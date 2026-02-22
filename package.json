@@ -9,7 +9,9 @@
     "lint": "eslint",
     "test": "jest",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:pw": "npx playwright test",
+    "test:e2e:cy": "npx cypress open"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.46",
@@ -51,6 +53,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.10.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jest": "^30.2.0",
