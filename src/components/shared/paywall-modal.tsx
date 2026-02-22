@@ -16,6 +16,7 @@ interface PaywallModalProps {
 
 export function PaywallModal({ onClose, reason }: PaywallModalProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isYearly, setIsYearly] = useState(false);
 
   const handleUpgrade = async () => {
     try {
@@ -23,7 +24,7 @@ export function PaywallModal({ onClose, reason }: PaywallModalProps) {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId: STRIPE_PRICES.MONTHLY })
+        body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.YEARLY : STRIPE_PRICES.MONTHLY })
       });
 
       if (!res.ok) {
@@ -61,7 +62,7 @@ export function PaywallModal({ onClose, reason }: PaywallModalProps) {
             You've hit the anonymous free limit. Upgrade to <span className="text-[var(--color-ax-yellow)] font-bold">Axiom Pro</span> to conquer your classes without restrictions.
           </p>
 
-          <div className="bg-[var(--color-bg2)] rounded-xl p-4 mb-8 text-left border border-[var(--color-border)]">
+          <div className="bg-[var(--color-bg2)] rounded-xl p-4 mb-6 text-left border border-[var(--color-border)]">
             <h3 className="font-semibold text-[var(--color-text-primary)] mb-3 text-sm tracking-wide">PRO PLAN INCLUDES:</h3>
             <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
               <li className="flex items-center gap-2">
@@ -79,11 +80,27 @@ export function PaywallModal({ onClose, reason }: PaywallModalProps) {
             </ul>
           </div>
 
+          <div className="flex items-center justify-center gap-3 mb-6 bg-[var(--color-bg0)] p-2 rounded-xl border border-[var(--color-border)] w-full max-w-[240px] mx-auto">
+            <button
+              onClick={() => setIsYearly(false)}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${!isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
+            >
+              Montly
+            </button>
+            <button
+              onClick={() => setIsYearly(true)}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
+            >
+              Yearly <span className="text-[var(--color-ax-green)] ml-1">-30%</span>
+            </button>
+          </div>
+
           <button
             onClick={handleUpgrade}
-            className="w-full bg-[var(--color-ax-yellow)] hover:bg-yellow-400 text-black font-extrabold h-12 rounded-full transition-all hover:scale-[1.02] shadow-[0_0_15px_rgba(251,191,36,0.3)]"
+            disabled={isLoading}
+            className="w-full bg-[var(--color-ax-yellow)] hover:bg-yellow-400 text-black font-extrabold h-12 rounded-full transition-all hover:scale-[1.02] shadow-[0_0_15px_rgba(251,191,36,0.3)] disabled:opacity-50"
           >
-            Upgrade Now - $9.99/mo
+            {isLoading ? 'Loading...' : `Upgrade Now - ${isYearly ? '$6.99/mo' : '$9.99/mo'}`}
           </button>
 
           <button onClick={onClose} className="mt-4 text-xs font-semibold text-[var(--color-dim)] hover:text-[var(--color-text-secondary)]">

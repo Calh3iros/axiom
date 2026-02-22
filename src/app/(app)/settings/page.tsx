@@ -50,13 +50,15 @@ export default function SettingsPage() {
     }
   };
 
+  const [isYearly, setIsYearly] = useState(false);
+
   const handleUpgrade = async () => {
     try {
       const { STRIPE_PRICES } = await import('@/lib/stripe/config');
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId: STRIPE_PRICES.MONTHLY }),
+        body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.YEARLY : STRIPE_PRICES.MONTHLY }),
       });
       if (!res.ok) throw new Error('Failed to create checkout session');
       const { url } = await res.json();
@@ -164,7 +166,7 @@ export default function SettingsPage() {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-xs text-[var(--color-dim)] uppercase tracking-wider font-mono mb-1">Billing</p>
-                  <p className="font-semibold text-[var(--color-text-primary)]">$9.99/month</p>
+                  <p className="font-semibold text-[var(--color-text-primary)]">Managed via Stripe</p>
                 </div>
                 <div>
                   <p className="text-xs text-[var(--color-dim)] uppercase tracking-wider font-mono mb-1">Status</p>
@@ -187,12 +189,28 @@ export default function SettingsPage() {
             </button>
           </div>
         ) : (
-          <button
-            onClick={handleUpgrade}
-            className="w-full py-3 bg-[var(--color-ax-yellow)] hover:bg-yellow-400 text-black font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(250,204,21,0.3)]"
-          >
-            Upgrade to Pro — $9.99/month
-          </button>
+          <div className="space-y-4 pt-2">
+            <div className="flex items-center justify-center gap-3 bg-[var(--color-bg0)] p-2 rounded-xl border border-[var(--color-border)] w-full max-w-[280px] mx-auto">
+              <button
+                onClick={() => setIsYearly(false)}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${!isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
+              >
+                Montly
+              </button>
+              <button
+                onClick={() => setIsYearly(true)}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
+              >
+                Yearly <span className="text-[var(--color-ax-green)] ml-1">-30%</span>
+              </button>
+            </div>
+            <button
+              onClick={handleUpgrade}
+              className="w-full py-3 bg-[var(--color-ax-yellow)] hover:bg-yellow-400 text-black font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(250,204,21,0.3)]"
+            >
+              Upgrade to Pro — {isYearly ? '$6.99/mo' : '$9.99/mo'}
+            </button>
+          </div>
         )}
       </div>
     </div>

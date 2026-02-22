@@ -1,6 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function LandingPage() {
+  const [isYearly, setIsYearly] = useState(false);
+
   return (
     <div className="min-h-screen bg-[var(--color-bg0)] text-[var(--color-text-primary)]">
       {/* ─── NAV ─── */}
@@ -184,9 +189,33 @@ export default function LandingPage() {
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-[var(--color-bg0)] font-mono text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full whitespace-nowrap">
               MOST POPULAR
             </div>
-            <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] mb-4">PRO</p>
-            <p className="text-5xl font-extrabold mb-1"><span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>9<span className="text-3xl">.99</span></p>
-            <p className="text-sm text-[var(--color-dim)] mb-7">per month / $6.99 on annual</p>
+
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)]">PRO</p>
+              <div className="flex items-center gap-2 bg-[var(--color-bg0)] p-1 rounded-lg border border-[var(--color-border)]">
+                <button
+                  onClick={() => setIsYearly(false)}
+                  className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${!isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setIsYearly(true)}
+                  className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
+                >
+                  Yearly
+                </button>
+              </div>
+            </div>
+
+            <p className="text-5xl font-extrabold mb-1">
+              <span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>
+              {isYearly ? '6' : '9'}
+              <span className="text-3xl">{isYearly ? '.99' : '.99'}</span>
+            </p>
+            <p className="text-sm text-[var(--color-dim)] mb-7">
+              {isYearly ? 'per month, billed annually' : 'per month, cancel anytime'}
+            </p>
             <ul className="space-y-3 text-sm text-[var(--color-text-primary)]">
               {['Unlimited solves — any subject', 'Unlimited essay writing', 'Unlimited humanizer', 'Unlimited Panic Mode', 'Saved history & progress', 'Priority AI (fastest model)'].map((item, i) => (
                 <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
@@ -195,12 +224,27 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
-            <Link
-              href="/settings"
+            <button
+              onClick={async () => {
+                try {
+                  const { STRIPE_PRICES } = await import('@/lib/stripe/config');
+                  const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.YEARLY : STRIPE_PRICES.MONTHLY }),
+                  });
+                  if (!res.ok) throw new Error('Failed to create checkout session');
+                  const { url } = await res.json();
+                  if (url) window.location.href = url;
+                } catch (err) {
+                  // If unauthorized, redirect to login
+                  window.location.href = '/auth/login?returnTo=/settings';
+                }
+              }}
               className="mt-8 block w-full py-3 text-center bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]"
             >
               Get Pro →
-            </Link>
+            </button>
           </div>
         </div>
       </section>
