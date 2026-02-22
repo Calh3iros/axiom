@@ -2,12 +2,13 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { Camera, Send, Loader2, Sparkles } from 'lucide-react';
+import { Camera, Send, Loader2, Sparkles, Copy, Check } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 export function SolveChat() {
   const [input, setInput] = useState('');
   const [localAttachment, setLocalAttachment] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, status } = useChat({
@@ -129,6 +130,22 @@ export function SolveChat() {
                   </div>
                 )}
               </div>
+
+              {/* Copy button for assistant messages */}
+              {message.role === 'assistant' && (
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(getMessageText(message));
+                    setCopiedId(message.id);
+                    setTimeout(() => setCopiedId(null), 2000);
+                  }}
+                  className="mt-1.5 self-start flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-dim)] hover:text-[var(--color-text-secondary)] transition-colors rounded-md hover:bg-[var(--color-bg3)]"
+                  title="Copy to clipboard"
+                >
+                  {copiedId === message.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedId === message.id ? 'Copied!' : 'Copy'}
+                </button>
+              )}
 
               {/* Follow-up action buttons after AI responses */}
               {message.role === 'assistant' && msgIdx === messages.length - 1 && !isLoading && (

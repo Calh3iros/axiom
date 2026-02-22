@@ -196,7 +196,7 @@ export default function LandingPage() {
               ))}
             </ul>
             <Link
-              href="/solve"
+              href="/settings"
               className="mt-8 block w-full py-3 text-center bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]"
             >
               Get Pro →
@@ -227,9 +227,9 @@ export default function LandingPage() {
           </div>
           <p className="text-sm text-[var(--color-dim)]">© 2026 Axiom. Study smarter.</p>
           <div className="flex gap-6 text-sm text-[var(--color-text-secondary)]">
-            <a href="#" className="hover:text-[var(--color-text-primary)] transition-colors">Privacy</a>
-            <a href="#" className="hover:text-[var(--color-text-primary)] transition-colors">Terms</a>
-            <a href="#" className="hover:text-[var(--color-text-primary)] transition-colors">Contact</a>
+            <Link href="/privacy" className="hover:text-[var(--color-text-primary)] transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-[var(--color-text-primary)] transition-colors">Terms</Link>
+            <a href="mailto:support@axiom.study" className="hover:text-[var(--color-text-primary)] transition-colors">Contact</a>
           </div>
         </div>
       </footer>
