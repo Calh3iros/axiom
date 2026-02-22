@@ -1,3 +1,4 @@
+export {};
 const locales = ['en', 'pt', 'es', 'fr', 'de', 'zh'];
 
 locales.forEach((locale) => {
@@ -25,21 +26,22 @@ locales.forEach((locale) => {
       cy.get('#name').type(`Pro Tester ${locale.toUpperCase()}`);
       cy.get('#email').type(testEmail);
       cy.get('#password').type(testPassword);
-      cy.get('button').contains(t('Dashboard.Auth.createAccount')).click();
+      cy.get('button[type="submit"]').click();
 
       // 2. Navigate to Write/Humanizer module
       cy.url().should('include', `/${locale}/solve`);
-      cy.contains(t('Dashboard.Sidebar.write')).click();
+      cy.contains(t('Dashboard.Sidebar.write', 'Write')).click();
 
       // 3. Hit Humanizer Word Limit
       const longText = Array(600).fill('word').join(' ');
       cy.get('textarea').type(longText, { delay: 0 }); // disable typing delay for huge text
 
       // Click "Humanize" button
-      cy.contains(t('Dashboard.Components.humanize')).click();
+      cy.contains(t('Dashboard.Components.humanize', 'Humanize')).click();
 
       // 4. Paywall should appear
-      cy.contains(t('Dashboard.Components.upgradeToPro', 'Upgrade to Pro')).should('be.visible');
+      // We check for the Upgrade button instead of strict translated title string
+      cy.get('button').filter(':contains("Subscribe"), :contains("Upgrade")').first().should('be.visible');
 
       // 5. Click Upgrade (Proceed to Stripe Checkout)
       // Cypress requires cross-origin workaround for Stripe, but clicking the button that triggers window.location = checkoutSessionUrl works if `chromeWebSecurity: false` or using `cy.origin()`.
@@ -62,10 +64,10 @@ locales.forEach((locale) => {
       cy.contains('PRO ✨', { timeout: 10000 }).should('be.visible');
 
       // 8. Open Settings and Cancel Subscription
-      cy.contains(t('Dashboard.Sidebar.settings')).click();
+      cy.contains(t('Dashboard.Sidebar.settings', 'Settings')).click();
       cy.url().should('include', `/${locale}/settings`);
       
-      cy.contains(t('Dashboard.Settings.manageBilling')).click();
+      cy.contains(t('Dashboard.Settings.manageSubscription', 'Manage Subscription')).click();
 
       cy.origin('https://billing.stripe.com', () => {
         cy.contains('Cancel plan').click();

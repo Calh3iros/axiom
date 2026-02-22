@@ -1,3 +1,4 @@
+export {};
 const locales = ['en', 'pt', 'es', 'fr', 'de', 'zh'];
 
 locales.forEach((locale) => {
@@ -32,7 +33,7 @@ locales.forEach((locale) => {
       cy.get('#password').type(testPassword);
 
       // We find the button by getting its translated text
-      cy.get('button').contains(t('Dashboard.Auth.createAccount')).click();
+      cy.get('button[type="submit"]').click();
 
       // 4. Verify Redirect to Solve Dashboard
       cy.url().should('include', `/${locale}/solve`);
@@ -45,10 +46,10 @@ locales.forEach((locale) => {
 
       // 7. Check Limits Usage
       cy.visit(`/${locale}/settings`);
-      cy.contains(t('Dashboard.Sidebar.planFree', 'FREE')).should('be.visible');
+      cy.contains(t('Dashboard.Sidebar.free', 'FREE')).should('be.visible');
 
       // 8. Sign Out
-      cy.contains(t('Dashboard.Sidebar.signOut')).click();
+      cy.contains(t('Dashboard.Sidebar.signOut', 'Sign Out')).click();
       cy.url().should('include', `/${locale}/auth/login`);
     });
   });
