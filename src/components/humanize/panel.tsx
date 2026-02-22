@@ -17,17 +17,12 @@ export function HumanizerPanel() {
   const [outputScore, setOutputScore] = useState<DetectionResult | null>(null);
   const [showSignals, setShowSignals] = useState(false);
 
-  // Free Tier constraints
+  // Word count display
   const MAX_FREE_WORDS = 500;
   const wordCount = input.trim().split(/\s+/).filter(w => w.length > 0).length;
 
   const handleHumanize = async () => {
     if (!input) return;
-
-    if (wordCount > MAX_FREE_WORDS) {
-      setShowPaywall(true);
-      return;
-    }
 
     setLoading(true);
     try {
@@ -37,10 +32,15 @@ export function HumanizerPanel() {
         body: JSON.stringify({ text: input, mode }),
       });
 
-      if (res.status === 402) {
+      if (res.status === 429 || res.status === 402) {
         setShowPaywall(true);
         setLoading(false);
         return;
+      }
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to humanize');
       }
 
       const data = await res.json();

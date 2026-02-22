@@ -2,6 +2,7 @@ import { generateObject } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
@@ -28,6 +29,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Subject is required' }, { status: 400 });
     }
 
+    // Check user plan and rate limits
+    const { userId, isPro } = await getUserAndPlan(req);
+    const usage = await checkUsage(userId, 'learn', isPro);
+    if (!usage.allowed) {
+      return NextResponse.json(
+        { error: 'Daily Panic Mode limit reached. Upgrade to Pro for unlimited access.' },
+        { status: 429 }
+      );
+    }
+
     const { object } = await generateObject({
       model: google('gemini-2.5-flash'),
       schema: panicSchema,
@@ -36,6 +47,8 @@ Generate a complete exam preparation package. Make it thorough but concise.
 Focus on the most important concepts and likely exam questions.
 Write in the same language as the subject name.`,
     });
+
+    await incrementUsage(userId, 'learn');
 
     return NextResponse.json(object);
   } catch (error: any) {

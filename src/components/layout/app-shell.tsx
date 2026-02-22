@@ -44,7 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           .from('profiles')
           .select('plan')
           .eq('id', user.id)
-          .single();
+          .single() as { data: { plan: string } | null };
         if (profile?.plan) setPlan(profile.plan as 'free' | 'pro');
       }
     });

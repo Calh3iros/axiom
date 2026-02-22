@@ -2,7 +2,7 @@ import { streamText, convertToModelMessages } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { solveSystemPrompt } from '@/lib/ai/prompts/solve';
 import { learnSystemPrompt } from '@/lib/ai/prompts/learn';
-import { checkUsage, incrementUsage, getUserIdFromRequest } from '@/lib/usage';
+import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 import { NextResponse } from 'next/server';
 
 const google = createGoogleGenerativeAI({
@@ -18,10 +18,10 @@ export async function POST(req: Request) {
   try {
     const { messages, type = 'solve' } = await req.json();
 
-    // Rate limiting check (solve and learn share the 'solve' counter for now)
-    const userId = getUserIdFromRequest(req);
+    // Get authenticated user and their plan from Supabase
+    const { userId, isPro } = await getUserAndPlan(req);
     const usageType = type === 'learn' ? 'learn' as const : 'solve' as const;
-    const usage = await checkUsage(userId, usageType);
+    const usage = await checkUsage(userId, usageType, isPro);
     if (!usage.allowed) {
       return NextResponse.json(
         { error: `Daily limit reached. Upgrade to Pro for unlimited access.` },

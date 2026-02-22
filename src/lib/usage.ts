@@ -5,21 +5,23 @@
  * Checks if a user (free or pro) has exceeded daily limits.
  *
  * Free tier limits (per day):
- * - Solve: 5 questions
+ * - Solve: 3 questions
  * - Humanize: 500 words
- * - Write: 3 actions
+ * - Write: 1 action
  * - Learn: 2 panic mode generations
  *
  * Pro tier: unlimited
  */
 
+import { createClient } from '@/lib/supabase/server';
+
 export const PLANS = {
   free: {
     limits: {
-      solves: 50,       // increased for development (production: 5)
-      humanize_words: 5000, // increased for development (production: 500)
-      writes: 30,       // increased for development (production: 3)
-      learns: 20,       // increased for development (production: 2)
+      solves: 3,
+      humanize_words: 500,
+      writes: 1,
+      learns: 2,
     },
   },
   pro: {
@@ -36,6 +38,11 @@ interface UsageCheck {
   used?: number;
 }
 
+interface UserInfo {
+  userId: string;
+  isPro: boolean;
+}
+
 // In-memory usage tracking (will be replaced with Supabase when DB is configured)
 const memoryUsage = new Map<string, Record<string, number>>();
 
@@ -48,12 +55,40 @@ function getUserDayKey(userId: string): string {
 }
 
 /**
+ * Get the authenticated user and their plan from Supabase.
+ * Falls back to anonymous IP-based tracking for non-logged-in users.
+ */
+export async function getUserAndPlan(req: Request): Promise<UserInfo> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      // Fetch plan from profiles table
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('plan')
+        .eq('id', user.id)
+        .single() as { data: { plan: string } | null };
+
+      return {
+        userId: user.id,
+        isPro: profile?.plan === 'pro',
+      };
+    }
+  } catch {
+    // Fall through to anonymous
+  }
+
+  // Anonymous fallback
+  return {
+    userId: getUserIdFromRequest(req),
+    isPro: false,
+  };
+}
+
+/**
  * Check if a user has remaining usage for a given action type.
- *
- * @param userId - The user ID (or IP for anonymous users)
- * @param type - The type of action being performed
- * @param isPro - Whether the user has a Pro subscription
- * @returns UsageCheck with allowed status and remaining count
  */
 export async function checkUsage(
   userId: string,

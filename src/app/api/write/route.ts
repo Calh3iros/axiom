@@ -1,6 +1,7 @@
 import { streamText, convertToModelMessages } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
+import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
@@ -28,9 +29,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
 
+    // Check user plan and rate limits
+    const { userId, isPro } = await getUserAndPlan(req);
+    const usage = await checkUsage(userId, 'write', isPro);
+    if (!usage.allowed) {
+      return NextResponse.json(
+        { error: 'Daily write limit reached. Upgrade to Pro for unlimited access.' },
+        { status: 429 }
+      );
+    }
+
     const result = streamText({
       model: google('gemini-2.5-flash'),
       prompt: promptFn(content, context),
+      onFinish: async () => {
+        await incrementUsage(userId, 'write');
+      },
     });
 
     return result.toTextStreamResponse();
