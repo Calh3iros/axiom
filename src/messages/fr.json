@@ -93,7 +93,9 @@
       "tabSummary": "Résumé",
       "tabQA": "Questions-Réponses",
       "tabFlashcards": "Flashcards",
-      "tabPlan": "Plan d'Étude"
+      "tabPlan": "Plan d'Étude",
+      "emergencyActive": "MODE D URGENT ACTIF",
+      "clickToFlip": "Cliquez sur une carte pour la retourner"
     },
     "Auth": {
       "checkInbox": "Vérifiez votre boîte de réception",
@@ -109,8 +111,6 @@
       "solvedBy": "Résolu par Axiom en 5 secondes"
     },
     "Components": {
-      "emergencyActive": "MODE D URGENT ACTIF",
-      "clickToFlip": "Cliquez sur une carte pour la retourner",
       "input": "Entrée",
       "humanizedResult": "Résultat Humanisé",
       "applyingImperfections": "Application de subtiles imperfections...",
@@ -152,13 +152,15 @@
     },
     "hero": {
       "badge": "Your AI study companion is here",
+      "title": "Stop Waiting. Start Solving.",
       "subtitle": "Snap a photo of any homework question. Get step-by-step solutions instantly. Write essays. Humanize AI text. Study for exams.",
       "allFor": "All for $9.99/month.",
       "ctaFree": "📸 Solve your first question — No signup needed",
       "seePricing": "See Pricing",
       "trustedBy": "Trusted by",
       "studentsGlobally": "10,000+ students globally",
-      "freeBadge": "✨ Free tier — no credit card, no signup. Start solving instantly."
+      "freeBadge": "✨ Free tier — no credit card, no signup. Start solving instantly.",
+      "studentAvatar": "Student Avatar"
     },
     "features": {
       "superpowers": "4 SUPERPOWERS",

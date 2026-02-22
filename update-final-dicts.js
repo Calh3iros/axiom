@@ -321,6 +321,17 @@ for (const lang of langs) {
     dict.Dashboard.Share = data[lang].Share;
     dict.Dashboard.Components = data[lang].Components;
     dict.Language = data[lang].Language;
+
+    // Fix translation mappings
+    if (!dict.Dashboard.Panic) dict.Dashboard.Panic = {};
+    if (dict.Dashboard.Components.emergencyActive) {
+      dict.Dashboard.Panic.emergencyActive = dict.Dashboard.Components.emergencyActive;
+      delete dict.Dashboard.Components.emergencyActive;
+    }
+    if (dict.Dashboard.Components.clickToFlip) {
+      dict.Dashboard.Panic.clickToFlip = dict.Dashboard.Components.clickToFlip;
+      delete dict.Dashboard.Components.clickToFlip;
+    }
     
     fs.writeFileSync(filePath, JSON.stringify(dict, null, 2), 'utf8');
     console.log(`Updated ${lang}.json with Auth, Share, Components and Language components.`);

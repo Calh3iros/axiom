@@ -13,13 +13,15 @@ const data = {
       },
       hero: {
         badge: 'Your AI study companion is here',
+        title: 'Stop Waiting. Start Solving.',
         subtitle: 'Snap a photo of any homework question. Get step-by-step solutions instantly. Write essays. Humanize AI text. Study for exams.',
         allFor: 'All for $9.99/month.',
         ctaFree: '📸 Solve your first question — No signup needed',
         seePricing: 'See Pricing',
         trustedBy: 'Trusted by',
         studentsGlobally: '10,000+ students globally',
-        freeBadge: '✨ Free tier — no credit card, no signup. Start solving instantly.'
+        freeBadge: '✨ Free tier — no credit card, no signup. Start solving instantly.',
+        studentAvatar: 'Student Avatar'
       },
       features: {
         superpowers: '4 SUPERPOWERS',

@@ -7,7 +7,7 @@ import { LanguageSwitcher } from '@/components/shared/language-switcher';
 
 export default function LandingPage() {
   const [isYearly, setIsYearly] = useState(false);
-  const t = useTranslations('HomePage');
+  const t = useTranslations('Landing');
 
   return (
     <div className="min-h-screen bg-[var(--color-bg0)] text-[var(--color-text-primary)]">

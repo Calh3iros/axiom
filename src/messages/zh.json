@@ -93,7 +93,9 @@
       "tabSummary": "摘要",
       "tabQA": "问答",
       "tabFlashcards": "抽认卡",
-      "tabPlan": "学习计划"
+      "tabPlan": "学习计划",
+      "emergencyActive": "紧急模式处于活动状态",
+      "clickToFlip": "点击卡片翻转"
     },
     "Auth": {
       "checkInbox": "检查你的收件箱",
@@ -109,8 +111,6 @@
       "solvedBy": "Axiom 在 5 秒内解决"
     },
     "Components": {
-      "emergencyActive": "紧急模式处于活动状态",
-      "clickToFlip": "点击卡片翻转",
       "input": "输入",
       "humanizedResult": "人性化结果",
       "applyingImperfections": "应用微妙的不完美之处...",
@@ -152,13 +152,15 @@
     },
     "hero": {
       "badge": "Your AI study companion is here",
+      "title": "Stop Waiting. Start Solving.",
       "subtitle": "Snap a photo of any homework question. Get step-by-step solutions instantly. Write essays. Humanize AI text. Study for exams.",
       "allFor": "All for $9.99/month.",
       "ctaFree": "📸 Solve your first question — No signup needed",
       "seePricing": "See Pricing",
       "trustedBy": "Trusted by",
       "studentsGlobally": "10,000+ students globally",
-      "freeBadge": "✨ Free tier — no credit card, no signup. Start solving instantly."
+      "freeBadge": "✨ Free tier — no credit card, no signup. Start solving instantly.",
+      "studentAvatar": "Student Avatar"
     },
     "features": {
       "superpowers": "4 SUPERPOWERS",
