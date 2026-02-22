@@ -14,6 +14,8 @@ export interface Database {
           id: string;
           user_id: string;
           title: string | null;
+          is_shared: boolean | null;
+          share_id: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -21,6 +23,8 @@ export interface Database {
           id?: string;
           user_id: string;
           title?: string | null;
+          is_shared?: boolean | null;
+          share_id?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -28,6 +32,8 @@ export interface Database {
           id?: string;
           user_id?: string;
           title?: string | null;
+          is_shared?: boolean | null;
+          share_id?: string | null;
           created_at?: string;
           updated_at?: string;
         };

@@ -1,11 +1,10 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { Camera, Send, Loader2, Sparkles, Copy, Check } from 'lucide-react';
+import { Camera, Send, Loader2, Sparkles, Copy, Check, Share2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-import { UIMessage } from 'ai';
+import { UIMessage, DefaultChatTransport } from 'ai';
 
 interface SolveChatProps {
   chatId?: string;
@@ -17,6 +16,8 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
   const [localAttachment, setLocalAttachment] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | undefined>(initialChatId);
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, status } = useChat({
@@ -94,6 +95,31 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
     return '';
   };
 
+  const shareChat = async () => {
+    if (!activeChatId) return;
+    setIsSharing(true);
+    try {
+      const res = await fetch('/api/chat/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chatId: activeChatId })
+      });
+      const data = await res.json();
+      if (data.shareId) {
+        const url = `${window.location.origin}/share/${data.shareId}`;
+        setShareUrl(url);
+        navigator.clipboard.writeText(url);
+        // Temporarily use copiedId state for the Share button feedback too
+        setCopiedId('share_success');
+        setTimeout(() => setCopiedId(null), 2000);
+      }
+    } catch (err) {
+      console.error('Failed to share', err);
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-[var(--color-bg1)] border border-[var(--color-border2)] rounded-2xl overflow-hidden shadow-inner relative">
       {/* Messages Area */}
@@ -151,18 +177,41 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
 
               {/* Copy button for assistant messages */}
               {message.role === 'assistant' && (
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(getMessageText(message));
-                    setCopiedId(message.id);
-                    setTimeout(() => setCopiedId(null), 2000);
-                  }}
-                  className="mt-1.5 self-start flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-dim)] hover:text-[var(--color-text-secondary)] transition-colors rounded-md hover:bg-[var(--color-bg3)]"
-                  title="Copy to clipboard"
-                >
-                  {copiedId === message.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                  {copiedId === message.id ? 'Copied!' : 'Copy'}
-                </button>
+                <div className="mt-1.5 self-start flex gap-2">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(getMessageText(message));
+                      setCopiedId(message.id);
+                      setTimeout(() => setCopiedId(null), 2000);
+                    }}
+                    className="flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-dim)] hover:text-[var(--color-text-secondary)] transition-colors rounded-md hover:bg-[var(--color-bg3)]"
+                    title="Copy to clipboard"
+                  >
+                    {copiedId === message.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedId === message.id ? 'Copied!' : 'Copy'}
+                  </button>
+
+                  {/* Share button displays only on the very last assistant message if the chat is saved */}
+                  {msgIdx === messages.length - 1 && activeChatId && !isLoading && (
+                    <button
+                      onClick={shareChat}
+                      disabled={isSharing}
+                      className="flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-dim)] hover:text-[var(--color-text-secondary)] transition-colors rounded-md hover:bg-[var(--color-bg3)] disabled:opacity-50"
+                      title="Share with Class"
+                    >
+                      {isSharing ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : copiedId === 'share_success' ? (
+                        <Check className="w-3 h-3 text-[var(--color-ax-blue)]" />
+                      ) : (
+                        <Share2 className="w-3 h-3 text-[var(--color-ax-blue)]" />
+                      )}
+                      <span className={copiedId === 'share_success' || shareUrl ? "text-[var(--color-ax-blue)]" : ""}>
+                        {copiedId === 'share_success' ? 'Link Copied!' : 'Share with Class'}
+                      </span>
+                    </button>
+                  )}
+                </div>
               )}
 
               {/* Follow-up action buttons after AI responses */}
