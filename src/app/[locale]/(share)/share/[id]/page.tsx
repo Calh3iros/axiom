@@ -6,10 +6,13 @@ import { Sparkles } from 'lucide-react';
 // Wait, our RLS policy says "Anyone can view shared chats", so the anon key should work!
 // Let's use standard Supabase anon client since it's a public read.
 
+import { getTranslations } from 'next-intl/server';
+
 // Because this is a Next.js Server Component that fetches data, we define it carefully:
 export default async function SharedChatPage({ params }: { params: Promise<{ id: string }> }) {
   // Await the params to resolve Next.js dynamic routing correctly
   const { id } = await params;
+  const t = await getTranslations('Dashboard.Share');
 
   // We must use a separate client (anon) or admin to read, since the user might not be logged in.
   // We'll just construct a basic supabase client for the public table read.
@@ -29,8 +32,8 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
     return (
       <div className="min-h-screen bg-[var(--color-bg1)] flex flex-col items-center justify-center p-6 text-center">
         <Sparkles className="w-12 h-12 text-[var(--color-ax-blue)] mb-4" />
-        <h1 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">Chat not found</h1>
-        <p className="text-[var(--color-text-secondary)]">This link may be invalid or the chat is no longer shared.</p>
+        <h1 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">{t('chatNotFound')}</h1>
+        <p className="text-[var(--color-text-secondary)]">{t('invalidLink')}</p>
         <Link href="/" className="mt-6 px-6 py-2 bg-[var(--color-bg2)] border border-[var(--color-border)] rounded-full text-sm font-medium hover:text-[var(--color-ax-blue)] transition-colors">
           Return to Axiom
         </Link>
@@ -104,9 +107,9 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
       <footer className="w-full bg-[var(--color-bg1)] border-t border-[var(--color-border)] py-12 px-6 flex flex-col justify-center items-center text-center mt-12">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[var(--color-ax-blue)]/10 border border-[var(--color-ax-blue)]/20 rounded-full mb-6">
           <Sparkles className="w-4 h-4 text-[var(--color-ax-blue)]" />
-          <span className="text-sm font-semibold text-[var(--color-text-primary)]">Solved by Axiom in 5 seconds</span>
+          <span className="text-sm font-semibold text-[var(--color-text-primary)]">{t('solvedBy')}</span>
         </div>
-        <h2 className="text-2xl font-bold mb-4">Stop waiting. Start solving.</h2>
+        <h2 className="text-2xl font-bold mb-4">{t('stopWaiting', { defaultMessage: 'Stop waiting. Start solving.' })}</h2>
         <p className="text-[var(--color-text-secondary)] mb-6 max-w-md">
           Join thousands of students getting instant, step-by-step solutions to their hardest questions.
         </p>

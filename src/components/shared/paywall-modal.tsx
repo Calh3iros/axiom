@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
+import { useTranslations } from 'next-intl';
 
 import { STRIPE_PRICES } from '@/lib/stripe/config';
 import { useState } from 'react';
@@ -41,6 +42,8 @@ export function PaywallModal({ onClose, reason }: PaywallModalProps) {
     }
   };
 
+  const t = useTranslations('Dashboard.Components');
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-[var(--color-bg1)] border border-[var(--color-border2)] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative">
@@ -59,11 +62,11 @@ export function PaywallModal({ onClose, reason }: PaywallModalProps) {
             {reason === 'word_limit' ? 'Word Limit Reached' : 'Daily Limit Reached'}
           </h2>
           <p className="text-[var(--color-text-secondary)] mb-8 leading-relaxed">
-            You've hit the anonymous free limit. Upgrade to <span className="text-[var(--color-ax-yellow)] font-bold">Axiom Pro</span> to conquer your classes without restrictions.
+            You've hit the anonymous free limit. Upgrade to <span className="text-[var(--color-ax-yellow)] font-bold">{t('axiomUltra', { defaultMessage: 'Axiom Ultra' })}</span> to conquer your classes without restrictions.
           </p>
 
           <div className="bg-[var(--color-bg2)] rounded-xl p-4 mb-6 text-left border border-[var(--color-border)]">
-            <h3 className="font-semibold text-[var(--color-text-primary)] mb-3 text-sm tracking-wide">PRO PLAN INCLUDES:</h3>
+            <h3 className="font-semibold text-[var(--color-text-primary)] mb-3 text-sm tracking-wide">{t('ultraPlanIncludes', { defaultMessage: 'ULTRA PLAN INCLUDES:' })}</h3>
             <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
               <li className="flex items-center gap-2">
                 <span className="text-[var(--color-ax-green)]">✓</span> Unlimited AI Humanizer

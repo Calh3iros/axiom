@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import {
   FileText, Expand, Quote, Wand2, CheckCircle, Loader2, Copy, Trash2, BookMarked
 } from 'lucide-react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 type WriteAction = 'outline' | 'expand' | 'cite' | 'humanize' | 'conclude';
 
@@ -24,6 +24,7 @@ export function WriteEditor() {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'output' | 'citations'>('output');
   const locale = useLocale();
+  const t = useTranslations('Dashboard.Components');
 
   const handleAction = useCallback(async (action: WriteAction) => {
     if (!content.trim() || loading) return;
@@ -134,11 +135,11 @@ export function WriteEditor() {
         {/* Input Editor */}
         <div className="flex flex-col bg-[var(--color-bg1)] border border-[var(--color-border2)] rounded-2xl overflow-hidden">
           <div className="px-4 py-3 border-b border-[var(--color-border)] flex items-center justify-between">
-            <span className="text-xs font-bold text-[var(--color-text-secondary)] tracking-wider uppercase">Your Text</span>
+            <span className="text-xs font-bold text-[var(--color-text-secondary)] tracking-wider uppercase">{t('yourText')}</span>
             <button
               onClick={() => setContent('')}
               className="text-[var(--color-dim)] hover:text-red-400 transition-colors p-1"
-              title="Clear"
+              title={t('clearBtn')}
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -146,7 +147,7 @@ export function WriteEditor() {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Paste your essay topic, paragraph, or text here..."
+            placeholder={t('pasteEssayTopic')}
             className="flex-1 p-4 bg-transparent text-[var(--color-text-primary)] placeholder-[var(--color-dim)] resize-none focus:outline-none text-sm leading-relaxed"
           />
           <div className="px-4 py-2 border-t border-[var(--color-border)] text-xs text-[var(--color-dim)]">
@@ -190,7 +191,7 @@ export function WriteEditor() {
                 <button
                   onClick={handleCopyOutput}
                   className="text-[var(--color-text-secondary)] hover:text-[var(--color-ax-blue)] transition-colors p-1.5 rounded hover:bg-[var(--color-bg3)]"
-                  title="Copy output"
+                  title={t('copyOutput')}
                 >
                   <Copy className="w-4 h-4" />
                 </button>
@@ -215,10 +216,10 @@ export function WriteEditor() {
                   {loading ? (
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-5 h-5 animate-spin text-[var(--color-ax-blue)]" />
-                      <span>Writing...</span>
+                      <span>{t('writing')}</span>
                     </div>
                   ) : (
-                    <p>Select an action from the toolbar to generate content.</p>
+                    <p>{t('selectAction')}</p>
                   )}
                 </div>
               )
@@ -238,8 +239,8 @@ export function WriteEditor() {
                 {citations.length === 0 && !loading && (
                    <div className="h-full flex flex-col items-center justify-center text-[var(--color-dim)] text-sm text-center mt-12 opacity-60">
                      <BookMarked className="w-8 h-8 mb-3" />
-                     <p>No citations yet.</p>
-                     <p className="max-w-[200px] mt-1">Select text and click "Cite" to generate sources.</p>
+                     <p>{t('noCitations')}</p>
+                     <p className="max-w-[200px] mt-1">{t('selectToCite')}</p>
                    </div>
                 )}
 
@@ -250,7 +251,7 @@ export function WriteEditor() {
                        <button
                          onClick={() => navigator.clipboard.writeText(cit)}
                          className="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-                         title="Copy"
+                         title={t('copyBtn')}
                        >
                          <Copy className="w-4 h-4" />
                        </button>

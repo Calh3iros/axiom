@@ -79,7 +79,7 @@ export default function PanicModePage() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/8 border border-red-500/20 rounded-full mb-4">
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
-              <span className="text-red-400 text-xs font-bold tracking-wider uppercase">EMERGENCY MODE ACTIVE</span>
+              <span className="text-red-400 text-xs font-bold tracking-wider uppercase">{t('emergencyActive', { defaultMessage: 'EMERGENCY MODE ACTIVE' })}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
               🚨 {t('title')}
@@ -198,7 +198,7 @@ export default function PanicModePage() {
                 <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-red-400" /> Quick Memorization Cards
                 </h3>
-                <p className="text-xs text-[var(--color-dim)] mb-4">Click a card to flip it</p>
+                <p className="text-xs text-[var(--color-dim)] mb-4">{t('clickToFlip', { defaultMessage: 'Click a card to flip it' })}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {result.flashcards.map((card, i) => (
                     <button

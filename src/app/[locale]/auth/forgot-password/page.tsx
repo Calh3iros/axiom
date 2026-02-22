@@ -10,6 +10,9 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { useLocale, useTranslations } = require('next-intl');
+  const locale = useLocale();
+  const t = useTranslations('Dashboard.Auth');
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +66,7 @@ export default function ForgotPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-[var(--color-text-primary)]">Check your inbox</h3>
+              <h3 className="text-lg font-bold text-[var(--color-text-primary)]">{t('checkInbox')}</h3>
               <p className="text-sm text-[var(--color-text-secondary)] pb-4">
                 We've sent a password reset link to <strong>{email}</strong>.
               </p>
@@ -83,7 +86,7 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="you@email.com"
+                  placeholder={t('emailPlaceholder')}
                   className="w-full px-4 py-3 bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 focus:border-[var(--color-ax-blue)]/50 transition-all"
                 />
               </div>

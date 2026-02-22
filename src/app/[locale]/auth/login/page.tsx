@@ -15,8 +15,9 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/solve";
-  const { useLocale } = require('next-intl');
+  const { useLocale, useTranslations } = require('next-intl');
   const locale = useLocale();
+  const t = useTranslations('Dashboard.Auth');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,7 +119,7 @@ function LoginContent() {
             </div>
             <div className="relative flex justify-center text-xs">
               <span className="bg-[var(--color-bg1)] px-3 text-[var(--color-dim)]">
-                or continue with email
+                {t('orContinue')}
               </span>
             </div>
           </div>
@@ -138,7 +139,7 @@ function LoginContent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="you@email.com"
+                placeholder={t('emailPlaceholder')}
                 className="w-full px-4 py-3 bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 focus:border-[var(--color-ax-blue)]/50 transition-all"
               />
             </div>

@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { Camera, Send, Loader2, Sparkles, Copy, Check, Share2 } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { UIMessage, DefaultChatTransport } from 'ai';
@@ -22,6 +22,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const locale = useLocale();
+  const t = useTranslations('Dashboard.Components');
 
   const { messages, sendMessage, status } = useChat({
     messages: initialMessages,
@@ -145,7 +146,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
               <Sparkles className="w-8 h-8 text-[var(--color-ax-blue)]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">How can I help you?</h2>
+              <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">{t('howCanIHelp')}</h2>
               <p className="text-[var(--color-text-secondary)] text-sm max-w-sm">
                 Paste your homework question or take a clear photo of the assignment to get an instant step-by-step solution.
               </p>
@@ -175,7 +176,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                       <img
                         key={i}
                         src={part.url}
-                        alt="Attached image"
+                        alt={t('attachedImage')}
                         className="max-w-[200px] mb-3 rounded-lg border border-[var(--color-border)]"
                       />
                     );
@@ -199,11 +200,10 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                       setCopiedId(message.id);
                       setTimeout(() => setCopiedId(null), 2000);
                     }}
-                    className="flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-dim)] hover:text-[var(--color-text-secondary)] transition-colors rounded-md hover:bg-[var(--color-bg3)]"
-                    title="Copy to clipboard"
                   >
+                    <span className="sr-only">{t('copyToClipboard')}</span>
                     {copiedId === message.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                    {copiedId === message.id ? 'Copied!' : 'Copy'}
+                    {copiedId === message.id ? 'Copied!' : t('copyBtn')}
                   </button>
 
                   {/* Share button displays only on the very last assistant message if the chat is saved */}
@@ -212,7 +212,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                       onClick={shareChat}
                       disabled={isSharing}
                       className="flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-dim)] hover:text-[var(--color-text-secondary)] transition-colors rounded-md hover:bg-[var(--color-bg3)] disabled:opacity-50"
-                      title="Share with Class"
+                      title={t('shareWithClass')}
                     >
                       {isSharing ? (
                         <Loader2 className="w-3 h-3 animate-spin" />
@@ -222,7 +222,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                         <Share2 className="w-3 h-3 text-[var(--color-ax-blue)]" />
                       )}
                       <span className={copiedId === 'share_success' || shareUrl ? "text-[var(--color-ax-blue)]" : ""}>
-                        {copiedId === 'share_success' ? 'Link Copied!' : 'Share with Class'}
+                        {copiedId === 'share_success' ? 'Link Copied!' : t('shareWithClass')}
                       </span>
                     </button>
                   )}
@@ -261,7 +261,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
             <div className="max-w-[85%] rounded-2xl p-4 bg-[var(--color-bg2)] border border-[var(--color-border)]">
               <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">Thinking...</span>
+                <span className="text-sm">{t('thinking')}</span>
               </div>
             </div>
           </div>
@@ -273,7 +273,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
         {localAttachment && (
           <div className="mb-3 flex items-center gap-3">
             <div className="relative inline-block">
-              <img src={localAttachment} alt="Preview" className="h-16 w-16 object-cover rounded-lg border border-[var(--color-ax-blue)]" />
+              <img src={localAttachment} alt={t('preview', { defaultMessage: 'Preview' })} className="h-16 w-16 object-cover rounded-lg border border-[var(--color-ax-blue)]" />
               <button
                 onClick={() => setLocalAttachment(null)}
                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
@@ -281,7 +281,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                 ×
               </button>
             </div>
-            <span className="text-xs text-[var(--color-text-secondary)]">Image attached</span>
+            <span className="text-xs text-[var(--color-text-secondary)]">{t('imageAttached')}</span>
           </div>
         )}
 
@@ -299,7 +299,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="absolute left-3 p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-ax-blue)] transition-colors rounded-full hover:bg-[var(--color-bg3)]"
-            title="Upload photo"
+            title={t('uploadPhoto')}
           >
             <Camera className="w-5 h-5" />
           </button>

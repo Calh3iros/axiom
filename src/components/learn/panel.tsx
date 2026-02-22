@@ -162,7 +162,12 @@ export function LearnPanel() {
             )}
 
             {activeTab === 'flashcards' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                <div className="md:col-span-2 text-center mb-2">
+                  <span className="text-xs font-medium text-[var(--color-dim)] bg-[var(--color-bg2)] px-3 py-1 rounded-full border border-[var(--color-border)]">
+                    👉 {t('clickToFlip', { defaultMessage: 'Click a card to flip it' })}
+                  </span>
+                </div>
                 {result.flashcards.map((card, i) => (
                   <button
                     key={i}

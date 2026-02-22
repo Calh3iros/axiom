@@ -17,9 +17,9 @@ export default function LandingPage() {
           AXIOM<span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.4)]" />
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm text-[var(--color-text-secondary)]">
-          <a href="#features" className="hover:text-[var(--color-text-primary)] transition-colors">Features</a>
-          <a href="#compare" className="hover:text-[var(--color-text-primary)] transition-colors">Compare</a>
-          <a href="#pricing" className="hover:text-[var(--color-text-primary)] transition-colors">Pricing</a>
+          <a href="#features" className="hover:text-[var(--color-text-primary)] transition-colors">{t('nav.features')}</a>
+          <a href="#compare" className="hover:text-[var(--color-text-primary)] transition-colors">{t('nav.compare')}</a>
+          <a href="#pricing" className="hover:text-[var(--color-text-primary)] transition-colors">{t('nav.pricing')}</a>
         </div>
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
@@ -27,7 +27,7 @@ export default function LandingPage() {
             href="/solve"
             className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-semibold text-sm rounded-lg transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] hidden sm:block"
           >
-            {t('cta')} →
+            {t('cta.btn').split('—')[0].trim()} →
           </Link>
         </div>
       </nav>
@@ -41,18 +41,17 @@ export default function LandingPage() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/5 border border-emerald-500/15 rounded-full text-emerald-400 text-sm font-medium mb-8 animate-[fadeUp_0.8s_ease_both]">
           <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-          Your AI study companion is here
+          {t('hero.badge')}
         </div>
 
         {/* Title */}
         <h1 className="text-[clamp(40px,7vw,80px)] font-extrabold leading-[1.05] tracking-tight max-w-3xl mb-6 animate-[fadeUp_0.8s_0.1s_ease_both]">
-          {t('title')}
+          {t('hero.title') || 'Stop Waiting. Start Solving.'}
         </h1>
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-[var(--color-text-secondary)] max-w-xl mb-12 leading-relaxed animate-[fadeUp_0.8s_0.2s_ease_both]">
-          Snap a photo of any homework question. Get step-by-step solutions instantly.
-          Write essays. Humanize AI text. Study for exams. <strong className="text-[var(--color-text-primary)]">All for $9.99/month.</strong>
+          {t('hero.subtitle')} <strong className="text-[var(--color-text-primary)]">{t('hero.allFor')}</strong>
         </p>
 
         {/* CTA */}
@@ -61,13 +60,13 @@ export default function LandingPage() {
             href="/solve"
             className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold text-base rounded-xl transition-all hover:shadow-[0_0_30px_rgba(52,211,153,0.3)] hover:-translate-y-0.5"
           >
-            📸 {t('cta')} — No signup needed
+            {t('hero.ctaFree')}
           </Link>
           <a
             href="#pricing"
             className="px-8 py-4 bg-[var(--color-bg2)] border border-[var(--color-border2)] text-[var(--color-text-secondary)] font-semibold text-base rounded-xl transition-all hover:border-[var(--color-text-secondary)]/30 hover:-translate-y-0.5"
           >
-            See Pricing
+            {t('hero.seePricing')}
           </a>
         </div>
 
@@ -76,7 +75,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-center -space-x-3">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="w-10 h-10 rounded-full border-2 border-[var(--color-bg0)] overflow-hidden bg-[var(--color-bg1)] flex items-center justify-center">
-                <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="Student Avatar" className="w-full h-full object-cover" />
+                <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt={t('hero.studentAvatar', { defaultMessage: 'Student Avatar' })} className="w-full h-full object-cover" />
               </div>
             ))}
           </div>
@@ -89,11 +88,11 @@ export default function LandingPage() {
               ))}
             </div>
             <p className="text-sm font-medium text-[var(--color-text-secondary)]">
-              Trusted by <strong className="text-[var(--color-text-primary)]">10,000+</strong> students globally
+              {t('hero.trustedBy')} <strong className="text-[var(--color-text-primary)]">10,000+</strong> {t('hero.studentsGlobally').split('10,000+')[1]}
             </p>
           </div>
           <p className="mt-2 text-xs text-[var(--color-dim)] max-w-sm">
-            ✨ Free tier — no credit card, no signup. Start solving instantly.
+            {t('hero.freeBadge')}
           </p>
         </div>
       </section>
@@ -101,9 +100,9 @@ export default function LandingPage() {
       {/* ─── FEATURES ─── */}
       <section id="features" className="py-24 px-5 md:px-10">
         <div className="text-center mb-16">
-          <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">4 SUPERPOWERS</p>
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">Everything a student needs</h2>
-          <p className="text-[var(--color-text-secondary)] text-lg max-w-lg mx-auto">Homework solver, essay writer, text humanizer, and exam tutor — all in one app.</p>
+          <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">{t('features.superpowers')}</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">{t('features.title')}</h2>
+          <p className="text-[var(--color-text-secondary)] text-lg max-w-lg mx-auto">{t('features.subtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
@@ -111,61 +110,61 @@ export default function LandingPage() {
           <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-emerald-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-13 h-13 rounded-xl bg-emerald-500/10 flex items-center justify-center text-2xl mb-5">📸</div>
-            <h3 className="text-2xl font-bold mb-3">Solve</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">Photo or text → step-by-step solution in 5 seconds. Ask follow-ups, get alternative methods, generate practice questions.</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-emerald-500/8 text-emerald-400 rounded-md">INSTANT ANSWERS</span>
+            <h3 className="text-2xl font-bold mb-3">{t('features.solveTitle')}</h3>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.solveDesc')}</p>
+            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-emerald-500/8 text-emerald-400 rounded-md">{t('features.solveBadge')}</span>
           </div>
 
           {/* Write */}
           <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-blue-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-13 h-13 rounded-xl bg-blue-500/10 flex items-center justify-center text-2xl mb-5">✍️</div>
-            <h3 className="text-2xl font-bold mb-3">Write</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">Outline → draft → citations → polish. AI-powered essay writer with APA citations and academic tone built in.</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-blue-500/8 text-blue-400 rounded-md">FULL ESSAYS</span>
+            <h3 className="text-2xl font-bold mb-3">{t('features.writeTitle')}</h3>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.writeDesc')}</p>
+            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-blue-500/8 text-blue-400 rounded-md">{t('features.writeBadge')}</span>
           </div>
 
           {/* Humanize */}
           <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-orange-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-13 h-13 rounded-xl bg-orange-500/10 flex items-center justify-center text-2xl mb-5">🔄</div>
-            <h3 className="text-2xl font-bold mb-3">Humanize</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">Paste any AI-generated text → get natural, human-sounding output. Three modes: Academic, Casual, Professional.</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-orange-500/8 text-orange-400 rounded-md">UNDETECTABLE</span>
+            <h3 className="text-2xl font-bold mb-3">{t('features.humanizeTitle')}</h3>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.humanizeDesc')}</p>
+            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-orange-500/8 text-orange-400 rounded-md">{t('features.humanizeBadge')}</span>
           </div>
 
           {/* Learn */}
           <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-purple-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-13 h-13 rounded-xl bg-purple-500/10 flex items-center justify-center text-2xl mb-5">🧠</div>
-            <h3 className="text-2xl font-bold mb-3">Learn</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">Panic Mode: enter subject → get a 1-page summary, 10 exam questions, flashcards, and a 2-hour study plan. Instantly.</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-purple-500/8 text-purple-400 rounded-md">🚨 PANIC MODE</span>
+            <h3 className="text-2xl font-bold mb-3">{t('features.learnTitle')}</h3>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.learnDesc')}</p>
+            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-purple-500/8 text-purple-400 rounded-md">{t('features.learnBadge')}</span>
           </div>
         </div>
       </section>
 
       {/* ─── COMPARISON ─── */}
       <section id="compare" className="py-24 px-5 md:px-10 flex flex-col items-center">
-        <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">WHY AXIOM</p>
-        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-center mb-4">The old way vs. the Axiom way</h2>
-        <p className="text-[var(--color-text-secondary)] text-lg text-center max-w-xl mb-12">Students deserve instant, interactive help. Not static answers behind a paywall.</p>
+        <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">{t('compare.badge')}</p>
+        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-center mb-4">{t('compare.title')}</h2>
+        <p className="text-[var(--color-text-secondary)] text-lg text-center max-w-xl mb-12">{t('compare.subtitle')}</p>
 
         <div className="w-full max-w-3xl">
           <div className="grid grid-cols-[1fr_50px_1fr] md:grid-cols-[1fr_80px_1fr] text-sm">
             {/* Header */}
-            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-red-400 border-b border-[var(--color-border)]">OLD WAY</div>
-            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] border-b border-[var(--color-border)]">VS</div>
-            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-emerald-400 border-b border-[var(--color-border)]">AXIOM</div>
+            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-red-400 border-b border-[var(--color-border)]">{t('compare.oldWay')}</div>
+            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] border-b border-[var(--color-border)]">{t('compare.vs')}</div>
+            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-emerald-400 border-b border-[var(--color-border)]">{t('compare.axiom')}</div>
 
             {/* Rows */}
             {[
-              ['Wait 30min-2h for answers', '⏱', 'Answer in 5 seconds'],
-              ['Static text, no follow-ups', '💬', 'Interactive chat with follow-ups'],
-              ['$20+/month for basic access', '💰', '$9.99/month — everything included'],
-              ['Can\'t explain differently', '🔄', '"Explain like I\'m 12" works'],
-              ['No practice questions', '📝', 'Generate unlimited exercises'],
-              ['Outdated, human-dependent', '⚡', 'Built on cutting-edge AI'],
+              [t('compare.row1Old'), '⏱', t('compare.row1New')],
+              [t('compare.row2Old'), '💬', t('compare.row2New')],
+              [t('compare.row3Old'), '💰', t('compare.row3New')],
+              [t('compare.row4Old'), '🔄', t('compare.row4New')],
+              [t('compare.row5Old'), '📝', t('compare.row5New')],
+              [t('compare.row6Old'), '⚡', t('compare.row6New')],
             ].map(([old, icon, newText], i) => (
               <div key={i} className="contents">
                 <div className="p-4 flex items-center justify-end text-right text-[var(--color-dim)] line-through decoration-red-400/30 border-b border-[var(--color-border)]">{old}</div>
@@ -180,19 +179,19 @@ export default function LandingPage() {
       {/* ─── PRICING ─── */}
       <section id="pricing" className="py-24 px-5 md:px-10">
         <div className="text-center mb-16">
-          <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">PRICING</p>
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">Less than 2 coffees a month</h2>
-          <p className="text-[var(--color-text-secondary)] text-lg">Premium AI study tools. No limits. No waiting.</p>
+          <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">{t('pricing.badge')}</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">{t('pricing.title')}</h2>
+          <p className="text-[var(--color-text-secondary)] text-lg">{t('pricing.subtitle')}</p>
         </div>
 
         <div className="flex flex-col md:flex-row justify-center gap-5 max-w-3xl mx-auto">
           {/* Free */}
           <div className="flex-1 bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8">
-            <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] mb-4">FREE</p>
+            <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] mb-4">{t('pricing.freeTitle')}</p>
             <p className="text-5xl font-extrabold mb-1"><span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>0</p>
-            <p className="text-sm text-[var(--color-dim)] mb-7">forever, no signup</p>
+            <p className="text-sm text-[var(--color-dim)] mb-7">{t('pricing.foreverNoSignup')}</p>
             <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-              {['5 questions solved per day', '500 words humanized per day', '3 essay actions per day', '2 Panic Mode generations per day'].map((item, i) => (
+              {(t.raw('pricing.freeFeatures') as string[]).map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
                   <span className="text-emerald-400 mt-0.5">✓</span>
                   {item}
@@ -203,30 +202,30 @@ export default function LandingPage() {
               href="/solve"
               className="mt-8 block w-full py-3 text-center bg-[var(--color-bg3)] border border-[var(--color-border2)] text-[var(--color-text-secondary)] font-semibold rounded-xl hover:bg-[var(--color-bg2)] transition-colors"
             >
-              Start Free
+              {t('pricing.startFree')}
             </Link>
           </div>
 
           {/* Pro */}
           <div className="flex-1 bg-[var(--color-bg1)] border border-emerald-500/30 rounded-2xl p-8 relative shadow-[0_0_60px_rgba(52,211,153,0.08)]">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-[var(--color-bg0)] font-mono text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full whitespace-nowrap">
-              MOST POPULAR
+              {t('pricing.mostPopular')}
             </div>
 
             <div className="flex items-center justify-between mb-4">
-              <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)]">PRO</p>
+              <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)]">{t('pricing.proTitle')}</p>
               <div className="flex items-center gap-2 bg-[var(--color-bg0)] p-1 rounded-lg border border-[var(--color-border)]">
                 <button
                   onClick={() => setIsYearly(false)}
                   className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${!isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
                 >
-                  Monthly
+                  {t('pricing.monthly')}
                 </button>
                 <button
                   onClick={() => setIsYearly(true)}
                   className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
                 >
-                  Yearly
+                  {t('pricing.yearly')}
                 </button>
               </div>
             </div>
@@ -237,10 +236,10 @@ export default function LandingPage() {
               <span className="text-3xl">{isYearly ? '.99' : '.99'}</span>
             </p>
             <p className="text-sm text-[var(--color-dim)] mb-7">
-              {isYearly ? 'per month, billed annually' : 'per month, cancel anytime'}
+              {isYearly ? t('pricing.billedAnnually') : t('pricing.cancelAnytime')}
             </p>
             <ul className="space-y-3 text-sm text-[var(--color-text-primary)]">
-              {['Unlimited solves — any subject', 'Unlimited essay writing', 'Unlimited humanizer', 'Unlimited Panic Mode', 'Saved history & progress', 'Priority AI (fastest model)'].map((item, i) => (
+              {(t.raw('pricing.proFeatures') as string[]).map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
                   <span className="text-emerald-400 mt-0.5">✓</span>
                   {item}
@@ -266,7 +265,7 @@ export default function LandingPage() {
               }}
               className="mt-8 block w-full py-3 text-center bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]"
             >
-              Get Pro →
+              {t('pricing.getPro')}
             </button>
           </div>
         </div>
@@ -274,15 +273,15 @@ export default function LandingPage() {
 
       {/* ─── FINAL CTA ─── */}
       <section className="py-24 px-5 text-center">
-        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6">Stop waiting. Start solving.</h2>
+        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6">{t('cta.title')}</h2>
         <p className="text-[var(--color-text-secondary)] text-lg max-w-lg mx-auto mb-10">
-          Your next homework is due in hours. Axiom solves it in seconds. Free. No signup.
+          {t('cta.subtitle')}
         </p>
         <Link
           href="/solve"
           className="inline-block px-10 py-4 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold text-lg rounded-xl transition-all hover:shadow-[0_0_30px_rgba(52,211,153,0.3)] hover:-translate-y-0.5"
         >
-          📸 Solve your first question — free
+          {t('cta.btn')}
         </Link>
       </section>
 
@@ -292,11 +291,11 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 font-extrabold text-lg">
             AXIOM<span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           </div>
-          <p className="text-sm text-[var(--color-dim)]">© 2026 Axiom. Study smarter.</p>
+          <p className="text-sm text-[var(--color-dim)]">{t('footer.copy')}</p>
           <div className="flex gap-6 text-sm text-[var(--color-text-secondary)]">
-            <Link href="/privacy" className="hover:text-[var(--color-text-primary)] transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-[var(--color-text-primary)] transition-colors">Terms</Link>
-            <a href="mailto:support@axiom.study" className="hover:text-[var(--color-text-primary)] transition-colors">Contact</a>
+            <Link href="/privacy" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.privacy')}</Link>
+            <Link href="/terms" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.terms')}</Link>
+            <a href="mailto:support@axiom.study" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.contact')}</a>
           </div>
         </div>
       </footer>

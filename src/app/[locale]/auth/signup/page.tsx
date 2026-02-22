@@ -14,8 +14,9 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const { useLocale } = require('next-intl');
+  const { useLocale, useTranslations } = require('next-intl');
   const locale = useLocale();
+  const t = useTranslations('Dashboard.Auth');
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +73,7 @@ export default function SignupPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <span className="text-3xl">✉️</span>
             </div>
-            <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">Check your email</h2>
+            <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">{t('checkEmail')}</h2>
             <p className="text-[var(--color-text-secondary)] text-sm">
               We&apos;ve sent a confirmation link to <strong className="text-[var(--color-text-primary)]">{email}</strong>. Click it to activate your account.
             </p>
@@ -132,7 +133,7 @@ export default function SignupPage() {
               <div className="w-full border-t border-[var(--color-border)]" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-[var(--color-bg1)] px-3 text-[var(--color-dim)]">or continue with email</span>
+              <span className="bg-[var(--color-bg1)] px-3 text-[var(--color-dim)]">{t('orContinue')}</span>
             </div>
           </div>
 
@@ -147,7 +148,7 @@ export default function SignupPage() {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Your name"
+                placeholder={t('namePlaceholder')}
                 className="w-full px-4 py-3 bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 focus:border-[var(--color-ax-blue)]/50 transition-all"
               />
             </div>
@@ -161,7 +162,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="you@email.com"
+                placeholder={t('emailPlaceholder')}
                 className="w-full px-4 py-3 bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 focus:border-[var(--color-ax-blue)]/50 transition-all"
               />
             </div>
@@ -176,7 +177,7 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                placeholder="Min. 6 characters"
+                placeholder={t('minChars')}
                 className="w-full px-4 py-3 bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 focus:border-[var(--color-ax-blue)]/50 transition-all"
               />
             </div>

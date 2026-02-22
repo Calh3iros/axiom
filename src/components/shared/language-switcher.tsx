@@ -4,12 +4,14 @@ import { useTransition } from 'react';
 import { usePathname, useRouter } from '@/i18n/routing';
 import { useParams } from 'next/navigation';
 import { Globe } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function LanguageSwitcher() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
   const params = useParams();
+  const t = useTranslations('Language');
 
   const handleLocaleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = e.target.value;
@@ -29,12 +31,12 @@ export function LanguageSwitcher() {
         disabled={isPending}
         className="appearance-none bg-transparent border border-[var(--color-border)] text-[var(--color-text-secondary)] text-xs md:text-sm rounded-lg pl-8 pr-6 py-1.5 focus:outline-none focus:border-[var(--color-ax-blue)] hover:border-[var(--color-text-secondary)]/30 transition-all cursor-pointer disabled:opacity-50"
       >
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="zh">中文</option>
+        <option value="en">{t('en', { defaultMessage: 'English' })}</option>
+        <option value="pt">{t('pt', { defaultMessage: 'Português' })}</option>
+        <option value="es">{t('es', { defaultMessage: 'Español' })}</option>
+        <option value="fr">{t('fr', { defaultMessage: 'Français' })}</option>
+        <option value="de">{t('de', { defaultMessage: 'Deutsch' })}</option>
+        <option value="zh">{t('zh', { defaultMessage: '中文' })}</option>
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[var(--color-dim)]">
         <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">

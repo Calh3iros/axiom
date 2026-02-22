@@ -6,7 +6,7 @@ import { Copy, RefreshCw, Sparkles, ShieldCheck, ShieldAlert, ChevronDown, Chevr
 import { PaywallModal } from '../shared/paywall-modal';
 import * as Diff from 'diff';
 import { detectAI, type DetectionResult } from '@/lib/ai/detect';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 export function HumanizerPanel() {
   const [input, setInput] = useState('');
@@ -22,6 +22,7 @@ export function HumanizerPanel() {
   const MAX_FREE_WORDS = 500;
   const wordCount = input.trim().split(/\s+/).filter(w => w.length > 0).length;
   const locale = useLocale();
+  const t = useTranslations('Dashboard.Components');
 
   const handleHumanize = async () => {
     if (!input) return;
@@ -95,14 +96,14 @@ export function HumanizerPanel() {
       {/* Input Side */}
       <div className="flex flex-col bg-[var(--color-bg1)] border border-[var(--color-border2)] rounded-2xl overflow-hidden focus-within:border-[var(--color-ax-blue)] transition-colors">
         <div className="p-4 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg2)]">
-          <span className="font-semibold text-sm tracking-wide text-[var(--color-text-secondary)] uppercase">Input</span>
+          <span className="font-semibold text-sm tracking-wide text-[var(--color-text-secondary)] uppercase">{t('input')}</span>
           <span className={`text-xs font-mono ${wordCount > MAX_FREE_WORDS ? 'text-[var(--color-ax-red)] font-bold' : 'text-[var(--color-dim)]'}`}>
             {wordCount} / {MAX_FREE_WORDS} free words
           </span>
         </div>
         <textarea
           className="flex-1 w-full p-6 bg-transparent resize-none outline-none text-[var(--color-text-primary)] placeholder-[var(--color-dim)] leading-relaxed"
-          placeholder="Paste AI-generated text here to humanize..."
+          placeholder={t('pasteText')}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -123,7 +124,7 @@ export function HumanizerPanel() {
       <div className="flex flex-col bg-[var(--color-bg0)] border border-[var(--color-border2)] rounded-2xl overflow-hidden shadow-inner">
         <div className="p-4 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg1)]">
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-semibold text-sm tracking-wide text-[var(--color-text-secondary)] uppercase">Humanized Result</span>
+            <span className="font-semibold text-sm tracking-wide text-[var(--color-text-secondary)] uppercase">{t('humanizedResult')}</span>
             {inputScore && outputScore && !output.startsWith('Error:') && (
               <div className="flex items-center gap-2">
                 {/* Original score */}
@@ -157,7 +158,7 @@ export function HumanizerPanel() {
             onClick={handleCopy}
             disabled={!output}
             className="text-[var(--color-dim)] hover:text-[var(--color-text-primary)] transition-colors disabled:opacity-30 disabled:hover:text-[var(--color-dim)]"
-            title="Copy to clipboard"
+            title={t('copyToClipboard')}
           >
             <Copy className="w-5 h-5" />
           </button>
@@ -170,7 +171,7 @@ export function HumanizerPanel() {
                <div className="w-5/6 h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
                <div className="w-full h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
                <div className="w-3/4 h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
-               <span className="text-[var(--color-dim)] text-sm mt-4 font-mono">Applying subtle imperfections...</span>
+               <span className="text-[var(--color-dim)] text-sm mt-4 font-mono">{t('applyingImperfections')}</span>
             </div>
           ) : output ? (
             <div className="space-y-4">
