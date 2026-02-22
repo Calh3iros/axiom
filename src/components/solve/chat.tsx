@@ -5,16 +5,34 @@ import { DefaultChatTransport } from 'ai';
 import { Camera, Send, Loader2, Sparkles, Copy, Check } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-export function SolveChat() {
+import { UIMessage } from 'ai';
+
+interface SolveChatProps {
+  chatId?: string;
+  initialMessages?: UIMessage[];
+}
+
+export function SolveChat({ chatId: initialChatId, initialMessages = [] }: SolveChatProps) {
   const [input, setInput] = useState('');
   const [localAttachment, setLocalAttachment] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [activeChatId, setActiveChatId] = useState<string | undefined>(initialChatId);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, status } = useChat({
+    messages: initialMessages,
     transport: new DefaultChatTransport({
       api: '/api/chat',
-      body: { type: 'solve' },
+      body: activeChatId ? { type: 'solve', chatId: activeChatId } : { type: 'solve' },
+      fetch: async (url: any, options: any) => {
+        const res = await fetch(url, options);
+        const id = res.headers.get('x-chat-id');
+        if (id && !activeChatId) {
+          setActiveChatId(id);
+          window.history.replaceState({}, '', `/solve/${id}`);
+        }
+        return res;
+      }
     }),
     onError: (err: Error) => console.error('Chat API Error:', err.message),
   });
