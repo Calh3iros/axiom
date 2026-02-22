@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Loader2 } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -119,9 +119,14 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-[var(--color-text-secondary)]">
+                  Password
+                </label>
+                <Link href="/auth/forgot-password" className="text-xs text-[var(--color-ax-blue)] hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 id="password"
                 type="password"
@@ -159,5 +164,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[var(--color-bg0)] flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-[var(--color-ax-blue)]" /></div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

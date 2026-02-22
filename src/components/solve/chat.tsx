@@ -3,6 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { Camera, Send, Loader2, Sparkles, Copy, Check, Share2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 import { UIMessage, DefaultChatTransport } from 'ai';
 
@@ -36,6 +37,18 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
       }
     }),
     onError: (err: Error) => console.error('Chat API Error:', err.message),
+    onFinish: () => {
+      // Micro-rewards!
+      const rewards = [
+        "🧠 +1 Brain Power!",
+        "✅ Nailed it!",
+        "🔥 You're on fire!",
+        "👏 Great question!",
+        "🚀 Concept unlocked!"
+      ];
+      const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+      toast.success(randomReward, { duration: 3000 });
+    }
   });
 
   const isLoading = status === 'submitted' || status === 'streaming';

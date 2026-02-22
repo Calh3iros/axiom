@@ -108,13 +108,13 @@ ${text}
 
               // Upsert logic for knowledge_map
               const { supabaseAdmin } = await import('@/lib/supabase/admin');
-              const { data: existingTopic } = await supabaseAdmin
+              const { data: existingTopic } = await (supabaseAdmin
                 .from('knowledge_map')
                 .select('id, interactions_count, mastery_score')
                 .eq('user_id', userId)
                 .eq('subject', topicData.subject)
                 .eq('topic', topicData.topic)
-                .single();
+                .single() as any);
 
               if (existingTopic) {
                 // Gentle moving average: new_score = (old_score * count + new_understanding) / (count + 1)
@@ -122,13 +122,13 @@ ${text}
                 const oldScore = existingTopic.mastery_score || 0;
                 const newScore = ((oldScore * (existingTopic.interactions_count || 1)) + topicData.understanding_score) / newCount;
 
-                await supabaseAdmin.from('knowledge_map').update({
+                await (supabaseAdmin.from('knowledge_map') as any).update({
                   interactions_count: newCount,
                   mastery_score: newScore,
                   last_interaction_at: new Date().toISOString()
                 }).eq('id', existingTopic.id);
               } else {
-                await supabaseAdmin.from('knowledge_map').insert({
+                await (supabaseAdmin.from('knowledge_map') as any).insert({
                   user_id: userId,
                   subject: topicData.subject,
                   topic: topicData.topic,

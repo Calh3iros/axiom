@@ -104,6 +104,7 @@ export interface Database {
           stripe_subscription_id: string | null;
           current_streak: number | null;
           last_active_date: string | null;
+          badges: string[] | null;
           created_at: string;
           updated_at: string;
         };
@@ -117,6 +118,7 @@ export interface Database {
           stripe_subscription_id?: string | null;
           current_streak?: number | null;
           last_active_date?: string | null;
+          badges?: string[] | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -130,6 +132,7 @@ export interface Database {
           stripe_subscription_id?: string | null;
           current_streak?: number | null;
           last_active_date?: string | null;
+          badges?: string[] | null;
           created_at?: string;
           updated_at?: string;
         };

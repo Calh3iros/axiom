@@ -171,30 +171,50 @@ export async function incrementUsage(
       });
   }
 
-  // 2. Streak Logic (Only for real uuid users, skip 'anon:ip')
+  // 2. Streak Logic & Badge Checking (Only for real uuid users, skip 'anon:ip')
   if (!userId.startsWith('anon:')) {
     const { data: profile } = await supabaseAdmin
       .from('profiles')
-      .select('current_streak, last_active_date')
+      .select('current_streak, last_active_date, badges')
       .eq('id', userId)
-      .single() as { data: { current_streak: number | null, last_active_date: string | null } | null };
+      .single() as { data: { current_streak: number | null, last_active_date: string | null, badges: string[] | null } | null };
 
     if (profile) {
       const lastActive = profile.last_active_date;
       const currentStreak = profile.current_streak || 0;
 
+      let newStreak = currentStreak;
+
       if (lastActive !== today) {
-        let newStreak = 1;
+        newStreak = 1;
 
         if (lastActive === yesterday) {
           // Continuous active day
           newStreak = currentStreak + 1;
         }
+      }
 
+      // Check for badges regardless of whether streak changed today (in case we want to re-eval or award missing)
+      const existingBadges = profile.badges || [];
+      const newBadges = [...existingBadges];
+      let badgesUpdated = false;
+
+      if (newStreak >= 7 && !existingBadges.includes('1_week_scholar')) {
+        newBadges.push('1_week_scholar');
+        badgesUpdated = true;
+      }
+      if (newStreak >= 30 && !existingBadges.includes('monthly_master')) {
+        newBadges.push('monthly_master');
+        badgesUpdated = true;
+      }
+
+      // We only update if something changed (either the day is new or we got new badges)
+      if (lastActive !== today || badgesUpdated) {
         await (supabaseAdmin.from('profiles') as any)
           .update({
             current_streak: newStreak,
-            last_active_date: today
+            last_active_date: today,
+            badges: newBadges
           })
           .eq('id', userId);
       }

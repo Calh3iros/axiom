@@ -74,7 +74,7 @@ export default async function KnowledgeMapPage() {
                 {subject}
               </h2>
               <div className="space-y-4">
-                {items.map((item) => {
+                {(items as any[]).map((item: any) => {
                   const percent = Math.round((item.mastery_score || 0) * 100);
                   // Determine color based on mastery
                   let colorClass = 'bg-red-400';

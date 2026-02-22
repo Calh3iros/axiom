@@ -102,13 +102,17 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
 
       {/* Footer CTA */}
       <footer className="w-full bg-[var(--color-bg1)] border-t border-[var(--color-border)] py-12 px-6 flex flex-col justify-center items-center text-center mt-12">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[var(--color-ax-blue)]/10 border border-[var(--color-ax-blue)]/20 rounded-full mb-6">
+          <Sparkles className="w-4 h-4 text-[var(--color-ax-blue)]" />
+          <span className="text-sm font-semibold text-[var(--color-text-primary)]">Solved by Axiom in 5 seconds</span>
+        </div>
         <h2 className="text-2xl font-bold mb-4">Stop waiting. Start solving.</h2>
         <p className="text-[var(--color-text-secondary)] mb-6 max-w-md">
           Join thousands of students getting instant, step-by-step solutions to their hardest questions.
         </p>
         <Link
           href="/solve"
-          className="px-8 py-3 bg-[var(--color-ax-blue)] text-black font-semibold rounded-full hover:bg-blue-400 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg0)]"
+          className="px-8 py-3 bg-[var(--color-ax-blue)] text-white font-semibold rounded-full hover:bg-blue-500 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg0)]"
         >
           Create your free account
         </Link>

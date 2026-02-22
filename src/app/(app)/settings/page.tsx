@@ -10,6 +10,7 @@ type Profile = {
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   created_at: string;
+  badges: string[] | null;
 };
 
 export default function SettingsPage() {
@@ -26,7 +27,7 @@ export default function SettingsPage() {
       if (user) {
         const { data } = await supabase
           .from('profiles')
-          .select('plan, stripe_customer_id, stripe_subscription_id, created_at')
+          .select('plan, stripe_customer_id, stripe_subscription_id, created_at, badges')
           .eq('id', user.id)
           .single() as { data: Profile | null };
         setProfile(data);
@@ -126,6 +127,52 @@ export default function SettingsPage() {
             </div>
             <p className="text-sm font-semibold text-[var(--color-text-primary)] capitalize">
               {user?.app_metadata?.provider || 'Email'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Achievements Card ── */}
+      <div className="bg-[var(--color-bg1)] border border-[var(--color-border2)] rounded-2xl p-6">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)] flex items-center gap-2">
+            🏆 Achievements
+          </h2>
+          <p className="text-xs text-[var(--color-text-secondary)]">Solve problems daily to unlock badges and build your streak.</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {/* Badge 1: 1-Week Scholar */}
+          <div className={`flex flex-col items-center justify-center p-4 rounded-xl border ${
+            profile?.badges?.includes('1_week_scholar')
+              ? 'bg-[var(--color-ax-yellow)]/10 border-[var(--color-ax-yellow)]/20'
+              : 'bg-[var(--color-bg0)] border-[var(--color-border)] opacity-60 grayscale'
+          }`}>
+            <div className={`w-12 h-12 rounded-full mb-2 flex items-center justify-center ${
+              profile?.badges?.includes('1_week_scholar') ? 'bg-[var(--color-ax-yellow)]/20 text-[var(--color-ax-yellow)]' : 'bg-[var(--color-bg2)] text-[var(--color-dim)]'
+            }`}>
+              🔥
+            </div>
+            <p className="font-bold text-sm text-[var(--color-text-primary)] text-center">7-Day Scholar</p>
+            <p className="text-[10px] text-[var(--color-text-secondary)] text-center mt-1">
+              Active for 7 days
+            </p>
+          </div>
+
+          {/* Badge 2: Monthly Master */}
+          <div className={`flex flex-col items-center justify-center p-4 rounded-xl border ${
+            profile?.badges?.includes('monthly_master')
+              ? 'bg-[var(--color-ax-blue)]/10 border-[var(--color-ax-blue)]/20'
+              : 'bg-[var(--color-bg0)] border-[var(--color-border)] opacity-60 grayscale'
+          }`}>
+            <div className={`w-12 h-12 rounded-full mb-2 flex items-center justify-center ${
+              profile?.badges?.includes('monthly_master') ? 'bg-[var(--color-ax-blue)]/20 text-[var(--color-ax-blue)]' : 'bg-[var(--color-bg2)] text-[var(--color-dim)]'
+            }`}>
+              🎖️
+            </div>
+            <p className="font-bold text-sm text-[var(--color-text-primary)] text-center">Monthly Master</p>
+            <p className="text-[10px] text-[var(--color-text-secondary)] text-center mt-1">
+              Active for 30 days
             </p>
           </div>
         </div>
