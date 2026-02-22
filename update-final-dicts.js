@@ -17,7 +17,15 @@ const data = {
     Share: {
       chatNotFound: 'Chat not found',
       invalidLink: 'This link may be invalid or the chat is no longer shared.',
-      solvedBy: 'Solved by Axiom in 5 seconds'
+      solvedBy: 'Solved by Axiom in 5 seconds',
+      returnHome: 'Return to Axiom',
+      tryFree: 'Try Free',
+      sharedSolution: 'Shared Solution:',
+      untitledChat: 'Untitled Session',
+      snapshotDesc: 'This is a read-only snapshot of a conversation solved by Axiom AI.',
+      stopWaiting: 'Stop waiting. Start solving.',
+      joinThousands: 'Join thousands of students getting instant, step-by-step solutions to their hardest questions.',
+      createFree: 'Create your free account'
     },
     Components: {
       emergencyActive: 'EMERGENCY MODE ACTIVE',
@@ -67,7 +75,15 @@ const data = {
     Share: {
       chatNotFound: 'Chat não encontrado',
       invalidLink: 'Este link pode ser inválido ou o chat não é mais compartilhado.',
-      solvedBy: 'Resolvido pelo Axiom em 5 segundos'
+      solvedBy: 'Resolvido pelo Axiom em 5 segundos',
+      returnHome: 'Voltar para o Axiom',
+      tryFree: 'Testar Grátis',
+      sharedSolution: 'Solução Compartilhada:',
+      untitledChat: 'Sessão sem título',
+      snapshotDesc: 'Este é um instantâneo somente leitura de uma conversa resolvida pela Axiom AI.',
+      stopWaiting: 'Pare de esperar. Comece a resolver.',
+      joinThousands: 'Junte-se a milhares de estudantes recebendo soluções instantâneas passo a passo para as perguntas mais difíceis.',
+      createFree: 'Crie sua conta grátis'
     },
     Components: {
       emergencyActive: 'MODO DE EMERGÊNCIA ATIVO',
@@ -117,7 +133,15 @@ const data = {
     Share: {
       chatNotFound: 'Chat no encontrado',
       invalidLink: 'Este enlace puede no ser válido o el chat ya no está compartido.',
-      solvedBy: 'Resuelto por Axiom en 5 segundos'
+      solvedBy: 'Resuelto por Axiom en 5 segundos',
+      returnHome: 'Volver a Axiom',
+      tryFree: 'Probar Gratis',
+      sharedSolution: 'Solución Compartida:',
+      untitledChat: 'Sesión sin título',
+      snapshotDesc: 'Esta es una instantánea de solo lectura de una conversación resuelta por Axiom AI.',
+      stopWaiting: 'Deja de esperar. Empieza a resolver.',
+      joinThousands: 'Únete a miles de estudiantes que obtienen soluciones instantáneas paso a paso a sus preguntas más difíciles.',
+      createFree: 'Crea tu cuenta gratis'
     },
     Components: {
       emergencyActive: 'MODO DE EMERGENCIA ACTIVO',
@@ -167,7 +191,15 @@ const data = {
     Share: {
       chatNotFound: "Discussion introuvable",
       invalidLink: "Ce lien peut être invalide ou la discussion n'est plus partagée.",
-      solvedBy: "Résolu par Axiom en 5 secondes"
+      solvedBy: "Résolu par Axiom en 5 secondes",
+      returnHome: "Retour à Axiom",
+      tryFree: "Essayer Gratuitement",
+      sharedSolution: "Solution Partagée :",
+      untitledChat: "Session sans titre",
+      snapshotDesc: "Ceci est un aperçu en lecture seule d'une conversation résolue par Axiom AI.",
+      stopWaiting: "Arrêtez d'attendre. Commencez à résoudre.",
+      joinThousands: "Rejoignez des milliers d'étudiants obtenant des solutions instantanées étape par étape à leurs questions les plus difficiles.",
+      createFree: "Créez votre compte gratuit"
     },
     Components: {
       emergencyActive: "MODE D URGENT ACTIF",
@@ -217,7 +249,15 @@ const data = {
     Share: {
       chatNotFound: 'Chat nicht gefunden',
       invalidLink: 'Dieser Link ist möglicherweise ungültig oder der Chat wird nicht mehr geteilt.',
-      solvedBy: 'Gelöst von Axiom in 5 Sekunden'
+      solvedBy: 'Gelöst von Axiom in 5 Sekunden',
+      returnHome: 'Zurück zu Axiom',
+      tryFree: 'Kostenlos testen',
+      sharedSolution: 'Geteilte Lösung:',
+      untitledChat: 'Unbenannte Sitzung',
+      snapshotDesc: 'Dies ist ein schreibgeschützter Schnappschuss eines Gesprächs, das von Axiom AI gelöst wurde.',
+      stopWaiting: 'Hör auf zu warten. Fange an zu lösen.',
+      joinThousands: 'Schließe dich Tausenden von Studenten an, die sofortige Schritt-für-Schritt-Lösungen für ihre härtesten Fragen erhalten.',
+      createFree: 'Erstelle dein kostenloses Konto'
     },
     Components: {
       emergencyActive: 'NOTFALLMODUS AKTIV',
@@ -267,7 +307,15 @@ const data = {
     Share: {
       chatNotFound: '找不到聊天',
       invalidLink: '此链接可能无效或聊天不再共享。',
-      solvedBy: 'Axiom 在 5 秒内解决'
+      solvedBy: 'Axiom 在 5 秒内解决',
+      returnHome: '返回 Axiom',
+      tryFree: '免费试用',
+      sharedSolution: '共享的解决方案：',
+      untitledChat: '无标题会话',
+      snapshotDesc: '这是Axiom AI解决的对话的只读快照。',
+      stopWaiting: '不要等待。开始解决。',
+      joinThousands: '加入成千上万的学生，获取最难问题的即时逐步解决方案。',
+      createFree: '创建您的免费帐户'
     },
     Components: {
       emergencyActive: '紧急模式处于活动状态',

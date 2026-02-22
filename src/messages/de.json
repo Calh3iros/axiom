@@ -108,7 +108,15 @@
     "Share": {
       "chatNotFound": "Chat nicht gefunden",
       "invalidLink": "Dieser Link ist möglicherweise ungültig oder der Chat wird nicht mehr geteilt.",
-      "solvedBy": "Gelöst von Axiom in 5 Sekunden"
+      "solvedBy": "Gelöst von Axiom in 5 Sekunden",
+      "returnHome": "Zurück zu Axiom",
+      "tryFree": "Kostenlos testen",
+      "sharedSolution": "Geteilte Lösung:",
+      "untitledChat": "Unbenannte Sitzung",
+      "snapshotDesc": "Dies ist ein schreibgeschützter Schnappschuss eines Gesprächs, das von Axiom AI gelöst wurde.",
+      "stopWaiting": "Hör auf zu warten. Fange an zu lösen.",
+      "joinThousands": "Schließe dich Tausenden von Studenten an, die sofortige Schritt-für-Schritt-Lösungen für ihre härtesten Fragen erhalten.",
+      "createFree": "Erstelle dein kostenloses Konto"
     },
     "Components": {
       "input": "Eingabe",

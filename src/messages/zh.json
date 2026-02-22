@@ -108,7 +108,15 @@
     "Share": {
       "chatNotFound": "找不到聊天",
       "invalidLink": "此链接可能无效或聊天不再共享。",
-      "solvedBy": "Axiom 在 5 秒内解决"
+      "solvedBy": "Axiom 在 5 秒内解决",
+      "returnHome": "返回 Axiom",
+      "tryFree": "免费试用",
+      "sharedSolution": "共享的解决方案：",
+      "untitledChat": "无标题会话",
+      "snapshotDesc": "这是Axiom AI解决的对话的只读快照。",
+      "stopWaiting": "不要等待。开始解决。",
+      "joinThousands": "加入成千上万的学生，获取最难问题的即时逐步解决方案。",
+      "createFree": "创建您的免费帐户"
     },
     "Components": {
       "input": "输入",

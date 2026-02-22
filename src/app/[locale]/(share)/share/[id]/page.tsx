@@ -35,7 +35,7 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
         <h1 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">{t('chatNotFound')}</h1>
         <p className="text-[var(--color-text-secondary)]">{t('invalidLink')}</p>
         <Link href="/" className="mt-6 px-6 py-2 bg-[var(--color-bg2)] border border-[var(--color-border)] rounded-full text-sm font-medium hover:text-[var(--color-ax-blue)] transition-colors">
-          Return to Axiom
+          {t('returnHome', { defaultMessage: 'Return to Axiom' })}
         </Link>
       </div>
     );
@@ -68,7 +68,7 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
             href="/solve"
             className="flex items-center gap-2 px-4 py-2 bg-[var(--color-text-primary)] text-[var(--color-bg0)] text-sm font-medium rounded-full shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:bg-[var(--color-text-secondary)] hover:scale-105 transition-all"
           >
-            Try Free
+            {t('tryFree', { defaultMessage: 'Try Free' })}
           </Link>
         </div>
       </header>
@@ -77,10 +77,10 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
         <div className="mb-8 p-6 rounded-2xl bg-[var(--color-ax-blue)]/5 border border-[var(--color-ax-blue)]/10 flex flex-col items-center text-center">
           <h1 className="text-xl md:text-2xl font-bold text-[var(--color-text-primary)] mb-2">
-            Shared Solution: {chat.title || 'Untitled Session'}
+            {t('sharedSolution', { defaultMessage: 'Shared Solution:' })} {chat.title || t('untitledChat', { defaultMessage: 'Untitled Session' })}
           </h1>
           <p className="text-sm text-[var(--color-text-secondary)]">
-            This is a read-only snapshot of a conversation solved by Axiom AI.
+            {t('snapshotDesc', { defaultMessage: 'This is a read-only snapshot of a conversation solved by Axiom AI.' })}
           </p>
         </div>
 
@@ -111,13 +111,13 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
         </div>
         <h2 className="text-2xl font-bold mb-4">{t('stopWaiting', { defaultMessage: 'Stop waiting. Start solving.' })}</h2>
         <p className="text-[var(--color-text-secondary)] mb-6 max-w-md">
-          Join thousands of students getting instant, step-by-step solutions to their hardest questions.
+          {t('joinThousands', { defaultMessage: 'Join thousands of students getting instant, step-by-step solutions to their hardest questions.' })}
         </p>
         <Link
           href="/solve"
           className="px-8 py-3 bg-[var(--color-ax-blue)] text-white font-semibold rounded-full hover:bg-blue-500 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg0)]"
         >
-          Create your free account
+          {t('createFree', { defaultMessage: 'Create your free account' })}
         </Link>
       </footer>
     </div>

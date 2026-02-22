@@ -108,7 +108,15 @@
     "Share": {
       "chatNotFound": "Chat not found",
       "invalidLink": "This link may be invalid or the chat is no longer shared.",
-      "solvedBy": "Solved by Axiom in 5 seconds"
+      "solvedBy": "Solved by Axiom in 5 seconds",
+      "returnHome": "Return to Axiom",
+      "tryFree": "Try Free",
+      "sharedSolution": "Shared Solution:",
+      "untitledChat": "Untitled Session",
+      "snapshotDesc": "This is a read-only snapshot of a conversation solved by Axiom AI.",
+      "stopWaiting": "Stop waiting. Start solving.",
+      "joinThousands": "Join thousands of students getting instant, step-by-step solutions to their hardest questions.",
+      "createFree": "Create your free account"
     },
     "Components": {
       "input": "Input",
