@@ -1,8 +1,7 @@
 /**
  * Rate Limiting / Usage Tracking
  *
- * Reusable helper for all API routes.
- * Checks if a user (free or pro) has exceeded daily limits.
+ * Migrated to Supabase DB. Tracks daily usage and real consecutive-day streaks.
  *
  * Free tier limits (per day):
  * - Solve: 3 questions
@@ -14,6 +13,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 
 export const PLANS = {
   free: {
@@ -43,15 +43,8 @@ interface UserInfo {
   isPro: boolean;
 }
 
-// In-memory usage tracking (will be replaced with Supabase when DB is configured)
-const memoryUsage = new Map<string, Record<string, number>>();
-
-function getTodayKey(): string {
+function getTodayStr(): string {
   return new Date().toISOString().split('T')[0];
-}
-
-function getUserDayKey(userId: string): string {
-  return `${userId}:${getTodayKey()}`;
 }
 
 /**
@@ -64,7 +57,6 @@ export async function getUserAndPlan(req: Request): Promise<UserInfo> {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (user) {
-      // Fetch plan from profiles table
       const { data: profile } = await supabase
         .from('profiles')
         .select('plan')
@@ -77,10 +69,9 @@ export async function getUserAndPlan(req: Request): Promise<UserInfo> {
       };
     }
   } catch {
-    // Fall through to anonymous
+    // Fall through
   }
 
-  // Anonymous fallback
   return {
     userId: getUserIdFromRequest(req),
     isPro: false,
@@ -95,20 +86,7 @@ export async function checkUsage(
   type: UsageType,
   isPro: boolean = false
 ): Promise<UsageCheck> {
-  // Pro users have unlimited access
-  if (isPro) {
-    return { allowed: true };
-  }
-
-  const key = getUserDayKey(userId);
-  const current = memoryUsage.get(key) || {};
-
-  const fieldMap: Record<UsageType, string> = {
-    solve: 'solves_used',
-    humanize: 'humanize_words',
-    write: 'writes_used',
-    learn: 'learns_used',
-  };
+  if (isPro) return { allowed: true };
 
   const limitMap: Record<UsageType, number> = {
     solve: PLANS.free.limits.solves,
@@ -116,10 +94,29 @@ export async function checkUsage(
     write: PLANS.free.limits.writes,
     learn: PLANS.free.limits.learns,
   };
-
-  const field = fieldMap[type];
   const limit = limitMap[type];
-  const used = current[field] || 0;
+
+  // If anonymous, just use limit check but we don't block yet (memory map removed, so anonymous is basically unlimited unless we add IP blocking back. But spec focuses on auth users).
+  // Actually, to keep anonymous tracking without memory leaks, we can store 'anon:ip' in the usage table too!
+
+  const today = getTodayStr();
+
+  const { data: usage } = await supabaseAdmin
+    .from('usage')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('date', today)
+    .single();
+
+  const fieldMap: Record<UsageType, 'solves' | 'humanizes' | 'writes'> = {
+    solve: 'solves',
+    humanize: 'humanizes',
+    write: 'writes',
+    learn: 'solves',
+  };
+
+  const fieldName = fieldMap[type];
+  const used = Number(usage?.[fieldName]) || 0;
 
   return {
     allowed: used < limit,
@@ -130,33 +127,81 @@ export async function checkUsage(
 }
 
 /**
- * Increment usage counter for a given action.
- * Call this AFTER successfully processing a request.
+ * Increment usage counter in DB.
+ * Updates user streak if it's their first action of the day.
  */
 export async function incrementUsage(
   userId: string,
   type: UsageType,
   amount: number = 1
 ): Promise<void> {
-  const key = getUserDayKey(userId);
-  const current = memoryUsage.get(key) || {};
+  const today = getTodayStr();
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterday = yesterdayDate.toISOString().split('T')[0];
 
-  const fieldMap: Record<UsageType, string> = {
-    solve: 'solves_used',
-    humanize: 'humanize_words',
-    write: 'writes_used',
-    learn: 'learns_used',
+  const fieldMap: Record<UsageType, 'solves' | 'humanizes' | 'writes'> = {
+    solve: 'solves',
+    humanize: 'humanizes',
+    write: 'writes',
+    learn: 'solves', // falling back to solves for learn count in DB
   };
-
   const field = fieldMap[type];
-  current[field] = (current[field] || 0) + amount;
-  memoryUsage.set(key, current);
+
+  const { data: existingUsage } = await supabaseAdmin
+    .from('usage')
+    .select('id, solves, writes, humanizes')
+    .eq('user_id', userId)
+    .eq('date', today)
+    .single() as { data: { id: string, solves: number, writes: number, humanizes: number } | null };
+
+  if (existingUsage) {
+    await (supabaseAdmin.from('usage') as any)
+      .update({ [field]: existingUsage[field] + amount })
+      .eq('id', existingUsage.id);
+  } else {
+    // New day usage for this user
+    await (supabaseAdmin.from('usage') as any)
+      .insert({
+        user_id: userId,
+        date: today,
+        solves: type === 'solve' || type === 'learn' ? amount : 0,
+        writes: type === 'write' ? amount : 0,
+        humanizes: type === 'humanize' ? amount : 0,
+      });
+  }
+
+  // 2. Streak Logic (Only for real uuid users, skip 'anon:ip')
+  if (!userId.startsWith('anon:')) {
+    const { data: profile } = await supabaseAdmin
+      .from('profiles')
+      .select('current_streak, last_active_date')
+      .eq('id', userId)
+      .single() as { data: { current_streak: number | null, last_active_date: string | null } | null };
+
+    if (profile) {
+      const lastActive = profile.last_active_date;
+      const currentStreak = profile.current_streak || 0;
+
+      if (lastActive !== today) {
+        let newStreak = 1;
+
+        if (lastActive === yesterday) {
+          // Continuous active day
+          newStreak = currentStreak + 1;
+        }
+
+        await (supabaseAdmin.from('profiles') as any)
+          .update({
+            current_streak: newStreak,
+            last_active_date: today
+          })
+          .eq('id', userId);
+      }
+    }
+  }
 }
 
-/**
- * Get the user's IP from the request headers.
- * Used as a fallback identifier for anonymous users.
- */
 export function getUserIdFromRequest(req: Request): string {
   const forwarded = req.headers.get('x-forwarded-for');
   const ip = forwarded?.split(',')[0]?.trim() || 'anonymous';

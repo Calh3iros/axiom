@@ -31,6 +31,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [plan, setPlan] = useState<'free' | 'pro'>('free');
+  const [streak, setStreak] = useState(0);
   const [signingOut, setSigningOut] = useState(false);
 
   useEffect(() => {
@@ -42,10 +43,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('plan')
+          .select('plan, current_streak')
           .eq('id', user.id)
-          .single() as { data: { plan: string } | null };
+          .single() as { data: { plan: string, current_streak: number | null } | null };
         if (profile?.plan) setPlan(profile.plan as 'free' | 'pro');
+        if (profile?.current_streak !== undefined) setStreak(profile.current_streak || 0);
       }
     });
 
@@ -172,7 +174,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="h-14 flex items-center justify-between px-4 md:px-8 border-b border-[var(--color-border)] bg-[var(--color-bg1)]/80 backdrop-blur-md flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/8 border border-amber-500/15 rounded-full text-amber-400 text-xs font-mono font-semibold">
-              🔥 <span>1</span>
+              🔥 <span>{streak}</span>
             </div>
             <span className="text-xs text-[var(--color-dim)] hidden sm:inline">day streak</span>
           </div>
