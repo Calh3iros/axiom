@@ -38,6 +38,38 @@ export interface Database {
           updated_at?: string;
         };
       };
+        knowledge_map: {
+          Row: {
+            id: string;
+            user_id: string;
+            subject: string;
+            topic: string;
+            interactions_count: number | null;
+            mastery_score: number | null;
+            last_interaction_at: string | null;
+            created_at: string | null;
+          };
+          Insert: {
+            id?: string;
+            user_id: string;
+            subject: string;
+            topic: string;
+            interactions_count?: number | null;
+            mastery_score?: number | null;
+            last_interaction_at?: string | null;
+            created_at?: string | null;
+          };
+          Update: {
+            id?: string;
+            user_id?: string;
+            subject?: string;
+            topic?: string;
+            interactions_count?: number | null;
+            mastery_score?: number | null;
+            last_interaction_at?: string | null;
+            created_at?: string | null;
+          };
+        };
       messages: {
         Row: {
           id: string;

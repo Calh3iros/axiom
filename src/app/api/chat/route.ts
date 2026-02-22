@@ -81,7 +81,70 @@ export async function POST(req: Request) {
             role: 'assistant',
             content: text
           });
+
+          // --- BACKGROUND WORKER: KNOWLEDGE MAP EXTRACTOR ---
+          // We intentionally do NOT await this so the response closes quickly.
+          (async () => {
+            try {
+              const { generateObject } = await import('ai');
+              const { z } = await import('zod');
+
+              const { object: topicData } = await generateObject({
+                model: google('gemini-2.5-flash'),
+                schema: z.object({
+                  subject: z.string().describe('Broad subject category, e.g. "Mathematics", "Physics", "History"'),
+                  topic: z.string().describe('Specific topic being asked about, e.g. "Derivatives", "Kinematics", "World War II"'),
+                  understanding_score: z.number().min(0).max(1).describe('Estimated understanding of the user based on the question context. 0.0 = completely lost, 1.0 = highly knowledgeable.')
+                }),
+                prompt: `Analyze the user's question and the provided answer to extract the topic and estimate the user's initial understanding level.
+
+User Question:
+${lastMessage?.content || 'Unknown'}
+
+AI Answer:
+${text}
+`
+              });
+
+              // Upsert logic for knowledge_map
+              const { supabaseAdmin } = await import('@/lib/supabase/admin');
+              const { data: existingTopic } = await supabaseAdmin
+                .from('knowledge_map')
+                .select('id, interactions_count, mastery_score')
+                .eq('user_id', userId)
+                .eq('subject', topicData.subject)
+                .eq('topic', topicData.topic)
+                .single();
+
+              if (existingTopic) {
+                // Gentle moving average: new_score = (old_score * count + new_understanding) / (count + 1)
+                const newCount = (existingTopic.interactions_count || 1) + 1;
+                const oldScore = existingTopic.mastery_score || 0;
+                const newScore = ((oldScore * (existingTopic.interactions_count || 1)) + topicData.understanding_score) / newCount;
+
+                await supabaseAdmin.from('knowledge_map').update({
+                  interactions_count: newCount,
+                  mastery_score: newScore,
+                  last_interaction_at: new Date().toISOString()
+                }).eq('id', existingTopic.id);
+              } else {
+                await supabaseAdmin.from('knowledge_map').insert({
+                  user_id: userId,
+                  subject: topicData.subject,
+                  topic: topicData.topic,
+                  mastery_score: topicData.understanding_score,
+                  interactions_count: 1
+                });
+              }
+
+              console.log(`Knowledge map updated for ${userId}: ${topicData.subject}/${topicData.topic} -> Mastery: ${topicData.understanding_score}`);
+            } catch (err) {
+              console.error('Background Knowledge Map Extractor Failed:', err);
+            }
+          })();
+          // -------------------------------------------------
         }
+
       },
     });
 

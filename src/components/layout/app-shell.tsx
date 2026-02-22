@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   LogOut,
-  User
+  User,
+  Target
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -23,6 +24,7 @@ const navItems = [
   { name: 'Write', href: '/write', icon: PenTool },
   { name: 'Humanize', href: '/humanize', icon: Wand2 },
   { name: 'Learn', href: '/learn', icon: BookOpen },
+  { name: 'Map', href: '/map', icon: Target },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
