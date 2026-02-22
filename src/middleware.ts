@@ -70,12 +70,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // CRITICAL BYPASS: Do not let next-intl intercept and redirect the OAuth callback
+  // because Supabase PKCE requires the redirect_uri to match EXACTLY during code exchange.
+  if (pathWithoutLocale === '/auth/callback') {
+    return response;
+  }
+
   // Pass the request to the next-intl middleware for locale routing
   const intlResponse = handleI18nRouting(request);
 
-  // Merge the Supabase headers into the intl response
-  intlResponse.headers.forEach((value, key) => {
-    response.headers.set(key, value);
+  // Merge the Supabase session headers into the final next-intl response
+  // We ONLY care about cookies here so session refresh works.
+  response.headers.forEach((value, key) => {
+    if (key.toLowerCase() === 'set-cookie') {
+      intlResponse.headers.append(key, value);
+    }
   });
 
   return intlResponse;

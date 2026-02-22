@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     const response = await generateText({
       model: google('gemini-2.5-flash'),
       prompt: `Text to humanize:\n${text}`,
-      system: PROMPTS.HUMANIZE(mode),
+      system: `${PROMPTS.HUMANIZE(mode)}\n\nCRITICAL: You MUST respond EXCLUSIVELY in the same language as the text provided to be humanized. DO NOT mix languages.`,
     });
 
     // Track usage by word count

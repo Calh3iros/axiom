@@ -1,1 +1,99 @@
-{ "HomePage": { "title": "Solve your homework in 5 seconds" } }
+{
+  "HomePage": {
+    "title": "Solve anything in 5 seconds",
+    "cta": "Try Free"
+  },
+  "Dashboard": {
+    "Sidebar": {
+      "solve": "Solve",
+      "write": "Write",
+      "humanize": "Humanize",
+      "learn": "Learn",
+      "map": "Map",
+      "upgradeToPro": "Upgrade to Pro",
+      "settings": "Settings",
+      "signOut": "Sign Out",
+      "signingOut": "Signing out...",
+      "dayStreak": "day streak",
+      "solvesLeftToday": "solves left today",
+      "free": "FREE",
+      "pro": "PRO ✨"
+    },
+    "Solve": {
+      "title": "Homework Solver",
+      "description": "Snap a photo or type your question. I'll solve it step-by-step instantly.",
+      "chatHistory": "Chat History",
+      "newSolve": "New Solve",
+      "noRecentChats": "No recent chats",
+      "untitledChat": "Untitled Chat"
+    },
+    "Write": {
+      "title": "Essay Writer",
+      "description": "AI-powered writing assistant. Generate outlines, expand ideas, add citations, and more."
+    },
+    "Humanize": {
+      "title": "AI Humanizer",
+      "description": "Rewrite AI-generated text to sound naturally human. Bypass detectors with a single click."
+    },
+    "Map": {
+      "title": "Your Knowledge Map",
+      "description": "Axiom tracks the subjects you query and estimates your mastery. The more you explore and solve, the smarter this map gets.",
+      "noData": "No data yet",
+      "noDataDesc": "Start solving problems in the Chat to build your customized knowledge profile.",
+      "startSolving": "Start Solving",
+      "interaction": "interaction",
+      "interactions": "interactions"
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Manage your account and subscription",
+      "memberSince": "Member since",
+      "authProvider": "Auth provider",
+      "achievements": "Achievements",
+      "achievementsDesc": "Solve problems daily to unlock badges and build your streak.",
+      "scholar7": "7-Day Scholar",
+      "scholar7Desc": "Active for 7 days",
+      "master30": "Monthly Master",
+      "master30Desc": "Active for 30 days",
+      "planFree": "Free Plan",
+      "planFreeDesc": "3 solves, 500 words, 1 write per day",
+      "planPro": "Axiom Pro",
+      "planProDesc": "Unlimited access to all features",
+      "billing": "Billing",
+      "status": "Status",
+      "managedViaStripe": "Managed via Stripe",
+      "active": "Active",
+      "manageSubscription": "Manage Subscription",
+      "opening": "Opening...",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "upgradeToProPricing": "Upgrade to Pro — "
+    },
+    "Learn": {
+      "title": "Learn Tutor",
+      "description": "Your AI study companion. Ask anything — \"Teach me calculus from zero\".",
+      "panicBtn": "🚨 PANIC MODE",
+      "whatToLearn": "What do you want to learn?",
+      "askMeAnythingDesc": "Ask me anything — \"Teach me derivatives from scratch\", \"Explain photosynthesis\", or \"Help me understand recursion\".",
+      "sug1": "Teach me calculus basics",
+      "sug2": "Explain DNA replication",
+      "sug3": "How does recursion work?",
+      "sug4": "Prep me for my physics exam",
+      "thinking": "Thinking...",
+      "inputPlaceholder": "Ask me anything... \"Teach me about...\""
+    },
+    "Panic": {
+      "backBtn": "Back to Tutor",
+      "title": "Panic Mode",
+      "description": "Generate a complete exam prep package in seconds",
+      "subjectPlaceholder": "Subject (e.g. Organic Chemistry)",
+      "chapterPlaceholder": "Chapter or topic (optional)",
+      "generating": "Generating study package...",
+      "activateBtn": "🚨 ACTIVATE PANIC MODE",
+      "tabSummary": "Summary",
+      "tabQA": "Q&A",
+      "tabFlashcards": "Flashcards",
+      "tabPlan": "Study Plan"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AlertTriangle, BookOpen, Loader2, HelpCircle, Lightbulb, Clock } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 
 type PanicResult = {
   summary: string;
@@ -17,6 +18,8 @@ export function LearnPanel() {
   const [result, setResult] = useState<PanicResult | null>(null);
   const [activeTab, setActiveTab] = useState<'summary' | 'questions' | 'flashcards' | 'plan'>('summary');
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+  const locale = useLocale();
+  const t = useTranslations('Dashboard.Panic');
 
   const handlePanicMode = async () => {
     if (!subject.trim() || loading) return;
@@ -28,7 +31,7 @@ export function LearnPanel() {
       const res = await fetch('/api/learn/panic', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, chapter }),
+        body: JSON.stringify({ subject, chapter, locale }),
       });
 
       if (!res.ok) {
@@ -56,10 +59,10 @@ export function LearnPanel() {
   };
 
   const tabs = [
-    { key: 'summary' as const, label: 'Summary', icon: BookOpen },
-    { key: 'questions' as const, label: 'Q&A', icon: HelpCircle },
-    { key: 'flashcards' as const, label: 'Flashcards', icon: Lightbulb },
-    { key: 'plan' as const, label: 'Study Plan', icon: Clock },
+    { key: 'summary' as const, label: t('tabSummary'), icon: BookOpen },
+    { key: 'questions' as const, label: t('tabQA'), icon: HelpCircle },
+    { key: 'flashcards' as const, label: t('tabFlashcards'), icon: Lightbulb },
+    { key: 'plan' as const, label: t('tabPlan'), icon: Clock },
   ];
 
   return (
@@ -71,8 +74,8 @@ export function LearnPanel() {
             <AlertTriangle className="w-5 h-5 text-red-400" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[var(--color-text-primary)]">Panic Mode</h2>
-            <p className="text-xs text-[var(--color-text-secondary)]">Generate a complete exam prep package in seconds</p>
+            <h2 className="text-lg font-bold text-[var(--color-text-primary)]">{t('title')}</h2>
+            <p className="text-xs text-[var(--color-text-secondary)]">{t('description')}</p>
           </div>
         </div>
 
@@ -80,13 +83,13 @@ export function LearnPanel() {
           <input
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            placeholder="Subject (e.g. Organic Chemistry)"
+            placeholder={t('subjectPlaceholder')}
             className="bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-ax-blue)] text-[var(--color-text-primary)] placeholder-[var(--color-dim)]"
           />
           <input
             value={chapter}
             onChange={(e) => setChapter(e.target.value)}
-            placeholder="Chapter or topic (optional)"
+            placeholder={t('chapterPlaceholder')}
             className="bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-ax-blue)] text-[var(--color-text-primary)] placeholder-[var(--color-dim)]"
           />
         </div>
@@ -99,12 +102,12 @@ export function LearnPanel() {
           {loading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Generating study package...
+              {t('generating')}
             </>
           ) : (
             <>
               <AlertTriangle className="w-5 h-5" />
-              🚨 ACTIVATE PANIC MODE
+              {t('activateBtn')}
             </>
           )}
         </button>

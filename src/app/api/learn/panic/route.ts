@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       prompt: `Subject: ${subject}${chapter ? `, Chapter/Topic: ${chapter}` : ''}.
 Generate a complete exam preparation package. Make it thorough but concise.
 Focus on the most important concepts and likely exam questions.
-Write in the same language as the subject name.`,
+CRITICAL: You MUST respond and fill all JSON fields EXCLUSIVELY in the same language as the 'Subject' provided by the user. DO NOT mix languages.`,
     });
 
     await incrementUsage(userId, 'learn');

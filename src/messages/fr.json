@@ -1,1 +1,99 @@
-{ "HomePage": { "title": "Résolvez vos devoirs en 5 secondes" } }
+{
+  "HomePage": {
+    "title": "Résolvez n'importe quoi en 5 secondes",
+    "cta": "Essayer Gratuitement"
+  },
+  "Dashboard": {
+    "Sidebar": {
+      "solve": "Résoudre",
+      "write": "Écrire",
+      "humanize": "Humaniser",
+      "learn": "Apprendre",
+      "map": "Carte",
+      "upgradeToPro": "Passer à Pro",
+      "settings": "Paramètres",
+      "signOut": "Se déconnecter",
+      "signingOut": "Déconnexion...",
+      "dayStreak": "jours de flamme",
+      "solvesLeftToday": "solutions restantes aujourd'hui",
+      "free": "GRUIT",
+      "pro": "PRO ✨"
+    },
+    "Solve": {
+      "title": "Solveur",
+      "description": "Prenez une photo ou tapez votre question. Je la résoudrai étape par étape instantanément.",
+      "chatHistory": "Historique du Chat",
+      "newSolve": "Nouvelle Résolution",
+      "noRecentChats": "Aucun chat récent",
+      "untitledChat": "Chat sans titre"
+    },
+    "Write": {
+      "title": "Rédacteur",
+      "description": "Assistant de rédaction par IA. Générez des plans, développez des idées, ajoutez des citations, et plus."
+    },
+    "Humanize": {
+      "title": "Humaniseur d'IA",
+      "description": "Réécrivez les textes générés par l'IA pour qu'ils paraissent humains. Contournez les détecteurs en un clic."
+    },
+    "Map": {
+      "title": "Votre Carte de Connaissances",
+      "description": "Axiom suit les sujets que vous interrogez et estime votre maîtrise. Plus vous explorez et résolvez, plus cette carte devient intelligente.",
+      "noData": "Pas encore de données",
+      "noDataDesc": "Commencez à résoudre des problèmes dans le Chat pour construire votre profil de connaissances.",
+      "startSolving": "Commencer à Résoudre",
+      "interaction": "interaction",
+      "interactions": "interactions"
+    },
+    "Settings": {
+      "title": "Paramètres",
+      "description": "Gérez votre compte et votre abonnement",
+      "memberSince": "Membre depuis",
+      "authProvider": "Fournisseur d'accès",
+      "achievements": "Réalisations",
+      "achievementsDesc": "Résolvez des problèmes quotidiennement pour débloquer des badges et augmenter votre flamme.",
+      "scholar7": "Érudit de 7 Jours",
+      "scholar7Desc": "Actif pendant 7 jours",
+      "master30": "Maître Mensuel",
+      "master30Desc": "Actif pendant 30 jours",
+      "planFree": "Plan Gratuit",
+      "planFreeDesc": "3 résolutions, 500 mots, 1 rédaction par jour",
+      "planPro": "Axiom Pro",
+      "planProDesc": "Accès illimité à toutes les fonctionnalités",
+      "billing": "Facturation",
+      "status": "Statut",
+      "managedViaStripe": "Géré par Stripe",
+      "active": "Actif",
+      "manageSubscription": "Gérer l'abonnement",
+      "opening": "Ouverture...",
+      "monthly": "Mensuel",
+      "yearly": "Annuel",
+      "upgradeToProPricing": "Passer à Pro — "
+    },
+    "Learn": {
+      "title": "Tuteur Interactif",
+      "description": "Votre compagnon d'étude IA. Demandez n'importe quoi — \"Apprends-moi le calcul depuis le début\".",
+      "panicBtn": "🚨 MODE PANIQUE",
+      "whatToLearn": "Que voulez-vous apprendre ?",
+      "askMeAnythingDesc": "Demandez n'importe quoi — \"Explique-moi les dérivées\", \"Comment fonctionne la photosynthèse\", ou \"Aide-moi à comprendre la récursivité\".",
+      "sug1": "Apprends-moi les bases du calcul",
+      "sug2": "Explique-moi la réplication de l'ADN",
+      "sug3": "Comment fonctionne la récursivité ?",
+      "sug4": "Prépare-moi pour mon examen de physique",
+      "thinking": "Réflexion...",
+      "inputPlaceholder": "Demandez n'importe quoi... \"Explique-moi...\""
+    },
+    "Panic": {
+      "backBtn": "Retour au Tuteur",
+      "title": "Mode Panique",
+      "description": "Générez un package de préparation aux examens en quelques secondes",
+      "subjectPlaceholder": "Matière (ex: Chimie Organique)",
+      "chapterPlaceholder": "Chapitre ou sujet (optionnel)",
+      "generating": "Génération en cours...",
+      "activateBtn": "🚨 ACTIVER LE MODE PANIQUE",
+      "tabSummary": "Résumé",
+      "tabQA": "Questions-Réponses",
+      "tabFlashcards": "Flashcards",
+      "tabPlan": "Plan d'Étude"
+    }
+  }
+}

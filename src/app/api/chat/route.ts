@@ -17,7 +17,7 @@ const systemPrompts: Record<string, string> = {
 
 export async function POST(req: Request) {
   try {
-    const { messages, type = 'solve', chatId: providedChatId } = await req.json();
+    const { messages, type = 'solve', chatId: providedChatId, locale = 'en' } = await req.json();
 
     // Get authenticated user and their plan from Supabase
     const { userId, isPro } = await getUserAndPlan(req);
@@ -30,7 +30,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const systemInstruction = systemPrompts[type] || systemPrompts.solve;
+    let systemInstruction = systemPrompts[type] || systemPrompts.solve;
+    systemInstruction += `\n\nCRITICAL: You MUST respond EXCLUSIVELY in the same language that the user used in their last message or image text. If the user asks a question in Portuguese, answer in Portuguese. If they speak in Spanish, answer in Spanish. DO NOT default to English unless the user speaks in English.`;
+
     const modelMessages = await convertToModelMessages(messages);
 
     // Grab the latest user message

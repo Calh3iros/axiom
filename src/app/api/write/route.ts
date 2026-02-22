@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: google('gemini-2.5-flash'),
-      prompt: promptFn(content, context),
+      prompt: `${promptFn(content, context)}\n\nCRITICAL: You MUST respond EXCLUSIVELY in the same language as the text provided by the user. DO NOT mix languages.`,
       onFinish: async () => {
         await incrementUsage(userId, 'write');
       },

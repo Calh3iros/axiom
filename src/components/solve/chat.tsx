@@ -3,6 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { Camera, Send, Loader2, Sparkles, Copy, Check, Share2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { useLocale } from 'next-intl';
 import { toast } from 'sonner';
 
 import { UIMessage, DefaultChatTransport } from 'ai';
@@ -20,12 +21,13 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
   const [isSharing, setIsSharing] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const locale = useLocale();
 
   const { messages, sendMessage, status } = useChat({
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: '/api/chat',
-      body: activeChatId ? { type: 'solve', chatId: activeChatId } : { type: 'solve' },
+      body: activeChatId ? { type: 'solve', chatId: activeChatId, locale } : { type: 'solve', locale },
       fetch: async (url: any, options: any) => {
         const res = await fetch(url, options);
         const id = res.headers.get('x-chat-id');

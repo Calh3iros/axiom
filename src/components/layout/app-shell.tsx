@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/routing';
 import {
   Home,
   PenTool,
@@ -18,13 +17,15 @@ import {
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { LanguageSwitcher } from '@/components/shared/language-switcher';
+import { useTranslations } from 'next-intl';
 
 const navItems = [
-  { name: 'Solve', href: '/solve', icon: Home },
-  { name: 'Write', href: '/write', icon: PenTool },
-  { name: 'Humanize', href: '/humanize', icon: Wand2 },
-  { name: 'Learn', href: '/learn', icon: BookOpen },
-  { name: 'Map', href: '/map', icon: Target },
+  { id: 'solve', href: '/solve', icon: Home },
+  { id: 'write', href: '/write', icon: PenTool },
+  { id: 'humanize', href: '/humanize', icon: Wand2 },
+  { id: 'learn', href: '/learn', icon: BookOpen },
+  { id: 'map', href: '/map', icon: Target },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -35,6 +36,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState<'free' | 'pro'>('free');
   const [streak, setStreak] = useState(0);
   const [signingOut, setSigningOut] = useState(false);
+  const t = useTranslations('Dashboard.Sidebar');
 
   useEffect(() => {
     const supabase = createClient();
@@ -112,7 +114,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
             return (
               <Link
-                key={item.name}
+                key={item.id}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`
@@ -124,7 +126,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 `}
               >
                 <Icon className={`w-5 h-5 ${isActive ? 'text-[var(--color-ax-blue)]' : ''}`} />
-                {item.name}
+                {t(item.id)}
               </Link>
             );
           })}
@@ -134,11 +136,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="p-4 border-t border-[var(--color-border)] space-y-2">
           {plan !== 'pro' && (
             <Link href="/pricing" className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)] transition-colors text-sm">
-              <CreditCard className="w-4 h-4" /> Upgrade to Pro
+              <CreditCard className="w-4 h-4" /> {t('upgradeToPro')}
             </Link>
           )}
           <Link href="/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)] transition-colors text-sm">
-            <Settings className="w-4 h-4" /> Settings
+            <Settings className="w-4 h-4" /> {t('settings')}
           </Link>
 
           {/* User Profile & Sign Out */}
@@ -163,7 +165,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-red-400 hover:bg-red-500/10 transition-colors text-sm w-full text-left disabled:opacity-50"
               >
                 <LogOut className="w-4 h-4" />
-                {signingOut ? 'Signing out...' : 'Sign Out'}
+                {signingOut ? t('signingOut') : t('signOut')}
               </button>
             </div>
           )}
@@ -178,15 +180,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/8 border border-amber-500/15 rounded-full text-amber-400 text-xs font-mono font-semibold">
               🔥 <span>{streak}</span>
             </div>
-            <span className="text-xs text-[var(--color-dim)] hidden sm:inline">day streak</span>
+            <span className="text-xs text-[var(--color-dim)] hidden sm:inline">{t('dayStreak')}</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-xs text-[var(--color-text-secondary)]">
-              <span className="text-emerald-400 font-semibold">∞</span> solves left today
+            <div className="hidden md:block">
+              <LanguageSwitcher />
             </div>
-            <div className="w-px h-5 bg-[var(--color-border)]" />
+            <div className="text-xs text-[var(--color-text-secondary)] hidden md:block">
+              <span className="text-emerald-400 font-semibold">∞</span> {t('solvesLeftToday')}
+            </div>
+            <div className="w-px h-5 bg-[var(--color-border)] hidden md:block" />
             <span className={`text-xs font-mono font-semibold ${plan === 'pro' ? 'text-[var(--color-ax-yellow)]' : 'text-[var(--color-dim)]'}`}>
-              {plan === 'pro' ? 'PRO ✨' : 'FREE'}
+              {plan === 'pro' ? t('pro') : t('free')}
             </span>
           </div>
         </div>

@@ -1,1 +1,99 @@
-{ "HomePage": { "title": "Resuelve tu tarea en 5 segundos" } }
+{
+  "HomePage": {
+    "title": "Resuelve cualquier cosa en 5 segundos",
+    "cta": "Prueba Gratis"
+  },
+  "Dashboard": {
+    "Sidebar": {
+      "solve": "Resolver",
+      "write": "Escribir",
+      "humanize": "Humanizar",
+      "learn": "Aprender",
+      "map": "Mapa",
+      "upgradeToPro": "Actualizar a Pro",
+      "settings": "Ajustes",
+      "signOut": "Cerrar sesión",
+      "signingOut": "Saliendo...",
+      "dayStreak": "días de racha",
+      "solvesLeftToday": "resoluciones restantes hoy",
+      "free": "GRATIS",
+      "pro": "PRO ✨"
+    },
+    "Solve": {
+      "title": "Solucionador",
+      "description": "Toma una foto o escribe tu pregunta. Lo resolveré paso a paso al instante.",
+      "chatHistory": "Historial del Chat",
+      "newSolve": "Nueva Resolución",
+      "noRecentChats": "No hay chats recientes",
+      "untitledChat": "Chat sin título"
+    },
+    "Write": {
+      "title": "Redactor",
+      "description": "Asistente de escritura con IA. Crea esquemas, amplía ideas, añade citas y más."
+    },
+    "Humanize": {
+      "title": "Humanizador de IA",
+      "description": "Reescribe el texto generado por IA para que suene humano. Evita los detectores con un clic."
+    },
+    "Map": {
+      "title": "Tu Mapa de Conocimiento",
+      "description": "Axiom rastrea los temas que buscas y estima tu dominio. Cuanto más exploras y resuelves, más inteligente se vuelve este mapa.",
+      "noData": "Aún sin datos",
+      "noDataDesc": "Empieza a resolver problemas en el Chat para construir tu perfil de conocimiento.",
+      "startSolving": "Empezar a Resolver",
+      "interaction": "interacción",
+      "interactions": "interacciones"
+    },
+    "Settings": {
+      "title": "Ajustes",
+      "description": "Gestiona tu cuenta y suscripción",
+      "memberSince": "Miembro desde",
+      "authProvider": "Proveedor de acceso",
+      "achievements": "Logros",
+      "achievementsDesc": "Resuelve problemas diariamente para desbloquear insignias y aumentar tu racha.",
+      "scholar7": "Estudioso de 7 Días",
+      "scholar7Desc": "Activo por 7 días",
+      "master30": "Maestro Mensual",
+      "master30Desc": "Activo por 30 días",
+      "planFree": "Plan Gratis",
+      "planFreeDesc": "3 resoluciones, 500 palabras, 1 escrito por día",
+      "planPro": "Axiom Pro",
+      "planProDesc": "Acceso ilimitado a todas las funciones",
+      "billing": "Facturación",
+      "status": "Estado",
+      "managedViaStripe": "Gestionado por Stripe",
+      "active": "Activo",
+      "manageSubscription": "Gestionar Suscripción",
+      "opening": "Abriendo...",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "upgradeToProPricing": "Actualizar a Pro — "
+    },
+    "Learn": {
+      "title": "Tutor Interactivo",
+      "description": "Tu compañero de estudio con IA. Pregunta cualquier cosa — \"Enséñame cálculo desde cero\".",
+      "panicBtn": "🚨 MODO PÁNICO",
+      "whatToLearn": "¿Qué quieres aprender?",
+      "askMeAnythingDesc": "Pregunta cualquier cosa — \"Enséñame derivadas desde cero\", \"Explica la fotosíntesis\", o \"Ayúdame a entender la recursión\".",
+      "sug1": "Enséñame lo básico de cálculo",
+      "sug2": "Explica la replicación del ADN",
+      "sug3": "¿Cómo funciona la recursión?",
+      "sug4": "Prepárame para mi examen de física",
+      "thinking": "Pensando...",
+      "inputPlaceholder": "Pregunta cualquier cosa... \"Enséñame sobre...\""
+    },
+    "Panic": {
+      "backBtn": "Volver al Tutor",
+      "title": "Modo Pánico",
+      "description": "Genera un paquete completo de estudio en segundos",
+      "subjectPlaceholder": "Materia (ej: Química Orgánica)",
+      "chapterPlaceholder": "Capítulo o tema (opcional)",
+      "generating": "Generando paquete de estudio...",
+      "activateBtn": "🚨 ACTIVAR MODO PÁNICO",
+      "tabSummary": "Resumen",
+      "tabQA": "P y R",
+      "tabFlashcards": "Tarjetas",
+      "tabPlan": "Plan de Estudio"
+    }
+  }
+}

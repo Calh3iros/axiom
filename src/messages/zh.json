@@ -1,1 +1,99 @@
-{ "HomePage": { "title": "在 5 秒内解决你的作业" } }
+{
+  "HomePage": {
+    "title": "5秒内解决任何问题",
+    "cta": "免费试用"
+  },
+  "Dashboard": {
+    "Sidebar": {
+      "solve": "解答",
+      "write": "写作",
+      "humanize": "人性化",
+      "learn": "学习",
+      "map": "地图",
+      "upgradeToPro": "升级到高级版",
+      "settings": "设置",
+      "signOut": "登出",
+      "signingOut": "正在登出...",
+      "dayStreak": "天连击",
+      "solvesLeftToday": "今天剩余解答次数",
+      "free": "免费",
+      "pro": "高级 ✨"
+    },
+    "Solve": {
+      "title": "作业解答器",
+      "description": "拍照或输入你的问题。我会立即提供循序渐进的解答。",
+      "chatHistory": "聊天记录",
+      "newSolve": "新的解答",
+      "noRecentChats": "没有最近的聊天记录",
+      "untitledChat": "未命名的聊天"
+    },
+    "Write": {
+      "title": "论文写手",
+      "description": "人工智能写作助手。生成大纲，扩展思路，添加引用等。"
+    },
+    "Humanize": {
+      "title": "人工智能人性化",
+      "description": "重写人工智能生成的文本，使其听起来像自然人。一键绕过检测器。"
+    },
+    "Map": {
+      "title": "你的知识地图",
+      "description": "Axiom 会跟踪你查询的主题并评估你的掌握程度。探索和解答得越多，这张地图就越智能。",
+      "noData": "还没有数据",
+      "noDataDesc": "开始在聊天中解决问题以建立定制的知识概况。",
+      "startSolving": "开始解答",
+      "interaction": "次互动",
+      "interactions": "次互动"
+    },
+    "Settings": {
+      "title": "设置",
+      "description": "管理你的帐户和订阅",
+      "memberSince": "初始会员期间",
+      "authProvider": "认证提供商",
+      "achievements": "成就",
+      "achievementsDesc": "每天解决问题，解锁徽章并积累连击。",
+      "scholar7": "7天学者",
+      "scholar7Desc": "活跃7天",
+      "master30": "月度大师",
+      "master30Desc": "活跃30天",
+      "planFree": "免费计划",
+      "planFreeDesc": "每天3次解答，500字，1次写作",
+      "planPro": "Axiom 高级版",
+      "planProDesc": "无限制访问所有功能",
+      "billing": "账单",
+      "status": "状态",
+      "managedViaStripe": "通过Stripe管理",
+      "active": "已激活",
+      "manageSubscription": "管理订阅",
+      "opening": "正在打开...",
+      "monthly": "每月",
+      "yearly": "每年",
+      "upgradeToProPricing": "升级到高级版 — "
+    },
+    "Learn": {
+      "title": "互动导师",
+      "description": "你的AI学习伙伴。随便问——“从零开始教我微积分”。",
+      "panicBtn": "🚨 恐慌模式",
+      "whatToLearn": "你想学什么？",
+      "askMeAnythingDesc": "随便问——“从头教我导数”、“解释光合作用”或“帮我理解递归”。",
+      "sug1": "教我微积分基础",
+      "sug2": "解释DNA复制",
+      "sug3": "递归是怎么工作的？",
+      "sug4": "帮我准备物理考试",
+      "thinking": "思考中...",
+      "inputPlaceholder": "随便问...“教我...”"
+    },
+    "Panic": {
+      "backBtn": "返回导师",
+      "title": "恐慌模式",
+      "description": "在几秒钟内生成完整的备考包",
+      "subjectPlaceholder": "科目（如：有机化学）",
+      "chapterPlaceholder": "章节或主题（可选）",
+      "generating": "正在生成学习包...",
+      "activateBtn": "🚨 激活恐慌模式",
+      "tabSummary": "摘要",
+      "tabQA": "问答",
+      "tabFlashcards": "抽认卡",
+      "tabPlan": "学习计划"
+    }
+  }
+}

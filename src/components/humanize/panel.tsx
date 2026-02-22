@@ -6,6 +6,7 @@ import { Copy, RefreshCw, Sparkles, ShieldCheck, ShieldAlert, ChevronDown, Chevr
 import { PaywallModal } from '../shared/paywall-modal';
 import * as Diff from 'diff';
 import { detectAI, type DetectionResult } from '@/lib/ai/detect';
+import { useLocale } from 'next-intl';
 
 export function HumanizerPanel() {
   const [input, setInput] = useState('');
@@ -20,6 +21,7 @@ export function HumanizerPanel() {
   // Word count display
   const MAX_FREE_WORDS = 500;
   const wordCount = input.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const locale = useLocale();
 
   const handleHumanize = async () => {
     if (!input) return;
@@ -29,7 +31,7 @@ export function HumanizerPanel() {
       const res = await fetch('/api/humanize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: input, mode }),
+        body: JSON.stringify({ text: input, mode, locale }),
       });
 
       if (res.status === 429 || res.status === 402) {

@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import {
   FileText, Expand, Quote, Wand2, CheckCircle, Loader2, Copy, Trash2, BookMarked
 } from 'lucide-react';
+import { useLocale } from 'next-intl';
 
 type WriteAction = 'outline' | 'expand' | 'cite' | 'humanize' | 'conclude';
 
@@ -22,6 +23,7 @@ export function WriteEditor() {
   const [activeAction, setActiveAction] = useState<WriteAction | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'output' | 'citations'>('output');
+  const locale = useLocale();
 
   const handleAction = useCallback(async (action: WriteAction) => {
     if (!content.trim() || loading) return;
@@ -40,7 +42,7 @@ export function WriteEditor() {
       const res = await fetch('/api/write', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, content, context: content }),
+        body: JSON.stringify({ action, content, context: content, locale }),
       });
 
       if (!res.ok) {

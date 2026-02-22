@@ -1,1 +1,99 @@
-{ "HomePage": { "title": "Löse deine Hausaufgaben in 5 Sekunden" } }
+{
+  "HomePage": {
+    "title": "Lösen Sie alles in 5 Sekunden",
+    "cta": "Kostenlos Testen"
+  },
+  "Dashboard": {
+    "Sidebar": {
+      "solve": "Lösen",
+      "write": "Schreiben",
+      "humanize": "Vermenschlichen",
+      "learn": "Lernen",
+      "map": "Karte",
+      "upgradeToPro": "Auf Pro upgraden",
+      "settings": "Einstellungen",
+      "signOut": "Abmelden",
+      "signingOut": "Abmelden...",
+      "dayStreak": "Tage in Folge",
+      "solvesLeftToday": "Lösungen heute übrig",
+      "free": "KOSTENLOS",
+      "pro": "PRO ✨"
+    },
+    "Solve": {
+      "title": "Aufgabenlöser",
+      "description": "Machen Sie ein Foto oder tippen Sie Ihre Frage. Ich löse sie sofort Schritt für Schritt.",
+      "chatHistory": "Chat-Verlauf",
+      "newSolve": "Neue Lösung",
+      "noRecentChats": "Keine kürzlichen Chats",
+      "untitledChat": "Unbenannter Chat"
+    },
+    "Write": {
+      "title": "Essay-Schreiber",
+      "description": "KI-gesteuerter Schreibassistent. Erstellen Sie Gliederungen, erweitern Sie Ideen, fügen Sie Zitate hinzu und mehr."
+    },
+    "Humanize": {
+      "title": "KI-Vermenschlicher",
+      "description": "Schreiben Sie KI-generierten Text so um, dass er natürlich menschlich klingt. Umgehen Sie Detektoren mit einem Klick."
+    },
+    "Map": {
+      "title": "Ihre Wissenskarte",
+      "description": "Axiom verfolgt die abgefragten Themen und schätzt Ihr Wissen. Je mehr Sie erkunden und lösen, desto intelligenter wird diese Karte.",
+      "noData": "Noch keine Daten",
+      "noDataDesc": "Beginnen Sie, Probleme im Chat zu lösen, um Ihr individuelles Wissensprofil zu erstellen.",
+      "startSolving": "Mit dem Lösen beginnen",
+      "interaction": "Interaktion",
+      "interactions": "Interaktionen"
+    },
+    "Settings": {
+      "title": "Einstellungen",
+      "description": "Verwalten Sie Ihr Konto und Ihr Abonnement",
+      "memberSince": "Mitglied seit",
+      "authProvider": "Authentifizierungsanbieter",
+      "achievements": "Erfolge",
+      "achievementsDesc": "Lösen Sie täglich Probleme, um Abzeichen freizuschalten und Ihre Serie auszubauen.",
+      "scholar7": "7-Tage-Gelehrter",
+      "scholar7Desc": "7 Tage aktiv",
+      "master30": "Monatsmeister",
+      "master30Desc": "30 Tage aktiv",
+      "planFree": "Kostenloser Plan",
+      "planFreeDesc": "3 Lösungen, 500 Wörter, 1 Schreiben pro Tag",
+      "planPro": "Axiom Pro",
+      "planProDesc": "Unbegrenzter Zugang zu allen Funktionen",
+      "billing": "Abrechnung",
+      "status": "Status",
+      "managedViaStripe": "Verwaltet über Stripe",
+      "active": "Aktiv",
+      "manageSubscription": "Abonnement verwalten",
+      "opening": "Öffnen...",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "upgradeToProPricing": "Auf Pro upgraden — "
+    },
+    "Learn": {
+      "title": "Interaktiver Tutor",
+      "description": "Dein KI-Studienbegleiter. Frag alles — \"Bring mir Infinitesimalrechnung von Null auf bei\".",
+      "panicBtn": "🚨 PANIK-MODUS",
+      "whatToLearn": "Was möchtest du lernen?",
+      "askMeAnythingDesc": "Frag alles — \"Erkläre mir Ableitungen von Grund auf\", \"Erkläre Photosynthese\" oder \"Hilf mir, Rekursion zu verstehen\".",
+      "sug1": "Bring mir die Grundlagen der Infinitesimalrechnung bei",
+      "sug2": "Erkläre die DNA-Replikation",
+      "sug3": "Wie funktioniert Rekursion?",
+      "sug4": "Bereite mich auf meine Physikprüfung vor",
+      "thinking": "Denke nach...",
+      "inputPlaceholder": "Frag alles... \"Bring mir etwas bei über...\""
+    },
+    "Panic": {
+      "backBtn": "Zurück zum Tutor",
+      "title": "Panik-Modus",
+      "description": "Generiere ein komplettes Prüfungsvorbereitungspaket in Sekunden",
+      "subjectPlaceholder": "Fach (z.B. Organische Chemie)",
+      "chapterPlaceholder": "Kapitel oder Thema (optional)",
+      "generating": "Generiere Studienpaket...",
+      "activateBtn": "🚨 PANIK-MODUS AKTIVIEREN",
+      "tabSummary": "Zusammenfassung",
+      "tabQA": "F&A",
+      "tabFlashcards": "Karteikarten",
+      "tabPlan": "Studienplan"
+    }
+  }
+}

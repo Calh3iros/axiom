@@ -4,14 +4,17 @@ import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { Send, Loader2, BookOpen } from 'lucide-react';
 import { useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 
 export function LearnChat() {
   const [input, setInput] = useState('');
+  const locale = useLocale();
+  const t = useTranslations('Dashboard.Learn');
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat',
-      body: { type: 'learn' },
+      body: { type: 'learn', locale },
     }),
     onError: (err: Error) => console.error('Learn Chat Error:', err.message),
   });
@@ -46,16 +49,16 @@ export function LearnChat() {
             <div className="p-4 rounded-2xl bg-[var(--color-bg2)] mb-4">
               <BookOpen className="w-8 h-8 text-[var(--color-ax-blue)]" />
             </div>
-            <p className="text-lg font-bold text-[var(--color-text-primary)]">What do you want to learn?</p>
+            <p className="text-lg font-bold text-[var(--color-text-primary)]">{t('whatToLearn')}</p>
             <p className="text-sm text-[var(--color-text-secondary)] max-w-sm mt-2">
-              Ask me anything — &quot;Teach me derivatives from scratch&quot;, &quot;Explain photosynthesis&quot;, or &quot;Help me understand recursion&quot;.
+              {t('askMeAnythingDesc')}
             </p>
             <div className="flex flex-wrap gap-2 mt-6 justify-center max-w-md">
               {[
-                'Teach me calculus basics',
-                'Explain DNA replication',
-                'How does recursion work?',
-                'Prep me for my physics exam',
+                t('sug1'),
+                t('sug2'),
+                t('sug3'),
+                t('sug4'),
               ].map((suggestion) => (
                 <button
                   key={suggestion}
@@ -91,7 +94,7 @@ export function LearnChat() {
             <div className="max-w-[85%] rounded-2xl p-4 bg-[var(--color-bg2)] border border-[var(--color-border)]">
               <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">Thinking...</span>
+                <span className="text-sm">{t('thinking')}</span>
               </div>
             </div>
           </div>
@@ -104,7 +107,7 @@ export function LearnChat() {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={isLoading ? "Thinking..." : 'Ask me anything... "Teach me about..."'}
+            placeholder={isLoading ? t('thinking') : t('inputPlaceholder')}
             disabled={isLoading}
             className="w-full bg-[var(--color-bg0)] border border-[var(--color-border)] rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:border-[var(--color-ax-blue)] text-[var(--color-text-primary)] placeholder-[var(--color-dim)] disabled:opacity-50"
           />

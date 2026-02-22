@@ -1,1 +1,99 @@
-{ "HomePage": { "title": "Resolva sua lição de casa em 5 segundos" } }
+{
+  "HomePage": {
+    "title": "Resolva qualquer questão em 5 segundos",
+    "cta": "Testar Grátis"
+  },
+  "Dashboard": {
+    "Sidebar": {
+      "solve": "Resolver",
+      "write": "Escrever",
+      "humanize": "Humanizar",
+      "learn": "Aprender",
+      "map": "Mapa",
+      "upgradeToPro": "Assinar Pro",
+      "settings": "Configurações",
+      "signOut": "Sair",
+      "signingOut": "Saindo...",
+      "dayStreak": "dias de ofensiva",
+      "solvesLeftToday": "resoluções restantes hoje",
+      "free": "GRÁTIS",
+      "pro": "PRO ✨"
+    },
+    "Solve": {
+      "title": "Solucionador",
+      "description": "Tire uma foto ou digite sua pergunta. Eu resolvo passo-a-passo na hora.",
+      "chatHistory": "Histórico do Chat",
+      "newSolve": "Nova Resolução",
+      "noRecentChats": "Nenhum chat recente",
+      "untitledChat": "Chat sem título"
+    },
+    "Write": {
+      "title": "Redator",
+      "description": "Assistente de redação por IA. Crie esboços, expanda ideias, adicione citações e muito mais."
+    },
+    "Humanize": {
+      "title": "Humanizador de IA",
+      "description": "Reescreva textos gerados por IA para soarem naturais. Burle detectores com um clique."
+    },
+    "Map": {
+      "title": "Seu Mapa de Conhecimento",
+      "description": "O Axiom rastreia os assuntos que você pesquisa e estima sua maestria. Quanto mais você explora e resolve, mais inteligente esse mapa fica.",
+      "noData": "Ainda sem dados",
+      "noDataDesc": "Comece a resolver problemas no Chat para construir seu perfil de conhecimento.",
+      "startSolving": "Começar a Resolver",
+      "interaction": "interação",
+      "interactions": "interações"
+    },
+    "Settings": {
+      "title": "Configurações",
+      "description": "Gerencie sua conta e assinatura",
+      "memberSince": "Membro desde",
+      "authProvider": "Provedor de Login",
+      "achievements": "Conquistas",
+      "achievementsDesc": "Resolva problemas diariamente para desbloquear selos e aumentar sua ofensiva.",
+      "scholar7": "Estudioso de 7 Dias",
+      "scholar7Desc": "Ativo por 7 dias",
+      "master30": "Mestre Mensal",
+      "master30Desc": "Ativo por 30 dias",
+      "planFree": "Plano Grátis",
+      "planFreeDesc": "3 resoluções, 500 palavras, 1 redação por dia",
+      "planPro": "Axiom Pro",
+      "planProDesc": "Acesso ilimitado a todos os recursos",
+      "billing": "Faturamento",
+      "status": "Status",
+      "managedViaStripe": "Gerenciado via Stripe",
+      "active": "Ativo",
+      "manageSubscription": "Gerenciar Assinatura",
+      "opening": "Abrindo...",
+      "monthly": "Mensal",
+      "yearly": "Anual",
+      "upgradeToProPricing": "Assinar Pro — "
+    },
+    "Learn": {
+      "title": "Tutor Interativo",
+      "description": "Seu companheiro de estudos com IA. Pergunte qualquer coisa — \"Ensine cálculo do zero\".",
+      "panicBtn": "🚨 MODO PÂNICO",
+      "whatToLearn": "O que você quer aprender?",
+      "askMeAnythingDesc": "Pergunte qualquer coisa — \"Me ensine derivadas do zero\", \"Explique a fotossíntese\", ou \"Me ajude a entender recursão\".",
+      "sug1": "Me ensine o básico de cálculo",
+      "sug2": "Explique a replicação do DNA",
+      "sug3": "Como funciona a recursão?",
+      "sug4": "Me prepare para a prova de física",
+      "thinking": "Pensando...",
+      "inputPlaceholder": "Pergunte qualquer coisa... \"Me ensine sobre...\""
+    },
+    "Panic": {
+      "backBtn": "Voltar ao Tutor",
+      "title": "Modo Pânico",
+      "description": "Gere um pacote completo de estudo em segundos",
+      "subjectPlaceholder": "Matéria (ex: Química Orgânica)",
+      "chapterPlaceholder": "Capítulo ou tópico (opcional)",
+      "generating": "Gerando pacote de estudo...",
+      "activateBtn": "🚨 ATIVAR MODO PÂNICO",
+      "tabSummary": "Resumo",
+      "tabQA": "P&R",
+      "tabFlashcards": "Flashcards",
+      "tabPlan": "Plano de Estudo"
+    }
+  }
+}
