@@ -23,17 +23,46 @@ export async function POST(req: Request) {
 
   switch (event.type) {
     case 'checkout.session.completed':
-      // Handle subscription creation or successful payment
-      if (session.subscription) {
-        console.log('Subscription completed:', session.subscription);
+      if (session.subscription && session.metadata?.supabaseUUID) {
+        const subscriptionId = typeof session.subscription === 'string'
+          ? session.subscription
+          : session.subscription.id;
+
+        const { error } = await (supabaseAdmin.from('profiles') as any)
+          .update({
+            plan: 'pro' as const,
+            stripe_subscription_id: subscriptionId,
+          })
+          .eq('id', session.metadata.supabaseUUID);
+
+        if (error) {
+          console.error('Error updating user profile on checkout completion:', error);
+        }
       }
       break;
-    case 'invoice.payment_succeeded':
-      // Handle subsequent payments
+
+    case 'invoice.payment_succeeded': {
+      // Handle subsequent payments if needed
+      // (e.g. extending an internal expiration date, or logging payment)
       break;
-    case 'customer.subscription.deleted':
-      // Handle cancelation
+    }
+
+    case 'customer.subscription.deleted': {
+      const subscription = event.data.object as Stripe.Subscription;
+
+      const { error } = await (supabaseAdmin.from('profiles') as any)
+        .update({
+          plan: 'free',
+          stripe_subscription_id: null,
+        })
+        .eq('stripe_subscription_id', subscription.id);
+
+      if (error) {
+        console.error('Error reverting user profile to free on subscription deletion:', error);
+      }
       break;
+    }
+
     default:
       console.log(`Unhandled event type ${event.type}`);
   }

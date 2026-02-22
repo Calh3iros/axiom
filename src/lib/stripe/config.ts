@@ -10,6 +10,6 @@ export const FREE_LIMITS = {
 } as const;
 
 export const STRIPE_PRICES = {
-  MONTHLY: process.env.STRIPE_PRICE_MONTHLY || 'price_monthly_id_here',
-  YEARLY: process.env.STRIPE_PRICE_YEARLY || 'price_yearly_id_here',
+  MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PRICE_ID || '',
+  YEARLY: process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID || '',
 };

@@ -30,14 +30,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [plan, setPlan] = useState<'free' | 'pro'>('free');
   const [signingOut, setSigningOut] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
 
-    // Get initial user
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    // Get initial user and their plan
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
       setUser(user);
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('plan')
+          .eq('id', user.id)
+          .single();
+        if (profile?.plan) setPlan(profile.plan as 'free' | 'pro');
+      }
     });
 
     // Listen for auth changes
@@ -119,9 +128,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Bottom Actions / User */}
         <div className="p-4 border-t border-[var(--color-border)] space-y-2">
-          <Link href="/pricing" className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)] transition-colors text-sm">
-            <CreditCard className="w-4 h-4" /> Upgrade to Pro
-          </Link>
+          {plan !== 'pro' && (
+            <Link href="/pricing" className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)] transition-colors text-sm">
+              <CreditCard className="w-4 h-4" /> Upgrade to Pro
+            </Link>
+          )}
           <Link href="/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)] transition-colors text-sm">
             <Settings className="w-4 h-4" /> Settings
           </Link>
@@ -170,7 +181,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="text-emerald-400 font-semibold">∞</span> solves left today
             </div>
             <div className="w-px h-5 bg-[var(--color-border)]" />
-            <span className="text-xs text-[var(--color-dim)] font-mono">FREE</span>
+            <span className={`text-xs font-mono font-semibold ${plan === 'pro' ? 'text-[var(--color-ax-yellow)]' : 'text-[var(--color-dim)]'}`}>
+              {plan === 'pro' ? 'PRO ✨' : 'FREE'}
+            </span>
           </div>
         </div>
         <div className="flex-1 w-full max-w-6xl mx-auto p-4 md:p-8 overflow-y-auto">

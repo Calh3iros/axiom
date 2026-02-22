@@ -3,6 +3,9 @@
 import { X } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 
+import { STRIPE_PRICES } from '@/lib/stripe/config';
+import { useState } from 'react';
+
 // Ensure the keys are set securely in production
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_123');
 
@@ -12,15 +15,28 @@ interface PaywallModalProps {
 }
 
 export function PaywallModal({ onClose, reason }: PaywallModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleUpgrade = async () => {
-    // Basic redirect to checkout logic. We would hit our API first to create a Stripe session
     try {
-      const res = await fetch('/api/checkout', { method: 'POST' });
+      setIsLoading(true);
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: STRIPE_PRICES.MONTHLY })
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+
       const { url } = await res.json();
       if (url) window.location.href = url;
     } catch(err) {
       console.error(err);
-      alert('Error initiating checkout. Please check the logs.');
+      alert('Error initiating checkout. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
