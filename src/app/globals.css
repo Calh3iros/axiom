@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Axiom Core Theme */
+  --color-bg0: #060708;
+  --color-bg1: #0e1018;
+  --color-bg2: #1a1e2a;
+  --color-bg3: #252a38;
+  --color-border: rgba(255,255,255,0.10);
+  --color-border2: rgba(255,255,255,0.18);
+  --color-border3: rgba(255,255,255,0.28);
+
+  --color-text-primary: #f2f1ec;
+  --color-text-secondary: #cdd0d9;
+  --color-text-tertiary: #a3a7b4;
+  --color-dim: #727682;
+
+  /* Axiom Accents */
+  --color-ax-green: #34d399;
+  --color-ax-blue: #60a5fa;
+  --color-ax-orange: #fb923c;
+  --color-ax-purple: #a78bfa;
+  --color-ax-red: #f87171;
+  --color-ax-yellow: #fbbf24;
+
+  --font-sans: "Inter", "Outfit", system-ui, sans-serif;
+  --font-mono: "Fira Code", monospace;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: var(--color-bg0);
+  --foreground: var(--color-text-primary);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg0);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border3);
+}
