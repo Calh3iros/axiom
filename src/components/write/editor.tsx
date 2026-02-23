@@ -6,6 +6,8 @@ import {
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useCallback } from 'react';
 
+import { Watermark } from '../shared/watermark';
+
 type WriteAction = 'outline' | 'expand' | 'cite' | 'humanize' | 'conclude';
 
 const actions: { key: WriteAction; label: string; icon: React.ElementType; description: string }[] = [
@@ -270,6 +272,9 @@ export function WriteEditor() {
           </div>
         </div>
       </div>
+
+      {/* Watermark for free users */}
+      <Watermark />
     </div>
   );
 }

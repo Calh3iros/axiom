@@ -9,6 +9,8 @@ import { detectAI, type DetectionResult } from '@/lib/ai/detect';
 
 import { PaywallModal } from '../shared/paywall-modal';
 
+import { Watermark } from '../shared/watermark';
+
 import { ModeSelector } from './mode-selector';
 
 
@@ -226,6 +228,9 @@ export function HumanizerPanel() {
           )}
         </div>
       </div>
+
+      {/* Watermark for free users */}
+      <Watermark />
 
       {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} reason="word_limit" />}
     </>

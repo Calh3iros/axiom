@@ -7,6 +7,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
+import { Watermark } from '../shared/watermark';
+
 
 interface SolveChatProps {
   chatId?: string;
@@ -327,6 +329,9 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
           </button>
         </form>
       </div>
+
+      {/* Watermark for free users */}
+      <Watermark />
     </div>
   );
 }
