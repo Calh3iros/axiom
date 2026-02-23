@@ -64,7 +64,7 @@ export default function SettingsPage() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.PRO_YEARLY : STRIPE_PRICES.PRO_MONTHLY }),
+        body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.PRO_YEARLY : STRIPE_PRICES.PRO_MONTHLY, locale: window.location.pathname.split('/')[1] || 'en' }),
       });
       if (!res.ok) throw new Error('Failed to create checkout session');
       const { url } = await res.json();

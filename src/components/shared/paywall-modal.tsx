@@ -121,10 +121,11 @@ export function PaywallModal({
   const handleCheckout = async (priceId: string, plan: PlanType) => {
     try {
       setLoadingPlan(plan);
+      const locale = window.location.pathname.split('/')[1] || 'en';
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ priceId, locale }),
       });
 
       if (!res.ok) throw new Error('Failed to create checkout session');

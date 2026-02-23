@@ -1,3 +1,4 @@
+import type Stripe from 'stripe';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { priceId } = body;
+    const { priceId, locale } = body;
 
     if (!priceId) {
       return new NextResponse('Price ID is required', { status: 400 });
@@ -75,10 +76,16 @@ export async function POST(request: Request) {
     // Determine return URLs
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
+    // Map next-intl locale to Stripe locale
+    const stripeLocaleMap: Record<string, string> = {
+      en: 'en', pt: 'pt-BR', es: 'es', fr: 'fr', de: 'de', zh: 'zh',
+    };
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
       payment_method_types: ['card'],
+      locale: (stripeLocaleMap[locale] || 'auto') as Stripe.Checkout.SessionCreateParams.Locale,
       line_items: [
         {
           price: priceId,
