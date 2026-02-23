@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     const { messages, type, chatId: providedChatId, locale: _locale } = parsed.data;
 
     // Get authenticated user and their plan from Supabase
-    const { userId, isPro } = await getUserAndPlan(req);
+    const { userId, plan } = await getUserAndPlan(req);
 
     // P0.2 — Rate limiting (by IP for DDoS protection)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     }
 
     const usageType = type === 'learn' ? 'learn' as const : 'solve' as const;
-    const usage = await checkUsage(userId, usageType, isPro);
+    const usage = await checkUsage(userId, usageType, plan);
     if (!usage.allowed) {
       return NextResponse.json(
         { error: `Daily limit reached. Upgrade to Pro for unlimited access.` },

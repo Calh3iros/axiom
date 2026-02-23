@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
 type Profile = {
-  plan: 'free' | 'pro';
+  plan: 'free' | 'pro' | 'elite';
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   created_at: string;
@@ -87,7 +87,7 @@ export default function SettingsPage() {
     );
   }
 
-  const isPro = profile?.plan === 'pro';
+  const isPro = profile?.plan === 'pro' || profile?.plan === 'elite';
 
   return (
     <div className="flex flex-col gap-6 max-w-2xl">

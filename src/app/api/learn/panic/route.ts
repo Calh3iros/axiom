@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const { subject, chapter } = parsed.data;
 
     // Check user plan and rate limits
-    const { userId, isPro } = await getUserAndPlan(req);
+    const { userId, plan } = await getUserAndPlan(req);
 
     // P0.2 — Rate limiting (by IP for DDoS protection)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const usage = await checkUsage(userId, 'learn', isPro);
+    const usage = await checkUsage(userId, 'learn', plan);
     if (!usage.allowed) {
       return NextResponse.json(
         { error: 'Daily Panic Mode limit reached. Upgrade to Pro for unlimited access.' },

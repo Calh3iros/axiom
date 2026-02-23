@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const { text, mode } = result.data;
 
     // Check user plan and rate limits
-    const { userId, isPro } = await getUserAndPlan(req);
+    const { userId, plan } = await getUserAndPlan(req);
 
     // P0.2 — Rate limiting (by IP for DDoS protection)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     }
 
     const wordCount = text.split(/\s+/).filter(Boolean).length;
-    const usage = await checkUsage(userId, 'humanize', isPro);
+    const usage = await checkUsage(userId, 'humanize', plan);
     if (!usage.allowed) {
       return NextResponse.json(
         { error: 'Daily word limit reached. Upgrade to Pro for unlimited access.' },
