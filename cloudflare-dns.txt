@@ -1,0 +1,5 @@
+; Axiom DNS — Vercel
+; Proxy status must be set to DNS-only (grey cloud) AFTER import
+
+@    IN  A      216.198.79.1
+www  IN  CNAME  cname.vercel-dns.com.

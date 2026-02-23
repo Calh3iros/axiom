@@ -69,14 +69,14 @@
 
 ## P3 — DEPLOY (Vercel)
 
-- [ ] **P3.1 Push pro GitHub** — `git push origin main`
-- [ ] **P3.2 Conectar repo no Vercel** — Import project
-- [ ] **P3.3 Env vars no Vercel** — TODAS as variáveis do `.env.local` + `NEXT_PUBLIC_APP_URL` com domínio real
-- [ ] **P3.4 Custom domain** — Conectar domínio comprado
-- [ ] **P3.5 Supabase** — Atualizar redirect URLs (Google OAuth + email) pro domínio
-- [ ] **P3.6 Stripe** — Configurar webhook endpoint prod: `https://dominio.com/api/webhooks/stripe`
-- [ ] **P3.7 Google OAuth** — Atualizar redirect URI no Google Cloud Console
-- [ ] **P3.8 Verificar build** — `pnpm build` deve passar sem erros
+- [x] **P3.1 Push pro GitHub** — `git push origin main`
+- [x] **P3.2 Conectar repo no Vercel** — Import project → axiom-five-sable.vercel.app
+- [x] **P3.3 Env vars no Vercel** — 15 variáveis, NEXT_PUBLIC_APP_URL=https://axiom-solver.com
+- [x] **P3.4 Custom domain** — axiom-solver.com + www, Cloudflare DNS-only + Full (strict)
+- [x] **P3.5 Supabase** — Site URL + 4 redirect URLs produção, localhost preservado
+- [x] **P3.6 Stripe** — Webhook prod: axiom-solver.com/api/webhooks/stripe (4 eventos)
+- [x] **P3.7 Google OAuth** — JS origins: axiom-solver.com + www.axiom-solver.com
+- [x] **P3.8 Verificar build** — `pnpm build` passa sem erros
 
 ---
 
@@ -87,8 +87,8 @@
 - [ ] **P4.3 Stripe checkout** — Pagar Pro → webhook → plan atualiza
 - [ ] **P4.4 Features IA** — Testar solve, write, humanize, panic com login real
 - [ ] **P4.5 Rate limit** — Enviar 15 requests rápidos → verificar 429
-- [ ] **P4.6 i18n** — Trocar idioma, verificar tradução
-- [ ] **P4.7 Security headers** — `curl -I https://dominio.com` → verificar headers
+- [x] **P4.6 i18n** — 6 locales (en/pt/es/fr/de/zh) retornam 200 + hreflang alternates
+- [x] **P4.7 Security headers** — CSP, HSTS, X-Frame-Options, X-Content-Type, Referrer-Policy, Permissions-Policy ✅
 
 ---
 
