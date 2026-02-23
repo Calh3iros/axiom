@@ -56,13 +56,14 @@
 
 ## P2 — SENTRY + ANALYTICS + CLEANUP
 
-- [ ] **P2.1 Sentry** — `npx @sentry/wizard@latest -i nextjs`
-- [ ] **P2.2 Vercel Analytics** — `@vercel/analytics` (1 linha)
-- [ ] **P2.3 Remover Cypress** — Deletar `cypress/`, `cypress.config.ts`, deps do `package.json`
-- [ ] **P2.4 LGPD/GDPR básico**:
-  - Cookie consent banner
-  - Botão "Delete my account" no Settings
-  - Fix /privacy e /terms (adicionar ao `publicRoutes` no middleware)
+- [x] **P2.1 Sentry** — `@sentry/nextjs`, 3 config files, instrumentation.ts, error.tsx integration
+- [x] **P2.2 Vercel Analytics** — `@vercel/analytics`, `<Analytics />` in root layout
+- [x] **P2.3 Health check bugs** — locale-aware redirects, themeColor → viewport, publicRoutes verified
+- [x] **P2.4 Remove Cypress** — Deleted `cypress/`, `cypress.config.ts`, deps
+- [x] **P2.5 LGPD/GDPR**:
+  - Cookie consent banner in root layout
+  - "Delete my account" button in Settings (calls `auth.admin.deleteUser`)
+  - `/privacy` and `/terms` already in `publicRoutes`
 
 ---
 
