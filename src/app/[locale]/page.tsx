@@ -185,13 +185,13 @@ export default function LandingPage() {
           <p className="text-[var(--color-text-secondary)] text-lg">{t('pricing.subtitle')}</p>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-center gap-5 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
           {/* Free */}
-          <div className="flex-1 bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8">
+          <div className="bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 flex flex-col">
             <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] mb-4">{t('pricing.freeTitle')}</p>
             <p className="text-5xl font-extrabold mb-1"><span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>0</p>
             <p className="text-sm text-[var(--color-dim)] mb-7">{t('pricing.foreverNoSignup')}</p>
-            <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+            <ul className="space-y-3 text-sm text-[var(--color-text-secondary)] flex-1">
               {(t.raw('pricing.freeFeatures') as string[]).map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
                   <span className="text-emerald-400 mt-0.5">✓</span>
@@ -208,7 +208,7 @@ export default function LandingPage() {
           </div>
 
           {/* Pro */}
-          <div className="flex-1 bg-[var(--color-bg1)] border border-emerald-500/30 rounded-2xl p-8 relative shadow-[0_0_60px_rgba(52,211,153,0.08)]">
+          <div className="bg-[var(--color-bg1)] border border-emerald-500/30 rounded-2xl p-8 relative shadow-[0_0_60px_rgba(52,211,153,0.08)] flex flex-col">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-[var(--color-bg0)] font-mono text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full whitespace-nowrap">
               {t('pricing.mostPopular')}
             </div>
@@ -233,13 +233,12 @@ export default function LandingPage() {
 
             <p className="text-5xl font-extrabold mb-1">
               <span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>
-              {isYearly ? '6' : '9'}
-              <span className="text-3xl">{isYearly ? '.99' : '.99'}</span>
+              {isYearly ? Math.round(190 / 12) : 19}
             </p>
             <p className="text-sm text-[var(--color-dim)] mb-7">
               {isYearly ? t('pricing.billedAnnually') : t('pricing.cancelAnytime')}
             </p>
-            <ul className="space-y-3 text-sm text-[var(--color-text-primary)]">
+            <ul className="space-y-3 text-sm text-[var(--color-text-primary)] flex-1">
               {(t.raw('pricing.proFeatures') as string[]).map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
                   <span className="text-emerald-400 mt-0.5">✓</span>
@@ -260,13 +259,59 @@ export default function LandingPage() {
                   const { url } = await res.json();
                   if (url) window.location.href = url;
                 } catch {
-                  // If unauthorized, redirect to login
                   window.location.href = '/auth/login?returnTo=/settings';
                 }
               }}
               className="mt-8 block w-full py-3 text-center bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]"
             >
               {t('pricing.getPro')}
+            </button>
+          </div>
+
+          {/* Elite */}
+          <div className="bg-[var(--color-bg1)] border border-amber-500/30 rounded-2xl p-8 relative shadow-[0_0_60px_rgba(251,191,36,0.06)] flex flex-col">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-[var(--color-bg0)] font-mono text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full whitespace-nowrap">
+              {t('pricing.bestValue')}
+            </div>
+
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-mono text-xs font-bold tracking-wider uppercase text-amber-400">{t('pricing.eliteTitle')}</p>
+            </div>
+
+            <p className="text-5xl font-extrabold mb-1">
+              <span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>
+              {isYearly ? Math.round(490 / 12) : 49}
+            </p>
+            <p className="text-sm text-[var(--color-dim)] mb-7">
+              {isYearly ? t('pricing.billedAnnually') : t('pricing.cancelAnytime')}
+            </p>
+            <ul className="space-y-3 text-sm text-[var(--color-text-primary)] flex-1">
+              {(t.raw('pricing.eliteFeatures') as string[]).map((item: string, i: number) => (
+                <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
+                  <span className="text-amber-400 mt-0.5">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={async () => {
+                try {
+                  const { STRIPE_PRICES } = await import('@/lib/stripe/config');
+                  const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.ELITE_YEARLY : STRIPE_PRICES.ELITE_MONTHLY }),
+                  });
+                  if (!res.ok) throw new Error('Failed to create checkout session');
+                  const { url } = await res.json();
+                  if (url) window.location.href = url;
+                } catch {
+                  window.location.href = '/auth/login?returnTo=/settings';
+                }
+              }}
+              className="mt-8 block w-full py-3 text-center bg-amber-500 hover:bg-amber-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+            >
+              {t('pricing.getElite')}
             </button>
           </div>
         </div>

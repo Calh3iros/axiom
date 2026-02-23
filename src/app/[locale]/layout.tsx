@@ -20,7 +20,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: 'Axiom — AI Study Companion | Solve Homework in 5 Seconds',
-  description: 'Snap a photo of any homework question and get step-by-step solutions instantly. Write essays, humanize AI text, and prepare for exams. Free to start, $9.99/mo for unlimited.',
+  description: 'Snap a photo of any homework question and get step-by-step solutions instantly. Write essays, humanize AI text, and prepare for exams. Free to start, Pro from $19/mo.',
   keywords: ['homework help', 'math solver', 'AI tutor', 'essay writer', 'AI humanizer', 'chegg alternative', 'study companion'],
   manifest: '/manifest.json',
   openGraph: {

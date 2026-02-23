@@ -162,7 +162,7 @@
       "badge": "Your AI study companion is here",
       "title": "Stop Waiting. Start Solving.",
       "subtitle": "Snap a photo of any homework question. Get step-by-step solutions instantly. Write essays. Humanize AI text. Study for exams.",
-      "allFor": "All for $9.99/month.",
+      "allFor": "Starting from $19/month.",
       "ctaFree": "📸 Solve your first question — No signup needed",
       "seePricing": "See Pricing",
       "trustedBy": "Trusted by",
@@ -199,7 +199,7 @@
       "row2Old": "Static text, no follow-ups",
       "row2New": "Interactive chat with follow-ups",
       "row3Old": "$20+/month for basic access",
-      "row3New": "$9.99/month — everything included",
+      "row3New": "From $19/month — everything included",
       "row4Old": "Can't explain differently",
       "row4New": "\"Explain like I'm 12\" works",
       "row5Old": "No practice questions",
@@ -209,32 +209,45 @@
     },
     "pricing": {
       "badge": "PRICING",
-      "title": "Less than 2 coffees a month",
-      "subtitle": "Premium AI study tools. No limits. No waiting.",
+      "title": "Plans that fit your study style",
+      "subtitle": "From free homework help to unlimited AI power. No hidden fees.",
       "freeTitle": "FREE",
       "foreverNoSignup": "forever, no signup",
       "freeFeatures": [
-        "5 questions solved per day",
+        "3 solves per day",
         "500 words humanized per day",
-        "3 essay actions per day",
-        "2 Panic Mode generations per day"
+        "1 essay per day",
+        "2 learn sessions per day"
       ],
       "startFree": "Start Free",
       "mostPopular": "MOST POPULAR",
       "proTitle": "PRO",
+      "proMonthly": 19,
+      "proYearly": 190,
       "monthly": "Monthly",
       "yearly": "Yearly",
       "billedAnnually": "per month, billed annually",
       "cancelAnytime": "per month, cancel anytime",
       "proFeatures": [
+        "50 solves per day",
+        "20 essays per day",
+        "5,000 humanize words per day",
+        "20 learn sessions per day",
+        "Saved history & progress"
+      ],
+      "getPro": "Get Pro →",
+      "eliteTitle": "ELITE",
+      "bestValue": "BEST VALUE",
+      "eliteMonthly": 49,
+      "eliteYearly": 490,
+      "eliteFeatures": [
         "Unlimited solves — any subject",
         "Unlimited essay writing",
         "Unlimited humanizer",
-        "Unlimited Panic Mode",
-        "Saved history & progress",
-        "Priority AI (fastest model)"
+        "Unlimited learn sessions",
+        "Priority support"
       ],
-      "getPro": "Get Pro →"
+      "getElite": "Get Elite →"
     },
     "cta": {
       "title": "Stop waiting. Start solving.",
@@ -303,7 +316,7 @@
         },
         {
           "title": "4. Subscription & Billing",
-          "content": "Pro subscriptions are billed monthly at $9.99/month. You can cancel at any time through the Settings page. Refunds are handled on a case-by-case basis."
+          "content": "Pro subscriptions are billed at $19/month or $190/year. Elite subscriptions are billed at $49/month or $490/year. You can cancel at any time through the Settings page. Refunds are handled on a case-by-case basis."
         },
         {
           "title": "5. Acceptable Use",

@@ -260,7 +260,7 @@ export default function SettingsPage() {
               onClick={handleUpgrade}
               className="w-full py-3 bg-[var(--color-ax-yellow)] hover:bg-yellow-400 text-black font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(250,204,21,0.3)]"
             >
-              {t('upgradeToProPricing')}{isYearly ? '$6.99/mo' : '$9.99/mo'}
+              {t('upgradeToProPricing')}{isYearly ? '$16/mo' : '$19/mo'}
             </button>
           </div>
         )}
