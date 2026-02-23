@@ -1,7 +1,8 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { UIMessage } from 'ai';
+
+import { createClient } from '@/lib/supabase/server';
 
 export async function getChats() {
   const supabase = await createClient();
@@ -39,6 +40,7 @@ export async function getChatMessages(chatId: string): Promise<UIMessage[]> {
     return [];
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (data || []).map((msg: any) => ({
     id: msg.id,
     role: msg.role as 'user' | 'assistant' | 'system',

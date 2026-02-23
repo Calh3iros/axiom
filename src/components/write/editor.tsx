@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import {
   FileText, Expand, Quote, Wand2, CheckCircle, Loader2, Copy, Trash2, BookMarked
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState, useCallback } from 'react';
 
 type WriteAction = 'outline' | 'expand' | 'cite' | 'humanize' | 'conclude';
 
@@ -76,6 +76,7 @@ export function WriteEditor() {
           setOutput(''); // clear output since it's now in citations
         }
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error('Write Error:', err);
       if (action !== 'cite') {
@@ -85,7 +86,7 @@ export function WriteEditor() {
       setLoading(false);
       setActiveAction(null);
     }
-  }, [content, loading]);
+  }, [content, loading, locale]);
 
   const handleCopyOutput = () => {
     navigator.clipboard.writeText(output);

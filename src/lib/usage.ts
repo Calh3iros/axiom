@@ -12,8 +12,8 @@
  * Pro tier: unlimited
  */
 
-import { createClient } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 
 export const PLANS = {
   free: {
@@ -156,11 +156,13 @@ export async function incrementUsage(
     .single() as { data: { id: string, solves: number, writes: number, humanizes: number } | null };
 
   if (existingUsage) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabaseAdmin.from('usage') as any)
       .update({ [field]: existingUsage[field] + amount })
       .eq('id', existingUsage.id);
   } else {
     // New day usage for this user
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabaseAdmin.from('usage') as any)
       .insert({
         user_id: userId,
@@ -210,6 +212,7 @@ export async function incrementUsage(
 
       // We only update if something changed (either the day is new or we got new badges)
       if (lastActive !== today || badgesUpdated) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (supabaseAdmin.from('profiles') as any)
           .update({
             current_streak: newStreak,

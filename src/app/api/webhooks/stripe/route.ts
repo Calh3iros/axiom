@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+
 import { stripe } from '@/lib/stripe/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import Stripe from 'stripe';
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -15,6 +16,7 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
@@ -28,6 +30,7 @@ export async function POST(req: Request) {
           ? session.subscription
           : session.subscription.id;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { error } = await (supabaseAdmin.from('profiles') as any)
           .update({
             plan: 'pro' as const,
@@ -50,6 +53,7 @@ export async function POST(req: Request) {
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as Stripe.Subscription;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabaseAdmin.from('profiles') as any)
         .update({
           plan: 'free',

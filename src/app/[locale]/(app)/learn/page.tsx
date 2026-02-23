@@ -1,6 +1,7 @@
-import { Link } from '@/i18n/routing';
-import { LearnChat } from '@/components/learn/chat';
 import { useTranslations } from 'next-intl';
+
+import { LearnChat } from '@/components/learn/chat';
+import { Link } from '@/i18n/routing';
 
 export default function LearnPage() {
   const t = useTranslations('Dashboard.Learn');

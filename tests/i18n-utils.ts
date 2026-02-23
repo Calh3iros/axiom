@@ -7,7 +7,9 @@ export function getTranslations(locale: string) {
   return JSON.parse(file);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function t(dict: any, key: string, fallback?: string): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result = key.split('.').reduce((o: any, i: string) => (o ? o[i] : undefined), dict);
   return result || fallback || key;
 }

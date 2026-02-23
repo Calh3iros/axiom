@@ -1,9 +1,10 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
+
 import { useRouter, Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
-import { Loader2 } from 'lucide-react';
 
 export default function UpdatePasswordPage() {
   const [password, setPassword] = useState('');

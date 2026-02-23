@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+
 import { getTranslations, t } from '../i18n-utils';
 
 test.describe('Monetization - Stripe Checkout', () => {
@@ -18,7 +19,7 @@ test.describe('Monetization - Stripe Checkout', () => {
     await page.locator('#email').fill(testEmail);
     await page.locator('#password').fill(testPassword);
     
-    const createAccountBtn = t(dict, 'Dashboard.Auth.createAccount', 'Create Account');
+    const _createAccountBtn = t(dict, 'Dashboard.Auth.createAccount', 'Create Account');
     // We can rely on button type submit to avoid exact matching issues
     await page.locator('button[type="submit"]').click();
     await page.waitForURL(`**/${locale}/solve`);
@@ -42,7 +43,7 @@ test.describe('Monetization - Stripe Checkout', () => {
     await expect(page.locator('button', { hasText: /Subscribe|Upgrade/i }).first()).toBeVisible({ timeout: 15000 });
 
     // 5. Click Upgrade (Proceed to Checkout)
-    const selectPlanBtn = t(dict, 'Dashboard.Components.upgradeYearly', 'Subscribe Yearly');
+    const _selectPlanBtn = t(dict, 'Dashboard.Components.upgradeYearly', 'Subscribe Yearly');
     // Using a broader locator in case the translation has variations
     await page.getByRole('button').filter({ hasText: /Subscribe|Upgrade/i }).first().click();
 

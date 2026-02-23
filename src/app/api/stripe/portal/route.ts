@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+
 import { createClient } from '@/lib/supabase/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apiVersion: '2025-01-27.acacia' as any,
 });
 
@@ -35,6 +37,7 @@ export async function POST() {
     });
 
     return NextResponse.json({ url: session.url });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Stripe Portal Error:', error);
     return NextResponse.json(

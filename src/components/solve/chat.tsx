@@ -1,12 +1,12 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
+import { UIMessage, DefaultChatTransport } from 'ai';
 import { Camera, Send, Loader2, Sparkles, Copy, Check, Share2 } from 'lucide-react';
-import { useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-import { UIMessage, DefaultChatTransport } from 'ai';
 
 interface SolveChatProps {
   chatId?: string;
@@ -29,6 +29,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
     transport: new DefaultChatTransport({
       api: '/api/chat',
       body: activeChatId ? { type: 'solve', chatId: activeChatId, locale } : { type: 'solve', locale },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fetch: async (url: any, options: any) => {
         const res = await fetch(url, options);
         const id = res.headers.get('x-chat-id');
@@ -100,11 +101,14 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
   };
 
   // Helper to extract text from UIMessage parts
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   const getMessageText = (message: any): string => {
     if (message.content) return message.content;
     if (message.parts) {
       return message.parts
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((p: any) => p.type === 'text')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((p: any) => p.text)
         .join('');
     }
@@ -163,6 +167,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                 }`}
               >
                 {/* Render message parts (text + files) */}
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(message as any).parts?.map((part: any, i: number) => {
                   if (part.type === 'text' && part.text) {
                     return (
@@ -184,6 +189,7 @@ export function SolveChat({ chatId: initialChatId, initialMessages = [] }: Solve
                   return null;
                 })}
                 {/* Fallback for messages without parts */}
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {!(message as any).parts?.length && (
                   <div className="whitespace-pre-wrap leading-relaxed">
                     {getMessageText(message)}

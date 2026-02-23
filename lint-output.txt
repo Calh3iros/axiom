@@ -1,0 +1,144 @@
+﻿
+> axiom@0.1.0 lint F:\axiom
+> eslint .
+
+
+F:\axiom\cypress.config.ts
+  7:21  error  'on' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+  7:25  error  'config' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+F:\axiom\eslint.config.mjs
+  6:1  warning  Assign array to a variable before exporting as module default  import/no-anonymous-default-export
+
+F:\axiom\src\app\[locale]\(app)\map\page.tsx
+   1:34  error  'Target' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  34:32  error  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  80:28  error  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+  80:46  error  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\[locale]\(app)\panic\page.tsx
+  40:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\[locale]\(app)\settings\page.tsx
+  103:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+F:\axiom\src\app\[locale]\(app)\solve\page.tsx
+  20:5  error  Error: Cannot access variable before it is declared
+
+`loadChats` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+F:\axiom\src\app\[locale]\(app)\solve\page.tsx:20:5
+  18 |
+  19 |   useEffect(() => {
+> 20 |     loadChats();
+     |     ^^^^^^^^^ `loadChats` accessed before it is declared
+  21 |   }, []);
+  22 |
+  23 |   const loadChats = async () => {
+
+F:\axiom\src\app\[locale]\(app)\solve\page.tsx:23:3
+  21 |   }, []);
+  22 |
+> 23 |   const loadChats = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 24 |     const data = await getChats();
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 25 |     setChats(data);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 26 |   };
+     | ^^^^^ `loadChats` is declared here
+  27 |
+  28 |   const handleSelectChat = async (id: string) => {
+  29 |     if (selectedChatId === id) return;  react-hooks/immutability
+
+F:\axiom\src\app\[locale]\(share)\share\[id]\page.tsx
+  2:1  error  There should be no empty line within import group  import/order
+
+F:\axiom\src\app\[locale]\auth\forgot-password\page.tsx
+  15:9   error  'locale' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  72:19  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                    react/no-unescaped-entities
+  78:76  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                    react/no-unescaped-entities
+
+F:\axiom\src\app\[locale]\auth\login\page.tsx
+  21:9  error  'locale' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+F:\axiom\src\app\[locale]\auth\signup\page.tsx
+   3:19  error  'Mail' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   3:25  error  'Lock' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   3:31  error  'User' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   3:37  error  'ShieldAlert' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  17:9   error  'router' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:9   error  'locale' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+F:\axiom\src\app\[locale]\layout.tsx
+   2:1   error  There should be no empty line within import group  import/order
+  57:43  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\[locale]\page.tsx
+   79:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  262:26  error    'err' is defined but never used                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+
+F:\axiom\src\app\[locale]\privacy\page.tsx
+  1:10  error  'ArrowLeft' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+F:\axiom\src\app\[locale]\terms\page.tsx
+  1:10  error  'ArrowLeft' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+F:\axiom\src\app\api\chat\route.ts
+   22:63  error    'locale' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   54:87  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+   66:45  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+   83:47  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  121:30  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  129:63  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  135:63  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  144:15  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  161:19  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\api\chat\share\route.ts
+  22:79  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:69  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\api\checkout\route.ts
+  5:10  error  'STRIPE_PRICES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+F:\axiom\src\app\api\humanize\route.ts
+  51:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\api\learn\panic\route.ts
+  55:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\api\stripe\portal\route.ts
+   7:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\app\api\webhooks\stripe\route.ts
+  19:17  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  32:68  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  54:66  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  68:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+F:\axiom\src\app\api\write\route.ts
+   2:22  error  'convertToModelMessages' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  52:19  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\components\humanize\panel.tsx
+  63:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\components\layout\app-shell.tsx
+   14:3   error    'User' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  153:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+F:\axiom\src\components\learn\chat.tsx
+  31:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+F:\axiom\src\components\solve\chat.tsx
+  181:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  282:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+Ô£û 58 problems (50 errors, 8 warnings)
+
+ÔÇëELIFECYCLEÔÇë Command failed with exit code 1.

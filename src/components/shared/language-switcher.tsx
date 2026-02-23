@@ -1,10 +1,11 @@
 'use client';
 
-import { useTransition } from 'react';
-import { usePathname, useRouter } from '@/i18n/routing';
-import { useParams } from 'next/navigation';
 import { Globe } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useTransition } from 'react';
+
+import { usePathname, useRouter } from '@/i18n/routing';
 
 export function LanguageSwitcher() {
   const router = useRouter();

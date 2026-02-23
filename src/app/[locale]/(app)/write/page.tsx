@@ -1,5 +1,6 @@
-import { WriteEditor } from '@/components/write/editor';
 import { useTranslations } from 'next-intl';
+
+import { WriteEditor } from '@/components/write/editor';
 
 export default function WritePage() {
   const t = useTranslations('Dashboard.Write');

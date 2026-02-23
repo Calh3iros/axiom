@@ -1,12 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
-import { Link } from '@/i18n/routing';
 import { Sparkles } from 'lucide-react';
-
-// For this public route, we need to bypass RLS for reading if the chat is shared.
-// Wait, our RLS policy says "Anyone can view shared chats", so the anon key should work!
-// Let's use standard Supabase anon client since it's a public read.
-
 import { getTranslations } from 'next-intl/server';
+
+import { Link } from '@/i18n/routing';
 
 // Because this is a Next.js Server Component that fetches data, we define it carefully:
 export default async function SharedChatPage({ params }: { params: Promise<{ id: string }> }) {

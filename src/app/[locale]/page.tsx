@@ -1,9 +1,10 @@
 'use client';
 
-import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+
 import { LanguageSwitcher } from '@/components/shared/language-switcher';
+import { Link } from '@/i18n/routing';
 
 export default function LandingPage() {
   const [isYearly, setIsYearly] = useState(false);
@@ -258,7 +259,7 @@ export default function LandingPage() {
                   if (!res.ok) throw new Error('Failed to create checkout session');
                   const { url } = await res.json();
                   if (url) window.location.href = url;
-                } catch (err) {
+                } catch {
                   // If unauthorized, redirect to login
                   window.location.href = '/auth/login?returnTo=/settings';
                 }

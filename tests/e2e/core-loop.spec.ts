@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+
 import { getTranslations, t } from '../i18n-utils';
 
 test.describe('Core Loop - Free User Journey', () => {
@@ -15,7 +16,7 @@ test.describe('Core Loop - Free User Journey', () => {
     await page.goto(`/${locale}`);
     
     // Verify Hero title translations
-    const heroTitle = t(dict, 'Landing.hero.title', 'Stop Waiting. Start Solving.');
+    const _heroTitle = t(dict, 'Landing.hero.title', 'Stop Waiting. Start Solving.');
     // We only match part of it or handle cases where only part of it renders
     await expect(page.locator('h1')).toContainText(/Stop Waiting|start solving/i, { ignoreCase: true, timeout: 10000 });
 
@@ -29,7 +30,7 @@ test.describe('Core Loop - Free User Journey', () => {
     await page.locator('#email').fill(testEmail);
     await page.locator('#password').fill(testPassword);
 
-    const createAccountBtn = t(dict, 'Dashboard.Auth.createAccount', 'Create Account');
+    const _createAccountBtn = t(dict, 'Dashboard.Auth.createAccount', 'Create Account');
     // Using locator by type to be safer than exact string match
     await page.locator('button[type="submit"]').click();
 

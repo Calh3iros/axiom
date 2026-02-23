@@ -1,9 +1,10 @@
 'use client';
 
+import { Loader2, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
+
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
-import { Loader2, ArrowLeft } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ export default function ForgotPasswordPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { useLocale, useTranslations } = require('next-intl');
-  const locale = useLocale();
+  const _locale = useLocale();
   const t = useTranslations('Dashboard.Auth');
 
   const handleReset = async (e: React.FormEvent) => {
@@ -68,13 +69,13 @@ export default function ForgotPasswordPage() {
               </div>
               <h3 className="text-lg font-bold text-[var(--color-text-primary)]">{t('checkInbox')}</h3>
               <p className="text-sm text-[var(--color-text-secondary)] pb-4">
-                We've sent a password reset link to <strong>{email}</strong>.
+                We&apos;ve sent a password reset link to <strong>{email}</strong>.
               </p>
             </div>
           ) : (
             <form onSubmit={handleReset} className="space-y-4">
               <p className="text-sm text-[var(--color-text-secondary)] mb-4">
-                Enter the email address associated with your account and we'll send you a link to reset your password.
+                Enter the email address associated with your account and we&apos;ll send you a link to reset your password.
               </p>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">

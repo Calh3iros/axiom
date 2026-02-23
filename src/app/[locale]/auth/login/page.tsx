@@ -1,10 +1,12 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+
 import { createClient } from "@/lib/supabase/client";
-import { Loader2 } from "lucide-react";
+
 
 function LoginContent() {
   const [email, setEmail] = useState("");
@@ -16,7 +18,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/solve";
   const { useLocale, useTranslations } = require('next-intl');
-  const locale = useLocale();
+  const _locale = useLocale();
   const t = useTranslations('Dashboard.Auth');
 
   const handleLogin = async (e: React.FormEvent) => {

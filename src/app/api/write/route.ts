@@ -1,6 +1,7 @@
-import { streamText, convertToModelMessages } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { streamText } from 'ai';
 import { NextResponse } from 'next/server';
+
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 
 const google = createGoogleGenerativeAI({
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
     });
 
     return result.toTextStreamResponse();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Write API Error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });

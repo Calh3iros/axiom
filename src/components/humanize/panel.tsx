@@ -1,12 +1,18 @@
 'use client';
 
-import { useState } from 'react';
-import { ModeSelector } from './mode-selector';
-import { Copy, RefreshCw, Sparkles, ShieldCheck, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
-import { PaywallModal } from '../shared/paywall-modal';
 import * as Diff from 'diff';
-import { detectAI, type DetectionResult } from '@/lib/ai/detect';
+import { Copy, RefreshCw, Sparkles, ShieldCheck, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
+
+import { detectAI, type DetectionResult } from '@/lib/ai/detect';
+
+import { PaywallModal } from '../shared/paywall-modal';
+
+import { ModeSelector } from './mode-selector';
+
+
+
 
 export function HumanizerPanel() {
   const [input, setInput] = useState('');
@@ -54,6 +60,7 @@ export function HumanizerPanel() {
         setInputScore(detectAI(input));
         setOutputScore(detectAI(data.text));
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       setOutput(`Error: ${err.message || 'Failed to humanize text'}`);

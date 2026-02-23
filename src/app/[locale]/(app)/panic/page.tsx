@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { Link } from '@/i18n/routing';
 import { AlertTriangle, Loader2, BookOpen, HelpCircle, Lightbulb, Clock, ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+
+import { Link } from '@/i18n/routing';
 
 type PanicResult = {
   summary: string;
@@ -36,7 +37,7 @@ export default function PanicModePage() {
       setResult(data);
       setActiveTab('summary');
       setFlippedCards(new Set());
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Panic Mode Error:', err);
     } finally {
       setLoading(false);

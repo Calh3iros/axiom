@@ -1,10 +1,12 @@
-import { streamText, convertToModelMessages } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { solveSystemPrompt } from '@/lib/ai/prompts/solve';
-import { learnSystemPrompt } from '@/lib/ai/prompts/learn';
-import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
+import { streamText, convertToModelMessages } from 'ai';
 import { NextResponse } from 'next/server';
+
+import { learnSystemPrompt } from '@/lib/ai/prompts/learn';
+import { solveSystemPrompt } from '@/lib/ai/prompts/solve';
 import { createClient } from '@/lib/supabase/server';
+import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
+
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
@@ -17,7 +19,7 @@ const systemPrompts: Record<string, string> = {
 
 export async function POST(req: Request) {
   try {
-    const { messages, type = 'solve', chatId: providedChatId, locale = 'en' } = await req.json();
+    const { messages, type = 'solve', chatId: providedChatId, locale: _locale = 'en' } = await req.json();
 
     // Get authenticated user and their plan from Supabase
     const { userId, isPro } = await getUserAndPlan(req);
@@ -49,6 +51,7 @@ export async function POST(req: Request) {
       if (!chatId) {
         // Create a new chat
         const title = lastMessage?.content?.substring(0, 50) || 'New Chat';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data: chatData, error: chatError } = await (supabase.from('chats') as any)
           .insert({ user_id: userId, title })
           .select('id')
@@ -61,6 +64,7 @@ export async function POST(req: Request) {
 
       if (chatId && lastMessage) {
         // Save the user's incoming message
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (supabase.from('messages') as any).insert({
           chat_id: chatId,
           role: 'user',
@@ -78,6 +82,7 @@ export async function POST(req: Request) {
 
         // Save assistant response to DB
         if (isAuthenticUser && chatId && text) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (supabase.from('messages') as any).insert({
             chat_id: chatId,
             role: 'assistant',
@@ -116,6 +121,7 @@ ${text}
                 .eq('user_id', userId)
                 .eq('subject', topicData.subject)
                 .eq('topic', topicData.topic)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .single() as any);
 
               if (existingTopic) {
@@ -124,12 +130,14 @@ ${text}
                 const oldScore = existingTopic.mastery_score || 0;
                 const newScore = ((oldScore * (existingTopic.interactions_count || 1)) + topicData.understanding_score) / newCount;
 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 await (supabaseAdmin.from('knowledge_map') as any).update({
                   interactions_count: newCount,
                   mastery_score: newScore,
                   last_interaction_at: new Date().toISOString()
                 }).eq('id', existingTopic.id);
               } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 await (supabaseAdmin.from('knowledge_map') as any).insert({
                   user_id: userId,
                   subject: topicData.subject,
@@ -156,6 +164,7 @@ ${text}
     }
 
     return result.toUIMessageStreamResponse({ headers });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Chat API Error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });

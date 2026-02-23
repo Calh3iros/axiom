@@ -1,7 +1,8 @@
-import { generateObject } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { generateObject } from 'ai';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 
 const google = createGoogleGenerativeAI({
@@ -51,6 +52,7 @@ CRITICAL: You MUST respond and fill all JSON fields EXCLUSIVELY in the same lang
     await incrementUsage(userId, 'learn');
 
     return NextResponse.json(object);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Panic Mode Error:', error);
     return NextResponse.json({ error: error.message || 'Failed to generate study package' }, { status: 500 });

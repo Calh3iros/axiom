@@ -1,14 +1,14 @@
 'use client';
 
-import { X } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
+import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-
-import { STRIPE_PRICES } from '@/lib/stripe/config';
 import { useState } from 'react';
 
+import { STRIPE_PRICES } from '@/lib/stripe/config';
+
 // Ensure the keys are set securely in production
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_123');
+const _stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_123');
 
 interface PaywallModalProps {
   onClose: () => void;
@@ -62,7 +62,7 @@ export function PaywallModal({ onClose, reason }: PaywallModalProps) {
             {reason === 'word_limit' ? 'Word Limit Reached' : 'Daily Limit Reached'}
           </h2>
           <p className="text-[var(--color-text-secondary)] mb-8 leading-relaxed">
-            You've hit the anonymous free limit. Upgrade to <span className="text-[var(--color-ax-yellow)] font-bold">{t('axiomUltra', { defaultMessage: 'Axiom Ultra' })}</span> to conquer your classes without restrictions.
+            You&apos;ve hit the anonymous free limit. Upgrade to <span className="text-[var(--color-ax-yellow)] font-bold">{t('axiomUltra', { defaultMessage: 'Axiom Ultra' })}</span> to conquer your classes without restrictions.
           </p>
 
           <div className="bg-[var(--color-bg2)] rounded-xl p-4 mb-6 text-left border border-[var(--color-border)]">

@@ -1,6 +1,7 @@
-import { Link } from '@/i18n/routing';
-import { ArrowLeft } from 'lucide-react';
+
 import { useTranslations } from 'next-intl';
+
+import { Link } from '@/i18n/routing';
 
 export default function PrivacyPage() {
   const t = useTranslations('Legal.privacy');

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { AlertTriangle, BookOpen, Loader2, HelpCircle, Lightbulb, Clock } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 type PanicResult = {
   summary: string;
@@ -43,6 +43,7 @@ export function LearnPanel() {
       setResult(data);
       setActiveTab('summary');
       setFlippedCards(new Set());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error('Panic Mode Error:', err);
     } finally {

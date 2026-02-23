@@ -1,6 +1,6 @@
 'use client';
 
-import { Link, usePathname, useRouter } from '@/i18n/routing';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 import {
   Home,
   PenTool,
@@ -11,14 +11,15 @@ import {
   Menu,
   X,
   LogOut,
-  User,
   Target
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { LanguageSwitcher } from '@/components/shared/language-switcher';
 import { useTranslations } from 'next-intl';
+import { useState, useEffect } from 'react';
+
+import { LanguageSwitcher } from '@/components/shared/language-switcher';
+import { Link, usePathname, useRouter } from '@/i18n/routing';
+import { createClient } from '@/lib/supabase/client';
+
 
 const navItems = [
   { id: 'solve', href: '/solve', icon: Home },

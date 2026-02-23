@@ -3,8 +3,8 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { Send, Loader2, BookOpen } from 'lucide-react';
-import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 export function LearnChat() {
   const [input, setInput] = useState('');
@@ -28,11 +28,14 @@ export function LearnChat() {
     setInput('');
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getMessageText = (message: any): string => {
     if (typeof message.content === 'string') return message.content;
     if (Array.isArray(message.parts)) {
       return message.parts
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((p: any) => p.type === 'text')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((p: any) => p.text)
         .join('');
     }

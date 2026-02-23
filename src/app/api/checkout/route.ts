@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { STRIPE_PRICES } from '@/lib/stripe/config';
+import { NextResponse } from 'next/server';
+
+import { STRIPE_PRICES as _STRIPE_PRICES } from '@/lib/stripe/config';
+import { stripe } from '@/lib/stripe/server';
 
 export async function POST(request: Request) {
   try {

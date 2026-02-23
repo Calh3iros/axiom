@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { User, Crown, CreditCard, Mail, Calendar, Loader2, ExternalLink, Shield } from 'lucide-react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { User, Crown, CreditCard, Mail, Calendar, Loader2, ExternalLink, Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useState, useEffect } from 'react';
+
+import { createClient } from '@/lib/supabase/client';
 
 type Profile = {
   plan: 'free' | 'pro';

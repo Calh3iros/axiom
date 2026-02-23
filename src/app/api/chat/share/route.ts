@@ -1,6 +1,7 @@
-import { createClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
 import { nanoid } from 'nanoid';
+import { NextResponse } from 'next/server';
+
+import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   try {
@@ -18,6 +19,7 @@ export async function POST(req: Request) {
     }
 
     // Check if chat exists and belongs to user
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: chat, error: chatError } = await (supabase.from('chats') as any)
       .select('id, is_shared, share_id')
       .eq('id', chatId)
@@ -35,6 +37,7 @@ export async function POST(req: Request) {
 
     // Otherwise, generate a new share_id and mark as shared
     const shareId = nanoid(10);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: updateError } = await (supabase.from('chats') as any)
       .update({ is_shared: true, share_id: shareId })
       .eq('id', chatId);
@@ -45,6 +48,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ shareId });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Share Chat API Error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });

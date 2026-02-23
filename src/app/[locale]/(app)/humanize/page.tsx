@@ -1,5 +1,6 @@
-import { HumanizerPanel } from '@/components/humanize/panel';
 import { useTranslations } from 'next-intl';
+
+import { HumanizerPanel } from '@/components/humanize/panel';
 
 export default function HumanizePage() {
   const t = useTranslations('Dashboard.Humanize');

@@ -1,7 +1,8 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { Loader2, Mail, Lock, User, ShieldAlert } from 'lucide-react';
+
 import { Link, useRouter } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
 
@@ -13,9 +14,9 @@ export default function SignupPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const router = useRouter();
+  const _router = useRouter();
   const { useLocale, useTranslations } = require('next-intl');
-  const locale = useLocale();
+  const _locale = useLocale();
   const t = useTranslations('Dashboard.Auth');
 
   const handleSignup = async (e: React.FormEvent) => {

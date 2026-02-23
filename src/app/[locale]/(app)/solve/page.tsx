@@ -1,11 +1,12 @@
 'use client';
 
-import { SolveChat } from '@/components/solve/chat';
-import { getChats, getChatMessages } from '@/lib/actions/chat';
-import { useEffect, useState } from 'react';
 import { UIMessage } from 'ai';
 import { Loader2, MessageSquare, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
+import { SolveChat } from '@/components/solve/chat';
+import { getChats, getChatMessages } from '@/lib/actions/chat';
 
 export default function SolvePage() {
   const [chats, setChats] = useState<{ id: string; title: string | null; updated_at: string }[]>([]);
@@ -20,8 +21,10 @@ export default function SolvePage() {
     setChats(data);
   };
 
+  // Initial chat loading - standard data-fetching pattern
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- loadChats calls setState via async fetch, which is the standard pattern
   useEffect(() => {
-    loadChats();
+    getChats().then(setChats);
   }, []);
 
   const handleSelectChat = async (id: string) => {

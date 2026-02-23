@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
-import { generateText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { generateText } from 'ai';
+import { NextResponse } from 'next/server';
+
 import { PROMPTS } from '@/lib/ai/prompts';
-import { humanizeRequestSchema } from '@/lib/validators/humanize';
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
+import { humanizeRequestSchema } from '@/lib/validators/humanize';
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
       text: response.text,
       usage: response.usage,
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Humanize API Error:', error);
     return NextResponse.json(

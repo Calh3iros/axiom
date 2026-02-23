@@ -1,8 +1,9 @@
-import { createClient } from '@/lib/supabase/server';
-import { Sparkles, Brain, Award, Target, Hash } from 'lucide-react';
-import { Link } from '@/i18n/routing';
-import { getTranslations } from 'next-intl/server';
+import { Sparkles, Brain, Award, Hash } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+
+import { Link } from '@/i18n/routing';
+import { createClient } from '@/lib/supabase/server';
 
 export const metadata = {
   title: 'Knowledge Map | Axiom',
@@ -30,6 +31,7 @@ export default async function KnowledgeMapPage() {
     console.error('Failed to load knowledge map:', error);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topicList = (topics as any[]) || [];
 
   // Group by subject
@@ -76,6 +78,7 @@ export default async function KnowledgeMapPage() {
                 {subject}
               </h2>
               <div className="space-y-4">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(items as any[]).map((item: any) => {
                   const percent = Math.round((item.mastery_score || 0) * 100);
                   // Determine color based on mastery

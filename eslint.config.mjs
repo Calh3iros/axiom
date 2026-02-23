@@ -3,7 +3,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginImport from "eslint-plugin-import";
 import tseslint from "typescript-eslint";
 
-export default [
+const config = [
   ...nextCoreWebVitals,
   eslintConfigPrettier,
   {
@@ -12,7 +12,10 @@ export default [
       "@typescript-eslint": tseslint.plugin,
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
       "@typescript-eslint/no-explicit-any": "error",
       "import/order": [
         "error",
@@ -25,4 +28,18 @@ export default [
       "no-console": ["warn", { allow: ["warn", "error"] }],
     },
   },
+  {
+    ignores: [
+      "scripts/**",
+      "cypress/**",
+      "update-*.js",
+      "verify-*.js",
+      "translate-*.js",
+      "fix-*.js",
+      "playwright-report/**",
+      "test-results/**",
+    ],
+  },
 ];
+
+export default config;
