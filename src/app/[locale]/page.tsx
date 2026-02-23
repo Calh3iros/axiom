@@ -254,7 +254,7 @@ export default function LandingPage() {
                   const res = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.YEARLY : STRIPE_PRICES.MONTHLY }),
+                    body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.PRO_YEARLY : STRIPE_PRICES.PRO_MONTHLY }),
                   });
                   if (!res.ok) throw new Error('Failed to create checkout session');
                   const { url } = await res.json();
