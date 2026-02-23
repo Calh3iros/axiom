@@ -15,14 +15,14 @@ export default function SolvePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile primarily
   const t = useTranslations('Dashboard.Solve');
 
-  useEffect(() => {
-    loadChats();
-  }, []);
-
   const loadChats = async () => {
     const data = await getChats();
     setChats(data);
   };
+
+  useEffect(() => {
+    loadChats();
+  }, []);
 
   const handleSelectChat = async (id: string) => {
     if (selectedChatId === id) return;

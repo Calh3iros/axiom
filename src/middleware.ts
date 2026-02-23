@@ -4,7 +4,7 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 
 // Routes that don't require authentication
-const publicRoutes = ['/auth/login', '/auth/signup', '/auth/forgot-password', '/auth/update-password', '/auth/callback', '/pricing', '/share'];
+const publicRoutes = ['/auth/login', '/auth/signup', '/auth/forgot-password', '/auth/update-password', '/auth/callback', '/pricing', '/share', '/privacy', '/terms'];
 // Static/API routes to skip entirely
 const skipRoutes = ['/api/', '/_next/', '/favicon.ico', '/manifest.json', '/icon-'];
 
@@ -57,8 +57,10 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = pathWithoutLocale === '/' || publicRoutes.some((route) => pathWithoutLocale.startsWith(route));
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
-    // Use the default locale for redirects if one isn't present
-    url.pathname = '/en/auth/login';
+    // Extract locale from current path, fallback to 'en'
+    const localeMatch = pathname.match(/^\/([a-zA-Z]{2})(\/|$)/);
+    const currentLocale = localeMatch ? localeMatch[1] : 'en';
+    url.pathname = `/${currentLocale}/auth/login`;
     url.searchParams.set('next', pathname);
     return NextResponse.redirect(url);
   }
