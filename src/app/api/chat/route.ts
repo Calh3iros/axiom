@@ -4,8 +4,10 @@ import { NextResponse } from 'next/server';
 
 import { learnSystemPrompt } from '@/lib/ai/prompts/learn';
 import { solveSystemPrompt } from '@/lib/ai/prompts/solve';
+import { aiRatelimit } from '@/lib/ratelimit';
 import { createClient } from '@/lib/supabase/server';
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
+import { chatRequestSchema } from '@/lib/validators/chat';
 
 
 const google = createGoogleGenerativeAI({
@@ -19,10 +21,27 @@ const systemPrompts: Record<string, string> = {
 
 export async function POST(req: Request) {
   try {
-    const { messages, type = 'solve', chatId: providedChatId, locale: _locale = 'en' } = await req.json();
+    // P0.3 — Input validation
+    const json = await req.json();
+    const parsed = chatRequestSchema.safeParse(json);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request parameters' }, { status: 400 });
+    }
+    const { messages, type, chatId: providedChatId, locale: _locale } = parsed.data;
 
     // Get authenticated user and their plan from Supabase
     const { userId, isPro } = await getUserAndPlan(req);
+
+    // P0.2 — Rate limiting (by IP for DDoS protection)
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
+    const { success: rateLimitOk } = await aiRatelimit.limit(ip);
+    if (!rateLimitOk) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a moment.' },
+        { status: 429 }
+      );
+    }
+
     const usageType = type === 'learn' ? 'learn' as const : 'solve' as const;
     const usage = await checkUsage(userId, usageType, isPro);
     if (!usage.allowed) {
@@ -77,6 +96,8 @@ export async function POST(req: Request) {
       model: google('gemini-2.5-flash'),
       system: systemInstruction,
       messages: modelMessages,
+      maxOutputTokens: 4096,                        // P0.7
+      abortSignal: AbortSignal.timeout(30_000), // P0.6
       onFinish: async ({ text }) => {
         await incrementUsage(userId, usageType);
 
@@ -164,10 +185,8 @@ ${text}
     }
 
     return result.toUIMessageStreamResponse({ headers });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Chat API Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 }); // P0.4
   }
 }
-

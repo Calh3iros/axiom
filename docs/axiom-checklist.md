@@ -7,26 +7,26 @@
 
 ## P0 — SEGURANÇA (ANTES do deploy)
 
-- [ ] **P0.1 Security Headers** — Adicionar em `next.config.ts`:
+- [x] **P0.1 Security Headers** — Adicionar em `next.config.ts`:
   - CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
-- [ ] **P0.2 Rate Limiting (burst/DDoS)** — `@upstash/ratelimit`:
+- [x] **P0.2 Rate Limiting (burst/DDoS)** — `@upstash/ratelimit`:
   - 10 calls/min por user em rotas IA, 60/min em outras
   - Criar `src/lib/ratelimit.ts`
   - Adicionar check em todas as 4 API routes IA
-- [ ] **P0.3 Input Validation** — Zod em TODAS as API routes:
+- [x] **P0.3 Input Validation** — Zod em TODAS as API routes:
   - chat: validar messages array, type, chatId, locale
   - write: validar action (enum), content (max 10KB), context
   - humanize: JÁ TEM (`humanizeRequestSchema`) ✅
   - learn/panic: validar subject (string, max 200 chars), chapter
-- [ ] **P0.4 Error Leaking** — Mudar 5 rotas pra NUNCA retornar `error.message`:
+- [x] **P0.4 Error Leaking** — Mudar 5 rotas pra NUNCA retornar `error.message`:
   - chat/route.ts:170, write:55, panic:58, portal:44, share:54
   - Retornar: `{ error: 'Internal Server Error' }` (genérico)
-- [ ] **P0.5 Error Boundaries** — Criar:
+- [x] **P0.5 Error Boundaries** — Criar:
   - `src/app/error.tsx` (error boundary de page)
   - `src/app/global-error.tsx` (fallback fatal)
-- [ ] **P0.6 Timeout nas chamadas IA** — Configurar `abortSignal` com 30s timeout em:
+- [x] **P0.6 Timeout nas chamadas IA** — Configurar `abortSignal` com 30s timeout em:
   - chat/route.ts, write/route.ts, humanize/route.ts, panic/route.ts
-- [ ] **P0.7 maxOutputTokens** — Limitar output do Gemini:
+- [x] **P0.7 maxOutputTokens** — Limitar output do Gemini:
   - chat: 4096 tokens, write: 2048, humanize: 4096, panic: 8192
 
 ---

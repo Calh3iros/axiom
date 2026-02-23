@@ -3,6 +3,7 @@ import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 
 import { PROMPTS } from '@/lib/ai/prompts';
+import { aiRatelimit } from '@/lib/ratelimit';
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 import { humanizeRequestSchema } from '@/lib/validators/humanize';
 
@@ -26,6 +27,17 @@ export async function POST(req: Request) {
 
     // Check user plan and rate limits
     const { userId, isPro } = await getUserAndPlan(req);
+
+    // P0.2 — Rate limiting (by IP for DDoS protection)
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
+    const { success: rateLimitOk } = await aiRatelimit.limit(ip);
+    if (!rateLimitOk) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a moment.' },
+        { status: 429 }
+      );
+    }
+
     const wordCount = text.split(/\s+/).filter(Boolean).length;
     const usage = await checkUsage(userId, 'humanize', isPro);
     if (!usage.allowed) {
@@ -39,6 +51,8 @@ export async function POST(req: Request) {
       model: google('gemini-2.5-flash'),
       prompt: `Text to humanize:\n${text}`,
       system: `${PROMPTS.HUMANIZE(mode)}\n\nCRITICAL: You MUST respond EXCLUSIVELY in the same language as the text provided to be humanized. DO NOT mix languages.`,
+      maxOutputTokens: 4096,                        // P0.7
+      abortSignal: AbortSignal.timeout(30_000), // P0.6
     });
 
     // Track usage by word count
@@ -48,8 +62,7 @@ export async function POST(req: Request) {
       text: response.text,
       usage: response.usage,
     });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Humanize API Error:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },

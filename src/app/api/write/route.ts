@@ -2,7 +2,9 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { streamText } from 'ai';
 import { NextResponse } from 'next/server';
 
+import { aiRatelimit } from '@/lib/ratelimit';
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
+import { writeRequestSchema } from '@/lib/validators/write';
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
@@ -23,15 +25,32 @@ const prompts: Record<string, (content: string, context?: string) => string> = {
 
 export async function POST(req: Request) {
   try {
-    const { action, content, context } = await req.json();
+    // P0.3 — Input validation
+    const json = await req.json();
+    const parsed = writeRequestSchema.safeParse(json);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request parameters' }, { status: 400 });
+    }
+    const { action, content, context } = parsed.data;
 
     const promptFn = prompts[action];
     if (!promptFn) {
-      return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
 
     // Check user plan and rate limits
     const { userId, isPro } = await getUserAndPlan(req);
+
+    // P0.2 — Rate limiting (by IP for DDoS protection)
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
+    const { success: rateLimitOk } = await aiRatelimit.limit(ip);
+    if (!rateLimitOk) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a moment.' },
+        { status: 429 }
+      );
+    }
+
     const usage = await checkUsage(userId, 'write', isPro);
     if (!usage.allowed) {
       return NextResponse.json(
@@ -43,15 +62,16 @@ export async function POST(req: Request) {
     const result = streamText({
       model: google('gemini-2.5-flash'),
       prompt: `${promptFn(content, context)}\n\nCRITICAL: You MUST respond EXCLUSIVELY in the same language as the text provided by the user. DO NOT mix languages.`,
+      maxOutputTokens: 2048,                        // P0.7
+      abortSignal: AbortSignal.timeout(30_000), // P0.6
       onFinish: async () => {
         await incrementUsage(userId, 'write');
       },
     });
 
     return result.toTextStreamResponse();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Write API Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 }); // P0.4
   }
 }
