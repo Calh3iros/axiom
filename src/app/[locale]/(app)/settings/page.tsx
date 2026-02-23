@@ -1,7 +1,7 @@
 'use client';
 
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { User, Crown, CreditCard, Mail, Calendar, Loader2, ExternalLink, Shield } from 'lucide-react';
+import { User, Crown, CreditCard, Mail, Calendar, Loader2, ExternalLink, Shield, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 
@@ -20,6 +20,8 @@ export default function SettingsPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const t = useTranslations('Dashboard.Settings');
 
   useEffect(() => {
@@ -260,6 +262,66 @@ export default function SettingsPage() {
             >
               {t('upgradeToProPricing')}{isYearly ? '$6.99/mo' : '$9.99/mo'}
             </button>
+          </div>
+        )}
+      </div>
+      {/* ── Danger Zone ── */}
+      <div className="bg-[var(--color-bg1)] border border-red-500/20 rounded-2xl p-8">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="p-2 rounded-xl bg-red-500/10">
+            <Trash2 className="w-5 h-5 text-red-400" />
+          </div>
+          <h2 className="text-lg font-bold text-red-400">Danger Zone</h2>
+        </div>
+
+        {!deleteConfirm ? (
+          <div>
+            <p className="text-sm text-[var(--color-text-secondary)] mb-4">
+              Permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+            <button
+              onClick={() => setDeleteConfirm(true)}
+              className="px-6 py-2.5 text-sm font-bold rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
+            >
+              Delete my account
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <p className="text-sm text-red-400 font-medium">
+              Are you absolutely sure? All your data, usage history, and subscription will be permanently deleted.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={async () => {
+                  setDeleteLoading(true);
+                  try {
+                    const res = await fetch('/api/account/delete', { method: 'DELETE' });
+                    if (res.ok) {
+                      const supabase = createClient();
+                      await supabase.auth.signOut();
+                      window.location.href = '/';
+                    } else {
+                      alert('Failed to delete account. Please try again.');
+                    }
+                  } catch {
+                    alert('Error deleting account.');
+                  } finally {
+                    setDeleteLoading(false);
+                  }
+                }}
+                disabled={deleteLoading}
+                className="px-6 py-2.5 text-sm font-bold rounded-xl bg-red-500 text-white hover:bg-red-400 transition-colors disabled:opacity-50"
+              >
+                {deleteLoading ? 'Deleting...' : 'Yes, delete my account'}
+              </button>
+              <button
+                onClick={() => setDeleteConfirm(false)}
+                className="px-6 py-2.5 text-sm font-bold rounded-xl bg-[var(--color-bg2)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
       </div>

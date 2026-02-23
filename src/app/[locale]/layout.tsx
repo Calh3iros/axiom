@@ -7,6 +7,8 @@ import { Toaster } from 'sonner';
 
 import { Analytics } from '@vercel/analytics/react';
 
+import { CookieConsent } from '@/components/shared/cookie-consent';
+
 import './globals.css';
 import { routing } from '@/i18n/routing';
 
@@ -76,6 +78,7 @@ export default async function RootLayout({
           {children}
           <Analytics />
           <Toaster theme="dark" position="bottom-right" richColors />
+          <CookieConsent />
         </NextIntlClientProvider>
       </body>
     </html>
