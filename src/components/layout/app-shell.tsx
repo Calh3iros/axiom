@@ -14,11 +14,17 @@ import {
   Target
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
 
 import { LanguageSwitcher } from '@/components/shared/language-switcher';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
+// PlanType mirrors usage.ts but we can't import PLANS (it pulls in supabaseAdmin)
+type PlanType = 'free' | 'pro' | 'elite';
+
+/** Daily solve limits per plan (mirrors PLANS in usage.ts) */
+const DAILY_SOLVES: Record<PlanType, number> = { free: 3, pro: 50, elite: Infinity };
 
 
 const navItems = [
@@ -34,10 +40,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [plan, setPlan] = useState<'free' | 'pro'>('free');
+  const [plan, setPlan] = useState<PlanType>('free');
+  const [solvesRemaining, setSolvesRemaining] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
   const [signingOut, setSigningOut] = useState(false);
   const t = useTranslations('Dashboard.Sidebar');
+  const searchParams = useSearchParams();
+
+  const fetchProfile = useCallback(async (userId: string) => {
+    const supabase = createClient();
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('plan, current_streak')
+      .eq('id', userId)
+      .single() as { data: { plan: string, current_streak: number | null } | null };
+    if (profile?.plan) {
+      const p = (['free', 'pro', 'elite'].includes(profile.plan) ? profile.plan : 'free') as PlanType;
+      setPlan(p);
+      const dailySolves = DAILY_SOLVES[p];
+      setSolvesRemaining(dailySolves === Infinity ? Infinity : dailySolves);
+    }
+    if (profile?.current_streak !== undefined) setStreak(profile.current_streak || 0);
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -46,13 +70,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       setUser(user);
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('plan, current_streak')
-          .eq('id', user.id)
-          .single() as { data: { plan: string, current_streak: number | null } | null };
-        if (profile?.plan) setPlan(profile.plan as 'free' | 'pro');
-        if (profile?.current_streak !== undefined) setStreak(profile.current_streak || 0);
+        await fetchProfile(user.id);
       }
     });
 
@@ -62,7 +80,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchProfile]);
+
+  // Re-fetch plan after Stripe Checkout redirect
+  useEffect(() => {
+    if (searchParams.get('checkout') === 'success' && user) {
+      // Webhook may take a moment to update the DB — poll a few times
+      let attempts = 0;
+      const poll = setInterval(async () => {
+        attempts++;
+        await fetchProfile(user.id);
+        if (attempts >= 5) clearInterval(poll);
+      }, 2000);
+      // Also fetch immediately
+      fetchProfile(user.id);
+      return () => clearInterval(poll);
+    }
+  }, [searchParams, user, fetchProfile]);
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -135,7 +169,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Bottom Actions / User */}
         <div className="p-4 border-t border-[var(--color-border)] space-y-2">
-          {plan !== 'pro' && (
+          {plan === 'free' && (
             <Link href="/pricing" className="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)] transition-colors text-sm">
               <CreditCard className="w-4 h-4" /> {t('upgradeToPro')}
             </Link>
@@ -188,11 +222,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <LanguageSwitcher />
             </div>
             <div className="text-xs text-[var(--color-text-secondary)] hidden md:block">
-              <span className="text-emerald-400 font-semibold">∞</span> {t('solvesLeftToday')}
+              <span className="text-emerald-400 font-semibold">{solvesRemaining === Infinity ? '∞' : (solvesRemaining ?? '—')}</span> {t('solvesLeftToday')}
             </div>
             <div className="w-px h-5 bg-[var(--color-border)] hidden md:block" />
-            <span className={`text-xs font-mono font-semibold ${plan === 'pro' ? 'text-[var(--color-ax-yellow)]' : 'text-[var(--color-dim)]'}`}>
-              {plan === 'pro' ? t('pro') : t('free')}
+            <span className={`text-xs font-mono font-semibold ${
+              plan === 'elite' ? 'text-amber-400' :
+              plan === 'pro' ? 'text-[var(--color-ax-yellow)]' :
+              'text-[var(--color-dim)]'
+            }`}>
+              {plan === 'elite' ? 'ELITE' : plan === 'pro' ? 'PRO' : 'FREE'}
             </span>
           </div>
         </div>
