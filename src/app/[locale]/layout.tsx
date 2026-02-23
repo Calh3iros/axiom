@@ -5,6 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Toaster } from 'sonner';
 
+import { Analytics } from '@vercel/analytics/react';
+
 import './globals.css';
 import { routing } from '@/i18n/routing';
 
@@ -69,6 +71,7 @@ export default async function RootLayout({
       <body className="antialiased min-h-screen bg-[var(--color-bg0)]">
         <NextIntlClientProvider messages={messages}>
           {children}
+          <Analytics />
           <Toaster theme="dark" position="bottom-right" richColors />
         </NextIntlClientProvider>
       </body>
