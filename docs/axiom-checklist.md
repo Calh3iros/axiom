@@ -47,10 +47,10 @@
   - Cancelamento: respeitar `cancel_at_period_end`
 - [ ] **P1.5 Redesign `paywall-modal.tsx`** — 3 tiers com toggle mensal/anual
 - [ ] **P1.6 Watermark no Free** — Componente `<Watermark />` em solve/chat, write/editor, humanize/panel
-- [ ] **P1.7 Anti-abuse**:
-  - Conta nova = 24h antes de poder assinar
-  - IP tracking: bloquear se mesmo IP cria 3+ contas free
-  - Rate limit global: 10 calls/min qualquer tier (já em P0.2)
+- [x] **P1.7 Anti-abuse**:
+  - IP tracking: `ip_signups` table, check no auth callback (3+ signups = flag)
+  - Export restriction: Free users blocked via `isPaidPlan()` guard
+  - Rate limit per tier: Free 5/min, Pro 15/min, Elite 30/min (Upstash)
 
 ---
 

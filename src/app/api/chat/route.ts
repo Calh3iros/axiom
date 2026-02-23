@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 import { learnSystemPrompt } from '@/lib/ai/prompts/learn';
 import { solveSystemPrompt } from '@/lib/ai/prompts/solve';
-import { aiRatelimit } from '@/lib/ratelimit';
+import { getAiRatelimit } from '@/lib/ratelimit';
 import { createClient } from '@/lib/supabase/server';
 import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
 import { chatRequestSchema } from '@/lib/validators/chat';
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
     // P0.2 — Rate limiting (by IP for DDoS protection)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
-    const { success: rateLimitOk } = await aiRatelimit.limit(ip);
+    const { success: rateLimitOk } = await getAiRatelimit(plan).limit(ip);
     if (!rateLimitOk) {
       return NextResponse.json(
         { error: 'Too many requests. Please wait a moment.' },
