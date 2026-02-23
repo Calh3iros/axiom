@@ -69,7 +69,9 @@ export async function middleware(request: NextRequest) {
   // If authenticated and trying to access auth pages, redirect to app
   if (user && (pathWithoutLocale.startsWith('/auth/login') || pathWithoutLocale.startsWith('/auth/signup'))) {
     const url = request.nextUrl.clone();
-    url.pathname = '/en/solve';
+    const localeMatch = pathname.match(/^\/([a-zA-Z]{2})(\/|$)/);
+    const userLocale = localeMatch ? localeMatch[1] : 'en';
+    url.pathname = `/${userLocale}/solve`;
     return NextResponse.redirect(url);
   }
 

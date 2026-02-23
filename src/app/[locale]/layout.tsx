@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
@@ -21,7 +21,6 @@ export const metadata: Metadata = {
   description: 'Snap a photo of any homework question and get step-by-step solutions instantly. Write essays, humanize AI text, and prepare for exams. Free to start, $9.99/mo for unlimited.',
   keywords: ['homework help', 'math solver', 'AI tutor', 'essay writer', 'AI humanizer', 'chegg alternative', 'study companion'],
   manifest: '/manifest.json',
-  themeColor: '#08090b',
   openGraph: {
     title: 'Axiom — Solve Any Homework in 5 Seconds',
     description: 'AI-powered study companion. Instant solutions, essay writing, text humanizer, and exam prep. Free to start.',
@@ -42,6 +41,10 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     apple: '/icon-192.png',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#08090b',
 };
 
 
