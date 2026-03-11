@@ -25,10 +25,16 @@ export default function LandingPage() {
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
           <Link
-            href="/solve"
+            href="/auth/login"
+            className="px-4 py-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] font-medium text-sm transition-colors hidden sm:block"
+          >
+            {t('nav.login')}
+          </Link>
+          <Link
+            href="/auth/signup"
             className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-semibold text-sm rounded-lg transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] hidden sm:block"
           >
-            {t('cta.btn').split('—')[0].trim()} →
+            {t('nav.startNow')} →
           </Link>
         </div>
       </nav>

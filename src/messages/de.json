@@ -156,7 +156,9 @@
     "nav": {
       "features": "Funktionen",
       "compare": "Vergleich",
-      "pricing": "Preise"
+      "pricing": "Preise",
+      "login": "Anmelden",
+      "startNow": "Jetzt Starten"
     },
     "hero": {
       "badge": "Dein KI-Lernbegleiter ist da",

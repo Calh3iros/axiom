@@ -156,7 +156,9 @@
     "nav": {
       "features": "功能",
       "compare": "对比",
-      "pricing": "价格"
+      "pricing": "价格",
+      "login": "登录",
+      "startNow": "立即开始"
     },
     "hero": {
       "badge": "你的AI学习伙伴来了",

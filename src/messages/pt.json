@@ -156,7 +156,9 @@
     "nav": {
       "features": "Recursos",
       "compare": "Compare",
-      "pricing": "Planos"
+      "pricing": "Planos",
+      "login": "Entrar",
+      "startNow": "Começar Agora"
     },
     "hero": {
       "badge": "Seu assistente de estudo com IA chegou",

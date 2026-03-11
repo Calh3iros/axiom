@@ -156,7 +156,9 @@
     "nav": {
       "features": "Features",
       "compare": "Compare",
-      "pricing": "Pricing"
+      "pricing": "Pricing",
+      "login": "Login",
+      "startNow": "Start Now"
     },
     "hero": {
       "badge": "Your AI study companion is here",

@@ -156,7 +156,9 @@
     "nav": {
       "features": "Fonctionnalités",
       "compare": "Comparer",
-      "pricing": "Tarifs"
+      "pricing": "Tarifs",
+      "login": "Connexion",
+      "startNow": "Commencer"
     },
     "hero": {
       "badge": "Votre compagnon d'étude IA est arrivé",
