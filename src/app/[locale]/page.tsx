@@ -347,7 +347,7 @@ export default function LandingPage() {
           <div className="flex gap-6 text-sm text-[var(--color-text-secondary)]">
             <Link href="/privacy" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.privacy')}</Link>
             <Link href="/terms" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.terms')}</Link>
-            <a href="mailto:mysupport@axiom-solver.com" className="hover:text-[var(--color-text-primary)] transition-colors">mysupport@axiom-solver.com SC</a>
+            <a href="mailto:mysupport@axiom-solver.com" className="hover:text-[var(--color-text-primary)] transition-colors">mysupport@axiom-solver.com</a>
           </div>
         </div>
       </footer>
