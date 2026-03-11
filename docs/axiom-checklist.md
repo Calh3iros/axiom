@@ -1,7 +1,7 @@
 # Axiom — Checklist Definitivo Pré-Deploy → Produção
 
-> Estado atual: Commit `f9ec074` | 0 lint errors | Dev server funcional
-> Gerado: 2026-02-23 | Baseado em auditoria de 38 itens
+> Estado atual: Commit `7377ac9` | 0 lint errors | Produção: axiom-solver.com
+> Gerado: 2026-02-23 | Atualizado: 2026-03-11 | Baseado em auditoria de 38 itens
 
 ---
 
