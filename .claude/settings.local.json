@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://wsgoeojeyhxtakvjtubh.supabase.co/rest/v1/profiles?select=id,email,plan,stripe_subscription_id,stripe_customer_id&email=eq.soren2222@gmail.com\" -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzZ29lb2pleWh4dGFrdmp0dWJoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTcwNjAyNSwiZXhwIjoyMDg3MjgyMDI1fQ.9F89KechCpV16NVCIYwrfaFfphxi52FzC8VPfdTb980\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzZ29lb2pleWh4dGFrdmp0dWJoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTcwNjAyNSwiZXhwIjoyMDg3MjgyMDI1fQ.9F89KechCpV16NVCIYwrfaFfphxi52FzC8VPfdTb980\")"
+    ]
+  }
+}
