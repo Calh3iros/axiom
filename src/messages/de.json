@@ -69,7 +69,13 @@
       "opening": "Öffnen...",
       "monthly": "Monatlich",
       "yearly": "Jährlich",
-      "upgradeToProPricing": "Auf Pro upgraden — "
+      "upgradeToProPricing": "Auf Pro upgraden — ",
+      "changePassword": "Passwort ändern",
+      "changePasswordDesc": "Aktualisieren Sie Ihr Kontopasswort",
+      "newPassword": "Neues Passwort",
+      "confirmNewPassword": "Neues Passwort bestätigen",
+      "passwordUpdated": "Passwort erfolgreich aktualisiert!",
+      "updatePassword": "Passwort aktualisieren"
     },
     "Learn": {
       "title": "Interaktiver Tutor",

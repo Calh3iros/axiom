@@ -69,7 +69,13 @@
       "opening": "Abrindo...",
       "monthly": "Mensal",
       "yearly": "Anual",
-      "upgradeToProPricing": "Assinar Pro — "
+      "upgradeToProPricing": "Assinar Pro — ",
+      "changePassword": "Alterar Senha",
+      "changePasswordDesc": "Atualize a senha da sua conta",
+      "newPassword": "Nova Senha",
+      "confirmNewPassword": "Confirmar Nova Senha",
+      "passwordUpdated": "Senha atualizada com sucesso!",
+      "updatePassword": "Atualizar Senha"
     },
     "Learn": {
       "title": "Tutor Interativo",

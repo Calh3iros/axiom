@@ -69,7 +69,13 @@
       "opening": "Opening...",
       "monthly": "Monthly",
       "yearly": "Yearly",
-      "upgradeToProPricing": "Upgrade to Pro — "
+      "upgradeToProPricing": "Upgrade to Pro — ",
+      "changePassword": "Change Password",
+      "changePasswordDesc": "Update your account password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "passwordUpdated": "Password updated successfully!",
+      "updatePassword": "Update Password"
     },
     "Learn": {
       "title": "Learn Tutor",
