@@ -13,10 +13,14 @@ import {
   Trash2,
   Lock,
   Check,
+  Headphones,
+  FileText,
+  BookOpen,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 
+import { Link } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
 
 type Profile = {
@@ -459,6 +463,52 @@ export default function SettingsPage() {
           </form>
         </div>
       )}
+
+      {/* ── Help & Support ── */}
+      <div className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10">
+            <Headphones className="h-5 w-5 text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="font-bold text-[var(--color-text-primary)]">
+              {t("helpSupport")}
+            </h3>
+            <p className="text-xs text-[var(--color-text-secondary)]">
+              {t("helpSupportDesc")}
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <a
+            href="mailto:mysupport@axiom-solver.com"
+            className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] p-3 text-sm text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-ax-blue)]/30 hover:bg-[var(--color-bg2)] hover:text-[var(--color-text-primary)]"
+          >
+            <Mail className="h-4 w-4 text-[var(--color-ax-blue)]" />
+            <span className="flex-1">{t("emailSupport")}</span>
+            <span className="font-mono text-xs text-[var(--color-dim)]">
+              mysupport@axiom-solver.com
+            </span>
+          </a>
+          <Link
+            href="/privacy"
+            className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] p-3 text-sm text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-ax-blue)]/30 hover:bg-[var(--color-bg2)] hover:text-[var(--color-text-primary)]"
+          >
+            <FileText className="h-4 w-4 text-[var(--color-dim)]" />
+            <span className="flex-1">{t("privacyPolicy")}</span>
+            <ExternalLink className="h-3.5 w-3.5 text-[var(--color-dim)]" />
+          </Link>
+          <Link
+            href="/terms"
+            className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] p-3 text-sm text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-ax-blue)]/30 hover:bg-[var(--color-bg2)] hover:text-[var(--color-text-primary)]"
+          >
+            <BookOpen className="h-4 w-4 text-[var(--color-dim)]" />
+            <span className="flex-1">{t("termsOfService")}</span>
+            <ExternalLink className="h-3.5 w-3.5 text-[var(--color-dim)]" />
+          </Link>
+        </div>
+      </div>
 
       {/* ── Danger Zone ── */}
       <div className="rounded-2xl border border-red-500/20 bg-[var(--color-bg1)] p-8">

@@ -75,7 +75,12 @@
       "newPassword": "新密码",
       "confirmNewPassword": "确认新密码",
       "passwordUpdated": "密码更新成功！",
-      "updatePassword": "更新密码"
+      "updatePassword": "更新密码",
+      "helpSupport": "帮助与支持",
+      "helpSupportDesc": "需要帮助？我们随时为您服务。",
+      "emailSupport": "邮件支持",
+      "privacyPolicy": "隐私政策",
+      "termsOfService": "服务条款"
     },
     "Learn": {
       "title": "互动导师",

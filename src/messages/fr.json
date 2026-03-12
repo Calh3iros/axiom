@@ -75,7 +75,12 @@
       "newPassword": "Nouveau mot de passe",
       "confirmNewPassword": "Confirmer le nouveau mot de passe",
       "passwordUpdated": "Mot de passe mis à jour avec succès !",
-      "updatePassword": "Mettre à jour le mot de passe"
+      "updatePassword": "Mettre à jour le mot de passe",
+      "helpSupport": "Aide et Support",
+      "helpSupportDesc": "Besoin d'aide ? Nous sommes là pour vous.",
+      "emailSupport": "Support par Email",
+      "privacyPolicy": "Politique de Confidentialité",
+      "termsOfService": "Conditions d'Utilisation"
     },
     "Learn": {
       "title": "Tuteur Interactif",

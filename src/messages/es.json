@@ -75,7 +75,12 @@
       "newPassword": "Nueva Contraseña",
       "confirmNewPassword": "Confirmar Nueva Contraseña",
       "passwordUpdated": "¡Contraseña actualizada con éxito!",
-      "updatePassword": "Actualizar Contraseña"
+      "updatePassword": "Actualizar Contraseña",
+      "helpSupport": "Ayuda y Soporte",
+      "helpSupportDesc": "¿Necesitas ayuda? Estamos aquí para ti.",
+      "emailSupport": "Soporte por Email",
+      "privacyPolicy": "Política de Privacidad",
+      "termsOfService": "Términos de Servicio"
     },
     "Learn": {
       "title": "Tutor Interactivo",

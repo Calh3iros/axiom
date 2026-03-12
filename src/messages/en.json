@@ -75,7 +75,12 @@
       "newPassword": "New Password",
       "confirmNewPassword": "Confirm New Password",
       "passwordUpdated": "Password updated successfully!",
-      "updatePassword": "Update Password"
+      "updatePassword": "Update Password",
+      "helpSupport": "Help & Support",
+      "helpSupportDesc": "Need help? We're here for you.",
+      "emailSupport": "Email Support",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
     },
     "Learn": {
       "title": "Learn Tutor",
