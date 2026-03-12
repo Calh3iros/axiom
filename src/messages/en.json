@@ -155,6 +155,21 @@
       "copyBtn": "Copy",
       "axiomUltra": "Axiom Ultra",
       "ultraPlanIncludes": "ULTRA PLAN INCLUDES:"
+    },
+    "Onboarding": {
+      "welcome": "WELCOME TO AXIOM",
+      "title": "4 superpowers at your fingertips",
+      "solveTitle": "Solve",
+      "solveDesc": "Snap a photo or type any homework question. Get step-by-step solutions in 5 seconds — math, physics, chemistry, history, and more.",
+      "writeTitle": "Write",
+      "writeDesc": "AI-powered essay writer. Generate outlines, expand ideas, add APA citations, and polish your text to academic quality.",
+      "humanizeTitle": "Humanize",
+      "humanizeDesc": "Paste any AI-generated text and get natural, human-sounding output. Three modes: Academic, Casual, or Professional.",
+      "learnTitle": "Learn",
+      "learnDesc": "Your AI tutor. Ask anything — 'Teach me calculus from zero'. Plus Panic Mode: instant summaries, exam questions, and flashcards.",
+      "back": "Back",
+      "next": "Next",
+      "getStarted": "Get Started 🚀"
     }
   },
   "Language": {

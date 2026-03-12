@@ -155,6 +155,21 @@
       "copyBtn": "Kopieren",
       "axiomUltra": "Axiom Ultra",
       "ultraPlanIncludes": "DER ULTRA-PLAN BEINHALTET:"
+    },
+    "Onboarding": {
+      "welcome": "WILLKOMMEN BEI AXIOM",
+      "title": "4 Superkräfte in Ihrer Hand",
+      "solveTitle": "Solve",
+      "solveDesc": "Machen Sie ein Foto oder tippen Sie eine Frage ein. Erhalten Sie schrittweise Lösungen in 5 Sekunden — Mathe, Physik, Chemie, Geschichte und mehr.",
+      "writeTitle": "Write",
+      "writeDesc": "KI-gestützter Aufsatzschreiber. Erstellen Sie Gliederungen, erweitern Sie Ideen, fügen Sie APA-Zitate hinzu und verfeinern Sie Ihren Text.",
+      "humanizeTitle": "Humanize",
+      "humanizeDesc": "Fügen Sie beliebigen KI-generierten Text ein und erhalten Sie ein natürliches Ergebnis. Drei Modi: Akademisch, Lässig oder Professionell.",
+      "learnTitle": "Learn",
+      "learnDesc": "Ihr KI-Tutor. Fragen Sie alles — 'Lehre mir Analysis von Null an'. Panik-Modus: Zusammenfassungen, Prüfungsfragen und Karteikarten sofort.",
+      "back": "Zurück",
+      "next": "Weiter",
+      "getStarted": "Los geht's 🚀"
     }
   },
   "Language": {

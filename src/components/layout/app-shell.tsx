@@ -18,6 +18,7 @@ import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback } from "react";
 
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
+import { OnboardingModal } from "@/components/shared/onboarding-modal";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
 // PlanType mirrors usage.ts but we can't import PLANS (it pulls in supabaseAdmin)
@@ -329,6 +330,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
       )}
+
+      {/* Onboarding modal — shows once for new users */}
+      <OnboardingModal />
     </div>
   );
 }

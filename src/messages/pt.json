@@ -155,6 +155,21 @@
       "copyBtn": "Copiar",
       "axiomUltra": "Axiom Ultra",
       "ultraPlanIncludes": "O PLANO ULTRA INCLUI:"
+    },
+    "Onboarding": {
+      "welcome": "BEM-VINDO AO AXIOM",
+      "title": "4 superpoderes na sua mão",
+      "solveTitle": "Solve",
+      "solveDesc": "Tire uma foto ou digite qualquer questão. Receba soluções passo a passo em 5 segundos — matemática, física, química, história e mais.",
+      "writeTitle": "Write",
+      "writeDesc": "Escritor de redações com IA. Gere resumos, expanda ideias, adicione citações APA e policie seu texto com qualidade acadêmica.",
+      "humanizeTitle": "Humanize",
+      "humanizeDesc": "Cole qualquer texto gerado por IA e receba um resultado natural. Três modos: Acadêmico, Casual ou Profissional.",
+      "learnTitle": "Learn",
+      "learnDesc": "Seu tutor IA. Pergunte qualquer coisa — 'Me ensine cálculo do zero'. Modo Pânico: resumos, questões de prova e flashcards instantâneos.",
+      "back": "Voltar",
+      "next": "Próximo",
+      "getStarted": "Começar 🚀"
     }
   },
   "Language": {
