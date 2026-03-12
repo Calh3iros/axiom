@@ -108,7 +108,7 @@
 - [ ] **P6.1 PostHog** — Analytics avançado (funnels, retention)
 - [ ] **P6.2 Admin dashboard** — Rota `/admin` com role check
 - [ ] **P6.3 Vitest** — Testes unitários para core logic
-- [ ] **P6.4 SEO** — Sitemap, robots.txt, structured data
+- [x] **P6.4 SEO** — ✅ `2071d26` — sitemap.xml (7 URLs, 6 locales hreflang), robots.txt, JSON-LD WebApplication schema
 - [ ] **P6.5 Export PDF/DOCX** — Feature Pro/Elite
 
 ---
