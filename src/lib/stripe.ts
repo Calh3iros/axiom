@@ -12,11 +12,11 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 // Price IDs from Stripe Dashboard — set these in .env.local
 export const PRICE_IDS = {
   pro: {
-    monthly: process.env.STRIPE_PRICE_PRO_MONTHLY!,
-    yearly: process.env.STRIPE_PRICE_PRO_YEARLY!,
+    monthly: process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PRICE_ID!,
+    yearly: process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID!,
   },
   elite: {
-    monthly: process.env.STRIPE_PRICE_ELITE_MONTHLY!,
-    yearly: process.env.STRIPE_PRICE_ELITE_YEARLY!,
+    monthly: process.env.NEXT_PUBLIC_STRIPE_ELITE_MONTHLY_PRICE_ID!,
+    yearly: process.env.NEXT_PUBLIC_STRIPE_ELITE_YEARLY_PRICE_ID!,
   },
 } as const;
