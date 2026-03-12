@@ -1,6 +1,6 @@
 # Axiom — Checklist Definitivo Pré-Deploy → Produção
 
-> Estado atual: Commit `452ae7f` | 0 lint errors | Produção: axiom-solver.com
+> Estado atual: Commit `ba834f6` | 0 lint errors | Produção: axiom-solver.com
 > Gerado: 2026-02-23 | Atualizado: 2026-03-12 (sessão 2) | Baseado em auditoria de 38 itens
 
 ---
@@ -95,7 +95,7 @@
 ## P5 — POLISH & UX
 
 - [x] **P5.1 Botão "Change Password"** — ✅ `37ab07e` — Inline no Settings, Supabase `updateUser()`, só email users, 6 locales
-- [ ] **P5.2 Onboarding** — Modal pós-signup (3-4 slides)
+- [x] **P5.2 Onboarding** — ✅ `ba834f6` — 4-slide modal (Solve/Write/Humanize/Learn), localStorage, 6 locales
 - [ ] **P5.3 FAQ** — Página estática com accordion
 - [x] **P5.4 Help/Support** — ✅ `452ae7f` — Card no Settings: mailto email, Privacy Policy, Terms links, 6 locales
 - [x] **P5.5 Traduções landing** — Hero content em pt/es/fr/de/zh ✅
