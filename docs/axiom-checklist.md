@@ -99,7 +99,7 @@
 - [x] **P5.3 FAQ** — ✅ `527ae55` — 8 Q&A accordion, /faq rota pública, 6 locales
 - [x] **P5.4 Help/Support** — ✅ `452ae7f` — Card no Settings: mailto email, Privacy Policy, Terms links, 6 locales
 - [x] **P5.5 Traduções landing** — Hero content em pt/es/fr/de/zh ✅
-- [ ] **P5.6 Fix themeColor** → viewport export (8 páginas)
+- [x] **P5.6 Fix themeColor** — ✅ JÁ CORRETO: `themeColor` no `viewport` export (layout.tsx:48-50), não em metadata
 
 ---
 
