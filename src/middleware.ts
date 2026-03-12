@@ -24,6 +24,8 @@ const skipRoutes = [
   "/favicon.ico",
   "/manifest.json",
   "/icon-",
+  "/sitemap.xml",
+  "/robots.txt",
 ];
 
 const handleI18nRouting = createIntlMiddleware(routing);
