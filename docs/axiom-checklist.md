@@ -1,6 +1,6 @@
 # Axiom — Checklist Definitivo Pré-Deploy → Produção
 
-> Estado atual: Commit `527ae55` | 0 lint errors | Produção: axiom-solver.com
+> Estado atual: Commit `2a2d796` | 0 lint errors | Produção: axiom-solver.com
 > Gerado: 2026-02-23 | Atualizado: 2026-03-12 (sessão 2) | Baseado em auditoria de 38 itens
 
 ---
@@ -83,7 +83,7 @@
 ## P4 — TESTES PÓS-DEPLOY
 
 - [x] **P4.1 Auth flow** — ✅ Testado: signup `soren2222+axiomtest@gmail.com` → email verificação → confirm → dashboard
-- [ ] **P4.2 Google OAuth** — Pendente teste manual (requer popup Google)
+- [x] **P4.2 Google OAuth** — ✅ Testado manualmente pelo usuário: login Google → dashboard OK
 - [x] **P4.3 Stripe checkout** — ✅ (Test Mode + Live Mode configurado e deployado)
 - [x] **P4.4 Features IA** — ✅ Testadas 4/4: Solve (derivada OK), Write (outline OK), Humanize (OK), Learn (Linear Algebra OK)
 - [x] **P4.5 Rate limit** — ✅ Código correto: Upstash Redis sliding window (Free 5/min, Pro 15/min, Elite 30/min) em 4 rotas
