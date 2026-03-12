@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       client_reference_id: user.id,
       customer_email: user.email,
       metadata: {
-        supabase_user_id: user.id,
+        supabaseUUID: user.id,
         plan,
         interval,
       },
