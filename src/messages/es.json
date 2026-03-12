@@ -172,6 +172,47 @@
       "getStarted": "Comenzar 🚀"
     }
   },
+  "FAQ": {
+    "backToHome": "Volver al Inicio",
+    "subtitle": "FAQ",
+    "title": "Preguntas Frecuentes",
+    "description": "Todo lo que necesitas saber sobre Axiom.",
+    "stillNeedHelp": "¿Aún tienes preguntas?",
+    "items": [
+      {
+        "q": "¿Qué es Axiom?",
+        "a": "Axiom es un compañero de estudio con IA. Sube una foto o escribe una pregunta para obtener soluciones paso a paso, escribir ensayos, humanizar textos de IA o aprender cualquier materia con un tutor interactivo."
+      },
+      {
+        "q": "¿Axiom es gratis?",
+        "a": "¡Sí! El plan Free te da 3 resoluciones por día, 1 ensayo y 500 palabras de humanización. Actualiza a Pro ($19/mes) o Elite ($49/mes) para más límites."
+      },
+      {
+        "q": "¿Qué materias soporta Axiom?",
+        "a": "Axiom resuelve matemáticas, física, química, biología, historia, literatura, programación y más. Si puedes preguntarlo, Axiom puede resolverlo."
+      },
+      {
+        "q": "¿Cómo funciona Solve?",
+        "a": "Toma una foto de tu tarea o escribe una pregunta. Axiom usa IA para analizarla y devuelve una solución detallada paso a paso en unos 5 segundos."
+      },
+      {
+        "q": "¿Qué es Humanize?",
+        "a": "Humanize toma texto generado por IA y lo reescribe para que suene natural y humano. Elige entre los modos Académico, Casual o Profesional."
+      },
+      {
+        "q": "¿Puedo cancelar mi suscripción?",
+        "a": "Por supuesto. Cancela en cualquier momento desde Configuración → Gestionar Suscripción. Tu plan sigue activo hasta el final del período de facturación."
+      },
+      {
+        "q": "¿Mis datos están seguros?",
+        "a": "Sí. Usamos Supabase con seguridad a nivel de fila, encriptación HTTPS y nunca compartimos tus datos con terceros. Puedes eliminar tu cuenta en cualquier momento."
+      },
+      {
+        "q": "¿Qué idiomas soporta Axiom?",
+        "a": "La interfaz está disponible en inglés, portugués, español, francés, alemán y chino. Las respuestas de la IA se adaptan a tu idioma seleccionado."
+      }
+    ]
+  },
   "Language": {
     "en": "English",
     "pt": "Português",

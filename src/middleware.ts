@@ -1,13 +1,30 @@
-import { createServerClient } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
-import createIntlMiddleware from 'next-intl/middleware';
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
 
-import { routing } from './i18n/routing';
+import { routing } from "./i18n/routing";
 
 // Routes that don't require authentication
-const publicRoutes = ['/auth/login', '/auth/signup', '/auth/forgot-password', '/auth/update-password', '/auth/callback', '/pricing', '/share', '/privacy', '/terms'];
+const publicRoutes = [
+  "/auth/login",
+  "/auth/signup",
+  "/auth/forgot-password",
+  "/auth/update-password",
+  "/auth/callback",
+  "/pricing",
+  "/share",
+  "/privacy",
+  "/terms",
+  "/faq",
+];
 // Static/API routes to skip entirely
-const skipRoutes = ['/api/', '/_next/', '/favicon.ico', '/manifest.json', '/icon-'];
+const skipRoutes = [
+  "/api/",
+  "/_next/",
+  "/favicon.ico",
+  "/manifest.json",
+  "/icon-",
+];
 
 const handleI18nRouting = createIntlMiddleware(routing);
 
@@ -52,32 +69,38 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Strip locale from pathname to check public routes correctly
-  const pathWithoutLocale = pathname.replace(/^\/[a-zA-Z]{2}(\/|$)/, '/');
+  const pathWithoutLocale = pathname.replace(/^\/[a-zA-Z]{2}(\/|$)/, "/");
 
   // If not authenticated and trying to access protected route
-  const isPublicRoute = pathWithoutLocale === '/' || publicRoutes.some((route) => pathWithoutLocale.startsWith(route));
+  const isPublicRoute =
+    pathWithoutLocale === "/" ||
+    publicRoutes.some((route) => pathWithoutLocale.startsWith(route));
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     // Extract locale from current path, fallback to 'en'
     const localeMatch = pathname.match(/^\/([a-zA-Z]{2})(\/|$)/);
-    const currentLocale = localeMatch ? localeMatch[1] : 'en';
+    const currentLocale = localeMatch ? localeMatch[1] : "en";
     url.pathname = `/${currentLocale}/auth/login`;
-    url.searchParams.set('next', pathname);
+    url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
 
   // If authenticated and trying to access auth pages, redirect to app
-  if (user && (pathWithoutLocale.startsWith('/auth/login') || pathWithoutLocale.startsWith('/auth/signup'))) {
+  if (
+    user &&
+    (pathWithoutLocale.startsWith("/auth/login") ||
+      pathWithoutLocale.startsWith("/auth/signup"))
+  ) {
     const url = request.nextUrl.clone();
     const localeMatch = pathname.match(/^\/([a-zA-Z]{2})(\/|$)/);
-    const userLocale = localeMatch ? localeMatch[1] : 'en';
+    const userLocale = localeMatch ? localeMatch[1] : "en";
     url.pathname = `/${userLocale}/solve`;
     return NextResponse.redirect(url);
   }
 
   // CRITICAL BYPASS: Do not let next-intl intercept and redirect the OAuth callback
   // because Supabase PKCE requires the redirect_uri to match EXACTLY during code exchange.
-  if (pathWithoutLocale === '/auth/callback') {
+  if (pathWithoutLocale === "/auth/callback") {
     return response;
   }
 
@@ -87,7 +110,7 @@ export async function middleware(request: NextRequest) {
   // Merge the Supabase session headers into the final next-intl response
   // We ONLY care about cookies here so session refresh works.
   response.headers.forEach((value, key) => {
-    if (key.toLowerCase() === 'set-cookie') {
+    if (key.toLowerCase() === "set-cookie") {
       intlResponse.headers.append(key, value);
     }
   });
@@ -96,5 +119,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|manifest.json|icon-).*)'],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|manifest.json|icon-).*)",
+  ],
 };

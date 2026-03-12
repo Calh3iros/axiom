@@ -172,6 +172,47 @@
       "getStarted": "Começar 🚀"
     }
   },
+  "FAQ": {
+    "backToHome": "Voltar ao Início",
+    "subtitle": "FAQ",
+    "title": "Perguntas Frequentes",
+    "description": "Tudo o que você precisa saber sobre o Axiom.",
+    "stillNeedHelp": "Ainda tem dúvidas?",
+    "items": [
+      {
+        "q": "O que é o Axiom?",
+        "a": "Axiom é um companheiro de estudos com IA. Tire uma foto ou digite uma pergunta para obter soluções passo a passo, escrever redações, humanizar textos de IA ou aprender qualquer matéria com um tutor interativo."
+      },
+      {
+        "q": "O Axiom é gratuito?",
+        "a": "Sim! O plano Free oferece 3 resoluções por dia, 1 redação e 500 palavras de humanização. Atualize para Pro (R$99/mês) ou Elite (R$249/mês) para limites maiores."
+      },
+      {
+        "q": "Quais matérias o Axiom suporta?",
+        "a": "Axiom resolve matemática, física, química, biologia, história, literatura, programação e muito mais. Se você pode perguntar, o Axiom pode resolver."
+      },
+      {
+        "q": "Como funciona o Solve?",
+        "a": "Tire uma foto do dever de casa ou digite uma questão. O Axiom usa IA para analisar e retorna uma solução detalhada passo a passo em cerca de 5 segundos."
+      },
+      {
+        "q": "O que é o Humanize?",
+        "a": "O Humanize pega texto gerado por IA e reescreve para soar natural e humano. Escolha entre os modos Acadêmico, Casual ou Profissional."
+      },
+      {
+        "q": "Posso cancelar minha assinatura?",
+        "a": "Com certeza. Cancele a qualquer momento em Configurações → Gerenciar Assinatura. Seu plano continua ativo até o fim do período de cobrança."
+      },
+      {
+        "q": "Meus dados estão seguros?",
+        "a": "Sim. Usamos Supabase com segurança em nível de linha, criptografia HTTPS e nunca compartilhamos seus dados com terceiros. Você pode excluir sua conta e dados a qualquer momento."
+      },
+      {
+        "q": "Quais idiomas o Axiom suporta?",
+        "a": "A interface está disponível em inglês, português, espanhol, francês, alemão e chinês. As respostas da IA se adaptam ao idioma selecionado."
+      }
+    ]
+  },
   "Language": {
     "en": "English",
     "pt": "Português",

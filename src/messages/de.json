@@ -172,6 +172,47 @@
       "getStarted": "Los geht's 🚀"
     }
   },
+  "FAQ": {
+    "backToHome": "Zurück zur Startseite",
+    "subtitle": "FAQ",
+    "title": "Häufig gestellte Fragen",
+    "description": "Alles, was Sie über Axiom wissen müssen.",
+    "stillNeedHelp": "Noch Fragen?",
+    "items": [
+      {
+        "q": "Was ist Axiom?",
+        "a": "Axiom ist ein KI-gestützter Lernbegleiter. Laden Sie ein Foto hoch oder tippen Sie eine Frage ein, um schrittweise Lösungen zu erhalten, Aufsätze zu schreiben, KI-Text zu humanisieren oder jedes Fach mit einem interaktiven Tutor zu lernen."
+      },
+      {
+        "q": "Ist Axiom kostenlos?",
+        "a": "Ja! Der Free-Plan bietet 3 Lösungen pro Tag, 1 Aufsatz und 500 Wörter Humanisierung. Upgrade auf Pro (19$/Monat) oder Elite (49$/Monat) für mehr."
+      },
+      {
+        "q": "Welche Fächer unterstützt Axiom?",
+        "a": "Axiom löst Mathe, Physik, Chemie, Biologie, Geschichte, Literatur, Programmierung und mehr. Wenn Sie es fragen können, kann Axiom es lösen."
+      },
+      {
+        "q": "Wie funktioniert Solve?",
+        "a": "Machen Sie ein Foto Ihrer Hausaufgaben oder tippen Sie eine Frage ein. Axiom analysiert sie mit KI und liefert eine detaillierte Schritt-für-Schritt-Lösung in etwa 5 Sekunden."
+      },
+      {
+        "q": "Was ist Humanize?",
+        "a": "Humanize nimmt KI-generierten Text und schreibt ihn um, damit er natürlich klingt. Wählen Sie zwischen den Modi Akademisch, Lässig oder Professionell."
+      },
+      {
+        "q": "Kann ich mein Abonnement kündigen?",
+        "a": "Natürlich. Kündigen Sie jederzeit unter Einstellungen → Abonnement verwalten. Ihr Plan bleibt bis zum Ende des Abrechnungszeitraums aktiv."
+      },
+      {
+        "q": "Sind meine Daten sicher?",
+        "a": "Ja. Wir verwenden Supabase mit Sicherheit auf Zeilenebene, HTTPS-Verschlüsselung und teilen Ihre Daten niemals mit Dritten."
+      },
+      {
+        "q": "Welche Sprachen unterstützt Axiom?",
+        "a": "Die Oberfläche ist in Englisch, Portugiesisch, Spanisch, Französisch, Deutsch und Chinesisch verfügbar. KI-Antworten passen sich Ihrer Sprache an."
+      }
+    ]
+  },
   "Language": {
     "en": "English",
     "pt": "Português",

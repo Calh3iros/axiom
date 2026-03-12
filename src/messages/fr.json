@@ -172,6 +172,47 @@
       "getStarted": "Commencer 🚀"
     }
   },
+  "FAQ": {
+    "backToHome": "Retour à l'accueil",
+    "subtitle": "FAQ",
+    "title": "Questions Fréquentes",
+    "description": "Tout ce que vous devez savoir sur Axiom.",
+    "stillNeedHelp": "Encore des questions ?",
+    "items": [
+      {
+        "q": "Qu'est-ce qu'Axiom ?",
+        "a": "Axiom est un compagnon d'étude alimenté par l'IA. Téléchargez une photo ou tapez une question pour obtenir des solutions étape par étape, rédiger des dissertations, humaniser du texte IA ou apprendre n'importe quel sujet."
+      },
+      {
+        "q": "Axiom est-il gratuit ?",
+        "a": "Oui ! Le plan gratuit vous donne 3 résolutions par jour, 1 dissertation et 500 mots d'humanisation. Passez à Pro (19$/mois) ou Elite (49$/mois) pour plus."
+      },
+      {
+        "q": "Quelles matières Axiom supporte-t-il ?",
+        "a": "Axiom gère les maths, la physique, la chimie, la biologie, l'histoire, la littérature, la programmation et plus encore."
+      },
+      {
+        "q": "Comment fonctionne Solve ?",
+        "a": "Prenez une photo de vos devoirs ou tapez une question. Axiom utilise l'IA pour l'analyser et retourne une solution détaillée en environ 5 secondes."
+      },
+      {
+        "q": "Qu'est-ce que Humanize ?",
+        "a": "Humanize prend du texte généré par IA et le réécrit pour qu'il sonne naturel. Choisissez entre les modes Académique, Décontracté ou Professionnel."
+      },
+      {
+        "q": "Puis-je annuler mon abonnement ?",
+        "a": "Absolument. Annulez à tout moment depuis Paramètres → Gérer l'abonnement. Votre plan reste actif jusqu'à la fin de la période de facturation."
+      },
+      {
+        "q": "Mes données sont-elles en sécurité ?",
+        "a": "Oui. Nous utilisons Supabase avec la sécurité au niveau des lignes, le chiffrement HTTPS et ne partageons jamais vos données avec des tiers."
+      },
+      {
+        "q": "Quelles langues Axiom supporte-t-il ?",
+        "a": "L'interface est disponible en anglais, portugais, espagnol, français, allemand et chinois. Les réponses IA s'adaptent à votre langue."
+      }
+    ]
+  },
   "Language": {
     "en": "English",
     "pt": "Português",

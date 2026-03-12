@@ -172,6 +172,47 @@
       "getStarted": "Get Started 🚀"
     }
   },
+  "FAQ": {
+    "backToHome": "Back to Home",
+    "subtitle": "FAQ",
+    "title": "Frequently Asked Questions",
+    "description": "Everything you need to know about Axiom.",
+    "stillNeedHelp": "Still have questions?",
+    "items": [
+      {
+        "q": "What is Axiom?",
+        "a": "Axiom is an AI-powered study companion. Upload a photo or type a question to get step-by-step solutions, write essays, humanize AI text, or learn any subject with an interactive tutor."
+      },
+      {
+        "q": "Is Axiom free?",
+        "a": "Yes! The Free plan gives you 3 solves per day, 1 essay, and 500 words of humanization. Upgrade to Pro ($19/mo) or Elite ($49/mo) for higher limits and premium features."
+      },
+      {
+        "q": "What subjects does Axiom support?",
+        "a": "Axiom handles math, physics, chemistry, biology, history, literature, programming, and more. If you can ask it, Axiom can solve it."
+      },
+      {
+        "q": "How does the Solve feature work?",
+        "a": "Snap a photo of your homework or type a question. Axiom uses AI to analyze it and returns a detailed, step-by-step solution in about 5 seconds."
+      },
+      {
+        "q": "What is Humanize?",
+        "a": "Humanize takes AI-generated text and rewrites it to sound natural and human. Choose from Academic, Casual, or Professional modes."
+      },
+      {
+        "q": "Can I cancel my subscription?",
+        "a": "Absolutely. You can cancel anytime from Settings → Manage Subscription. Your plan stays active until the end of the billing period."
+      },
+      {
+        "q": "Is my data safe?",
+        "a": "Yes. We use Supabase with row-level security, HTTPS encryption, and never share your data with third parties. You can delete your account and all data from Settings at any time."
+      },
+      {
+        "q": "What languages does Axiom support?",
+        "a": "The interface is available in English, Portuguese, Spanish, French, German, and Chinese. AI responses adapt to your selected language."
+      }
+    ]
+  },
   "Language": {
     "en": "English",
     "pt": "Português",
