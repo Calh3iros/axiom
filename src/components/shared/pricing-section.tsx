@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -8,6 +9,30 @@ import { Link } from "@/i18n/routing";
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
   const t = useTranslations("Landing");
+  const router = useRouter();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleCheckout = async (plan: "pro" | "elite") => {
+    setLoading(plan);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan,
+          interval: isYearly ? "yearly" : "monthly",
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        router.push(data.url);
+      }
+    } catch (err) {
+      console.error("Checkout failed:", err);
+    } finally {
+      setLoading(null);
+    }
+  };
 
   return (
     <section id="pricing" className="px-5 py-24 md:px-10">
@@ -110,30 +135,11 @@ export function PricingSection() {
             )}
           </ul>
           <button
-            onClick={async () => {
-              try {
-                const { STRIPE_PRICES } = await import("@/lib/stripe/config");
-                const res = await fetch("/api/checkout", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    priceId: isYearly
-                      ? STRIPE_PRICES.PRO_YEARLY
-                      : STRIPE_PRICES.PRO_MONTHLY,
-                    locale: window.location.pathname.split("/")[1] || "en",
-                  }),
-                });
-                if (!res.ok)
-                  throw new Error("Failed to create checkout session");
-                const { url } = await res.json();
-                if (url) window.location.href = url;
-              } catch {
-                window.location.href = "/auth/login?returnTo=/settings";
-              }
-            }}
-            className="mt-8 block w-full rounded-xl bg-emerald-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]"
+            onClick={() => handleCheckout("pro")}
+            disabled={loading === "pro"}
+            className="mt-8 block w-full rounded-xl bg-emerald-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] disabled:opacity-50"
           >
-            {t("pricing.getPro")}
+            {loading === "pro" ? "Processing..." : t("pricing.getPro")}
           </button>
         </div>
 
@@ -174,30 +180,11 @@ export function PricingSection() {
             )}
           </ul>
           <button
-            onClick={async () => {
-              try {
-                const { STRIPE_PRICES } = await import("@/lib/stripe/config");
-                const res = await fetch("/api/checkout", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    priceId: isYearly
-                      ? STRIPE_PRICES.ELITE_YEARLY
-                      : STRIPE_PRICES.ELITE_MONTHLY,
-                    locale: window.location.pathname.split("/")[1] || "en",
-                  }),
-                });
-                if (!res.ok)
-                  throw new Error("Failed to create checkout session");
-                const { url } = await res.json();
-                if (url) window.location.href = url;
-              } catch {
-                window.location.href = "/auth/login?returnTo=/settings";
-              }
-            }}
-            className="mt-8 block w-full rounded-xl bg-amber-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+            onClick={() => handleCheckout("elite")}
+            disabled={loading === "elite"}
+            className="mt-8 block w-full rounded-xl bg-amber-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] disabled:opacity-50"
           >
-            {t("pricing.getElite")}
+            {loading === "elite" ? "Processing..." : t("pricing.getElite")}
           </button>
         </div>
       </div>
