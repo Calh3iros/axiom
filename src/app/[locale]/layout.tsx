@@ -7,6 +7,10 @@ import { getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
 
 import { CookieConsent } from "@/components/shared/cookie-consent";
+import {
+  PostHogPageView,
+  PostHogProvider,
+} from "@/components/shared/posthog-provider";
 import "./globals.css";
 import { routing } from "@/i18n/routing";
 
@@ -126,12 +130,15 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[var(--color-bg0)] antialiased">
-        <NextIntlClientProvider messages={messages}>
-          {children}
-          <Analytics />
-          <Toaster theme="dark" position="bottom-right" richColors />
-          <CookieConsent />
-        </NextIntlClientProvider>
+        <PostHogProvider>
+          <NextIntlClientProvider messages={messages}>
+            <PostHogPageView />
+            {children}
+            <Analytics />
+            <Toaster theme="dark" position="bottom-right" richColors />
+            <CookieConsent />
+          </NextIntlClientProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
