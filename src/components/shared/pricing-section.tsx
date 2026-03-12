@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
@@ -9,6 +9,7 @@ import { Link } from "@/i18n/routing";
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
   const t = useTranslations("Landing");
+  const locale = useLocale();
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -21,6 +22,7 @@ export function PricingSection() {
         body: JSON.stringify({
           plan,
           interval: isYearly ? "yearly" : "monthly",
+          locale,
         }),
       });
       const data = await res.json();

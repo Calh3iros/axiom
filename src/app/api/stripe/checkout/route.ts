@@ -16,9 +16,14 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { plan, interval } = body as {
+    const {
+      plan,
+      interval,
+      locale = "en",
+    } = body as {
       plan: "pro" | "elite";
       interval: "monthly" | "yearly";
+      locale?: string;
     };
 
     // Validate input strictly
@@ -48,8 +53,8 @@ export async function POST(req: NextRequest) {
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${origin}/dashboard?checkout=success`,
-      cancel_url: `${origin}/dashboard?checkout=cancelled`,
+      success_url: `${origin}/${locale}/dashboard?checkout=success`,
+      cancel_url: `${origin}/${locale}/dashboard?checkout=cancelled`,
       client_reference_id: user.id,
       customer_email: user.email,
       metadata: {
