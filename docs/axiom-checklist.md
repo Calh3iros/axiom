@@ -1,6 +1,6 @@
 # Axiom — Checklist Definitivo Pré-Deploy → Produção
 
-> Estado atual: Commit `2a2d796` | 0 lint errors | Produção: axiom-solver.com
+> Estado atual: Commit `a43d379` | 0 lint errors | Produção: axiom-solver.com
 > Gerado: 2026-02-23 | Atualizado: 2026-03-12 (sessão 2) | Baseado em auditoria de 38 itens
 
 ---
@@ -107,9 +107,9 @@
 
 - [x] **P6.1 PostHog** — ✅ `8ebe664` — posthog-js SDK, PostHogProvider + PageView, identified_only, Vercel env vars
 - [x] **P6.2 Admin dashboard** — ❌ CANCELADO — Usando dashboards existentes (Vercel, Supabase, Stripe, PostHog)
-- [ ] **P6.3 Vitest** — Testes unitários para core logic
+- [x] **P6.3 Vitest** — ⏳ ADIADO (pós-launch)
 - [x] **P6.4 SEO** — ✅ `2071d26` — sitemap.xml (7 URLs, 6 locales hreflang), robots.txt, JSON-LD WebApplication schema
-- [ ] **P6.5 Export PDF/DOCX** — Feature Pro/Elite
+- [x] **P6.5 Export PDF/DOCX** — ✅ `a43d379` — jsPDF + DOCX, botões em Solve e Write, branding Axiom
 
 ---
 
