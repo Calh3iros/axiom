@@ -106,7 +106,7 @@
 ## P6 — GROWTH (1000+ users)
 
 - [x] **P6.1 PostHog** — ✅ `8ebe664` — posthog-js SDK, PostHogProvider + PageView, identified_only, Vercel env vars
-- [ ] **P6.2 Admin dashboard** — Rota `/admin` com role check
+- [x] **P6.2 Admin dashboard** — ❌ CANCELADO — Usando dashboards existentes (Vercel, Supabase, Stripe, PostHog)
 - [ ] **P6.3 Vitest** — Testes unitários para core logic
 - [x] **P6.4 SEO** — ✅ `2071d26` — sitemap.xml (7 URLs, 6 locales hreflang), robots.txt, JSON-LD WebApplication schema
 - [ ] **P6.5 Export PDF/DOCX** — Feature Pro/Elite
