@@ -17,7 +17,9 @@
       "dayStreak": "day streak",
       "solvesLeftToday": "solves left today",
       "free": "FREE",
-      "pro": "PRO ✨"
+      "pro": "PRO ✨",
+      "checkoutSuccess": "Upgrade successful! Your plan has been updated.",
+      "checkoutCancelled": "Checkout cancelled. No charges were made."
     },
     "Solve": {
       "title": "Homework Solver",

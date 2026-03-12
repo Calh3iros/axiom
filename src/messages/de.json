@@ -17,7 +17,9 @@
       "dayStreak": "Tage in Folge",
       "solvesLeftToday": "Lösungen heute übrig",
       "free": "KOSTENLOS",
-      "pro": "PRO ✨"
+      "pro": "PRO ✨",
+      "checkoutSuccess": "Upgrade erfolgreich! Ihr Plan wurde aktualisiert.",
+      "checkoutCancelled": "Bezahlung abgebrochen. Es wurden keine Gebühren erhoben."
     },
     "Solve": {
       "title": "Aufgabenlöser",

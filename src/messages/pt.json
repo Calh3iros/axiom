@@ -17,7 +17,9 @@
       "dayStreak": "dias de ofensiva",
       "solvesLeftToday": "resoluções restantes hoje",
       "free": "GRÁTIS",
-      "pro": "PRO ✨"
+      "pro": "PRO ✨",
+      "checkoutSuccess": "Upgrade realizado com sucesso! Seu plano foi atualizado.",
+      "checkoutCancelled": "Checkout cancelado. Nenhuma cobrança foi feita."
     },
     "Solve": {
       "title": "Solucionador",

@@ -17,7 +17,9 @@
       "dayStreak": "días de racha",
       "solvesLeftToday": "resoluciones restantes hoy",
       "free": "GRATIS",
-      "pro": "PRO ✨"
+      "pro": "PRO ✨",
+      "checkoutSuccess": "Actualización exitosa. Tu plan ha sido actualizado.",
+      "checkoutCancelled": "Pago cancelado. No se realizó ningún cargo."
     },
     "Solve": {
       "title": "Solucionador",

@@ -1,26 +1,41 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useTranslations } from "next-intl";
 
-import { LanguageSwitcher } from '@/components/shared/language-switcher';
-import { Link } from '@/i18n/routing';
+import { LanguageSwitcher } from "@/components/shared/language-switcher";
+import { PricingSection } from "@/components/shared/pricing-section";
+import { Link } from "@/i18n/routing";
 
 export default function LandingPage() {
-  const [isYearly, setIsYearly] = useState(false);
-  const t = useTranslations('Landing');
+  const t = useTranslations("Landing");
 
   return (
     <div className="min-h-screen bg-[var(--color-bg0)] text-[var(--color-text-primary)]">
       {/* ─── NAV ─── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 h-16 px-6 md:px-10 flex items-center justify-between bg-[var(--color-bg0)]/80 backdrop-blur-xl border-b border-[var(--color-border)]">
-        <div className="flex items-center gap-2 font-extrabold text-xl tracking-tight">
-          AXIOM<span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.4)]" />
+      <nav className="fixed top-0 right-0 left-0 z-50 flex h-16 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-bg0)]/80 px-6 backdrop-blur-xl md:px-10">
+        <div className="flex items-center gap-2 text-xl font-extrabold tracking-tight">
+          AXIOM
+          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.4)]" />
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-[var(--color-text-secondary)]">
-          <a href="#features" className="hover:text-[var(--color-text-primary)] transition-colors">{t('nav.features')}</a>
-          <a href="#compare" className="hover:text-[var(--color-text-primary)] transition-colors">{t('nav.compare')}</a>
-          <a href="#pricing" className="hover:text-[var(--color-text-primary)] transition-colors">{t('nav.pricing')}</a>
+        <div className="hidden items-center gap-8 text-sm text-[var(--color-text-secondary)] md:flex">
+          <a
+            href="#features"
+            className="transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            {t("nav.features")}
+          </a>
+          <a
+            href="#compare"
+            className="transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            {t("nav.compare")}
+          </a>
+          <a
+            href="#pricing"
+            className="transition-colors hover:text-[var(--color-text-primary)]"
+          >
+            {t("nav.pricing")}
+          </a>
         </div>
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
@@ -40,143 +55,222 @@ export default function LandingPage() {
       </nav>
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-5 pt-24 pb-20 overflow-hidden">
+      <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 pt-24 pb-20 text-center">
         {/* Background glow */}
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(52,211,153,0.06)_0%,transparent_70%)] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(96,165,250,0.04)_0%,transparent_70%)] pointer-events-none" />
+        <div className="pointer-events-none absolute top-[-20%] left-1/2 h-[800px] w-[800px] -translate-x-1/2 bg-[radial-gradient(circle,rgba(52,211,153,0.06)_0%,transparent_70%)]" />
+        <div className="pointer-events-none absolute right-[-10%] bottom-[-10%] h-[600px] w-[600px] bg-[radial-gradient(circle,rgba(96,165,250,0.04)_0%,transparent_70%)]" />
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/5 border border-emerald-500/15 rounded-full text-emerald-400 text-sm font-medium mb-8 animate-[fadeUp_0.8s_ease_both]">
-          <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-          {t('hero.badge')}
+        <div className="mb-8 inline-flex animate-[fadeUp_0.8s_ease_both] items-center gap-2 rounded-full border border-emerald-500/15 bg-emerald-500/5 px-4 py-2 text-sm font-medium text-emerald-400">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+          {t("hero.badge")}
         </div>
 
         {/* Title */}
-        <h1 className="text-[clamp(40px,7vw,80px)] font-extrabold leading-[1.05] tracking-tight max-w-3xl mb-6 animate-[fadeUp_0.8s_0.1s_ease_both]">
-          {t('hero.title') || 'Stop Waiting. Start Solving.'}
+        <h1 className="mb-6 max-w-3xl animate-[fadeUp_0.8s_0.1s_ease_both] text-[clamp(40px,7vw,80px)] leading-[1.05] font-extrabold tracking-tight">
+          {t("hero.title") || "Stop Waiting. Start Solving."}
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg md:text-xl text-[var(--color-text-secondary)] max-w-xl mb-12 leading-relaxed animate-[fadeUp_0.8s_0.2s_ease_both]">
-          {t('hero.subtitle')} <strong className="text-[var(--color-text-primary)]">{t('hero.allFor')}</strong>
+        <p className="mb-12 max-w-xl animate-[fadeUp_0.8s_0.2s_ease_both] text-lg leading-relaxed text-[var(--color-text-secondary)] md:text-xl">
+          {t("hero.subtitle")}{" "}
+          <strong className="text-[var(--color-text-primary)]">
+            {t("hero.allFor")}
+          </strong>
         </p>
 
         {/* CTA */}
-        <div className="flex flex-col sm:flex-row gap-4 animate-[fadeUp_0.8s_0.3s_ease_both]">
+        <div className="flex animate-[fadeUp_0.8s_0.3s_ease_both] flex-col gap-4 sm:flex-row">
           <Link
             href="/solve"
-            className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold text-base rounded-xl transition-all hover:shadow-[0_0_30px_rgba(52,211,153,0.3)] hover:-translate-y-0.5"
+            className="rounded-xl bg-emerald-500 px-8 py-4 text-base font-bold text-[var(--color-bg0)] transition-all hover:-translate-y-0.5 hover:bg-emerald-400 hover:shadow-[0_0_30px_rgba(52,211,153,0.3)]"
           >
-            {t('hero.ctaFree')}
+            {t("hero.ctaFree")}
           </Link>
           <a
             href="#pricing"
-            className="px-8 py-4 bg-[var(--color-bg2)] border border-[var(--color-border2)] text-[var(--color-text-secondary)] font-semibold text-base rounded-xl transition-all hover:border-[var(--color-text-secondary)]/30 hover:-translate-y-0.5"
+            className="rounded-xl border border-[var(--color-border2)] bg-[var(--color-bg2)] px-8 py-4 text-base font-semibold text-[var(--color-text-secondary)] transition-all hover:-translate-y-0.5 hover:border-[var(--color-text-secondary)]/30"
           >
-            {t('hero.seePricing')}
+            {t("hero.seePricing")}
           </a>
         </div>
 
         {/* Social Proof */}
-        <div className="mt-12 flex flex-col items-center gap-3 animate-[fadeUp_0.8s_0.5s_ease_both]">
+        <div className="mt-12 flex animate-[fadeUp_0.8s_0.5s_ease_both] flex-col items-center gap-3">
           <div className="flex items-center justify-center -space-x-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-10 h-10 rounded-full border-2 border-[var(--color-bg0)] overflow-hidden bg-[var(--color-bg1)] flex items-center justify-center">
-                <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt={t('hero.studentAvatar', { defaultMessage: 'Student Avatar' })} className="w-full h-full object-cover" />
+              <div
+                key={i}
+                className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-[var(--color-bg0)] bg-[var(--color-bg1)]"
+              >
+                <img
+                  src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                  alt={t("hero.studentAvatar", {
+                    defaultMessage: "Student Avatar",
+                  })}
+                  className="h-full w-full object-cover"
+                />
               </div>
             ))}
           </div>
           <div className="flex flex-col items-center">
-            <div className="flex gap-1 mb-1">
+            <div className="mb-1 flex gap-1">
               {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-4 h-4 text-emerald-400 fill-current" viewBox="0 0 20 20">
+                <svg
+                  key={i}
+                  className="h-4 w-4 fill-current text-emerald-400"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
             <p className="text-sm font-medium text-[var(--color-text-secondary)]">
-              {t('hero.trustedBy')} <strong className="text-[var(--color-text-primary)]">10,000+</strong> {t('hero.studentsGlobally').split('10,000+')[1]}
+              {t("hero.trustedBy")}{" "}
+              <strong className="text-[var(--color-text-primary)]">
+                10,000+
+              </strong>{" "}
+              {t("hero.studentsGlobally").split("10,000+")[1]}
             </p>
           </div>
-          <p className="mt-2 text-xs text-[var(--color-dim)] max-w-sm">
-            {t('hero.freeBadge')}
+          <p className="mt-2 max-w-sm text-xs text-[var(--color-dim)]">
+            {t("hero.freeBadge")}
           </p>
         </div>
       </section>
 
       {/* ─── FEATURES ─── */}
-      <section id="features" className="py-24 px-5 md:px-10">
-        <div className="text-center mb-16">
-          <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">{t('features.superpowers')}</p>
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">{t('features.title')}</h2>
-          <p className="text-[var(--color-text-secondary)] text-lg max-w-lg mx-auto">{t('features.subtitle')}</p>
+      <section id="features" className="px-5 py-24 md:px-10">
+        <div className="mb-16 text-center">
+          <p className="mb-4 font-mono text-xs font-bold tracking-[3px] text-emerald-400 uppercase">
+            {t("features.superpowers")}
+          </p>
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-5xl">
+            {t("features.title")}
+          </h2>
+          <p className="mx-auto max-w-lg text-lg text-[var(--color-text-secondary)]">
+            {t("features.subtitle")}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-2">
           {/* Solve */}
-          <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-emerald-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-13 h-13 rounded-xl bg-emerald-500/10 flex items-center justify-center text-2xl mb-5">📸</div>
-            <h3 className="text-2xl font-bold mb-3">{t('features.solveTitle')}</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.solveDesc')}</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-emerald-500/8 text-emerald-400 rounded-md">{t('features.solveBadge')}</span>
+          <div className="group relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/20">
+            <div className="absolute top-0 right-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="mb-5 flex h-13 w-13 items-center justify-center rounded-xl bg-emerald-500/10 text-2xl">
+              📸
+            </div>
+            <h3 className="mb-3 text-2xl font-bold">
+              {t("features.solveTitle")}
+            </h3>
+            <p className="leading-relaxed text-[var(--color-text-secondary)]">
+              {t("features.solveDesc")}
+            </p>
+            <span className="mt-4 inline-block rounded-md bg-emerald-500/8 px-3 py-1 font-mono text-xs font-medium text-emerald-400">
+              {t("features.solveBadge")}
+            </span>
           </div>
 
           {/* Write */}
-          <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-blue-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-13 h-13 rounded-xl bg-blue-500/10 flex items-center justify-center text-2xl mb-5">✍️</div>
-            <h3 className="text-2xl font-bold mb-3">{t('features.writeTitle')}</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.writeDesc')}</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-blue-500/8 text-blue-400 rounded-md">{t('features.writeBadge')}</span>
+          <div className="group relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/20">
+            <div className="absolute top-0 right-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="mb-5 flex h-13 w-13 items-center justify-center rounded-xl bg-blue-500/10 text-2xl">
+              ✍️
+            </div>
+            <h3 className="mb-3 text-2xl font-bold">
+              {t("features.writeTitle")}
+            </h3>
+            <p className="leading-relaxed text-[var(--color-text-secondary)]">
+              {t("features.writeDesc")}
+            </p>
+            <span className="mt-4 inline-block rounded-md bg-blue-500/8 px-3 py-1 font-mono text-xs font-medium text-blue-400">
+              {t("features.writeBadge")}
+            </span>
           </div>
 
           {/* Humanize */}
-          <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-orange-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-13 h-13 rounded-xl bg-orange-500/10 flex items-center justify-center text-2xl mb-5">🔄</div>
-            <h3 className="text-2xl font-bold mb-3">{t('features.humanizeTitle')}</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.humanizeDesc')}</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-orange-500/8 text-orange-400 rounded-md">{t('features.humanizeBadge')}</span>
+          <div className="group relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-orange-500/20">
+            <div className="absolute top-0 right-0 left-0 h-0.5 bg-gradient-to-r from-orange-400 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="mb-5 flex h-13 w-13 items-center justify-center rounded-xl bg-orange-500/10 text-2xl">
+              🔄
+            </div>
+            <h3 className="mb-3 text-2xl font-bold">
+              {t("features.humanizeTitle")}
+            </h3>
+            <p className="leading-relaxed text-[var(--color-text-secondary)]">
+              {t("features.humanizeDesc")}
+            </p>
+            <span className="mt-4 inline-block rounded-md bg-orange-500/8 px-3 py-1 font-mono text-xs font-medium text-orange-400">
+              {t("features.humanizeBadge")}
+            </span>
           </div>
 
           {/* Learn */}
-          <div className="group bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 hover:border-purple-500/20 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-13 h-13 rounded-xl bg-purple-500/10 flex items-center justify-center text-2xl mb-5">🧠</div>
-            <h3 className="text-2xl font-bold mb-3">{t('features.learnTitle')}</h3>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">{t('features.learnDesc')}</p>
-            <span className="inline-block mt-4 px-3 py-1 text-xs font-mono font-medium bg-purple-500/8 text-purple-400 rounded-md">{t('features.learnBadge')}</span>
+          <div className="group relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/20">
+            <div className="absolute top-0 right-0 left-0 h-0.5 bg-gradient-to-r from-purple-400 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="mb-5 flex h-13 w-13 items-center justify-center rounded-xl bg-purple-500/10 text-2xl">
+              🧠
+            </div>
+            <h3 className="mb-3 text-2xl font-bold">
+              {t("features.learnTitle")}
+            </h3>
+            <p className="leading-relaxed text-[var(--color-text-secondary)]">
+              {t("features.learnDesc")}
+            </p>
+            <span className="mt-4 inline-block rounded-md bg-purple-500/8 px-3 py-1 font-mono text-xs font-medium text-purple-400">
+              {t("features.learnBadge")}
+            </span>
           </div>
         </div>
       </section>
 
       {/* ─── COMPARISON ─── */}
-      <section id="compare" className="py-24 px-5 md:px-10 flex flex-col items-center">
-        <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">{t('compare.badge')}</p>
-        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-center mb-4">{t('compare.title')}</h2>
-        <p className="text-[var(--color-text-secondary)] text-lg text-center max-w-xl mb-12">{t('compare.subtitle')}</p>
+      <section
+        id="compare"
+        className="flex flex-col items-center px-5 py-24 md:px-10"
+      >
+        <p className="mb-4 font-mono text-xs font-bold tracking-[3px] text-emerald-400 uppercase">
+          {t("compare.badge")}
+        </p>
+        <h2 className="mb-4 text-center text-3xl font-extrabold tracking-tight md:text-5xl">
+          {t("compare.title")}
+        </h2>
+        <p className="mb-12 max-w-xl text-center text-lg text-[var(--color-text-secondary)]">
+          {t("compare.subtitle")}
+        </p>
 
         <div className="w-full max-w-3xl">
-          <div className="grid grid-cols-[1fr_50px_1fr] md:grid-cols-[1fr_80px_1fr] text-sm">
+          <div className="grid grid-cols-[1fr_50px_1fr] text-sm md:grid-cols-[1fr_80px_1fr]">
             {/* Header */}
-            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-red-400 border-b border-[var(--color-border)]">{t('compare.oldWay')}</div>
-            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] border-b border-[var(--color-border)]">{t('compare.vs')}</div>
-            <div className="p-4 text-center font-mono text-xs font-bold tracking-wider uppercase text-emerald-400 border-b border-[var(--color-border)]">{t('compare.axiom')}</div>
+            <div className="border-b border-[var(--color-border)] p-4 text-center font-mono text-xs font-bold tracking-wider text-red-400 uppercase">
+              {t("compare.oldWay")}
+            </div>
+            <div className="border-b border-[var(--color-border)] p-4 text-center font-mono text-xs font-bold tracking-wider text-[var(--color-dim)] uppercase">
+              {t("compare.vs")}
+            </div>
+            <div className="border-b border-[var(--color-border)] p-4 text-center font-mono text-xs font-bold tracking-wider text-emerald-400 uppercase">
+              {t("compare.axiom")}
+            </div>
 
             {/* Rows */}
             {[
-              [t('compare.row1Old'), '⏱', t('compare.row1New')],
-              [t('compare.row2Old'), '💬', t('compare.row2New')],
-              [t('compare.row3Old'), '💰', t('compare.row3New')],
-              [t('compare.row4Old'), '🔄', t('compare.row4New')],
-              [t('compare.row5Old'), '📝', t('compare.row5New')],
-              [t('compare.row6Old'), '⚡', t('compare.row6New')],
+              [t("compare.row1Old"), "⏱", t("compare.row1New")],
+              [t("compare.row2Old"), "💬", t("compare.row2New")],
+              [t("compare.row3Old"), "💰", t("compare.row3New")],
+              [t("compare.row4Old"), "🔄", t("compare.row4New")],
+              [t("compare.row5Old"), "📝", t("compare.row5New")],
+              [t("compare.row6Old"), "⚡", t("compare.row6New")],
             ].map(([old, icon, newText], i) => (
               <div key={i} className="contents">
-                <div className="p-4 flex items-center justify-end text-right text-[var(--color-dim)] line-through decoration-red-400/30 border-b border-[var(--color-border)]">{old}</div>
-                <div className="p-4 flex items-center justify-center text-[var(--color-dim)] font-mono text-xs border-b border-[var(--color-border)]">{icon}</div>
-                <div className="p-4 flex items-center text-[var(--color-text-primary)] font-medium border-b border-[var(--color-border)]">{newText}</div>
+                <div className="flex items-center justify-end border-b border-[var(--color-border)] p-4 text-right text-[var(--color-dim)] line-through decoration-red-400/30">
+                  {old}
+                </div>
+                <div className="flex items-center justify-center border-b border-[var(--color-border)] p-4 font-mono text-xs text-[var(--color-dim)]">
+                  {icon}
+                </div>
+                <div className="flex items-center border-b border-[var(--color-border)] p-4 font-medium text-[var(--color-text-primary)]">
+                  {newText}
+                </div>
               </div>
             ))}
           </div>
@@ -184,166 +278,32 @@ export default function LandingPage() {
       </section>
 
       {/* ─── PRICING ─── */}
-      <section id="pricing" className="py-24 px-5 md:px-10">
-        <div className="text-center mb-16">
-          <p className="text-xs font-bold tracking-[3px] uppercase text-emerald-400 mb-4 font-mono">{t('pricing.badge')}</p>
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">{t('pricing.title')}</h2>
-          <p className="text-[var(--color-text-secondary)] text-lg">{t('pricing.subtitle')}</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
-          {/* Free */}
-          <div className="bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 flex flex-col">
-            <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)] mb-4">{t('pricing.freeTitle')}</p>
-            <p className="text-5xl font-extrabold mb-1"><span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>0</p>
-            <p className="text-sm text-[var(--color-dim)] mb-7">{t('pricing.foreverNoSignup')}</p>
-            <ul className="space-y-3 text-sm text-[var(--color-text-secondary)] flex-1">
-              {(t.raw('pricing.freeFeatures') as string[]).map((item: string, i: number) => (
-                <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
-                  <span className="text-emerald-400 mt-0.5">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/solve"
-              className="mt-8 block w-full py-3 text-center bg-[var(--color-bg3)] border border-[var(--color-border2)] text-[var(--color-text-secondary)] font-semibold rounded-xl hover:bg-[var(--color-bg2)] transition-colors"
-            >
-              {t('pricing.startFree')}
-            </Link>
-          </div>
-
-          {/* Pro */}
-          <div className="bg-[var(--color-bg1)] border border-emerald-500/30 rounded-2xl p-8 relative shadow-[0_0_60px_rgba(52,211,153,0.08)] flex flex-col">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-[var(--color-bg0)] font-mono text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full whitespace-nowrap">
-              {t('pricing.mostPopular')}
-            </div>
-
-            <div className="flex items-center justify-between mb-4">
-              <p className="font-mono text-xs font-bold tracking-wider uppercase text-[var(--color-dim)]">{t('pricing.proTitle')}</p>
-              <div className="flex items-center gap-2 bg-[var(--color-bg0)] p-1 rounded-lg border border-[var(--color-border)]">
-                <button
-                  onClick={() => setIsYearly(false)}
-                  className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${!isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
-                >
-                  {t('pricing.monthly')}
-                </button>
-                <button
-                  onClick={() => setIsYearly(true)}
-                  className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${isYearly ? 'bg-[var(--color-bg2)] text-[var(--color-text-primary)] shadow-sm' : 'text-[var(--color-dim)]'}`}
-                >
-                  {t('pricing.yearly')}
-                </button>
-              </div>
-            </div>
-
-            <p className="text-5xl font-extrabold mb-1">
-              <span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>
-              {isYearly ? Math.round(190 / 12) : 19}
-            </p>
-            <p className="text-sm text-[var(--color-dim)] mb-7">
-              {isYearly ? t('pricing.billedAnnually') : t('pricing.cancelAnytime')}
-            </p>
-            <ul className="space-y-3 text-sm text-[var(--color-text-primary)] flex-1">
-              {(t.raw('pricing.proFeatures') as string[]).map((item: string, i: number) => (
-                <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
-                  <span className="text-emerald-400 mt-0.5">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={async () => {
-                try {
-                  const { STRIPE_PRICES } = await import('@/lib/stripe/config');
-                  const res = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.PRO_YEARLY : STRIPE_PRICES.PRO_MONTHLY, locale: window.location.pathname.split('/')[1] || 'en' }),
-                  });
-                  if (!res.ok) throw new Error('Failed to create checkout session');
-                  const { url } = await res.json();
-                  if (url) window.location.href = url;
-                } catch {
-                  window.location.href = '/auth/login?returnTo=/settings';
-                }
-              }}
-              className="mt-8 block w-full py-3 text-center bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]"
-            >
-              {t('pricing.getPro')}
-            </button>
-          </div>
-
-          {/* Elite */}
-          <div className="bg-[var(--color-bg1)] border border-amber-500/30 rounded-2xl p-8 relative shadow-[0_0_60px_rgba(251,191,36,0.06)] flex flex-col">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-[var(--color-bg0)] font-mono text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full whitespace-nowrap">
-              {t('pricing.bestValue')}
-            </div>
-
-            <div className="flex items-center justify-between mb-4">
-              <p className="font-mono text-xs font-bold tracking-wider uppercase text-amber-400">{t('pricing.eliteTitle')}</p>
-            </div>
-
-            <p className="text-5xl font-extrabold mb-1">
-              <span className="text-2xl text-[var(--color-text-secondary)] align-top">$</span>
-              {isYearly ? Math.round(490 / 12) : 49}
-            </p>
-            <p className="text-sm text-[var(--color-dim)] mb-7">
-              {isYearly ? t('pricing.billedAnnually') : t('pricing.cancelAnytime')}
-            </p>
-            <ul className="space-y-3 text-sm text-[var(--color-text-primary)] flex-1">
-              {(t.raw('pricing.eliteFeatures') as string[]).map((item: string, i: number) => (
-                <li key={i} className="flex items-start gap-2 py-2 border-b border-[var(--color-border)] last:border-0">
-                  <span className="text-amber-400 mt-0.5">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={async () => {
-                try {
-                  const { STRIPE_PRICES } = await import('@/lib/stripe/config');
-                  const res = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ priceId: isYearly ? STRIPE_PRICES.ELITE_YEARLY : STRIPE_PRICES.ELITE_MONTHLY, locale: window.location.pathname.split('/')[1] || 'en' }),
-                  });
-                  if (!res.ok) throw new Error('Failed to create checkout session');
-                  const { url } = await res.json();
-                  if (url) window.location.href = url;
-                } catch {
-                  window.location.href = '/auth/login?returnTo=/settings';
-                }
-              }}
-              className="mt-8 block w-full py-3 text-center bg-amber-500 hover:bg-amber-400 text-[var(--color-bg0)] font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(251,191,36,0.3)]"
-            >
-              {t('pricing.getElite')}
-            </button>
-          </div>
-        </div>
-      </section>
+      <PricingSection />
 
       {/* ─── FINAL CTA ─── */}
-      <section className="py-24 px-5 text-center">
-        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6">{t('cta.title')}</h2>
-        <p className="text-[var(--color-text-secondary)] text-lg max-w-lg mx-auto mb-10">
-          {t('cta.subtitle')}
+      <section className="px-5 py-24 text-center">
+        <h2 className="mb-6 text-3xl font-extrabold tracking-tight md:text-5xl">
+          {t("cta.title")}
+        </h2>
+        <p className="mx-auto mb-10 max-w-lg text-lg text-[var(--color-text-secondary)]">
+          {t("cta.subtitle")}
         </p>
         <Link
           href="/solve"
-          className="inline-block px-10 py-4 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-bold text-lg rounded-xl transition-all hover:shadow-[0_0_30px_rgba(52,211,153,0.3)] hover:-translate-y-0.5"
+          className="inline-block rounded-xl bg-emerald-500 px-10 py-4 text-lg font-bold text-[var(--color-bg0)] transition-all hover:-translate-y-0.5 hover:bg-emerald-400 hover:shadow-[0_0_30px_rgba(52,211,153,0.3)]"
         >
-          {t('cta.btn')}
+          {t("cta.btn")}
         </Link>
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="py-12 px-5 md:px-10 border-t border-[var(--color-border)]">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-extrabold text-lg">
-            AXIOM<span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+      <footer className="border-t border-[var(--color-border)] px-5 py-12 md:px-10">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex items-center gap-2 text-lg font-extrabold">
+            AXIOM
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           </div>
-          <p className="text-sm text-[var(--color-dim)]">{t('footer.copy')}</p>
+          <p className="text-sm text-[var(--color-dim)]">{t("footer.copy")}</p>
           <div className="flex gap-6 text-sm text-[var(--color-text-secondary)]">
             <Link href="/privacy" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.privacy')}</Link>
             <Link href="/terms" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.terms')}</Link>

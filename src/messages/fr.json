@@ -17,7 +17,9 @@
       "dayStreak": "jours de flamme",
       "solvesLeftToday": "solutions restantes aujourd'hui",
       "free": "GRUIT",
-      "pro": "PRO ✨"
+      "pro": "PRO ✨",
+      "checkoutSuccess": "Mise à niveau réussie ! Votre plan a été mis à jour.",
+      "checkoutCancelled": "Paiement annulé. Aucun frais n'a été appliqué."
     },
     "Solve": {
       "title": "Solveur",

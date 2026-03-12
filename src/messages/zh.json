@@ -17,7 +17,9 @@
       "dayStreak": "天连击",
       "solvesLeftToday": "今天剩余解答次数",
       "free": "免费",
-      "pro": "高级 ✨"
+      "pro": "高级 ✨",
+      "checkoutSuccess": "升级成功！您的计划已更新。",
+      "checkoutCancelled": "付款已取消。未产生任何费用。"
     },
     "Solve": {
       "title": "作业解答器",
