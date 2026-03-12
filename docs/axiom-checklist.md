@@ -1,7 +1,7 @@
 # Axiom — Checklist Definitivo Pré-Deploy → Produção
 
-> Estado atual: Commit `7377ac9` | 0 lint errors | Produção: axiom-solver.com
-> Gerado: 2026-02-23 | Atualizado: 2026-03-11 | Baseado em auditoria de 38 itens
+> Estado atual: Commit `b19d84e` | 0 lint errors | Produção: axiom-solver.com
+> Gerado: 2026-02-23 | Atualizado: 2026-03-12 | Baseado em auditoria de 38 itens
 
 ---
 
@@ -39,13 +39,14 @@
   - ELITE ($49/mês): solve 150/dia (cap 4500), write 50/dia (cap 1500), humanize ilimitado, learn 50/dia (cap 1500)
   - Adicionar check mensal: `SUM(usage) WHERE date >= first_of_month`
   - Elite cap mensal: throttle 10 calls/hora (não bloqueia)
-- [ ] **P1.2 Rewrite `lib/stripe/config.ts`** — 4 price IDs (Pro monthly/yearly + Elite monthly/yearly)
-- [ ] **P1.3 Criar produtos no Stripe Dashboard** — Pro ($19/$190) + Elite ($49/$490)
-- [ ] **P1.4 Atualizar `webhooks/stripe/route.ts`**:
-  - Detectar price ID → setar 'pro' ou 'elite'
-  - Tratar `customer.subscription.updated` (downgrade)
-  - Cancelamento: respeitar `cancel_at_period_end`
-- [ ] **P1.5 Redesign `paywall-modal.tsx`** — 3 tiers com toggle mensal/anual
+- [x] **P1.2 Rewrite `lib/stripe/config.ts`** — 4 price IDs configurados via env vars (NEXT_PUBLIC_STRIPE_PRO/ELITE_MONTHLY/YEARLY_PRICE_ID) ✅
+- [x] **P1.3 Criar produtos no Stripe Dashboard** — Pro ($19/$190) + Elite ($49/$490) criados em Test + Live Mode ✅
+- [x] **P1.4 Atualizar `webhooks/stripe/route.ts`** ✅:
+  - Detecta price ID → seta 'pro' ou 'elite' via `planFromPriceId()`
+  - Trata `customer.subscription.updated` (downgrade)
+  - Cancelamento: respeita `cancel_at_period_end`
+  - Trata `customer.subscription.deleted` → reverte para free
+- [x] **P1.5 Redesign `pricing-section.tsx`** — 3 tiers com toggle mensal/anual, checkout via `/api/stripe/checkout` ✅
 - [ ] **P1.6 Watermark no Free** — Componente `<Watermark />` em solve/chat, write/editor, humanize/panel
 - [x] **P1.7 Anti-abuse**:
   - IP tracking: `ip_signups` table, check no auth callback (3+ signups = flag)
@@ -74,7 +75,7 @@
 - [x] **P3.3 Env vars no Vercel** — 15 variáveis, NEXT_PUBLIC_APP_URL=https://axiom-solver.com
 - [x] **P3.4 Custom domain** — axiom-solver.com + www, Cloudflare DNS-only + Full (strict)
 - [x] **P3.5 Supabase** — Site URL + 4 redirect URLs produção, localhost preservado
-- [x] **P3.6 Stripe** — Webhook prod: axiom-solver.com/api/webhooks/stripe (4 eventos)
+- [x] **P3.6 Stripe** — Webhook prod LIVE: axiom-solver.com/api/webhooks/stripe (5 eventos: checkout.session.completed, customer.subscription.updated/deleted, invoice.payment_succeeded/failed)
 - [x] **P3.7 Google OAuth** — JS origins: axiom-solver.com + www.axiom-solver.com
 - [x] **P3.8 Verificar build** — `pnpm build` passa sem erros
 
@@ -84,7 +85,7 @@
 
 - [ ] **P4.1 Auth flow** — Signup email → verificar email → login
 - [ ] **P4.2 Google OAuth** — Login com Google funcional
-- [ ] **P4.3 Stripe checkout** — Pagar Pro → webhook → plan atualiza
+- [x] **P4.3 Stripe checkout** — Pagar Pro → webhook → plan atualiza ✅ (Test Mode testado + Live Mode configurado e deployado)
 - [ ] **P4.4 Features IA** — Testar solve, write, humanize, panic com login real
 - [ ] **P4.5 Rate limit** — Enviar 15 requests rápidos → verificar 429
 - [x] **P4.6 i18n** — 6 locales (en/pt/es/fr/de/zh) retornam 200 + hreflang alternates
@@ -98,7 +99,7 @@
 - [ ] **P5.2 Onboarding** — Modal pós-signup (3-4 slides)
 - [ ] **P5.3 FAQ** — Página estática com accordion
 - [ ] **P5.4 Help/Support** — Crisp widget ou email support
-- [ ] **P5.5 Traduções landing** — Hero content em pt/es/fr/de/zh
+- [x] **P5.5 Traduções landing** — Hero content em pt/es/fr/de/zh ✅
 - [ ] **P5.6 Fix themeColor** → viewport export (8 páginas)
 
 ---
