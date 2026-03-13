@@ -107,7 +107,7 @@
 
 - [x] **P6.1 PostHog** — ✅ `8ebe664` — posthog-js SDK, PostHogProvider + PageView, identified_only, Vercel env vars
 - [x] **P6.2 Admin dashboard** — ❌ CANCELADO — Usando dashboards existentes (Vercel, Supabase, Stripe, PostHog)
-- [x] **P6.3 Vitest** — ⏳ ADIADO (pós-launch)
+- [x] **P6.3 Vitest** — ✅ 22 tests passing (usage.test.ts + export-utils.test.ts), vitest config, mocked Supabase + jsPDF
 - [x] **P6.4 SEO** — ✅ `2071d26` — sitemap.xml (7 URLs, 6 locales hreflang), robots.txt, JSON-LD WebApplication schema
 - [x] **P6.5 Export PDF/DOCX** — ✅ `a43d379` — jsPDF + DOCX, botões em Solve e Write, branding Axiom
 - [x] **BONUS: Delete Chat** — ✅ `0bb2f60` — X button on hover, instant delete, no confirmation
