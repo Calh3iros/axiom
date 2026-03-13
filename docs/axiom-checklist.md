@@ -1,6 +1,6 @@
 # Axiom — Checklist Definitivo Pré-Deploy → Produção
 
-> Estado atual: Commit `a43d379` | 0 lint errors | Produção: axiom-solver.com
+> Estado atual: Commit `0bb2f60` | 0 lint errors | Produção: axiom-solver.com
 > Gerado: 2026-02-23 | Atualizado: 2026-03-12 (sessão 2) | Baseado em auditoria de 38 itens
 
 ---
@@ -110,6 +110,7 @@
 - [x] **P6.3 Vitest** — ⏳ ADIADO (pós-launch)
 - [x] **P6.4 SEO** — ✅ `2071d26` — sitemap.xml (7 URLs, 6 locales hreflang), robots.txt, JSON-LD WebApplication schema
 - [x] **P6.5 Export PDF/DOCX** — ✅ `a43d379` — jsPDF + DOCX, botões em Solve e Write, branding Axiom
+- [x] **BONUS: Delete Chat** — ✅ `0bb2f60` — X button on hover, instant delete, no confirmation
 
 ---
 
