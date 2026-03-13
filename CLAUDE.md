@@ -1,6 +1,6 @@
 # Axiom — Contexto para Sessões Claude Code
 
-> Atualizado: 2026-03-12 | Branch: `main` | Deploy: Vercel (axiom-solver.com)
+> Atualizado: 2026-03-13 | Branch: `main` | Deploy: Vercel (axiom-solver.com)
 
 ---
 
@@ -156,3 +156,18 @@ docs/
 - Vercel: `SUPABASE_SERVICE_ROLE_KEY` corrigida + 7 Stripe env vars atualizadas para Live
 - Stripe Live: 2 produtos + 4 prices + 1 webhook + Customer Portal
 - Stripe Test: webhook endpoint "elegant-rhythm" já existia e funcionava (200 OK)
+
+---
+
+## SESSÃO 13/03/2026 — O QUE FOI FEITO
+
+### Links FAQ adicionados
+
+1. **FAQ link no footer da landing page**: Adicionado entre "Terms" e o email de contato
+2. **FAQ link na sidebar do app**: Adicionado com ícone `HelpCircle`, abaixo de Settings
+3. **i18n completo**: Chaves `footer.faq` e `sidebar.faq` adicionadas nos 6 locales (en/pt/es/fr/de/zh)
+4. **Verificado no browser**: Footer mostra link "FAQ" e clique redireciona para `/faq` corretamente
+
+### Commits desta sessão
+
+- `dbdd330` — feat: add FAQ links to landing footer and app sidebar (6 locales)

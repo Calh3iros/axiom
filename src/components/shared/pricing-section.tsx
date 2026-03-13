@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
+import { createClient } from "@/lib/supabase/client";
 
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
@@ -16,6 +17,19 @@ export function PricingSection() {
   const handleCheckout = async (plan: "pro" | "elite") => {
     setLoading(plan);
     try {
+      // Check if user is authenticated before calling checkout API
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        // Redirect to signup with plan context preserved
+        const interval = isYearly ? "yearly" : "monthly";
+        router.push(`/${locale}/auth/signup?plan=${plan}&interval=${interval}`);
+        return;
+      }
+
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,6 +39,14 @@ export function PricingSection() {
           locale,
         }),
       });
+
+      if (res.status === 401) {
+        // Session expired — redirect to login with plan context
+        const interval = isYearly ? "yearly" : "monthly";
+        router.push(`/${locale}/auth/login?plan=${plan}&interval=${interval}`);
+        return;
+      }
+
       const data = await res.json();
       if (data.url) {
         router.push(data.url);
