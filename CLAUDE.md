@@ -55,7 +55,6 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
 ### Pendente
 
 - P4.2: Teste Google OAuth em produção
-- P4.4: Teste features IA com login real
 - P4.5: Teste rate limit (429)
 - P6: Admin dashboard, SEO avançado
 
@@ -242,12 +241,18 @@ docs/
 26. **Deep orange em produção VERIFICADO** ✅: Landing page inteira em deep orange — navbar, hero, imagens estudantes, ticker, features, testimonials, compare, pricing, CTA, footer. Nenhum elemento azul funcional encontrado. Glows de background sutis permanecem (cosmético, não bloqueante)
 27. **Cloudflare API token**: Descartado — dev solo, sem risco real
 28. **Email signup end-to-end VERIFICADO** ✅: Signup em produção → email de confirmação chegou via Resend SMTP → conta criada em free mode. Login sem verificação corretamente bloqueado com "Email not confirmed"
+29. **P4.4 Features IA VERIFICADAS** ✅: Solve (derivada correta + step-by-step), Write (expansão de parágrafo + export .docx), Humanize (reescrita + human score), Learn/Panic (tutor com analogias). Todos os 4 módulos funcionando com conta ELITE em produção
+
+### Commits (noite)
+
+- `a83f63b` — docs: SG verify Resend domain + deep orange production
+- `25cbd00` — docs: SG verify email signup e2e
+- `78d5b79` — docs: update CLAUDE.md - move 8 completed items from pending to done
 
 ---
 
 ## PENDENTE (próxima sessão)
 
 - P4.2: Teste Google OAuth em produção
-- P4.4: Teste features IA com login real
 - P4.5: Teste rate limit (429)
 - P6: Admin dashboard, SEO avançado
