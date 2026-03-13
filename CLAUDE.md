@@ -114,9 +114,24 @@ docs/
 ## CONVENÇÕES DO USUÁRIO
 
 - **SC** = "Só Conversando" — significa que o usuário quer apenas conversar, sem edições de código
+- **SG** = "Segurança / Guardrails" — workflow: TESTAR → RETER (verificar, documentar, commitar)
 - **Deploy** = git push origin main → Vercel faz deploy automático
 - **Idioma** = Português brasileiro (comunicação com o usuário)
 - O banco Upstash Redis precisa de ping periódico para não ser arquivado por inatividade
+
+---
+
+## 7 PRINCÍPIOS SG (GUARDRAILS PARA AGENTE IA)
+
+1. **Menor Privilégio (Least Privilege)** — O agente só toca nos arquivos explicitamente autorizados. Default-deny: tudo que não foi pedido é proibido.
+2. **Contenção de Escopo (Scope Containment)** — Toda ação se limita ao escopo da tarefa. "SG > item X" = apenas X, sem scope creep.
+3. **Anti-Alucinação (Grounding)** — Toda ação baseada em evidência, não suposição. Verificar antes de agir, ler antes de editar. Se não sabe, perguntar.
+4. **Aprovação Humana (Human-in-the-Loop)** — Ações de alto risco exigem OK do humano antes de executar (delete, push, env vars).
+5. **Auditabilidade (Audit Trail)** — Toda ação registrada e rastreável. CLAUDE.md como log de sessões, commits descritivos.
+6. **Defesa em Camadas (Layered Defense)** — INPUT (task definida) → SCOPE (arquivos permitidos) → ACTION (aprovação) → OUTPUT (testar) → RETAIN (documentar).
+7. **Reversibilidade (Reversibility)** — Toda mudança deve ser reversível. Git commit antes de mudanças grandes, edições cirúrgicas > reescritas.
+
+> Referências: NIST AI RMF (AI 600-1), OWASP LLM Top 10, Stanford AI Safety, Principle of Least Privilege (PoLP)
 
 ---
 
@@ -222,13 +237,12 @@ docs/
 
 25. **Resend domain VERIFICADO** ✅: axiom-solver.com verificado em 13/03 12:03 PM. DKIM (Verified), SPF MX (Verified), SPF TXT (Verified). Sending habilitado, região São Paulo (sa-east-1)
 26. **Deep orange em produção VERIFICADO** ✅: Landing page inteira em deep orange — navbar, hero, imagens estudantes, ticker, features, testimonials, compare, pricing, CTA, footer. Nenhum elemento azul funcional encontrado. Glows de background sutis permanecem (cosmético, não bloqueante)
-27. **Cloudflare API token**: Bloqueado por CAPTCHA no dashboard — requer deleção manual pelo usuário (Profile → API Tokens → "Edit zone DNS")
+27. **Cloudflare API token**: Descartado — dev solo, sem risco real
+28. **Email signup end-to-end VERIFICADO** ✅: Signup em produção → email de confirmação chegou via Resend SMTP → conta criada em free mode. Login sem verificação corretamente bloqueado com "Email not confirmed"
 
 ---
 
 ## PENDENTE (próxima sessão)
 
-- Deletar token Cloudflare API (Profile → API Tokens → "Edit zone DNS") — MANUAL
-- Testar envio de email real (signup ou reset password em produção) — Resend verificado, falta testar end-to-end
 - P1.1: Rewrite `usage.ts` com limites granulares por tier
 - P5.1-P5.6: Itens pendentes do roadmap original
