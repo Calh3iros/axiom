@@ -181,3 +181,51 @@ docs/
 ### Commits adicionais
 
 - `a722204` — fix: redirect unauthenticated users to signup when clicking Get Pro/Elite
+
+### Landing Page V2 — Deep Orange + i18n + Student Images
+
+8. **V2 Landing Page rewrite**: Complete landing page adapted from user's HTML template with deep orange color scheme, demo window, ticker, testimonials, pricing toggle
+9. **Countdown timer**: Text "Time Left:" with 23h daily cycle, quadrupled size
+10. **Ticker section**: Quadrupled size — label, items, trust numbers, avatars
+11. **Student hero images**: 3 AI-generated images of stressed students between pain text and solution text
+12. **CTA updates**: "Start Now →", removed "No signup" from bottom note
+
+### Deep Orange Theme — Full App Conversion
+
+13. **Phase 1 — Emerald → Orange**: `emerald-*` → `orange-*` in 11 components (pricing-section, paywall-modal, onboarding-modal, cookie-consent, app-shell, chat, signup, forgot-password, map, pricing, settings)
+14. **Phase 2 — Blue → Orange**: Changed CSS var `--color-ax-blue: #60a5fa` → `#f97316` in globals.css. Batch-replaced `blue-*` → `orange-*` Tailwind classes in 14 more files (all auth pages, dashboard, solve, chat, editor, humanize, faq, share)
+15. **Middleware fix**: Updated matcher to exclude `.png`, `.jpg`, `.webp`, `.svg`, `.gif` from auth checks — static images were being redirected to login
+
+### i18n Landing Page — 6 Locales
+
+16. **en.json**: Full V2 landing strings added (nav, hero, ticker, features, testimonials, upsell, compare, pricing, cta, footer)
+17. **pt/es/fr/de/zh.json**: All translated with locale-specific content
+18. **page.tsx**: Wired to `useTranslations('Landing')` — 100+ hardcoded strings replaced with `t()` calls
+19. **Language switcher**: Works on landing page — verified EN ↔ PT switching
+
+### Resend SMTP for Supabase
+
+20. **Resend account**: Created via GitHub OAuth (Calh3iros), domain axiom-solver.com (São Paulo region)
+21. **DNS records**: 4 records added to Cloudflare via API (DKIM TXT, MX send, SPF TXT, DMARC TXT)
+22. **Supabase SMTP**: Configured `noreply@axiom-solver.com` via `smtp.resend.com:465`, username `resend`, password = Resend API key
+23. **Resend API key**: `re_6Yzh5gXu_7kwHRp8cfYxzbmYnDmfQCM3r` (also used as SMTP password)
+24. **Cloudflare Zone ID**: `822002c5011f4f7c4be341be71e00bc3`
+
+### Commits (afternoon)
+
+- `56ec460` — feat: deep orange theme, i18n landing (6 locales), student hero images, middleware fix (27 files, +1653/-764)
+- `6951057` — fix: convert all blue accents to deep orange auth, dashboard, chat, editor (14 files, +17/-17)
+
+### Vitest: 22/22 tests pass ✅
+
+---
+
+## PENDENTE (próxima sessão)
+
+- Verificar domínio Resend (Internal Verification) — https://resend.com/domains
+- Testar envio de email real (signup ou reset password em produção)
+- Deletar token Cloudflare API (Profile → API Tokens → "Edit zone DNS")
+- Verificar deep orange em produção (hard refresh Ctrl+Shift+R após login)
+- P1.1: Rewrite `usage.ts` com limites granulares por tier
+- P5.1-P5.6: Itens pendentes do roadmap original
+
