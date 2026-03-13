@@ -69,9 +69,9 @@ const PLAN_CARDS: PlanCard[] = [
       '20 learn sessions / day',
       '500 solves / month cap',
     ],
-    accent: 'text-emerald-400',
-    accentBg: 'bg-emerald-500/10',
-    accentGlow: 'shadow-[0_0_40px_rgba(52,211,153,0.08)]',
+    accent: 'text-orange-400',
+    accentBg: 'bg-orange-500/10',
+    accentGlow: 'shadow-[0_0_40px_rgba(249,115,22,0.08)]',
   },
   {
     key: 'elite',
@@ -88,9 +88,9 @@ const PLAN_CARDS: PlanCard[] = [
       'Unlimited learn sessions',
       'Priority support',
     ],
-    accent: 'text-amber-400',
-    accentBg: 'bg-amber-500/10',
-    accentGlow: 'shadow-[0_0_40px_rgba(251,191,36,0.10)]',
+    accent: 'text-orange-300',
+    accentBg: 'bg-orange-600/10',
+    accentGlow: 'shadow-[0_0_40px_rgba(234,88,12,0.10)]',
     badge: 'Best Value',
   },
 ];
@@ -188,7 +188,7 @@ export function PaywallModal({
               }`}
             >
               Yearly
-              <span className="text-emerald-400 text-[10px] font-extrabold">
+              <span className="text-orange-400 text-[10px] font-extrabold">
                 Save 17%
               </span>
             </button>
@@ -211,16 +211,16 @@ export function PaywallModal({
                   className={`
                     relative rounded-xl border p-5 flex flex-col transition-all duration-200
                     ${isHighlighted
-                      ? `border-amber-500/30 bg-[var(--color-bg1)] ${card.accentGlow}`
+                      ? `border-orange-600/30 bg-[var(--color-bg1)] ${card.accentGlow}`
                       : card.key === 'pro'
-                        ? `border-emerald-500/20 bg-[var(--color-bg1)] ${card.accentGlow}`
+                        ? `border-orange-500/20 bg-[var(--color-bg1)] ${card.accentGlow}`
                         : 'border-[var(--color-border)] bg-[var(--color-bg0)]'
                     }
                   `}
                 >
                   {/* Badge */}
                   {card.badge && (
-                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-black text-[9px] font-extrabold tracking-wider uppercase px-3 py-1 rounded-full whitespace-nowrap">
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-orange-600 text-black text-[9px] font-extrabold tracking-wider uppercase px-3 py-1 rounded-full whitespace-nowrap">
                       {card.badge}
                     </div>
                   )}
@@ -295,8 +295,8 @@ export function PaywallModal({
                         w-full py-2.5 text-xs font-extrabold rounded-lg transition-all hover:scale-[1.02]
                         disabled:opacity-50 disabled:cursor-not-allowed
                         ${card.key === 'elite'
-                          ? 'bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.25)]'
-                          : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.25)]'
+                          ? 'bg-orange-600 hover:bg-orange-500 text-black shadow-[0_0_15px_rgba(234,88,12,0.25)]'
+                          : 'bg-orange-500 hover:bg-orange-400 text-black shadow-[0_0_15px_rgba(249,115,22,0.25)]'
                         }
                       `}
                     >

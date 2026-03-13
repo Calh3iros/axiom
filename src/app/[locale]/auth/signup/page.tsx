@@ -71,7 +71,7 @@ export default function SignupPage() {
       <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg0)] px-4">
         <div className="w-full max-w-md text-center">
           <div className="bg-[var(--color-bg1)] border border-[var(--color-border)] rounded-2xl p-8 shadow-xl shadow-black/20">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
               <span className="text-3xl">✉️</span>
             </div>
             <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">{t('checkEmail')}</h2>

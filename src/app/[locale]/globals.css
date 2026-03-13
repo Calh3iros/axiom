@@ -4,30 +4,38 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Axiom Core Theme */
-  --color-bg0: #060708;
-  --color-bg1: #0e1018;
-  --color-bg2: #1a1e2a;
-  --color-bg3: #252a38;
-  --color-border: rgba(255,255,255,0.10);
-  --color-border2: rgba(255,255,255,0.18);
-  --color-border3: rgba(255,255,255,0.28);
+  /* Axiom Core Theme — Deep Orange */
+  --color-bg0: #09090b;
+  --color-bg1: #0f0f12;
+  --color-bg2: #161619;
+  --color-bg3: #1c1c20;
+  --color-bg4: #222226;
+  --color-border: rgba(255,255,255,0.06);
+  --color-border2: rgba(255,255,255,0.10);
+  --color-border3: rgba(255,255,255,0.14);
 
-  --color-text-primary: #f2f1ec;
-  --color-text-secondary: #cdd0d9;
-  --color-text-tertiary: #a3a7b4;
-  --color-dim: #727682;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #63636e;
+  --color-dim: #63636e;
 
-  /* Axiom Accents */
-  --color-ax-green: #34d399;
+  /* Axiom Accent — Deep Orange */
+  --color-accent: #e8590c;
+  --color-accent2: #f97316;
+  --color-accent3: #fb923c;
+  --color-accent-soft: rgba(232,89,12,0.12);
+  --color-accent-softer: rgba(232,89,12,0.06);
+
+  /* Functional colors */
+  --color-ax-green: #22c55e;
   --color-ax-blue: #60a5fa;
   --color-ax-orange: #fb923c;
   --color-ax-purple: #a78bfa;
-  --color-ax-red: #f87171;
+  --color-ax-red: #ef4444;
   --color-ax-yellow: #fbbf24;
 
-  --font-sans: "Inter", "Outfit", system-ui, sans-serif;
-  --font-mono: "Fira Code", monospace;
+  --font-sans: "Outfit", "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -45,7 +53,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar for dark mode */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

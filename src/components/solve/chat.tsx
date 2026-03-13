@@ -249,7 +249,7 @@ export function SolveChat({
                   >
                     <span className="sr-only">{t("copyToClipboard")}</span>
                     {copiedId === message.id ? (
-                      <Check className="h-3 w-3 text-emerald-400" />
+                      <Check className="h-3 w-3 text-orange-400" />
                     ) : (
                       <Copy className="h-3 w-3" />
                     )}

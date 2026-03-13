@@ -61,7 +61,7 @@ export function PricingSection() {
   return (
     <section id="pricing" className="px-5 py-24 md:px-10">
       <div className="mb-16 text-center">
-        <p className="mb-4 font-mono text-xs font-bold tracking-[3px] text-emerald-400 uppercase">
+        <p className="mb-4 font-mono text-xs font-bold tracking-[3px] text-orange-400 uppercase">
           {t("pricing.badge")}
         </p>
         <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-5xl">
@@ -94,7 +94,7 @@ export function PricingSection() {
                   key={i}
                   className="flex items-start gap-2 border-b border-[var(--color-border)] py-2 last:border-0"
                 >
-                  <span className="mt-0.5 text-emerald-400">✓</span>
+                  <span className="mt-0.5 text-orange-400">✓</span>
                   {item}
                 </li>
               )
@@ -109,8 +109,8 @@ export function PricingSection() {
         </div>
 
         {/* Pro */}
-        <div className="relative flex flex-col rounded-2xl border border-emerald-500/30 bg-[var(--color-bg1)] p-8 shadow-[0_0_60px_rgba(52,211,153,0.08)]">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-4 py-1.5 font-mono text-[10px] font-bold tracking-wider whitespace-nowrap text-[var(--color-bg0)] uppercase">
+        <div className="relative flex flex-col rounded-2xl border border-orange-500/30 bg-[var(--color-bg1)] p-8 shadow-[0_0_60px_rgba(249,115,22,0.08)]">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-4 py-1.5 font-mono text-[10px] font-bold tracking-wider whitespace-nowrap text-[var(--color-bg0)] uppercase">
             {t("pricing.mostPopular")}
           </div>
 
@@ -152,7 +152,7 @@ export function PricingSection() {
                   key={i}
                   className="flex items-start gap-2 border-b border-[var(--color-border)] py-2 last:border-0"
                 >
-                  <span className="mt-0.5 text-emerald-400">✓</span>
+                  <span className="mt-0.5 text-orange-400">✓</span>
                   {item}
                 </li>
               )
@@ -161,20 +161,20 @@ export function PricingSection() {
           <button
             onClick={() => handleCheckout("pro")}
             disabled={loading === "pro"}
-            className="mt-8 block w-full rounded-xl bg-emerald-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] disabled:opacity-50"
+            className="mt-8 block w-full rounded-xl bg-orange-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-orange-400 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)] disabled:opacity-50"
           >
             {loading === "pro" ? "Processing..." : t("pricing.getPro")}
           </button>
         </div>
 
         {/* Elite */}
-        <div className="relative flex flex-col rounded-2xl border border-amber-500/30 bg-[var(--color-bg1)] p-8 shadow-[0_0_60px_rgba(251,191,36,0.06)]">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 font-mono text-[10px] font-bold tracking-wider whitespace-nowrap text-[var(--color-bg0)] uppercase">
+        <div className="relative flex flex-col rounded-2xl border border-orange-600/30 bg-[var(--color-bg1)] p-8 shadow-[0_0_60px_rgba(234,88,12,0.06)]">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-orange-600 px-4 py-1.5 font-mono text-[10px] font-bold tracking-wider whitespace-nowrap text-[var(--color-bg0)] uppercase">
             {t("pricing.bestValue")}
           </div>
 
           <div className="mb-4 flex items-center justify-between">
-            <p className="font-mono text-xs font-bold tracking-wider text-amber-400 uppercase">
+            <p className="font-mono text-xs font-bold tracking-wider text-orange-300 uppercase">
               {t("pricing.eliteTitle")}
             </p>
           </div>
@@ -197,7 +197,7 @@ export function PricingSection() {
                   key={i}
                   className="flex items-start gap-2 border-b border-[var(--color-border)] py-2 last:border-0"
                 >
-                  <span className="mt-0.5 text-amber-400">✓</span>
+                  <span className="mt-0.5 text-orange-300">✓</span>
                   {item}
                 </li>
               )
@@ -206,7 +206,7 @@ export function PricingSection() {
           <button
             onClick={() => handleCheckout("elite")}
             disabled={loading === "elite"}
-            className="mt-8 block w-full rounded-xl bg-amber-500 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] disabled:opacity-50"
+            className="mt-8 block w-full rounded-xl bg-orange-600 py-3 text-center font-bold text-[var(--color-bg0)] transition-all hover:bg-orange-500 hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] disabled:opacity-50"
           >
             {loading === "elite" ? "Processing..." : t("pricing.getElite")}
           </button>

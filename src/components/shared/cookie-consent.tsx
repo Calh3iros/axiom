@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Link } from '@/i18n/routing';
 
 /**
  * LGPD/GDPR cookie consent banner.
@@ -36,7 +37,7 @@ export function CookieConsent() {
           <p>
             We use essential cookies for authentication and analytics to improve your experience.
             By continuing, you agree to our{' '}
-            <a href="/privacy" className="text-emerald-400 hover:underline">Privacy Policy</a>.
+            <Link href="/privacy" className="text-orange-400 hover:underline">Privacy Policy</Link>.
           </p>
         </div>
         <div className="flex gap-2 shrink-0">
@@ -48,7 +49,7 @@ export function CookieConsent() {
           </button>
           <button
             onClick={accept}
-            className="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black hover:bg-emerald-400 transition-colors"
+            className="px-4 py-2 text-xs font-bold rounded-lg bg-orange-500 text-black hover:bg-orange-400 transition-colors"
           >
             Accept
           </button>

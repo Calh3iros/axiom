@@ -269,7 +269,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Topbar with streak + usage */}
         <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-bg1)]/80 px-4 backdrop-blur-md md:px-8">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 rounded-full border border-amber-500/15 bg-amber-500/8 px-3 py-1.5 font-mono text-xs font-semibold text-amber-400">
+            <div className="flex items-center gap-1.5 rounded-full border border-orange-600/15 bg-orange-600/8 px-3 py-1.5 font-mono text-xs font-semibold text-orange-300">
               🔥 <span>{streak}</span>
             </div>
             <span className="hidden text-xs text-[var(--color-dim)] sm:inline">
@@ -281,7 +281,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <LanguageSwitcher />
             </div>
             <div className="hidden text-xs text-[var(--color-text-secondary)] md:block">
-              <span className="font-semibold text-emerald-400">
+              <span className="font-semibold text-orange-400">
                 {solvesRemaining === Infinity ? "∞" : (solvesRemaining ?? "—")}
               </span>{" "}
               {t("solvesLeftToday")}
@@ -290,7 +290,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span
               className={`font-mono text-xs font-semibold ${
                 plan === "elite"
-                  ? "text-amber-400"
+                  ? "text-orange-300"
                   : plan === "pro"
                     ? "text-[var(--color-ax-yellow)]"
                     : "text-[var(--color-dim)]"
@@ -318,8 +318,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div
           className={`fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl px-6 py-3 text-sm font-medium shadow-lg ${
             checkoutToast === "success"
-              ? "border border-emerald-500/30 bg-emerald-500/15 text-emerald-400"
-              : "border border-amber-500/30 bg-amber-500/15 text-amber-400"
+              ? "border border-orange-500/30 bg-orange-500/15 text-orange-400"
+              : "border border-orange-600/30 bg-orange-600/15 text-orange-300"
           }`}
         >
           <span>

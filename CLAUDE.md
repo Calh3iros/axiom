@@ -171,3 +171,13 @@ docs/
 ### Commits desta sessão
 
 - `dbdd330` — feat: add FAQ links to landing footer and app sidebar (6 locales)
+
+### Fix: Get Pro / Get Elite para usuários não logados
+
+5. **Pricing buttons fix**: Botões "Get Pro →" e "Get Elite →" na landing page falhavam silenciosamente para visitantes não autenticados (401 sem feedback). Fix: `pricing-section.tsx` agora verifica auth via Supabase antes de chamar checkout API. Se não logado, redireciona para `/auth/signup?plan=pro&interval=monthly` preservando contexto do plano escolhido.
+6. **401 fallback**: Se sessão expirar mid-page, o handler agora redireciona para `/auth/login` com plan context.
+7. **Testado no browser**: Get Pro (monthly ✅), Get Elite (monthly ✅), Get Pro (yearly ✅) — todos redirecionam para signup com params corretos.
+
+### Commits adicionais
+
+- `a722204` — fix: redirect unauthenticated users to signup when clicking Get Pro/Elite

@@ -338,7 +338,7 @@ export default function SettingsPage() {
                   <p className="mb-1 font-mono text-xs tracking-wider text-[var(--color-dim)] uppercase">
                     {t("status")}
                   </p>
-                  <p className="font-semibold text-emerald-400">
+                  <p className="font-semibold text-orange-400">
                     {t("active")}
                   </p>
                 </div>
@@ -446,7 +446,7 @@ export default function SettingsPage() {
             )}
 
             {passwordSuccess && (
-              <div className="flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-400">
+              <div className="flex items-center gap-2 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-sm text-orange-400">
                 <Check className="h-4 w-4" />
                 {t("passwordUpdated")}
               </div>
@@ -467,8 +467,8 @@ export default function SettingsPage() {
       {/* ── Help & Support ── */}
       <div className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6">
         <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10">
-            <Headphones className="h-5 w-5 text-emerald-400" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-orange-500/20 bg-orange-500/10">
+            <Headphones className="h-5 w-5 text-orange-400" />
           </div>
           <div>
             <h3 className="font-bold text-[var(--color-text-primary)]">

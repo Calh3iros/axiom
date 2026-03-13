@@ -85,7 +85,7 @@ export default async function KnowledgeMapPage() {
                   let colorClass = 'bg-red-400';
                   let textColor = 'text-red-400';
                   if (percent >= 40) { colorClass = 'bg-yellow-400'; textColor = 'text-yellow-400'; }
-                  if (percent >= 70) { colorClass = 'bg-emerald-400'; textColor = 'text-emerald-400'; }
+                  if (percent >= 70) { colorClass = 'bg-orange-400'; textColor = 'text-orange-400'; }
                   if (percent >= 90) { colorClass = 'bg-[var(--color-ax-blue)]'; textColor = 'text-[var(--color-ax-blue)]'; }
 
                   return (

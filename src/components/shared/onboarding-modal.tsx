@@ -54,9 +54,9 @@ const slides: Slide[] = [
   },
   {
     icon: BookOpen,
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/20",
+    color: "text-orange-400",
+    bgColor: "bg-orange-500/10",
+    borderColor: "border-orange-500/20",
     titleKey: "learnTitle",
     descKey: "learnDesc",
     emoji: "🎓",
