@@ -25,36 +25,39 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
 
 ---
 
-## ESTADO ATUAL (12/03/2026)
+## ESTADO ATUAL (13/03/2026)
 
 ### Completo (em produção)
 
 - P0: Segurança (headers, rate limit, input validation, error boundaries, timeouts, maxOutputTokens)
+- P1.1: ✅ `usage/limits.ts` com limites granulares por tier (free/pro/elite) + 22 testes
 - P1.2-P1.7: Stripe 3-tier, paywall modal, watermark free, anti-abuse
 - P2: Sentry, Vercel Analytics, bug fixes, LGPD/GDPR (cookie consent + delete account)
 - P3: Deploy completo (Vercel + domínio + Supabase + Stripe webhook + Google OAuth)
+- P4.1: ✅ Auth flow email testado end-to-end (signup → email Resend → verificação → login)
 - P4.3: ✅ Stripe checkout end-to-end TESTADO E FUNCIONANDO (Test + Live Mode)
 - P4.6: i18n landing page (6 locales traduzidos)
 - P4.7: Security headers verificados
+- P5.1: ✅ Change Password no Settings (form com validação)
+- P5.2: ✅ Onboarding modal pós-signup (4 slides, localStorage)
+- P5.3: ✅ FAQ page (accordion i18n completo)
+- P5.4: ✅ Help/Support (seção no Settings com email + links)
 - P5.5: Traduções da landing page completas
-- Landing page com botões Login/Start Now no navbar
-- Footer com email mysupport@axiom-solver.com
+- P5.6: ✅ Fix themeColor → `export const viewport: Viewport` no layout.tsx
+- P6 parcial: ✅ PostHog (provider + pageview tracking no layout)
+- P6 parcial: ✅ Export PDF/DOCX (`export-utils.ts` usado em Solve + Write)
+- P6 parcial: ✅ Vitest (22/22 testes passando)
+- Landing page V2 deep orange com botões Login/Start Now
+- Footer com email support@axiom-solver.com + FAQ link
 - Stripe Live Mode ATIVO — cobranças reais habilitadas
-- Pricing page movida para dentro de `(app)` route group
+- Resend SMTP verificado — emails de confirmação funcionando
 
 ### Pendente
 
-- P1.1: Rewrite `usage.ts` com limites granulares por tier (diário + mensal)
-- P4.1: Teste auth flow (signup email → verificar → login)
 - P4.2: Teste Google OAuth em produção
 - P4.4: Teste features IA com login real
 - P4.5: Teste rate limit (429)
-- P5.1: Botão "Change Password" no Settings
-- P5.2: Onboarding modal pós-signup
-- P5.3: FAQ page
-- P5.4: Help/Support (Crisp widget ou email)
-- P5.6: Fix themeColor → viewport export (8 páginas)
-- P6: Growth (PostHog, admin dashboard, Vitest, SEO, export PDF/DOCX)
+- P6: Admin dashboard, SEO avançado
 
 ---
 
@@ -244,5 +247,7 @@ docs/
 
 ## PENDENTE (próxima sessão)
 
-- P1.1: Rewrite `usage.ts` com limites granulares por tier
-- P5.1-P5.6: Itens pendentes do roadmap original
+- P4.2: Teste Google OAuth em produção
+- P4.4: Teste features IA com login real
+- P4.5: Teste rate limit (429)
+- P6: Admin dashboard, SEO avançado
