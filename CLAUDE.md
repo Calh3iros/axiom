@@ -218,14 +218,17 @@ docs/
 
 ### Vitest: 22/22 tests pass ✅
 
+### SG > TESTAR > RETER — 3 Itens Urgentes (tarde)
+
+25. **Resend domain VERIFICADO** ✅: axiom-solver.com verificado em 13/03 12:03 PM. DKIM (Verified), SPF MX (Verified), SPF TXT (Verified). Sending habilitado, região São Paulo (sa-east-1)
+26. **Deep orange em produção VERIFICADO** ✅: Landing page inteira em deep orange — navbar, hero, imagens estudantes, ticker, features, testimonials, compare, pricing, CTA, footer. Nenhum elemento azul funcional encontrado. Glows de background sutis permanecem (cosmético, não bloqueante)
+27. **Cloudflare API token**: Bloqueado por CAPTCHA no dashboard — requer deleção manual pelo usuário (Profile → API Tokens → "Edit zone DNS")
+
 ---
 
 ## PENDENTE (próxima sessão)
 
-- Verificar domínio Resend (Internal Verification) — https://resend.com/domains
-- Testar envio de email real (signup ou reset password em produção)
-- Deletar token Cloudflare API (Profile → API Tokens → "Edit zone DNS")
-- Verificar deep orange em produção (hard refresh Ctrl+Shift+R após login)
+- Deletar token Cloudflare API (Profile → API Tokens → "Edit zone DNS") — MANUAL
+- Testar envio de email real (signup ou reset password em produção) — Resend verificado, falta testar end-to-end
 - P1.1: Rewrite `usage.ts` com limites granulares por tier
 - P5.1-P5.6: Itens pendentes do roadmap original
-
