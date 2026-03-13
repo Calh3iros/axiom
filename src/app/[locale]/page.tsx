@@ -41,15 +41,15 @@ export default function LandingPage() {
           <LanguageSwitcher />
           <Link
             href="/auth/login"
-            className="px-4 py-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] font-medium text-sm transition-colors hidden sm:block"
+            className="hidden px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] sm:block"
           >
-            {t('nav.login')}
+            {t("nav.login")}
           </Link>
           <Link
             href="/auth/signup"
-            className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-[var(--color-bg0)] font-semibold text-sm rounded-lg transition-all hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] hidden sm:block"
+            className="hidden rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-[var(--color-bg0)] transition-all hover:bg-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.3)] sm:block"
           >
-            {t('nav.startNow')} →
+            {t("nav.startNow")} →
           </Link>
         </div>
       </nav>
@@ -305,9 +305,30 @@ export default function LandingPage() {
           </div>
           <p className="text-sm text-[var(--color-dim)]">{t("footer.copy")}</p>
           <div className="flex gap-6 text-sm text-[var(--color-text-secondary)]">
-            <Link href="/privacy" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.privacy')}</Link>
-            <Link href="/terms" className="hover:text-[var(--color-text-primary)] transition-colors">{t('footer.terms')}</Link>
-            <a href="mailto:mysupport@axiom-solver.com" className="hover:text-[var(--color-text-primary)] transition-colors">mysupport@axiom-solver.com</a>
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-[var(--color-text-primary)]"
+            >
+              {t("footer.privacy")}
+            </Link>
+            <Link
+              href="/terms"
+              className="transition-colors hover:text-[var(--color-text-primary)]"
+            >
+              {t("footer.terms")}
+            </Link>
+            <Link
+              href="/faq"
+              className="transition-colors hover:text-[var(--color-text-primary)]"
+            >
+              {t("footer.faq")}
+            </Link>
+            <a
+              href="mailto:mysupport@axiom-solver.com"
+              className="transition-colors hover:text-[var(--color-text-primary)]"
+            >
+              mysupport@axiom-solver.com
+            </a>
           </div>
         </div>
       </footer>

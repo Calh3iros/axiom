@@ -12,6 +12,7 @@
       "map": "Mapa",
       "upgradeToPro": "Assinar Pro",
       "settings": "Configurações",
+      "faq": "FAQ",
       "signOut": "Sair",
       "signingOut": "Saindo...",
       "dayStreak": "dias de ofensiva",
@@ -329,6 +330,7 @@
       "copy": "© 2026 Axiom. Estude melhor.",
       "privacy": "Privacidade",
       "terms": "Termos",
+      "faq": "FAQ",
       "contact": "Contato"
     }
   },

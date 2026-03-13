@@ -12,6 +12,7 @@
       "map": "Map",
       "upgradeToPro": "Upgrade to Pro",
       "settings": "Settings",
+      "faq": "FAQ",
       "signOut": "Sign Out",
       "signingOut": "Signing out...",
       "dayStreak": "day streak",
@@ -329,6 +330,7 @@
       "copy": "© 2026 Axiom. Study smarter.",
       "privacy": "Privacy",
       "terms": "Terms",
+      "faq": "FAQ",
       "contact": "Contact"
     }
   },

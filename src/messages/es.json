@@ -12,6 +12,7 @@
       "map": "Mapa",
       "upgradeToPro": "Actualizar a Pro",
       "settings": "Ajustes",
+      "faq": "FAQ",
       "signOut": "Cerrar sesión",
       "signingOut": "Saliendo...",
       "dayStreak": "días de racha",
@@ -329,6 +330,7 @@
       "copy": "© 2026 Axiom. Estudia mejor.",
       "privacy": "Privacidad",
       "terms": "Términos",
+      "faq": "FAQ",
       "contact": "Contacto"
     }
   },

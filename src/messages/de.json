@@ -12,6 +12,7 @@
       "map": "Karte",
       "upgradeToPro": "Auf Pro upgraden",
       "settings": "Einstellungen",
+      "faq": "FAQ",
       "signOut": "Abmelden",
       "signingOut": "Abmelden...",
       "dayStreak": "Tage in Folge",
@@ -329,6 +330,7 @@
       "copy": "© 2026 Axiom. Lerne smarter.",
       "privacy": "Datenschutz",
       "terms": "AGB",
+      "faq": "FAQ",
       "contact": "Kontakt"
     }
   },

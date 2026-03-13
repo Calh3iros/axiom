@@ -7,6 +7,7 @@ import {
   Wand2,
   BookOpen,
   Settings,
+  HelpCircle,
   CreditCard,
   Menu,
   X,
@@ -216,6 +217,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg2)]"
           >
             <Settings className="h-4 w-4" /> {t("settings")}
+          </Link>
+          <Link
+            href="/faq"
+            className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg2)]"
+          >
+            <HelpCircle className="h-4 w-4" /> {t("faq")}
           </Link>
 
           {/* User Profile & Sign Out */}

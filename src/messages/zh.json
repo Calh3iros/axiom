@@ -12,6 +12,7 @@
       "map": "地图",
       "upgradeToPro": "升级到高级版",
       "settings": "设置",
+      "faq": "常见问题",
       "signOut": "登出",
       "signingOut": "正在登出...",
       "dayStreak": "天连击",
@@ -329,6 +330,7 @@
       "copy": "© 2026 Axiom. 学得更聪明。",
       "privacy": "隐私",
       "terms": "条款",
+      "faq": "常见问题",
       "contact": "联系"
     }
   },
