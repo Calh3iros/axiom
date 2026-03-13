@@ -117,7 +117,7 @@ export function LearnChat() {
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="absolute right-2 p-2 bg-[var(--color-ax-blue)] text-black rounded-full hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="absolute right-2 p-2 bg-[var(--color-ax-blue)] text-black rounded-full hover:bg-orange-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 ml-0.5" />}
           </button>

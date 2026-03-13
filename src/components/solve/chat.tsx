@@ -424,7 +424,7 @@ export function SolveChat({
           <button
             type="submit"
             disabled={isLoading || (!input.trim() && !localAttachment)}
-            className="absolute right-2 rounded-full bg-[var(--color-ax-blue)] p-2 text-black transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="absolute right-2 rounded-full bg-[var(--color-ax-blue)] p-2 text-black transition-colors hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />

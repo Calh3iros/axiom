@@ -111,7 +111,7 @@ export default async function SharedChatPage({ params }: { params: Promise<{ id:
         </p>
         <Link
           href="/solve"
-          className="px-8 py-3 bg-[var(--color-ax-blue)] text-white font-semibold rounded-full hover:bg-blue-500 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg0)]"
+          className="px-8 py-3 bg-[var(--color-ax-blue)] text-white font-semibold rounded-full hover:bg-orange-500 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-[var(--color-ax-blue)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg0)]"
         >
           {t('createFree', { defaultMessage: 'Create your free account' })}
         </Link>

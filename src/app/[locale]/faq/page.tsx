@@ -77,7 +77,7 @@ export default function FAQPage() {
           </p>
           <a
             href="mailto:mysupport@axiom-solver.com"
-            className="text-sm font-medium text-[var(--color-ax-blue)] transition-colors hover:text-blue-400"
+            className="text-sm font-medium text-[var(--color-ax-blue)] transition-colors hover:text-orange-400"
           >
             mysupport@axiom-solver.com
           </a>

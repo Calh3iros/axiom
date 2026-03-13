@@ -121,7 +121,7 @@ export function HumanizerPanel() {
           <button
             onClick={handleHumanize}
             disabled={loading || !input}
-            className="flex items-center gap-2 bg-[var(--color-ax-blue)] hover:bg-blue-400 text-black font-semibold px-6 py-2.5 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 bg-[var(--color-ax-blue)] hover:bg-orange-400 text-black font-semibold px-6 py-2.5 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             {loading ? 'Humanizing...' : 'Humanize'}

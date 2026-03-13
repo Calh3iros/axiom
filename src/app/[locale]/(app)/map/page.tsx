@@ -64,7 +64,7 @@ export default async function KnowledgeMapPage() {
           </p>
           <Link
             href="/solve"
-            className="px-6 py-2.5 bg-[var(--color-ax-blue)] text-black font-semibold rounded-full hover:bg-blue-400 transition-colors"
+            className="px-6 py-2.5 bg-[var(--color-ax-blue)] text-black font-semibold rounded-full hover:bg-orange-400 transition-colors"
           >
             {t('startSolving')}
           </Link>

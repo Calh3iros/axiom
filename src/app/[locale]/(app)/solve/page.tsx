@@ -74,7 +74,7 @@ export default function SolvePage() {
         <div className="p-4 pb-2">
           <button
             onClick={startNewChat}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-ax-blue)] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-blue-400"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-ax-blue)] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-orange-400"
           >
             <Plus className="h-4 w-4" /> {t("newSolve")}
           </button>

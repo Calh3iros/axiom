@@ -27,9 +27,9 @@ interface Slide {
 const slides: Slide[] = [
   {
     icon: Home,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
+    color: "text-orange-400",
+    bgColor: "bg-orange-500/10",
+    borderColor: "border-orange-500/20",
     titleKey: "solveTitle",
     descKey: "solveDesc",
     emoji: "📸",
@@ -186,7 +186,7 @@ export function OnboardingModal() {
               )}
               <button
                 onClick={handleNext}
-                className="flex items-center gap-1 rounded-lg bg-[var(--color-ax-blue)] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-500 hover:shadow-[0_0_15px_rgba(96,165,250,0.3)]"
+                className="flex items-center gap-1 rounded-lg bg-[var(--color-ax-blue)] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-orange-500 hover:shadow-[0_0_15px_rgba(96,165,250,0.3)]"
               >
                 {isLast ? t("getStarted") : t("next")}
                 {!isLast && <ChevronRight className="h-4 w-4" />}

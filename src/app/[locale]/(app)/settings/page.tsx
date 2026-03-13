@@ -455,7 +455,7 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={passwordLoading || !newPassword}
-              className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-ax-blue)] py-3 font-semibold text-white transition-all duration-200 hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-ax-blue)] py-3 font-semibold text-white transition-all duration-200 hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {passwordLoading && <Loader2 className="h-4 w-4 animate-spin" />}
               {t("updatePassword")}
