@@ -45,7 +45,15 @@
       "noDataDesc": "开始在聊天中解决问题以建立定制的知识概况。",
       "startSolving": "开始解答",
       "interaction": "次互动",
-      "interactions": "次互动"
+      "interactions": "次互动",
+      "level": "等级",
+      "correct": "正确",
+      "incorrect": "错误",
+      "level_1": "初学者",
+      "level_2": "基础",
+      "level_3": "中级",
+      "level_4": "高级",
+      "level_5": "大师"
     },
     "Settings": {
       "title": "设置",
@@ -170,7 +178,35 @@
       "learnDesc": "您的 AI 导师。随便问——'从零教我微积分'。恐慌模式：即时摘要、考试题目和闪卡。",
       "back": "返回",
       "next": "下一步",
-      "getStarted": "开始使用 🚀"
+      "getStarted": "开始使用 🚀",
+      "saving": "保存中...",
+      "profileHeader": "告诉我们关于你的信息",
+      "profileTitle": "你的学习档案",
+      "profileDesc": "帮助 Axiom 适应你的水平。只需10秒，大大改善你的体验。",
+      "schoolYearLabel": "你在哪个年级？",
+      "goalLabel": "你在准备什么？",
+      "subjectsLabel": "选择你的科目",
+      "selectOption": "选择...",
+      "schoolYear_middle_school": "初中（6-9年级）",
+      "schoolYear_high_school": "高中（10-12年级）",
+      "schoolYear_university_undergrad": "大学（本科）",
+      "schoolYear_university_grad": "大学（研究生）",
+      "schoolYear_self_study": "自学 / 其他",
+      "goal_general": "一般学习",
+      "goal_enem": "ENEM",
+      "goal_vestibular": "Vestibular",
+      "goal_sat_act": "SAT / ACT",
+      "goal_toefl_ielts": "TOEFL / IELTS",
+      "goal_professional": "职业考试",
+      "subject_Mathematics": "数学",
+      "subject_Physics": "物理",
+      "subject_Chemistry": "化学",
+      "subject_Biology": "生物",
+      "subject_History": "历史",
+      "subject_Geography": "地理",
+      "subject_Languages": "语言",
+      "subject_Computer Science": "计算机科学",
+      "subject_Literature": "文学"
     }
   },
   "FAQ": {
@@ -324,31 +360,11 @@
       "headerTask": "任务",
       "headerWithout": "没有",
       "headerAxiom": "用Axiom",
-      "row1": [
-        "解1道题",
-        "30-60分钟",
-        "5秒"
-      ],
-      "row2": [
-        "写1000字论文",
-        "3-5小时",
-        "15分钟"
-      ],
-      "row3": [
-        "制定学习计划",
-        "1-2小时",
-        "1次点击"
-      ],
-      "row4": [
-        "人性化2000字",
-        "45分钟",
-        "10秒"
-      ],
-      "row5": [
-        "完整考试准备",
-        "6-10小时",
-        "2小时"
-      ],
+      "row1": ["解1道题", "30-60分钟", "5秒"],
+      "row2": ["写1000字论文", "3-5小时", "15分钟"],
+      "row3": ["制定学习计划", "1-2小时", "1次点击"],
+      "row4": ["人性化2000字", "45分钟", "10秒"],
+      "row5": ["完整考试准备", "6-10小时", "2小时"],
       "footer": "平均每个学生每学期节省约200小时"
     },
     "pricing": {

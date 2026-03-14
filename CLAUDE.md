@@ -1,6 +1,6 @@
 # Axiom — Contexto para Sessões Claude Code
 
-> Atualizado: 2026-03-13 | Branch: `main` | Deploy: Vercel (axiom-solver.com)
+> Atualizado: 2026-03-14 | Branch: `main` | Deploy: Vercel (axiom-solver.com)
 
 ---
 
@@ -39,7 +39,7 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
 - P4.6: i18n landing page (6 locales traduzidos)
 - P4.7: Security headers verificados
 - P5.1: ✅ Change Password no Settings (form com validação)
-- P5.2: ✅ Onboarding modal pós-signup (4 slides, localStorage)
+- P5.2: ✅ Onboarding modal pós-signup (5 slides: 4 features + 1 perfil educacional MBLID)
 - P5.3: ✅ FAQ page (accordion i18n completo)
 - P5.4: ✅ Help/Support (seção no Settings com email + links)
 - P5.5: Traduções da landing page completas
@@ -56,7 +56,27 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
 - P4.5: ✅ Rate limit implementado (Upstash Redis sliding window: Free 5/min, Pro 15/min, Elite 30/min)
 - P6: ✅ Completo — PostHog, Vitest 22/22, SEO (sitemap+robots+JSON-LD), Export PDF/DOCX. Admin dashboard CANCELADO (usando Vercel/Supabase/Stripe/PostHog dashboards existentes)
 
-> **🎉 CHECKLIST 43/43 — 100% COMPLETO (axiom-checklist.md)**
+> **🎉 CHECKLIST 44/44 — 100% COMPLETO (axiom-checklist.md)**
+
+---
+
+## MBLID — Mastery-Based Learning com IA Dinâmica (14/03/2026)
+
+### Fase 1: MBLID Core ✅ (implementado)
+
+- `buildSolveMblidPrompt()` / `buildLearnMblidPrompt()` — prompts adaptativos que injetam perfil do estudante + histórico de tópico
+- Background worker evoluído no `chat/route.ts`: detecta respostas a desafios, avalia correto/incorreto, atualiza nível
+- Tabela `student_profiles` (ano escolar, objetivo, matérias de interesse)
+- Tabela `challenge_log` (registro de cada tentativa de desafio)
+- `knowledge_map` evoluído: +level (1-5), +correct_count, +incorrect_count, +current_streak
+- Onboarding slide 5: perfil educacional → salva em student_profiles
+- Página `/map` evoluída: estrelas de nível (★★★☆☆) + contadores correto/incorreto
+- Regras: 3 acertos consecutivos = sobe nível, erro = reseta streak
+- Mastery score: `accuracy * 0.6 + (level/5) * 0.4`
+- Migration: `supabase/migrations/20260314_mblid_core.sql`
+- i18n: 28+ novas chaves em 6 locales
+- Chat.tsx e botões follow-up (Explain simpler, Another method, Practice questions, Theory behind it): INTOCADOS
+- Write, Humanize, Panic: INTOCADOS
 
 ---
 
@@ -73,7 +93,7 @@ src/
 │   ├── privacy/              # Política de privacidade
 │   └── terms/                # Termos de serviço
 ├── api/
-│   ├── chat/route.ts         # Solve AI
+│   ├── chat/route.ts         # Solve/Learn AI + MBLID loop + challenge evaluator
 │   ├── write/route.ts        # Write AI
 │   ├── humanize/route.ts     # Humanize AI
 │   ├── panic/route.ts        # Learn/Panic AI

@@ -1,3 +1,7 @@
+export { buildSolveMblidPrompt, solveSystemPrompt } from "./solve";
+export type { MblidContext } from "./solve";
+export { buildLearnMblidPrompt, learnSystemPrompt } from "./learn";
+
 export const PROMPTS = {
   HUMANIZE: (mode: string) => `You are an expert editor and writer.
 Rewrite the following text to sound highly natural, engaging, and human-written.

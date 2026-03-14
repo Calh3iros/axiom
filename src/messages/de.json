@@ -45,7 +45,15 @@
       "noDataDesc": "Beginnen Sie, Probleme im Chat zu lösen, um Ihr individuelles Wissensprofil zu erstellen.",
       "startSolving": "Mit dem Lösen beginnen",
       "interaction": "Interaktion",
-      "interactions": "Interaktionen"
+      "interactions": "Interaktionen",
+      "level": "Stufe",
+      "correct": "richtig",
+      "incorrect": "falsch",
+      "level_1": "Anfänger",
+      "level_2": "Grundlagen",
+      "level_3": "Mittelstufe",
+      "level_4": "Fortgeschritten",
+      "level_5": "Meister"
     },
     "Settings": {
       "title": "Einstellungen",
@@ -170,7 +178,35 @@
       "learnDesc": "Ihr KI-Tutor. Fragen Sie alles — 'Lehre mir Analysis von Null an'. Panik-Modus: Zusammenfassungen, Prüfungsfragen und Karteikarten sofort.",
       "back": "Zurück",
       "next": "Weiter",
-      "getStarted": "Los geht's 🚀"
+      "getStarted": "Los geht's 🚀",
+      "saving": "Speichern...",
+      "profileHeader": "Erzähl uns von dir",
+      "profileTitle": "Dein Lernprofil",
+      "profileDesc": "Hilf Axiom, sich an dein Niveau anzupassen. Dauert 10 Sekunden und verbessert dein Erlebnis deutlich.",
+      "schoolYearLabel": "In welcher Klasse bist du?",
+      "goalLabel": "Wofür bereitest du dich vor?",
+      "subjectsLabel": "Wähle deine Fächer",
+      "selectOption": "Auswählen...",
+      "schoolYear_middle_school": "Mittelstufe (6.–9. Klasse)",
+      "schoolYear_high_school": "Oberstufe (10.–12. Klasse)",
+      "schoolYear_university_undergrad": "Universität (Bachelor)",
+      "schoolYear_university_grad": "Universität (Master/Promotion)",
+      "schoolYear_self_study": "Selbststudium / Andere",
+      "goal_general": "Allgemeine Studien",
+      "goal_enem": "ENEM",
+      "goal_vestibular": "Vestibular",
+      "goal_sat_act": "SAT / ACT",
+      "goal_toefl_ielts": "TOEFL / IELTS",
+      "goal_professional": "Berufsprüfung",
+      "subject_Mathematics": "Mathematik",
+      "subject_Physics": "Physik",
+      "subject_Chemistry": "Chemie",
+      "subject_Biology": "Biologie",
+      "subject_History": "Geschichte",
+      "subject_Geography": "Geographie",
+      "subject_Languages": "Sprachen",
+      "subject_Computer Science": "Informatik",
+      "subject_Literature": "Literatur"
     }
   },
   "FAQ": {
@@ -324,31 +360,11 @@
       "headerTask": "Aufgabe",
       "headerWithout": "Ohne",
       "headerAxiom": "Mit Axiom",
-      "row1": [
-        "1 Problem lösen",
-        "30 – 60 Min",
-        "5 Sekunden"
-      ],
-      "row2": [
-        "1.000-Wort-Aufsatz schreiben",
-        "3 – 5 Stunden",
-        "15 Minuten"
-      ],
-      "row3": [
-        "Lernplan erstellen",
-        "1 – 2 Stunden",
-        "1 Klick"
-      ],
-      "row4": [
-        "2.000 Wörter humanisieren",
-        "45 Min",
-        "10 Sekunden"
-      ],
-      "row5": [
-        "Volle Prüfungsvorbereitung",
-        "6 – 10 Stunden",
-        "2 Stunden"
-      ],
+      "row1": ["1 Problem lösen", "30 – 60 Min", "5 Sekunden"],
+      "row2": ["1.000-Wort-Aufsatz schreiben", "3 – 5 Stunden", "15 Minuten"],
+      "row3": ["Lernplan erstellen", "1 – 2 Stunden", "1 Klick"],
+      "row4": ["2.000 Wörter humanisieren", "45 Min", "10 Sekunden"],
+      "row5": ["Volle Prüfungsvorbereitung", "6 – 10 Stunden", "2 Stunden"],
       "footer": "Durchschnittlicher Student spart ~200 Stunden pro Semester"
     },
     "pricing": {

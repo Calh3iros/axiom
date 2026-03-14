@@ -45,7 +45,15 @@
       "noDataDesc": "Comece a resolver problemas no Chat para construir seu perfil de conhecimento.",
       "startSolving": "Começar a Resolver",
       "interaction": "interação",
-      "interactions": "interações"
+      "interactions": "interações",
+      "level": "Nível",
+      "correct": "corretas",
+      "incorrect": "incorretas",
+      "level_1": "Iniciante",
+      "level_2": "Básico",
+      "level_3": "Intermediário",
+      "level_4": "Avançado",
+      "level_5": "Mestre"
     },
     "Settings": {
       "title": "Configurações",
@@ -170,7 +178,35 @@
       "learnDesc": "Seu tutor IA. Pergunte qualquer coisa — 'Me ensine cálculo do zero'. Modo Pânico: resumos, questões de prova e flashcards instantâneos.",
       "back": "Voltar",
       "next": "Próximo",
-      "getStarted": "Começar 🚀"
+      "getStarted": "Começar 🚀",
+      "saving": "Salvando...",
+      "profileHeader": "Conte sobre você",
+      "profileTitle": "Seu Perfil de Aprendizado",
+      "profileDesc": "Ajude o Axiom a se adaptar ao seu nível. Leva 10 segundos e melhora muito sua experiência.",
+      "schoolYearLabel": "Em que série você está?",
+      "goalLabel": "Para o que está se preparando?",
+      "subjectsLabel": "Escolha suas matérias",
+      "selectOption": "Selecionar...",
+      "schoolYear_middle_school": "Ensino Fundamental (6º–9º ano)",
+      "schoolYear_high_school": "Ensino Médio (1ª–3ª série)",
+      "schoolYear_university_undergrad": "Universidade (Graduação)",
+      "schoolYear_university_grad": "Universidade (Pós-graduação)",
+      "schoolYear_self_study": "Autodidata / Outro",
+      "goal_general": "Estudos gerais",
+      "goal_enem": "ENEM",
+      "goal_vestibular": "Vestibular",
+      "goal_sat_act": "SAT / ACT",
+      "goal_toefl_ielts": "TOEFL / IELTS",
+      "goal_professional": "Concurso / Exame profissional",
+      "subject_Mathematics": "Matemática",
+      "subject_Physics": "Física",
+      "subject_Chemistry": "Química",
+      "subject_Biology": "Biologia",
+      "subject_History": "História",
+      "subject_Geography": "Geografia",
+      "subject_Languages": "Idiomas",
+      "subject_Computer Science": "Ciência da Computação",
+      "subject_Literature": "Literatura"
     }
   },
   "FAQ": {
@@ -324,31 +360,15 @@
       "headerTask": "Tarefa",
       "headerWithout": "Sem",
       "headerAxiom": "Com Axiom",
-      "row1": [
-        "Resolver 1 problema",
-        "30 – 60 min",
-        "5 segundos"
-      ],
+      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
       "row2": [
         "Escrever redação de 1.000 palavras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": [
-        "Montar plano de estudo",
-        "1 – 2 horas",
-        "1 clique"
-      ],
-      "row4": [
-        "Humanizar 2.000 palavras",
-        "45 min",
-        "10 segundos"
-      ],
-      "row5": [
-        "Preparação completa para prova",
-        "6 – 10 horas",
-        "2 horas"
-      ],
+      "row3": ["Montar plano de estudo", "1 – 2 horas", "1 clique"],
+      "row4": ["Humanizar 2.000 palavras", "45 min", "10 segundos"],
+      "row5": ["Preparação completa para prova", "6 – 10 horas", "2 horas"],
       "footer": "Estudante médio economiza ~200 horas por semestre"
     },
     "pricing": {

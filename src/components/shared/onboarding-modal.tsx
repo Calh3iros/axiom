@@ -5,12 +5,15 @@ import {
   PenTool,
   Wand2,
   BookOpen,
+  GraduationCap,
   X,
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
+
+import { createClient } from "@/lib/supabase/client";
 
 const STORAGE_KEY = "axiom_onboarding_seen";
 
@@ -63,10 +66,45 @@ const slides: Slide[] = [
   },
 ];
 
+const SCHOOL_YEARS = [
+  "middle_school",
+  "high_school",
+  "university_undergrad",
+  "university_grad",
+  "self_study",
+] as const;
+
+const LEARNING_GOALS = [
+  "general",
+  "enem",
+  "vestibular",
+  "sat_act",
+  "toefl_ielts",
+  "professional",
+] as const;
+
+const SUBJECTS = [
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "History",
+  "Geography",
+  "Languages",
+  "Computer Science",
+  "Literature",
+] as const;
+
 export function OnboardingModal() {
   const [show, setShow] = useState(false);
   const [step, setStep] = useState(0);
+  const [schoolYear, setSchoolYear] = useState("");
+  const [learningGoal, setLearningGoal] = useState("");
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [saving, setSaving] = useState(false);
   const t = useTranslations("Dashboard.Onboarding");
+
+  const totalSteps = slides.length + 1; // 4 info slides + 1 profile slide
 
   useEffect(() => {
     // Only show if user hasn't seen onboarding
@@ -80,16 +118,50 @@ export function OnboardingModal() {
     }
   }, []);
 
-  const handleDismiss = () => {
+  const saveStudentProfile = async () => {
+    if (!schoolYear && !learningGoal && selectedSubjects.length === 0) return;
+    setSaving(true);
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase.from("student_profiles") as any).upsert(
+          {
+            id: user.id,
+            school_year: schoolYear || null,
+            learning_goal: learningGoal || null,
+            subjects_of_interest:
+              selectedSubjects.length > 0 ? selectedSubjects : [],
+            onboarding_completed: true,
+          },
+          { onConflict: "id" }
+        );
+      }
+    } catch (err) {
+      console.error("Failed to save student profile:", err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDismiss = async () => {
+    if (step === totalSteps - 1) {
+      await saveStudentProfile();
+    }
     setShow(false);
     localStorage.setItem(STORAGE_KEY, "true");
   };
 
-  const handleNext = () => {
-    if (step < slides.length - 1) {
+  const handleNext = async () => {
+    if (step < totalSteps - 1) {
       setStep(step + 1);
     } else {
-      handleDismiss();
+      await saveStudentProfile();
+      setShow(false);
+      localStorage.setItem(STORAGE_KEY, "true");
     }
   };
 
@@ -97,11 +169,130 @@ export function OnboardingModal() {
     if (step > 0) setStep(step - 1);
   };
 
+  const toggleSubject = (subject: string) => {
+    setSelectedSubjects((prev) =>
+      prev.includes(subject)
+        ? prev.filter((s) => s !== subject)
+        : [...prev, subject]
+    );
+  };
+
   if (!show) return null;
 
-  const current = slides[step];
-  const Icon = current.icon;
-  const isLast = step === slides.length - 1;
+  const isProfileSlide = step >= slides.length;
+  const isLast = step === totalSteps - 1;
+
+  // Render slide content
+  const renderSlideContent = () => {
+    if (isProfileSlide) {
+      // Slide 5: Educational Profile
+      return (
+        <div className="px-6 py-6">
+          <div className="mb-4 flex items-center gap-3 rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+              <GraduationCap className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-cyan-400">
+                🧠 {t("profileTitle")}
+              </h3>
+            </div>
+          </div>
+          <p className="mb-4 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+            {t("profileDesc")}
+          </p>
+
+          <div className="space-y-3">
+            {/* School Year */}
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">
+                {t("schoolYearLabel")}
+              </label>
+              <select
+                value={schoolYear}
+                onChange={(e) => setSchoolYear(e.target.value)}
+                className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg0)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-ax-blue)]/50 focus:outline-none"
+              >
+                <option value="">{t("selectOption")}</option>
+                {SCHOOL_YEARS.map((y) => (
+                  <option key={y} value={y}>
+                    {t(`schoolYear_${y}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Learning Goal */}
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">
+                {t("goalLabel")}
+              </label>
+              <select
+                value={learningGoal}
+                onChange={(e) => setLearningGoal(e.target.value)}
+                className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg0)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-[var(--color-ax-blue)]/50 focus:outline-none"
+              >
+                <option value="">{t("selectOption")}</option>
+                {LEARNING_GOALS.map((g) => (
+                  <option key={g} value={g}>
+                    {t(`goal_${g}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subjects */}
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-[var(--color-text-secondary)]">
+                {t("subjectsLabel")}
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {SUBJECTS.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => toggleSubject(s)}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
+                      selectedSubjects.includes(s)
+                        ? "border border-[var(--color-ax-blue)]/30 bg-[var(--color-ax-blue)]/10 text-[var(--color-ax-blue)]"
+                        : "border border-[var(--color-border)] bg-[var(--color-bg0)] text-[var(--color-text-secondary)] hover:border-[var(--color-ax-blue)]/20"
+                    }`}
+                  >
+                    {t(`subject_${s}`)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Info slides (1-4)
+    const current = slides[step];
+    const Icon = current.icon;
+    return (
+      <div className="px-6 py-6">
+        <div
+          className={`mb-4 flex items-center gap-3 rounded-xl border ${current.borderColor} ${current.bgColor} p-4`}
+        >
+          <div
+            className={`flex h-12 w-12 items-center justify-center rounded-xl ${current.bgColor} ${current.color}`}
+          >
+            <Icon className="h-6 w-6" />
+          </div>
+          <div>
+            <h3 className={`text-lg font-bold ${current.color}`}>
+              {current.emoji} {t(current.titleKey)}
+            </h3>
+          </div>
+        </div>
+        <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
+          {t(current.descKey)}
+        </p>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -131,36 +322,18 @@ export function OnboardingModal() {
               {t("welcome")}
             </p>
             <h2 className="text-xl font-bold text-[var(--color-text-primary)]">
-              {t("title")}
+              {isProfileSlide ? t("profileHeader") : t("title")}
             </h2>
           </div>
 
           {/* Slide content */}
-          <div className="px-6 py-6">
-            <div
-              className={`mb-4 flex items-center gap-3 rounded-xl border ${current.borderColor} ${current.bgColor} p-4`}
-            >
-              <div
-                className={`flex h-12 w-12 items-center justify-center rounded-xl ${current.bgColor} ${current.color}`}
-              >
-                <Icon className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className={`text-lg font-bold ${current.color}`}>
-                  {current.emoji} {t(current.titleKey)}
-                </h3>
-              </div>
-            </div>
-            <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-              {t(current.descKey)}
-            </p>
-          </div>
+          {renderSlideContent()}
 
           {/* Footer with dots + navigation */}
           <div className="flex items-center justify-between border-t border-[var(--color-border)] px-6 py-4">
             {/* Step dots */}
             <div className="flex items-center gap-2">
-              {slides.map((_, i) => (
+              {Array.from({ length: totalSteps }).map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setStep(i)}
@@ -186,10 +359,11 @@ export function OnboardingModal() {
               )}
               <button
                 onClick={handleNext}
-                className="flex items-center gap-1 rounded-lg bg-[var(--color-ax-blue)] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-orange-500 hover:shadow-[0_0_15px_rgba(96,165,250,0.3)]"
+                disabled={saving}
+                className="flex items-center gap-1 rounded-lg bg-[var(--color-ax-blue)] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-orange-500 hover:shadow-[0_0_15px_rgba(96,165,250,0.3)] disabled:opacity-50"
               >
-                {isLast ? t("getStarted") : t("next")}
-                {!isLast && <ChevronRight className="h-4 w-4" />}
+                {saving ? t("saving") : isLast ? t("getStarted") : t("next")}
+                {!isLast && !saving && <ChevronRight className="h-4 w-4" />}
               </button>
             </div>
           </div>

@@ -1,4 +1,15 @@
-export const solveSystemPrompt = `You are Axiom, an AI homework solver.
+export interface MblidContext {
+  studentProfile?: { school_year?: string; learning_goal?: string } | null;
+  topicHistory?: {
+    topic: string;
+    level: number;
+    correct_count: number;
+    incorrect_count: number;
+  } | null;
+}
+
+export function buildSolveMblidPrompt(context: MblidContext = {}): string {
+  const base = `You are Axiom, an AI homework solver and adaptive tutor.
 
 When given a question (text or image):
 1. Identify the subject and topic
@@ -15,4 +26,50 @@ Format rules:
 - If the image is unclear, say what you can see and ask for clarification
 - Always suggest what to explore next
 
+MBLID PROTOCOL — CRITICAL:
+After solving the problem, you MUST generate ONE practice problem of SIMILAR difficulty for the student to try.
+Format it exactly like this:
+
+---
+🎯 **Your turn!** Try this similar problem:
+
+[problem statement here]
+
+Send me your answer and I'll check it! 💪
+---
+
+When the student sends their answer to a practice problem:
+1. Evaluate if the answer is CORRECT or INCORRECT
+2. If CORRECT: Celebrate! ("Nice! 🎉", "Boom, nailed it! 🔥") Then generate a SLIGHTLY HARDER problem (next level up)
+3. If INCORRECT: Explain the mistake clearly and kindly, show the correct approach step by step, then generate ANOTHER problem of the SAME difficulty level
+4. Always be encouraging — mistakes are learning opportunities, never failures
+
 You speak the same language as the question. If asked in Portuguese, answer in Portuguese. If in Spanish, answer in Spanish. Default to English.`;
+
+  let ctx = "";
+
+  if (context.studentProfile?.school_year) {
+    ctx += `\n\nSTUDENT CONTEXT: ${context.studentProfile.school_year}`;
+    if (context.studentProfile.learning_goal) {
+      ctx += `, preparing for ${context.studentProfile.learning_goal}`;
+    }
+  }
+
+  if (context.topicHistory) {
+    const h = context.topicHistory;
+    ctx += `\n\nTOPIC HISTORY for "${h.topic}": Level ${h.level}/5, ${h.correct_count} correct, ${h.incorrect_count} incorrect.`;
+    ctx += `\nAdapt difficulty to level ${h.level}.`;
+    if (h.incorrect_count > h.correct_count) {
+      ctx +=
+        " This student struggles here — use simpler language and more hints.";
+    } else if (h.correct_count > 0) {
+      ctx +=
+        " This student is progressing well — challenge them appropriately.";
+    }
+  }
+
+  return base + ctx;
+}
+
+// Backward compat — static export for any code that imports it
+export const solveSystemPrompt = buildSolveMblidPrompt({});
