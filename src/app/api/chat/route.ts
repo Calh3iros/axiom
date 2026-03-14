@@ -66,22 +66,27 @@ export async function POST(req: Request) {
     let topicHistory: any = null;
 
     if (isAuthenticUser) {
-      // Get student educational profile (from onboarding)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: sp } = await (supabase.from("student_profiles") as any)
-        .select("school_year, learning_goal")
-        .eq("id", userId)
-        .single();
-      studentProfile = sp;
+      try {
+        // Get student educational profile (from onboarding)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: sp } = await (supabase.from("student_profiles") as any)
+          .select("school_year, learning_goal")
+          .eq("id", userId)
+          .single();
+        studentProfile = sp;
 
-      // Get most recent topic history for adaptive context
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: topics } = await (supabase.from("knowledge_map") as any)
-        .select("topic, level, correct_count, incorrect_count")
-        .eq("user_id", userId)
-        .order("last_interaction_at", { ascending: false })
-        .limit(3);
-      topicHistory = topics?.[0] || null;
+        // Get most recent topic history for adaptive context
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: topics } = await (supabase.from("knowledge_map") as any)
+          .select("topic, level, correct_count, incorrect_count")
+          .eq("user_id", userId)
+          .order("last_interaction_at", { ascending: false })
+          .limit(3);
+        topicHistory = topics?.[0] || null;
+      } catch (err) {
+        // Gracefully continue without MBLID context if queries fail
+        console.warn("MBLID context fetch failed (non-fatal):", err);
+      }
     }
 
     // Build adaptive MBLID prompt with student context

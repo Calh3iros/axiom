@@ -89,7 +89,9 @@
       "helpSupportDesc": "Besoin d'aide ? Nous sommes là pour vous.",
       "emailSupport": "Support par Email",
       "privacyPolicy": "Politique de Confidentialité",
-      "termsOfService": "Conditions d'Utilisation"
+      "termsOfService": "Conditions d'Utilisation",
+      "planElite": "Axiom Elite",
+      "planEliteDesc": "Accès illimité à toutes les fonctionnalités + support prioritaire"
     },
     "Learn": {
       "title": "Tuteur Interactif",

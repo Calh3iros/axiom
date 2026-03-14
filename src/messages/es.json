@@ -89,7 +89,9 @@
       "helpSupportDesc": "¿Necesitas ayuda? Estamos aquí para ti.",
       "emailSupport": "Soporte por Email",
       "privacyPolicy": "Política de Privacidad",
-      "termsOfService": "Términos de Servicio"
+      "termsOfService": "Términos de Servicio",
+      "planElite": "Axiom Elite",
+      "planEliteDesc": "Acceso ilimitado a todos los recursos + soporte prioritario"
     },
     "Learn": {
       "title": "Tutor Interactivo",

@@ -89,7 +89,9 @@
       "helpSupportDesc": "需要帮助？我们随时为您服务。",
       "emailSupport": "邮件支持",
       "privacyPolicy": "隐私政策",
-      "termsOfService": "服务条款"
+      "termsOfService": "服务条款",
+      "planElite": "Axiom Elite",
+      "planEliteDesc": "无限访问所有功能 + 优先支持"
     },
     "Learn": {
       "title": "互动导师",

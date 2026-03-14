@@ -157,7 +157,8 @@ export default function SettingsPage() {
     );
   }
 
-  const isPro = profile?.plan === "pro" || profile?.plan === "elite";
+  const isPaid = profile?.plan === "pro" || profile?.plan === "elite";
+  const isElite = profile?.plan === "elite";
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
@@ -285,7 +286,7 @@ export default function SettingsPage() {
       {/* ── Plan Card ── */}
       <div
         className={`rounded-2xl border bg-[var(--color-bg1)] p-6 ${
-          isPro
+          isPaid
             ? "border-[var(--color-ax-yellow)]/30 shadow-[0_0_40px_rgba(250,204,21,0.05)]"
             : "border-[var(--color-border2)]"
         }`}
@@ -294,36 +295,44 @@ export default function SettingsPage() {
           <div className="flex items-center gap-3">
             <div
               className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                isPro
+                isPaid
                   ? "border border-[var(--color-ax-yellow)]/20 bg-[var(--color-ax-yellow)]/10"
                   : "border border-[var(--color-border)] bg-[var(--color-bg2)]"
               }`}
             >
               <Crown
-                className={`h-5 w-5 ${isPro ? "text-[var(--color-ax-yellow)]" : "text-[var(--color-dim)]"}`}
+                className={`h-5 w-5 ${isPaid ? "text-[var(--color-ax-yellow)]" : "text-[var(--color-dim)]"}`}
               />
             </div>
             <div>
               <h3 className="font-bold text-[var(--color-text-primary)]">
-                {isPro ? t("planPro") : t("planFree")}
+                {isElite
+                  ? t("planElite")
+                  : isPaid
+                    ? t("planPro")
+                    : t("planFree")}
               </h3>
               <p className="text-xs text-[var(--color-text-secondary)]">
-                {isPro ? t("planProDesc") : t("planFreeDesc")}
+                {isElite
+                  ? t("planEliteDesc")
+                  : isPaid
+                    ? t("planProDesc")
+                    : t("planFreeDesc")}
               </p>
             </div>
           </div>
           <span
             className={`rounded-full px-3 py-1.5 font-mono text-xs font-bold ${
-              isPro
+              isPaid
                 ? "border border-[var(--color-ax-yellow)]/20 bg-[var(--color-ax-yellow)]/10 text-[var(--color-ax-yellow)]"
                 : "border border-[var(--color-border)] bg-[var(--color-bg2)] text-[var(--color-dim)]"
             }`}
           >
-            {isPro ? "PRO ✨" : "FREE"}
+            {isElite ? "ELITE 👑" : isPaid ? "PRO ✨" : "FREE"}
           </span>
         </div>
 
-        {isPro ? (
+        {isPaid ? (
           <div className="space-y-3">
             <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] p-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
