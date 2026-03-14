@@ -78,6 +78,16 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
 - Chat.tsx e botões follow-up (Explain simpler, Another method, Practice questions, Theory behind it): INTOCADOS
 - Write, Humanize, Panic: INTOCADOS
 
+### Hotfixes pós-deploy (14/03/2026)
+
+- ✅ Language fix: regra de idioma com ABSOLUTE PRIORITY no topo dos prompts (IA responde no idioma do aluno)
+- ✅ 401 fix: queries MBLID (`student_profiles`, `knowledge_map`) em try/catch — chat funciona mesmo se queries falharem
+- ✅ Elite display: Settings mostra `ELITE 👑` em vez de `PRO ✨` (i18n `planElite`/`planEliteDesc` em 6 locales)
+- ✅ KaTeX math rendering: `react-markdown` + `remark-math` + `rehype-katex` no chat (solve + learn)
+  - Componente `MarkdownMessage` (`src/components/shared/markdown-message.tsx`)
+  - Prompts instruíram IA a usar `$...$` inline e `$$...$$` display (LaTeX) em vez de code blocks
+  - Equações renderizadas como no livro: $4x^2 - 5x - 12 = 0$
+
 ---
 
 ## ESTRUTURA DE PASTAS IMPORTANTE
