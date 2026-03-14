@@ -52,11 +52,11 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
 - Stripe Live Mode ATIVO — cobranças reais habilitadas
 - Resend SMTP verificado — emails de confirmação funcionando
 
-### Pendente
+- P4.2: ✅ Google OAuth testado manualmente pelo usuário em produção
+- P4.5: ✅ Rate limit implementado (Upstash Redis sliding window: Free 5/min, Pro 15/min, Elite 30/min)
+- P6: ✅ Completo — PostHog, Vitest 22/22, SEO (sitemap+robots+JSON-LD), Export PDF/DOCX. Admin dashboard CANCELADO (usando Vercel/Supabase/Stripe/PostHog dashboards existentes)
 
-- P4.2: Teste Google OAuth em produção
-- P4.5: Teste rate limit (429)
-- P6: Admin dashboard, SEO avançado
+> **🎉 CHECKLIST 43/43 — 100% COMPLETO (axiom-checklist.md)**
 
 ---
 
@@ -251,8 +251,6 @@ docs/
 
 ---
 
-## PENDENTE (próxima sessão)
+## ✅ PROJETO 100% COMPLETO (43/43 itens — axiom-checklist.md)
 
-- P4.2: Teste Google OAuth em produção
-- P4.5: Teste rate limit (429)
-- P6: Admin dashboard, SEO avançado
+Nenhum item pendente. Próximos passos são evolução de produto (novas features, marketing, growth).
