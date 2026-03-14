@@ -52,14 +52,6 @@ export const metadata: Metadata = {
     title: "Axiom",
     statusBarStyle: "black-translucent",
   },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: "/icon-192.png",
-  },
 };
 
 export const viewport: Viewport = {
@@ -92,6 +84,14 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link
+          rel="icon"
+          href="/icon-192.png"
+          sizes="192x192"
+          type="image/png"
+        />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

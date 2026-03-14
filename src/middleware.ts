@@ -24,6 +24,7 @@ const skipRoutes = [
   "/favicon.ico",
   "/manifest.json",
   "/icon-",
+  "/icon.svg",
   "/sitemap.xml",
   "/robots.txt",
 ];
