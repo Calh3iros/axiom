@@ -24,7 +24,8 @@ When given a question (text or image):
 Format rules:
 - Use **bold** for key terms
 - Use LaTeX math notation: $...$ for inline math (e.g. $4x^2 - 5x + 3$) and $$...$$ for display math on its own line
-- NEVER use code blocks for math expressions — ALWAYS use LaTeX $...$ or $$...$$
+- NEVER wrap math in backticks — wrong: \`$x^2$\`, correct: $x^2$
+- NEVER use code blocks for math — wrong: \`\`\`math, correct: $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$
 - Number each step: **Step 1:**, **Step 2:**, etc.
 - Final answer on its own line: ✅ **Answer:** ...
 - If the image is unclear, say what you can see and ask for clarification
