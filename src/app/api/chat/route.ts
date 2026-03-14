@@ -1,17 +1,19 @@
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { streamText, convertToModelMessages } from 'ai';
-import { NextResponse } from 'next/server';
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { streamText, convertToModelMessages } from "ai";
+import { NextResponse } from "next/server";
 
-import { learnSystemPrompt } from '@/lib/ai/prompts/learn';
-import { solveSystemPrompt } from '@/lib/ai/prompts/solve';
-import { getAiRatelimit } from '@/lib/ratelimit';
-import { createClient } from '@/lib/supabase/server';
-import { checkUsage, incrementUsage, getUserAndPlan } from '@/lib/usage';
-import { chatRequestSchema } from '@/lib/validators/chat';
-
+import { learnSystemPrompt } from "@/lib/ai/prompts/learn";
+import { solveSystemPrompt } from "@/lib/ai/prompts/solve";
+import { getAiRatelimit } from "@/lib/ratelimit";
+import { createClient } from "@/lib/supabase/server";
+import { checkUsage, incrementUsage, getUserAndPlan } from "@/lib/usage";
+import { chatRequestSchema } from "@/lib/validators/chat";
 
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
+  apiKey:
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+    "",
 });
 
 const systemPrompts: Record<string, string> = {
@@ -25,24 +27,33 @@ export async function POST(req: Request) {
     const json = await req.json();
     const parsed = chatRequestSchema.safeParse(json);
     if (!parsed.success) {
-      return NextResponse.json({ error: 'Invalid request parameters' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid request parameters" },
+        { status: 400 }
+      );
     }
-    const { messages, type, chatId: providedChatId, locale: _locale } = parsed.data;
+    const {
+      messages,
+      type,
+      chatId: providedChatId,
+      locale: _locale,
+    } = parsed.data;
 
     // Get authenticated user and their plan from Supabase
     const { userId, plan } = await getUserAndPlan(req);
 
     // P0.2 — Rate limiting (by IP for DDoS protection)
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous';
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "anonymous";
     const { success: rateLimitOk } = await getAiRatelimit(plan).limit(ip);
     if (!rateLimitOk) {
       return NextResponse.json(
-        { error: 'Too many requests. Please wait a moment.' },
+        { error: "Too many requests. Please wait a moment." },
         { status: 429 }
       );
     }
 
-    const usageType = type === 'learn' ? 'learn' as const : 'solve' as const;
+    const usageType =
+      type === "learn" ? ("learn" as const) : ("solve" as const);
     const usage = await checkUsage(userId, usageType, plan);
     if (!usage.allowed) {
       return NextResponse.json(
@@ -64,16 +75,18 @@ export async function POST(req: Request) {
     let chatId = providedChatId;
 
     // We only save to DB if the user is authenticated (not anon:ip)
-    const isAuthenticUser = !userId.startsWith('anon:');
+    const isAuthenticUser = !userId.startsWith("anon:");
 
     if (isAuthenticUser) {
       if (!chatId) {
         // Create a new chat
-        const title = lastMessage?.content?.substring(0, 50) || 'New Chat';
+        const title = lastMessage?.content?.substring(0, 50) || "New Chat";
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: chatData, error: chatError } = await (supabase.from('chats') as any)
+        const { data: chatData, error: chatError } = await (
+          supabase.from("chats") as any
+        )
           .insert({ user_id: userId, title })
-          .select('id')
+          .select("id")
           .single();
 
         if (!chatError && chatData) {
@@ -84,19 +97,19 @@ export async function POST(req: Request) {
       if (chatId && lastMessage) {
         // Save the user's incoming message
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase.from('messages') as any).insert({
+        await (supabase.from("messages") as any).insert({
           chat_id: chatId,
-          role: 'user',
-          content: lastMessage.content
+          role: "user",
+          content: lastMessage.content,
         });
       }
     }
 
     const result = streamText({
-      model: google('gemini-2.5-flash'),
+      model: google("gemini-2.5-flash"),
       system: systemInstruction,
       messages: modelMessages,
-      maxOutputTokens: 4096,                        // P0.7
+      maxOutputTokens: 4096, // P0.7
       abortSignal: AbortSignal.timeout(30_000), // P0.6
       onFinish: async ({ text }) => {
         await incrementUsage(userId, usageType);
@@ -104,44 +117,58 @@ export async function POST(req: Request) {
         // Save assistant response to DB
         if (isAuthenticUser && chatId && text) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await (supabase.from('messages') as any).insert({
+          await (supabase.from("messages") as any).insert({
             chat_id: chatId,
-            role: 'assistant',
-            content: text
+            role: "assistant",
+            content: text,
           });
 
           // --- BACKGROUND WORKER: KNOWLEDGE MAP EXTRACTOR ---
           // We intentionally do NOT await this so the response closes quickly.
           (async () => {
             try {
-              const { generateObject } = await import('ai');
-              const { z } = await import('zod');
+              const { generateObject } = await import("ai");
+              const { z } = await import("zod");
 
               const { object: topicData } = await generateObject({
-                model: google('gemini-2.5-flash'),
+                model: google("gemini-2.5-flash"),
                 schema: z.object({
-                  subject: z.string().describe('Broad subject category, e.g. "Mathematics", "Physics", "History"'),
-                  topic: z.string().describe('Specific topic being asked about, e.g. "Derivatives", "Kinematics", "World War II"'),
-                  understanding_score: z.number().min(0).max(1).describe('Estimated understanding of the user based on the question context. 0.0 = completely lost, 1.0 = highly knowledgeable.')
+                  subject: z
+                    .string()
+                    .describe(
+                      'Broad subject category, e.g. "Mathematics", "Physics", "History"'
+                    ),
+                  topic: z
+                    .string()
+                    .describe(
+                      'Specific topic being asked about, e.g. "Derivatives", "Kinematics", "World War II"'
+                    ),
+                  understanding_score: z
+                    .number()
+                    .min(0)
+                    .max(1)
+                    .describe(
+                      "Estimated understanding of the user based on the question context. 0.0 = completely lost, 1.0 = highly knowledgeable."
+                    ),
                 }),
                 prompt: `Analyze the user's question and the provided answer to extract the topic and estimate the user's initial understanding level.
 
 User Question:
-${lastMessage?.content || 'Unknown'}
+${lastMessage?.content || "Unknown"}
 
 AI Answer:
 ${text}
-`
+`,
               });
 
               // Upsert logic for knowledge_map
-              const { supabaseAdmin } = await import('@/lib/supabase/admin');
+              const { supabaseAdmin } = await import("@/lib/supabase/admin");
               const { data: existingTopic } = await (supabaseAdmin
-                .from('knowledge_map')
-                .select('id, interactions_count, mastery_score')
-                .eq('user_id', userId)
-                .eq('subject', topicData.subject)
-                .eq('topic', topicData.topic)
+                .from("knowledge_map")
+                .select("id, interactions_count, mastery_score")
+                .eq("user_id", userId)
+                .eq("subject", topicData.subject)
+                .eq("topic", topicData.topic)
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .single() as any);
 
@@ -149,44 +176,53 @@ ${text}
                 // Gentle moving average: new_score = (old_score * count + new_understanding) / (count + 1)
                 const newCount = (existingTopic.interactions_count || 1) + 1;
                 const oldScore = existingTopic.mastery_score || 0;
-                const newScore = ((oldScore * (existingTopic.interactions_count || 1)) + topicData.understanding_score) / newCount;
+                const newScore =
+                  (oldScore * (existingTopic.interactions_count || 1) +
+                    topicData.understanding_score) /
+                  newCount;
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await (supabaseAdmin.from('knowledge_map') as any).update({
-                  interactions_count: newCount,
-                  mastery_score: newScore,
-                  last_interaction_at: new Date().toISOString()
-                }).eq('id', existingTopic.id);
+                await (supabaseAdmin.from("knowledge_map") as any)
+                  .update({
+                    interactions_count: newCount,
+                    mastery_score: newScore,
+                    last_interaction_at: new Date().toISOString(),
+                  })
+                  .eq("id", existingTopic.id);
               } else {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await (supabaseAdmin.from('knowledge_map') as any).insert({
+                await (supabaseAdmin.from("knowledge_map") as any).insert({
                   user_id: userId,
                   subject: topicData.subject,
                   topic: topicData.topic,
                   mastery_score: topicData.understanding_score,
-                  interactions_count: 1
+                  interactions_count: 1,
                 });
               }
 
-              console.log(`Knowledge map updated for ${userId}: ${topicData.subject}/${topicData.topic} -> Mastery: ${topicData.understanding_score}`);
+              console.warn(
+                `Knowledge map updated for ${userId}: ${topicData.subject}/${topicData.topic} -> Mastery: ${topicData.understanding_score}`
+              );
             } catch (err) {
-              console.error('Background Knowledge Map Extractor Failed:', err);
+              console.error("Background Knowledge Map Extractor Failed:", err);
             }
           })();
           // -------------------------------------------------
         }
-
       },
     });
 
     const headers = new Headers();
     if (chatId) {
-      headers.set('x-chat-id', chatId);
+      headers.set("x-chat-id", chatId);
     }
 
     return result.toUIMessageStreamResponse({ headers });
   } catch (error: unknown) {
-    console.error('Chat API Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 }); // P0.4
+    console.error("Chat API Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    ); // P0.4
   }
 }

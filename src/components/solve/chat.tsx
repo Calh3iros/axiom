@@ -126,8 +126,8 @@ export function SolveChat({
 
   // Helper to extract text from UIMessage parts
   {
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getMessageText = (message: any): string => {
     if (message.content) return message.content;
     if (message.parts) {
@@ -218,6 +218,7 @@ export function SolveChat({
                     part.mediaType?.startsWith("image/")
                   ) {
                     return (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         key={i}
                         src={part.url}
@@ -374,6 +375,7 @@ export function SolveChat({
         {localAttachment && (
           <div className="mb-3 flex items-center gap-3">
             <div className="relative inline-block">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={localAttachment}
                 alt={t("preview", { defaultMessage: "Preview" })}

@@ -1,7 +1,9 @@
-'use client';
+"use client";
 
-import * as Sentry from '@sentry/nextjs';
-import { useEffect } from 'react';
+import * as Sentry from "@sentry/nextjs";
+import { useEffect } from "react";
+
+import { Link } from "@/i18n/routing";
 
 export default function ErrorPage({
   error,
@@ -13,7 +15,7 @@ export default function ErrorPage({
   useEffect(() => {
     // Report to Sentry
     Sentry.captureException(error);
-    console.error('Page error:', error);
+    console.error("Page error:", error);
   }, [error]);
 
   return (
@@ -37,22 +39,22 @@ export default function ErrorPage({
         </svg>
       </div>
       <h2 className="text-2xl font-bold">Something went wrong</h2>
-      <p className="max-w-md text-muted-foreground">
+      <p className="text-muted-foreground max-w-md">
         An unexpected error occurred. Please try again.
       </p>
       <div className="flex gap-3">
         <button
           onClick={reset}
-          className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-6 py-2.5 text-sm font-medium transition-colors"
         >
           Try again
         </button>
-        <a
+        <Link
           href="/"
-          className="rounded-lg border border-border px-6 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
+          className="border-border hover:bg-accent rounded-lg border px-6 py-2.5 text-sm font-medium transition-colors"
         >
           Go home
-        </a>
+        </Link>
       </div>
     </div>
   );

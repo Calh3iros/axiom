@@ -174,6 +174,7 @@ export default function SettingsPage() {
       <div className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6">
         <div className="mb-6 flex items-center gap-4">
           {avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={avatarUrl}
               alt=""
@@ -338,9 +339,7 @@ export default function SettingsPage() {
                   <p className="mb-1 font-mono text-xs tracking-wider text-[var(--color-dim)] uppercase">
                     {t("status")}
                   </p>
-                  <p className="font-semibold text-orange-400">
-                    {t("active")}
-                  </p>
+                  <p className="font-semibold text-orange-400">{t("active")}</p>
                 </div>
               </div>
             </div>

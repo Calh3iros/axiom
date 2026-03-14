@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { Crown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Crown } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { createClient } from '@/lib/supabase/client';
+import { Link } from "@/i18n/routing";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Subtle "Powered by Axiom" watermark shown only to free-tier users.
@@ -29,14 +30,14 @@ export function Watermark() {
           return;
         }
 
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('plan')
-          .eq('id', user.id)
-          .single() as { data: { plan: string } | null };
+        const { data: profile } = (await supabase
+          .from("profiles")
+          .select("plan")
+          .eq("id", user.id)
+          .single()) as { data: { plan: string } | null };
 
-        const plan = (profile as { plan?: string } | null)?.plan ?? 'free';
-        if (!cancelled && (plan === 'free' || !plan)) {
+        const plan = (profile as { plan?: string } | null)?.plan ?? "free";
+        if (!cancelled && (plan === "free" || !plan)) {
           setShow(true);
         }
       } catch {
@@ -52,17 +53,17 @@ export function Watermark() {
   if (!show) return null;
 
   return (
-    <div className="flex items-center justify-center gap-1.5 py-2 text-[10px] text-[var(--color-dim)] select-none opacity-60">
+    <div className="flex items-center justify-center gap-1.5 py-2 text-[10px] text-[var(--color-dim)] opacity-60 select-none">
       <span>Powered by</span>
       <span className="font-bold tracking-tight">AXIOM</span>
       <span className="text-[var(--color-dim)]">·</span>
-      <a
+      <Link
         href="/settings"
-        className="inline-flex items-center gap-1 text-amber-500/70 hover:text-amber-400 transition-colors"
+        className="inline-flex items-center gap-1 text-amber-500/70 transition-colors hover:text-amber-400"
       >
-        <Crown className="w-3 h-3" />
+        <Crown className="h-3 w-3" />
         <span className="font-semibold">Remove watermark</span>
-      </a>
+      </Link>
     </div>
   );
 }

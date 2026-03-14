@@ -1,25 +1,29 @@
-'use client';
+"use client";
 
-import * as Diff from 'diff';
-import { Copy, RefreshCw, Sparkles, ShieldCheck, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import * as Diff from "diff";
+import {
+  Copy,
+  RefreshCw,
+  Sparkles,
+  ShieldCheck,
+  ShieldAlert,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
-import { detectAI, type DetectionResult } from '@/lib/ai/detect';
+import { detectAI, type DetectionResult } from "@/lib/ai/detect";
 
-import { PaywallModal } from '../shared/paywall-modal';
+import { PaywallModal } from "../shared/paywall-modal";
+import { Watermark } from "../shared/watermark";
 
-import { Watermark } from '../shared/watermark';
-
-import { ModeSelector } from './mode-selector';
-
-
-
+import { ModeSelector } from "./mode-selector";
 
 export function HumanizerPanel() {
-  const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
-  const [mode, setMode] = useState<'academic' | 'casual' | 'pro'>('academic');
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [mode, setMode] = useState<"academic" | "casual" | "pro">("academic");
   const [loading, setLoading] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [inputScore, setInputScore] = useState<DetectionResult | null>(null);
@@ -28,18 +32,21 @@ export function HumanizerPanel() {
 
   // Word count display
   const MAX_FREE_WORDS = 500;
-  const wordCount = input.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const wordCount = input
+    .trim()
+    .split(/\s+/)
+    .filter((w) => w.length > 0).length;
   const locale = useLocale();
-  const t = useTranslations('Dashboard.Components');
+  const t = useTranslations("Dashboard.Components");
 
   const handleHumanize = async () => {
     if (!input) return;
 
     setLoading(true);
     try {
-      const res = await fetch('/api/humanize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/humanize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: input, mode, locale }),
       });
 
@@ -51,7 +58,7 @@ export function HumanizerPanel() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Failed to humanize');
+        throw new Error(err.error || "Failed to humanize");
       }
 
       const data = await res.json();
@@ -62,10 +69,10 @@ export function HumanizerPanel() {
         setInputScore(detectAI(input));
         setOutputScore(detectAI(data.text));
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
-      setOutput(`Error: ${err.message || 'Failed to humanize text'}`);
+      setOutput(`Error: ${err.message || "Failed to humanize text"}`);
     } finally {
       setLoading(false);
     }
@@ -80,7 +87,7 @@ export function HumanizerPanel() {
 
   const getDiffRender = () => {
     if (!input || !output) return null;
-    if (output.startsWith('Error:')) return output;
+    if (output.startsWith("Error:")) return output;
 
     const diffs = Diff.diffWords(input, output);
     return (
@@ -89,12 +96,19 @@ export function HumanizerPanel() {
           if (part.removed) return null; // Only show what's in the final output
           if (part.added) {
             return (
-              <span key={index} className="bg-green-500/20 text-green-400 rounded-sm px-1 py-0.5 font-medium transition-colors">
+              <span
+                key={index}
+                className="rounded-sm bg-green-500/20 px-1 py-0.5 font-medium text-green-400 transition-colors"
+              >
                 {part.value}
               </span>
             );
           }
-          return <span key={index} className="text-[var(--color-text-primary)]">{part.value}</span>;
+          return (
+            <span key={index} className="text-[var(--color-text-primary)]">
+              {part.value}
+            </span>
+          );
         })}
       </div>
     );
@@ -103,61 +117,75 @@ export function HumanizerPanel() {
   return (
     <>
       {/* Input Side */}
-      <div className="flex flex-col bg-[var(--color-bg1)] border border-[var(--color-border2)] rounded-2xl overflow-hidden focus-within:border-[var(--color-ax-blue)] transition-colors">
-        <div className="p-4 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg2)]">
-          <span className="font-semibold text-sm tracking-wide text-[var(--color-text-secondary)] uppercase">{t('input')}</span>
-          <span className={`text-xs font-mono ${wordCount > MAX_FREE_WORDS ? 'text-[var(--color-ax-red)] font-bold' : 'text-[var(--color-dim)]'}`}>
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] transition-colors focus-within:border-[var(--color-ax-blue)]">
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-bg2)] p-4">
+          <span className="text-sm font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase">
+            {t("input")}
+          </span>
+          <span
+            className={`font-mono text-xs ${wordCount > MAX_FREE_WORDS ? "font-bold text-[var(--color-ax-red)]" : "text-[var(--color-dim)]"}`}
+          >
             {wordCount} / {MAX_FREE_WORDS} free words
           </span>
         </div>
         <textarea
-          className="flex-1 w-full p-6 bg-transparent resize-none outline-none text-[var(--color-text-primary)] placeholder-[var(--color-dim)] leading-relaxed"
-          placeholder={t('pasteText')}
+          className="w-full flex-1 resize-none bg-transparent p-6 leading-relaxed text-[var(--color-text-primary)] placeholder-[var(--color-dim)] outline-none"
+          placeholder={t("pasteText")}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <div className="p-4 border-t border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg2)]">
+        <div className="flex items-center justify-between border-t border-[var(--color-border)] bg-[var(--color-bg2)] p-4">
           <ModeSelector mode={mode} setMode={setMode} />
           <button
             onClick={handleHumanize}
             disabled={loading || !input}
-            className="flex items-center gap-2 bg-[var(--color-ax-blue)] hover:bg-orange-400 text-black font-semibold px-6 py-2.5 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 rounded-full bg-[var(--color-ax-blue)] px-6 py-2.5 font-semibold text-black transition-colors hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            {loading ? 'Humanizing...' : 'Humanize'}
+            {loading ? (
+              <RefreshCw className="h-4 w-4 animate-spin" />
+            ) : (
+              <Sparkles className="h-4 w-4" />
+            )}
+            {loading ? "Humanizing..." : "Humanize"}
           </button>
         </div>
       </div>
 
       {/* Output Side */}
-      <div className="flex flex-col bg-[var(--color-bg0)] border border-[var(--color-border2)] rounded-2xl overflow-hidden shadow-inner">
-        <div className="p-4 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg1)]">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-semibold text-sm tracking-wide text-[var(--color-text-secondary)] uppercase">{t('humanizedResult')}</span>
-            {inputScore && outputScore && !output.startsWith('Error:') && (
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg0)] shadow-inner">
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-bg1)] p-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-sm font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase">
+              {t("humanizedResult")}
+            </span>
+            {inputScore && outputScore && !output.startsWith("Error:") && (
               <div className="flex items-center gap-2">
                 {/* Original score */}
-                <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full border text-xs font-bold ${
-                  inputScore.score >= 50
-                    ? 'bg-red-500/10 border-red-500/20 text-red-400'
-                    : inputScore.score >= 25
-                      ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
-                      : 'bg-green-500/10 border-green-500/20 text-green-400'
-                }`}>
-                  <ShieldAlert className="w-3 h-3" />
+                <div
+                  className={`flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs font-bold ${
+                    inputScore.score >= 50
+                      ? "border-red-500/20 bg-red-500/10 text-red-400"
+                      : inputScore.score >= 25
+                        ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-400"
+                        : "border-green-500/20 bg-green-500/10 text-green-400"
+                  }`}
+                >
+                  <ShieldAlert className="h-3 w-3" />
                   <span>Before: {inputScore.score}%</span>
                 </div>
                 {/* Arrow */}
-                <span className="text-[var(--color-dim)] text-xs">→</span>
+                <span className="text-xs text-[var(--color-dim)]">→</span>
                 {/* Humanized score */}
-                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-bold ${
-                  outputScore.score >= 50
-                    ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                    : outputScore.score >= 25
-                      ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
-                      : 'bg-green-500/10 border-green-500/20 text-green-400'
-                }`}>
-                  <ShieldCheck className="w-3.5 h-3.5" />
+                <div
+                  className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${
+                    outputScore.score >= 50
+                      ? "border-orange-500/20 bg-orange-500/10 text-orange-400"
+                      : outputScore.score >= 25
+                        ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-400"
+                        : "border-green-500/20 bg-green-500/10 text-green-400"
+                  }`}
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" />
                   <span>After: {outputScore.score}%</span>
                 </div>
               </div>
@@ -166,21 +194,23 @@ export function HumanizerPanel() {
           <button
             onClick={handleCopy}
             disabled={!output}
-            className="text-[var(--color-dim)] hover:text-[var(--color-text-primary)] transition-colors disabled:opacity-30 disabled:hover:text-[var(--color-dim)]"
-            title={t('copyToClipboard')}
+            className="text-[var(--color-dim)] transition-colors hover:text-[var(--color-text-primary)] disabled:opacity-30 disabled:hover:text-[var(--color-dim)]"
+            title={t("copyToClipboard")}
           >
-            <Copy className="w-5 h-5" />
+            <Copy className="h-5 w-5" />
           </button>
         </div>
-        <div className="flex-1 p-6 overflow-y-auto w-full relative">
+        <div className="relative w-full flex-1 overflow-y-auto p-6">
           {loading ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-8 space-y-4">
-               {/* Skeleton Loaders */}
-               <div className="w-full h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
-               <div className="w-5/6 h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
-               <div className="w-full h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
-               <div className="w-3/4 h-4 bg-[var(--color-bg2)] rounded animate-pulse" />
-               <span className="text-[var(--color-dim)] text-sm mt-4 font-mono">{t('applyingImperfections')}</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 p-8">
+              {/* Skeleton Loaders */}
+              <div className="h-4 w-full animate-pulse rounded bg-[var(--color-bg2)]" />
+              <div className="h-4 w-5/6 animate-pulse rounded bg-[var(--color-bg2)]" />
+              <div className="h-4 w-full animate-pulse rounded bg-[var(--color-bg2)]" />
+              <div className="h-4 w-3/4 animate-pulse rounded bg-[var(--color-bg2)]" />
+              <span className="mt-4 font-mono text-sm text-[var(--color-dim)]">
+                {t("applyingImperfections")}
+              </span>
             </div>
           ) : output ? (
             <div className="space-y-4">
@@ -193,26 +223,53 @@ export function HumanizerPanel() {
                 <div className="border-t border-[var(--color-border)] pt-4">
                   <button
                     onClick={() => setShowSignals(!showSignals)}
-                    className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors mb-3"
+                    className="mb-3 flex items-center gap-2 text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
                   >
-                    {showSignals ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                    <span className="font-bold uppercase tracking-wider">Detection Signals ({outputScore.signals.length})</span>
+                    {showSignals ? (
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    ) : (
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    )}
+                    <span className="font-bold tracking-wider uppercase">
+                      Detection Signals ({outputScore.signals.length})
+                    </span>
                   </button>
                   {showSignals && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                       {outputScore.signals.map((signal) => {
                         const pct = Math.round(signal.score * 100);
-                        const barColor = pct < 25 ? 'bg-green-400' : pct < 50 ? 'bg-yellow-400' : pct < 75 ? 'bg-orange-400' : 'bg-red-400';
+                        const barColor =
+                          pct < 25
+                            ? "bg-green-400"
+                            : pct < 50
+                              ? "bg-yellow-400"
+                              : pct < 75
+                                ? "bg-orange-400"
+                                : "bg-red-400";
                         return (
-                          <div key={signal.name} className="bg-[var(--color-bg2)] rounded-lg p-3">
-                            <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-xs font-bold text-[var(--color-text-primary)]">{signal.name}</span>
-                              <span className={`text-xs font-mono font-bold ${pct < 25 ? 'text-green-400' : pct < 50 ? 'text-yellow-400' : pct < 75 ? 'text-orange-400' : 'text-red-400'}`}>{pct}%</span>
+                          <div
+                            key={signal.name}
+                            className="rounded-lg bg-[var(--color-bg2)] p-3"
+                          >
+                            <div className="mb-1.5 flex items-center justify-between">
+                              <span className="text-xs font-bold text-[var(--color-text-primary)]">
+                                {signal.name}
+                              </span>
+                              <span
+                                className={`font-mono text-xs font-bold ${pct < 25 ? "text-green-400" : pct < 50 ? "text-yellow-400" : pct < 75 ? "text-orange-400" : "text-red-400"}`}
+                              >
+                                {pct}%
+                              </span>
                             </div>
-                            <div className="w-full h-1.5 bg-[var(--color-bg0)] rounded-full overflow-hidden">
-                              <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${pct}%` }} />
+                            <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--color-bg0)]">
+                              <div
+                                className={`h-full rounded-full transition-all ${barColor}`}
+                                style={{ width: `${pct}%` }}
+                              />
                             </div>
-                            <p className="text-[10px] text-[var(--color-dim)] mt-1">{signal.description}</p>
+                            <p className="mt-1 text-[10px] text-[var(--color-dim)]">
+                              {signal.description}
+                            </p>
                           </div>
                         );
                       })}
@@ -222,8 +279,9 @@ export function HumanizerPanel() {
               )}
             </div>
           ) : (
-            <div className="flex h-full items-center justify-center text-[var(--color-dim)] text-sm">
-              Your humanized text will appear here. Added words will be highlighted.
+            <div className="flex h-full items-center justify-center text-sm text-[var(--color-dim)]">
+              Your humanized text will appear here. Added words will be
+              highlighted.
             </div>
           )}
         </div>
@@ -232,7 +290,12 @@ export function HumanizerPanel() {
       {/* Watermark for free users */}
       <Watermark />
 
-      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} reason="word_limit" />}
+      {showPaywall && (
+        <PaywallModal
+          onClose={() => setShowPaywall(false)}
+          reason="word_limit"
+        />
+      )}
     </>
   );
 }

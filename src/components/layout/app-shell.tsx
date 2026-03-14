@@ -230,6 +230,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="mt-2 border-t border-[var(--color-border)] pt-2">
               <div className="flex items-center gap-3 px-4 py-2.5">
                 {avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={avatarUrl}
                     alt=""

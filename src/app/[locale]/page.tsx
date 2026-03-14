@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useRef, useState, useCallback } from "react";
+
+import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
-import { LanguageSwitcher } from "@/components/shared/language-switcher";
-import Image from "next/image";
+
 import "./landing.css";
 
 export default function LandingPage() {
   const locale = useLocale();
-  const t = useTranslations('Landing');
+  const t = useTranslations("Landing");
   const router = useRouter();
   const revealRefs = useRef<HTMLElement[]>([]);
   const [countdown, setCountdown] = useState("--");
@@ -88,7 +90,9 @@ export default function LandingPage() {
     setLoading(plan);
     try {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         const interval = isYearly ? "yearly" : "monthly";
         router.push(`/${locale}/auth/signup?plan=${plan}&interval=${interval}`);
@@ -97,10 +101,16 @@ export default function LandingPage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, interval: isYearly ? "yearly" : "monthly", locale }),
+        body: JSON.stringify({
+          plan,
+          interval: isYearly ? "yearly" : "monthly",
+          locale,
+        }),
       });
       if (res.status === 401) {
-        router.push(`/${locale}/auth/login?plan=${plan}&interval=${isYearly ? "yearly" : "monthly"}`);
+        router.push(
+          `/${locale}/auth/login?plan=${plan}&interval=${isYearly ? "yearly" : "monthly"}`
+        );
         return;
       }
       const data = await res.json();
@@ -130,8 +140,12 @@ export default function LandingPage() {
         </div>
         <div className="nav-right">
           <LanguageSwitcher />
-          <Link href="/auth/login" className="nav-login">{t("nav.login")}</Link>
-          <Link href="/auth/signup" className="nav-cta">{t("nav.startFree")}</Link>
+          <Link href="/auth/login" className="nav-login">
+            {t("nav.login")}
+          </Link>
+          <Link href="/auth/signup" className="nav-cta">
+            {t("nav.startFree")}
+          </Link>
         </div>
       </nav>
 
@@ -143,12 +157,14 @@ export default function LandingPage() {
         {/* FIX #2: Dynamic countdown */}
         <div className="hero-pain-badge">
           <span className="pain-dot" />
-          {t("hero.timeLeft")} <span className="countdown-val">{countdown}</span>
+          {t("hero.timeLeft")}{" "}
+          <span className="countdown-val">{countdown}</span>
         </div>
 
         <h1>
           <span className="pain-text">
-            {t("hero.painLine1")}<br />
+            {t("hero.painLine1")}
+            <br />
             {t("hero.painLine2")}
           </span>
         </h1>
@@ -156,13 +172,31 @@ export default function LandingPage() {
         {/* Student trouble images */}
         <div className="hero-students">
           <div className="hero-student-img">
-            <Image src="/student1.png" alt="Stressed student" width={180} height={120} unoptimized />
+            <Image
+              src="/student1.png"
+              alt="Stressed student"
+              width={180}
+              height={120}
+              unoptimized
+            />
           </div>
           <div className="hero-student-img">
-            <Image src="/student2.png" alt="Confused student" width={180} height={120} unoptimized />
+            <Image
+              src="/student2.png"
+              alt="Confused student"
+              width={180}
+              height={120}
+              unoptimized
+            />
           </div>
           <div className="hero-student-img">
-            <Image src="/student3.png" alt="Exhausted student" width={180} height={120} unoptimized />
+            <Image
+              src="/student3.png"
+              alt="Exhausted student"
+              width={180}
+              height={120}
+              unoptimized
+            />
           </div>
         </div>
 
@@ -171,8 +205,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="hero-sub">
-          {t("hero.subtitle")}{" "}
-          <strong>{t("hero.free")}</strong>
+          {t("hero.subtitle")} <strong>{t("hero.free")}</strong>
         </p>
 
         {/* FIX #1: CTA buttons (no input field — video demo proves it works) */}
@@ -180,7 +213,9 @@ export default function LandingPage() {
           <Link href="/auth/signup" className="btn-primary">
             {t("hero.startNow")}
           </Link>
-          <a href="#pricing" className="btn-ghost">{t("hero.seePricing")}</a>
+          <a href="#pricing" className="btn-ghost">
+            {t("hero.seePricing")}
+          </a>
         </div>
 
         {/* FIX #4: Animated demo "video" with play button */}
@@ -188,7 +223,13 @@ export default function LandingPage() {
           {!demoStarted && (
             <div className="demo-play-overlay" onClick={startDemo}>
               <div className="play-btn">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff" style={{ marginLeft: 4 }}>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="28"
+                  height="28"
+                  fill="#fff"
+                  style={{ marginLeft: 4 }}
+                >
                   <polygon points="5,3 19,12 5,21" />
                 </svg>
               </div>
@@ -203,14 +244,19 @@ export default function LandingPage() {
               <span className="demo-tab">axiom-solver.com</span>
             </div>
             <div className="demo-body">
-              <div className={`demo-question demo-step-item ${demoSteps.ds0 ? "active" : ""}`}>
+              <div
+                className={`demo-question demo-step-item ${demoSteps.ds0 ? "active" : ""}`}
+              >
                 <div className="demo-q-icon">📸</div>
                 <div className="demo-q-text">
-                  <strong>{t("hero.yourQuestion")}</strong><br />
+                  <strong>{t("hero.yourQuestion")}</strong>
+                  <br />
                   {t("hero.demoQuestion")}
                 </div>
               </div>
-              <div className={`demo-answer demo-step-item ${demoSteps.ds1 ? "active" : ""}`}>
+              <div
+                className={`demo-answer demo-step-item ${demoSteps.ds1 ? "active" : ""}`}
+              >
                 <div className="demo-a-icon">A</div>
                 <div className="demo-a-content">
                   <div className={`demo-step ${demoSteps.st1 ? "show" : ""}`}>
@@ -228,7 +274,9 @@ export default function LandingPage() {
                   </div>
                   <div className={`demo-step ${demoSteps.st4 ? "show" : ""}`}>
                     <strong>Answer:</strong>{" "}
-                    <span className="demo-math" style={{ fontSize: 14 }}>f&apos;(x) = 12x³ − 10x + 2</span>
+                    <span className="demo-math" style={{ fontSize: 14 }}>
+                      f&apos;(x) = 12x³ − 10x + 2
+                    </span>
                   </div>
                   <div className={`demo-timing ${demoSteps.st5 ? "show" : ""}`}>
                     <span className="demo-timing-dot" />
@@ -254,93 +302,201 @@ export default function LandingPage() {
           <div className="ticker-label">{t("ticker.label")}</div>
           <div className="ticker">
             <div className="ticker-track">
-              <div className="ticker-item"><span className="t-dot" /> {t("ticker.item1")}</div>
-              <div className="ticker-item"><span className="t-dot" /> {t("ticker.item2")}</div>
-              <div className="ticker-item"><span className="t-dot" /> {t("ticker.item3")}</div>
-              <div className="ticker-item"><span className="t-dot" /> {t("ticker.item4")}</div>
-              <div className="ticker-item"><span className="t-dot" /> {t("ticker.item5")}</div>
-              <div className="ticker-item"><span className="t-dot" /> {t("ticker.item1")}</div>
+              <div className="ticker-item">
+                <span className="t-dot" /> {t("ticker.item1")}
+              </div>
+              <div className="ticker-item">
+                <span className="t-dot" /> {t("ticker.item2")}
+              </div>
+              <div className="ticker-item">
+                <span className="t-dot" /> {t("ticker.item3")}
+              </div>
+              <div className="ticker-item">
+                <span className="t-dot" /> {t("ticker.item4")}
+              </div>
+              <div className="ticker-item">
+                <span className="t-dot" /> {t("ticker.item5")}
+              </div>
+              <div className="ticker-item">
+                <span className="t-dot" /> {t("ticker.item1")}
+              </div>
             </div>
           </div>
           <div className="trust-row">
-            <div className="trust-item"><div className="trust-num">10,000+</div><div className="trust-label">{t("ticker.students")}</div></div>
-            <div className="trust-item"><div className="trust-num">2.3M+</div><div className="trust-label">{t("ticker.questionsSolved")}</div></div>
-            <div className="trust-item"><div className="trust-num">4.9 ★</div><div className="trust-label">{t("ticker.avgRating")}</div></div>
+            <div className="trust-item">
+              <div className="trust-num">10,000+</div>
+              <div className="trust-label">{t("ticker.students")}</div>
+            </div>
+            <div className="trust-item">
+              <div className="trust-num">2.3M+</div>
+              <div className="trust-label">{t("ticker.questionsSolved")}</div>
+            </div>
+            <div className="trust-item">
+              <div className="trust-num">4.9 ★</div>
+              <div className="trust-label">{t("ticker.avgRating")}</div>
+            </div>
           </div>
           {/* FIX #3: Real photos */}
           <div className="avatars-row">
             <div className="avatar-stack">
               {[44, 32, 68, 75, 90].map((id) => (
                 <div key={id} className="avatar-circle">
-                  <Image src={`https://randomuser.me/api/portraits/${id < 50 ? "women" : "men"}/${id}.jpg`} alt="student" width={36} height={36} />
+                  <Image
+                    src={`https://randomuser.me/api/portraits/${id < 50 ? "women" : "men"}/${id}.jpg`}
+                    alt="student"
+                    width={36}
+                    height={36}
+                  />
                 </div>
               ))}
             </div>
             <div>
               <div className="avatars-stars">★★★★★</div>
-              <div className="avatars-text"><strong>10,000+</strong> {t("ticker.solvingSmarter")}</div>
+              <div className="avatars-text">
+                <strong>10,000+</strong> {t("ticker.solvingSmarter")}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* ══ FEATURES ══ */}
-      <section id="features" className="landing-section reveal" ref={addRevealRef}>
+      <section
+        id="features"
+        className="landing-section reveal"
+        ref={addRevealRef}
+      >
         <div className="landing-tag">{t("features.tag")}</div>
         <div className="landing-stitle">{t("features.title")}</div>
         <p className="landing-ssub">{t("features.subtitle")}</p>
 
         <div className="feature-cards">
           <div className="feature-card">
-            <div className="card-top"><div className="card-icon">📸</div><span className="card-badge badge-instant">{t("features.solveBadge")}</span></div>
+            <div className="card-top">
+              <div className="card-icon">📸</div>
+              <span className="card-badge badge-instant">
+                {t("features.solveBadge")}
+              </span>
+            </div>
             <div className="card-pain">{t("features.solvePain")}</div>
             <div className="card-name">{t("features.solveTitle")}</div>
             <div className="card-desc">{t("features.solveDesc")}</div>
-            <div className="card-anticipation">{t("features.solveAnticipation")}</div>
+            <div className="card-anticipation">
+              {t("features.solveAnticipation")}
+            </div>
           </div>
           <div className="feature-card">
-            <div className="card-top"><div className="card-icon">🧠</div><span className="card-badge badge-panic">{t("features.learnBadge")}</span></div>
+            <div className="card-top">
+              <div className="card-icon">🧠</div>
+              <span className="card-badge badge-panic">
+                {t("features.learnBadge")}
+              </span>
+            </div>
             <div className="card-pain">{t("features.learnPain")}</div>
             <div className="card-name">{t("features.learnTitle")}</div>
             <div className="card-desc">{t("features.learnDesc")}</div>
-            <div className="card-anticipation">{t("features.learnAnticipation")}</div>
+            <div className="card-anticipation">
+              {t("features.learnAnticipation")}
+            </div>
           </div>
           <div className="feature-card">
-            <div className="card-top"><div className="card-icon">✍️</div><span className="card-badge badge-essays">{t("features.writeBadge")}</span></div>
+            <div className="card-top">
+              <div className="card-icon">✍️</div>
+              <span className="card-badge badge-essays">
+                {t("features.writeBadge")}
+              </span>
+            </div>
             <div className="card-pain">{t("features.writePain")}</div>
             <div className="card-name">{t("features.writeTitle")}</div>
             <div className="card-desc">{t("features.writeDesc")}</div>
-            <div className="card-anticipation">{t("features.writeAnticipation")}</div>
+            <div className="card-anticipation">
+              {t("features.writeAnticipation")}
+            </div>
           </div>
           <div className="feature-card">
-            <div className="card-top"><div className="card-icon">🔄</div><span className="card-badge badge-stealth">{t("features.humanizeBadge")}</span></div>
+            <div className="card-top">
+              <div className="card-icon">🔄</div>
+              <span className="card-badge badge-stealth">
+                {t("features.humanizeBadge")}
+              </span>
+            </div>
             <div className="card-pain">{t("features.humanizePain")}</div>
             <div className="card-name">{t("features.humanizeTitle")}</div>
             <div className="card-desc">{t("features.humanizeDesc")}</div>
-            <div className="card-anticipation">{t("features.humanizeAnticipation")}</div>
+            <div className="card-anticipation">
+              {t("features.humanizeAnticipation")}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ══ TESTIMONIALS ══ */}
-      <section className="landing-section testimonials-section reveal" ref={addRevealRef}>
+      <section
+        className="landing-section testimonials-section reveal"
+        ref={addRevealRef}
+      >
         <div className="landing-tag">{t("testimonials.tag")}</div>
         <div className="landing-stitle">{t("testimonials.title")}</div>
         <p className="landing-ssub">{t("testimonials.subtitle")}</p>
         <div className="test-grid">
           {[
-            { quote: <>I had a Calculus exam in 6 hours and hadn&apos;t studied at all. Used <strong>Panic Mode</strong> and got a summary + practice questions. <strong>Passed with a B+.</strong> I&apos;m not kidding.</>, name: "Sarah M.", detail: "Engineering · University of São Paulo", flag: "🇧🇷", img: "women/44" },
-            { quote: <>I was spending <strong>4-5 hours per essay</strong>. Now it takes me 20 minutes to get a polished first draft. I use the extra time to actually learn the material.</>, name: "Marcus T.", detail: "Business · King's College London", flag: "🇬🇧", img: "men/32" },
-            { quote: <>The humanizer is insane. I ran my output through 3 different detectors — <strong>all came back as human-written.</strong> This tool is non-negotiable for me now.</>, name: "Laura K.", detail: "Psychology · University of Melbourne", flag: "🇦🇺", img: "women/68" },
+            {
+              quote: (
+                <>
+                  I had a Calculus exam in 6 hours and hadn&apos;t studied at
+                  all. Used <strong>Panic Mode</strong> and got a summary +
+                  practice questions. <strong>Passed with a B+.</strong>{" "}
+                  I&apos;m not kidding.
+                </>
+              ),
+              name: "Sarah M.",
+              detail: "Engineering · University of São Paulo",
+              flag: "🇧🇷",
+              img: "women/44",
+            },
+            {
+              quote: (
+                <>
+                  I was spending <strong>4-5 hours per essay</strong>. Now it
+                  takes me 20 minutes to get a polished first draft. I use the
+                  extra time to actually learn the material.
+                </>
+              ),
+              name: "Marcus T.",
+              detail: "Business · King's College London",
+              flag: "🇬🇧",
+              img: "men/32",
+            },
+            {
+              quote: (
+                <>
+                  The humanizer is insane. I ran my output through 3 different
+                  detectors — <strong>all came back as human-written.</strong>{" "}
+                  This tool is non-negotiable for me now.
+                </>
+              ),
+              name: "Laura K.",
+              detail: "Psychology · University of Melbourne",
+              flag: "🇦🇺",
+              img: "women/68",
+            },
           ].map((t, i) => (
             <div key={i} className="test-card">
               <div className="test-stars">★★★★★</div>
               <div className="test-quote">&quot;{t.quote}&quot;</div>
               <div className="test-author">
                 <div className="test-avatar">
-                  <Image src={`https://randomuser.me/api/portraits/${t.img}.jpg`} alt={t.name} width={44} height={44} />
+                  <Image
+                    src={`https://randomuser.me/api/portraits/${t.img}.jpg`}
+                    alt={t.name}
+                    width={44}
+                    height={44}
+                  />
                 </div>
-                <div className="test-info"><div className="test-name">{t.name}</div><div className="test-detail">{t.detail}</div></div>
+                <div className="test-info">
+                  <div className="test-name">{t.name}</div>
+                  <div className="test-detail">{t.detail}</div>
+                </div>
                 <div className="test-flag">{t.flag}</div>
               </div>
             </div>
@@ -357,22 +513,49 @@ export default function LandingPage() {
           <div className="upsell-counter">{t("upsell.counter")}</div>
           <div className="upsell-counter-label">{t("upsell.counterLabel")}</div>
           <div className="upsell-stat">
-            <div className="upsell-stat-item"><div className="val">{t("upsell.yourTime")}</div><div className="lbl">{t("upsell.yourTimeLabel")}</div></div>
-            <div className="upsell-stat-item"><div className="val">{t("upsell.withoutAxiom")}</div><div className="lbl">{t("upsell.withoutLabel")}</div></div>
-            <div className="upsell-stat-item"><div className="val">{t("upsell.saved")}</div><div className="lbl">{t("upsell.savedLabel")}</div></div>
+            <div className="upsell-stat-item">
+              <div className="val">{t("upsell.yourTime")}</div>
+              <div className="lbl">{t("upsell.yourTimeLabel")}</div>
+            </div>
+            <div className="upsell-stat-item">
+              <div className="val">{t("upsell.withoutAxiom")}</div>
+              <div className="lbl">{t("upsell.withoutLabel")}</div>
+            </div>
+            <div className="upsell-stat-item">
+              <div className="val">{t("upsell.saved")}</div>
+              <div className="lbl">{t("upsell.savedLabel")}</div>
+            </div>
           </div>
-          <div className="upsell-msg">You just saved <strong>2 hours</strong> in 12 seconds.<br />Want to keep going?</div>
-          <a href="#pricing" className="btn-primary" style={{ fontSize: 15, padding: "14px 32px" }}>Unlock unlimited — {proDaily}/day</a>
+          <div className="upsell-msg">
+            You just saved <strong>2 hours</strong> in 12 seconds.
+            <br />
+            Want to keep going?
+          </div>
+          <a
+            href="#pricing"
+            className="btn-primary"
+            style={{ fontSize: 15, padding: "14px 32px" }}
+          >
+            Unlock unlimited — {proDaily}/day
+          </a>
         </div>
       </section>
 
       {/* ══ COMPARE ══ */}
-      <section id="compare" className="landing-section testimonials-section reveal" ref={addRevealRef}>
+      <section
+        id="compare"
+        className="landing-section testimonials-section reveal"
+        ref={addRevealRef}
+      >
         <div className="landing-tag">{t("compare.tag")}</div>
         <div className="landing-stitle">{t("compare.title")}</div>
         <p className="landing-ssub">{t("compare.subtitle")}</p>
         <div className="compare-box">
-          <div className="cmp-head"><span>{t("compare.headerTask")}</span><span className="cmp-head-old">{t("compare.headerWithout")}</span><span className="cmp-head-new">{t("compare.headerAxiom")}</span></div>
+          <div className="cmp-head">
+            <span>{t("compare.headerTask")}</span>
+            <span className="cmp-head-old">{t("compare.headerWithout")}</span>
+            <span className="cmp-head-new">{t("compare.headerAxiom")}</span>
+          </div>
           {[
             t.raw("compare.row1") as string[],
             t.raw("compare.row2") as string[],
@@ -391,18 +574,29 @@ export default function LandingPage() {
       </section>
 
       {/* ══ PRICING w/ ANNUAL TOGGLE ══ */}
-      <section id="pricing" className="landing-section reveal" ref={addRevealRef}>
+      <section
+        id="pricing"
+        className="landing-section reveal"
+        ref={addRevealRef}
+      >
         <div className="landing-tag">{t("pricing.badge")}</div>
         <div className="landing-stitle">{t("pricing.title")}</div>
         <p className="landing-ssub">{t("pricing.subtitle")}</p>
 
         {/* FIX #6: Toggle */}
         <div className="toggle-wrap">
-          <span className={`toggle-label ${!isYearly ? "active" : ""}`}>{t("pricing.monthly")}</span>
-          <div className={`toggle-track ${isYearly ? "on" : ""}`} onClick={() => setIsYearly(!isYearly)}>
+          <span className={`toggle-label ${!isYearly ? "active" : ""}`}>
+            {t("pricing.monthly")}
+          </span>
+          <div
+            className={`toggle-track ${isYearly ? "on" : ""}`}
+            onClick={() => setIsYearly(!isYearly)}
+          >
             <div className="toggle-knob" />
           </div>
-          <span className={`toggle-label ${isYearly ? "active" : ""}`}>{t("pricing.yearly")}</span>
+          <span className={`toggle-label ${isYearly ? "active" : ""}`}>
+            {t("pricing.yearly")}
+          </span>
           <span className="save-badge">{t("pricing.save")}</span>
         </div>
 
@@ -411,15 +605,32 @@ export default function LandingPage() {
           <div className="p-card">
             <div className="p-name">{t("pricing.eliteName")}</div>
             {isYearly && <div className="p-price-old">$49</div>}
-            <div className="p-price"><span className="p-curr">$</span>{elitePrice}</div>
-            <div className="p-period">{isYearly ? t("pricing.perMonthBilledYearlyElite") : t("pricing.perMonthCancel")}</div>
-            <div className="p-daily">≈ {eliteDaily}/day · unlimited everything</div>
+            <div className="p-price">
+              <span className="p-curr">$</span>
+              {elitePrice}
+            </div>
+            <div className="p-period">
+              {isYearly
+                ? t("pricing.perMonthBilledYearlyElite")
+                : t("pricing.perMonthCancel")}
+            </div>
+            <div className="p-daily">
+              ≈ {eliteDaily}/day · unlimited everything
+            </div>
             <ul className="p-features">
-              {(t.raw("pricing.eliteFeatures") as string[]).map((f: string, i: number) => (
-                <li key={i}><span className="p-check">✓</span> {f}</li>
-              ))}
+              {(t.raw("pricing.eliteFeatures") as string[]).map(
+                (f: string, i: number) => (
+                  <li key={i}>
+                    <span className="p-check">✓</span> {f}
+                  </li>
+                )
+              )}
             </ul>
-            <button className="p-btn p-btn-outline" onClick={() => handleCheckout("elite")} disabled={loading === "elite"}>
+            <button
+              className="p-btn p-btn-outline"
+              onClick={() => handleCheckout("elite")}
+              disabled={loading === "elite"}
+            >
               {loading === "elite" ? "Processing..." : t("pricing.getElite")}
             </button>
           </div>
@@ -429,15 +640,32 @@ export default function LandingPage() {
             <div className="p-top-badge">{t("pricing.mostPopular")}</div>
             <div className="p-name">{t("pricing.proName")}</div>
             {isYearly && <div className="p-price-old">$19</div>}
-            <div className="p-price"><span className="p-curr">$</span>{proPrice}</div>
-            <div className="p-period">{isYearly ? t("pricing.perMonthBilledYearlyPro") : t("pricing.perMonthCancel")}</div>
-            <div className="p-daily">≈ {proDaily}/day · less than a coffee ☕</div>
+            <div className="p-price">
+              <span className="p-curr">$</span>
+              {proPrice}
+            </div>
+            <div className="p-period">
+              {isYearly
+                ? t("pricing.perMonthBilledYearlyPro")
+                : t("pricing.perMonthCancel")}
+            </div>
+            <div className="p-daily">
+              ≈ {proDaily}/day · less than a coffee ☕
+            </div>
             <ul className="p-features">
-              {(t.raw("pricing.proFeatures") as string[]).map((f: string, i: number) => (
-                <li key={i}><span className="p-check">✓</span> {f}</li>
-              ))}
+              {(t.raw("pricing.proFeatures") as string[]).map(
+                (f: string, i: number) => (
+                  <li key={i}>
+                    <span className="p-check">✓</span> {f}
+                  </li>
+                )
+              )}
             </ul>
-            <button className="p-btn p-btn-main" onClick={() => handleCheckout("pro")} disabled={loading === "pro"}>
+            <button
+              className="p-btn p-btn-main"
+              onClick={() => handleCheckout("pro")}
+              disabled={loading === "pro"}
+            >
               {loading === "pro" ? "Processing..." : t("pricing.getPro")}
             </button>
           </div>
@@ -445,15 +673,27 @@ export default function LandingPage() {
           {/* Free */}
           <div className="p-card">
             <div className="p-name">{t("pricing.freeName")}</div>
-            <div className="p-price"><span className="p-curr">$</span>0</div>
+            <div className="p-price">
+              <span className="p-curr">$</span>0
+            </div>
             <div className="p-period">{t("pricing.foreverFree")}</div>
             <div className="p-daily">{t("pricing.zeroRisk")}</div>
             <ul className="p-features">
-              {(t.raw("pricing.freeFeatures") as string[]).map((f: string, i: number) => (
-                <li key={i}><span className="p-check">✓</span> {f}</li>
-              ))}
+              {(t.raw("pricing.freeFeatures") as string[]).map(
+                (f: string, i: number) => (
+                  <li key={i}>
+                    <span className="p-check">✓</span> {f}
+                  </li>
+                )
+              )}
             </ul>
-            <Link href="/auth/signup" className="p-btn p-btn-outline" style={{ display: "block", textAlign: "center" }}>{t("pricing.startFree")}</Link>
+            <Link
+              href="/auth/signup"
+              className="p-btn p-btn-outline"
+              style={{ display: "block", textAlign: "center" }}
+            >
+              {t("pricing.startFree")}
+            </Link>
           </div>
         </div>
       </section>
@@ -464,20 +704,34 @@ export default function LandingPage() {
         <div className="final-social">
           <div className="avatar-stack">
             {[44, 32, 68, 75, 90].map((id) => (
-              <div key={id} className="avatar-circle" style={{ width: 32, height: 32 }}>
-                <Image src={`https://randomuser.me/api/portraits/${id < 50 ? "women" : "men"}/${id}.jpg`} alt="" width={32} height={32} />
+              <div
+                key={id}
+                className="avatar-circle"
+                style={{ width: 32, height: 32 }}
+              >
+                <Image
+                  src={`https://randomuser.me/api/portraits/${id < 50 ? "women" : "men"}/${id}.jpg`}
+                  alt=""
+                  width={32}
+                  height={32}
+                />
               </div>
             ))}
           </div>
           <div className="avatars-text">{t("cta.joinStudents")}</div>
         </div>
         <div className="final-trigger">
-          {t("cta.trigger1")}<br />
+          {t("cta.trigger1")}
+          <br />
           <em>{t("cta.trigger2")}</em> —<br />
           {t("cta.trigger3")}
         </div>
         <div className="final-solution">{t("cta.solution")}</div>
-        <Link href="/auth/signup" className="btn-primary" style={{ fontSize: 16, padding: "16px 40px" }}>
+        <Link
+          href="/auth/signup"
+          className="btn-primary"
+          style={{ fontSize: 16, padding: "16px 40px" }}
+        >
           {t("cta.startNow")}
         </Link>
         <div className="final-note">{t("cta.note")}</div>
