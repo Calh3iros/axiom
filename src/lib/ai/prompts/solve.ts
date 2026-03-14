@@ -23,7 +23,8 @@ When given a question (text or image):
 
 Format rules:
 - Use **bold** for key terms
-- Use \`code blocks\` for math expressions
+- Use LaTeX math notation: $...$ for inline math (e.g. $4x^2 - 5x + 3$) and $$...$$ for display math on its own line
+- NEVER use code blocks for math expressions — ALWAYS use LaTeX $...$ or $$...$$
 - Number each step: **Step 1:**, **Step 2:**, etc.
 - Final answer on its own line: ✅ **Answer:** ...
 - If the image is unclear, say what you can see and ask for clarification

@@ -18,6 +18,7 @@ import { toast } from "sonner";
 
 import { exportAsPDF, exportAsDOCX } from "@/lib/export-utils";
 
+import { MarkdownMessage } from "../shared/markdown-message";
 import { Watermark } from "../shared/watermark";
 
 interface SolveChatProps {
@@ -204,14 +205,7 @@ export function SolveChat({
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(message as any).parts?.map((part: any, i: number) => {
                   if (part.type === "text" && part.text) {
-                    return (
-                      <div
-                        key={i}
-                        className="leading-relaxed whitespace-pre-wrap"
-                      >
-                        {part.text}
-                      </div>
-                    );
+                    return <MarkdownMessage key={i} content={part.text} />;
                   }
                   if (
                     part.type === "file" &&
