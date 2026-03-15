@@ -132,6 +132,16 @@ docs/
 - Componentes: `BadgeGrid` (glow amarelo/grayscale) + `BadgeUnlockToast`
 - i18n: 72 chaves (12 badges × 6 locales)
 
+## Student Dashboard + Public Profile (Phase 3)
+
+- `/map` evoluiu para dashboard completo: StatsHeader (5 cards) + StreakCalendar (GitHub-style 90 dias) + BadgeGrid + tópicos
+- Perfil público: `/profile/[userId]` (sem auth para ver, 404 se privado)
+- Toggle privacidade no Settings (`is_profile_public` em profiles)
+- Streak freeze: `streak_freeze_available` (1/semana para Pro/Elite)
+- Server actions: `getPublicProfile()`, `toggleProfilePublic()`, `getStreakCalendar()`
+- i18n: 17+ chaves × 6 locales (stats, calendar, profile)
+- Migration: `20260315_profile_public.sql`
+
 ---
 
 ## ESTADO: ✅ PROJETO 100% COMPLETO (44/44 itens)
