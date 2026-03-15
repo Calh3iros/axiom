@@ -142,6 +142,14 @@ docs/
 - i18n: 17+ chaves × 6 locales (stats, calendar, profile)
 - Migration: `20260315_profile_public.sql`
 
+## Streak Refinado (Phase 4)
+
+- Streak baseado em interações reais (`streak_last_interaction_date`), não login
+- Freeze protection: Pro/Elite ganham 1 freeze/semana (auto-reset). Se perdeu 1 dia + tem freeze → streak mantém
+- Free: sem freeze, gap > 1 dia = reset
+- Legacy cleanup: removida lógica de `badges[]` array (supersedida por `user_badges` table da Phase 2)
+- Tudo em `usage.ts` (linhas 322-385), zero novos arquivos ou schema changes
+
 ---
 
 ## ESTADO: ✅ PROJETO 100% COMPLETO (44/44 itens)
