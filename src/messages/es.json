@@ -20,7 +20,8 @@
       "free": "GRATIS",
       "pro": "PRO ✨",
       "checkoutSuccess": "Actualización exitosa. Tu plan ha sido actualizado.",
-      "checkoutCancelled": "Pago cancelado. No se realizó ningún cargo."
+      "checkoutCancelled": "Pago cancelado. No se realizó ningún cargo.",
+      "org": "Organización"
     },
     "Solve": {
       "title": "Solucionador",
@@ -595,5 +596,45 @@
     "accuracy": "Precisión",
     "topics": "Temas",
     "badges": "Logros"
+  },
+  "Org": {
+    "title": "Mis Organizaciones",
+    "createOrg": "Crear Organización",
+    "noOrgs": "Aún no formas parte de ninguna organización.",
+    "joinHint": "Pide a tu profesor un código de invitación, o crea la tuya.",
+    "typeSchool": "Escuela",
+    "typeNetwork": "Red",
+    "typeState": "Secretaría",
+    "roleStudent": "Estudiante",
+    "roleTeacher": "Profesor",
+    "roleAdmin": "Admin",
+    "roleDirector": "Director",
+    "roleSecretary": "Secretario",
+    "members": "Miembros",
+    "classes": "Clases",
+    "orgName": "Nombre de la organización",
+    "orgType": "Tipo",
+    "create": "Crear",
+    "cancel": "Cancelar"
+  },
+  "Class": {
+    "title": "Clase",
+    "inviteCode": "Código de Invitación",
+    "students": "Estudiantes",
+    "createClass": "Crear Clase",
+    "className": "Nombre de la clase",
+    "regenerateCode": "Regenerar Código",
+    "copyCode": "Copiar Código",
+    "codeCopied": "¡Código copiado!",
+    "noStudents": "Aún no hay estudiantes en esta clase.",
+    "teacher": "Profesor"
+  },
+  "Join": {
+    "title": "Unirse a una Clase",
+    "placeholder": "Ingresa el código de invitación",
+    "submit": "Unirse",
+    "success": "¡Te uniste con éxito!",
+    "error": "Código de invitación inválido",
+    "joining": "Uniéndose..."
   }
 }

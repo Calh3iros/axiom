@@ -13,6 +13,7 @@ import {
   X,
   LogOut,
   Target,
+  Building2,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -38,6 +39,7 @@ const navItems = [
   { id: "humanize", href: "/humanize", icon: Wand2 },
   { id: "learn", href: "/learn", icon: BookOpen },
   { id: "map", href: "/map", icon: Target },
+  { id: "org", href: "/org", icon: Building2 },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {

@@ -20,7 +20,8 @@
       "free": "GRUIT",
       "pro": "PRO ✨",
       "checkoutSuccess": "Mise à niveau réussie ! Votre plan a été mis à jour.",
-      "checkoutCancelled": "Paiement annulé. Aucun frais n'a été appliqué."
+      "checkoutCancelled": "Paiement annulé. Aucun frais n'a été appliqué.",
+      "org": "Organisation"
     },
     "Solve": {
       "title": "Solveur",
@@ -595,5 +596,45 @@
     "accuracy": "Précision",
     "topics": "Sujets",
     "badges": "Récompenses"
+  },
+  "Org": {
+    "title": "Mes Organisations",
+    "createOrg": "Créer une Organisation",
+    "noOrgs": "Vous ne faites partie d'aucune organisation.",
+    "joinHint": "Demandez un code d'invitation à votre professeur, ou créez la vôtre.",
+    "typeSchool": "École",
+    "typeNetwork": "Réseau",
+    "typeState": "Secrétariat",
+    "roleStudent": "Élève",
+    "roleTeacher": "Professeur",
+    "roleAdmin": "Admin",
+    "roleDirector": "Directeur",
+    "roleSecretary": "Secrétaire",
+    "members": "Membres",
+    "classes": "Classes",
+    "orgName": "Nom de l'organisation",
+    "orgType": "Type",
+    "create": "Créer",
+    "cancel": "Annuler"
+  },
+  "Class": {
+    "title": "Classe",
+    "inviteCode": "Code d'Invitation",
+    "students": "Élèves",
+    "createClass": "Créer une Classe",
+    "className": "Nom de la classe",
+    "regenerateCode": "Régénérer le Code",
+    "copyCode": "Copier le Code",
+    "codeCopied": "Code copié !",
+    "noStudents": "Aucun élève dans cette classe.",
+    "teacher": "Professeur"
+  },
+  "Join": {
+    "title": "Rejoindre une Classe",
+    "placeholder": "Entrez le code d'invitation",
+    "submit": "Rejoindre",
+    "success": "Inscription réussie !",
+    "error": "Code d'invitation invalide",
+    "joining": "En cours..."
   }
 }

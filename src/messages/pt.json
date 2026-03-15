@@ -20,7 +20,8 @@
       "free": "GRÁTIS",
       "pro": "PRO ✨",
       "checkoutSuccess": "Upgrade realizado com sucesso! Seu plano foi atualizado.",
-      "checkoutCancelled": "Checkout cancelado. Nenhuma cobrança foi feita."
+      "checkoutCancelled": "Checkout cancelado. Nenhuma cobrança foi feita.",
+      "org": "Organização"
     },
     "Solve": {
       "title": "Solucionador",
@@ -595,5 +596,45 @@
     "accuracy": "Precisão",
     "topics": "Tópicos",
     "badges": "Conquistas"
+  },
+  "Org": {
+    "title": "Minhas Organizações",
+    "createOrg": "Criar Organização",
+    "noOrgs": "Você ainda não faz parte de nenhuma organização.",
+    "joinHint": "Peça ao seu professor um código de convite, ou crie a sua própria.",
+    "typeSchool": "Escola",
+    "typeNetwork": "Rede",
+    "typeState": "Secretaria",
+    "roleStudent": "Aluno",
+    "roleTeacher": "Professor",
+    "roleAdmin": "Admin",
+    "roleDirector": "Diretor",
+    "roleSecretary": "Secretário",
+    "members": "Membros",
+    "classes": "Turmas",
+    "orgName": "Nome da organização",
+    "orgType": "Tipo",
+    "create": "Criar",
+    "cancel": "Cancelar"
+  },
+  "Class": {
+    "title": "Turma",
+    "inviteCode": "Código de Convite",
+    "students": "Alunos",
+    "createClass": "Criar Turma",
+    "className": "Nome da turma",
+    "regenerateCode": "Regenerar Código",
+    "copyCode": "Copiar Código",
+    "codeCopied": "Código copiado!",
+    "noStudents": "Nenhum aluno nesta turma ainda.",
+    "teacher": "Professor"
+  },
+  "Join": {
+    "title": "Entrar em uma Turma",
+    "placeholder": "Digite o código de convite",
+    "submit": "Entrar",
+    "success": "Entrada realizada com sucesso!",
+    "error": "Código de convite inválido",
+    "joining": "Entrando..."
   }
 }

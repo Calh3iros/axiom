@@ -20,7 +20,8 @@
       "free": "免费",
       "pro": "高级 ✨",
       "checkoutSuccess": "升级成功！您的计划已更新。",
-      "checkoutCancelled": "付款已取消。未产生任何费用。"
+      "checkoutCancelled": "付款已取消。未产生任何费用。",
+      "org": "组织"
     },
     "Solve": {
       "title": "作业解答器",
@@ -595,5 +596,45 @@
     "accuracy": "准确率",
     "topics": "主题",
     "badges": "成就"
+  },
+  "Org": {
+    "title": "我的组织",
+    "createOrg": "创建组织",
+    "noOrgs": "您还没有加入任何组织。",
+    "joinHint": "向老师索要邀请码，或创建自己的组织。",
+    "typeSchool": "学校",
+    "typeNetwork": "网络",
+    "typeState": "教育局",
+    "roleStudent": "学生",
+    "roleTeacher": "教师",
+    "roleAdmin": "管理员",
+    "roleDirector": "校长",
+    "roleSecretary": "秘书",
+    "members": "成员",
+    "classes": "班级",
+    "orgName": "组织名称",
+    "orgType": "类型",
+    "create": "创建",
+    "cancel": "取消"
+  },
+  "Class": {
+    "title": "班级",
+    "inviteCode": "邀请码",
+    "students": "学生",
+    "createClass": "创建班级",
+    "className": "班级名称",
+    "regenerateCode": "重新生成码",
+    "copyCode": "复制码",
+    "codeCopied": "已复制！",
+    "noStudents": "该班级暂无学生。",
+    "teacher": "教师"
+  },
+  "Join": {
+    "title": "加入班级",
+    "placeholder": "输入邀请码",
+    "submit": "加入",
+    "success": "加入成功！",
+    "error": "无效的邀请码",
+    "joining": "加入中..."
   }
 }

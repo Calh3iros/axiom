@@ -20,7 +20,8 @@
       "free": "FREE",
       "pro": "PRO ✨",
       "checkoutSuccess": "Upgrade successful! Your plan has been updated.",
-      "checkoutCancelled": "Checkout cancelled. No charges were made."
+      "checkoutCancelled": "Checkout cancelled. No charges were made.",
+      "org": "Organization"
     },
     "Solve": {
       "title": "Homework Solver",
@@ -595,5 +596,45 @@
     "accuracy": "Accuracy",
     "topics": "Topics",
     "badges": "Badges"
+  },
+  "Org": {
+    "title": "My Organizations",
+    "createOrg": "Create Organization",
+    "noOrgs": "You are not part of any organization yet.",
+    "joinHint": "Ask your teacher for an invite code, or create your own.",
+    "typeSchool": "School",
+    "typeNetwork": "Network",
+    "typeState": "State",
+    "roleStudent": "Student",
+    "roleTeacher": "Teacher",
+    "roleAdmin": "Admin",
+    "roleDirector": "Director",
+    "roleSecretary": "Secretary",
+    "members": "Members",
+    "classes": "Classes",
+    "orgName": "Organization name",
+    "orgType": "Type",
+    "create": "Create",
+    "cancel": "Cancel"
+  },
+  "Class": {
+    "title": "Class",
+    "inviteCode": "Invite Code",
+    "students": "Students",
+    "createClass": "Create Class",
+    "className": "Class name",
+    "regenerateCode": "Regenerate Code",
+    "copyCode": "Copy Code",
+    "codeCopied": "Code copied!",
+    "noStudents": "No students in this class yet.",
+    "teacher": "Teacher"
+  },
+  "Join": {
+    "title": "Join a Class",
+    "placeholder": "Enter invite code",
+    "submit": "Join",
+    "success": "Successfully joined!",
+    "error": "Invalid invite code",
+    "joining": "Joining..."
   }
 }

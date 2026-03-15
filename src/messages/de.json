@@ -20,7 +20,8 @@
       "free": "KOSTENLOS",
       "pro": "PRO ✨",
       "checkoutSuccess": "Upgrade erfolgreich! Ihr Plan wurde aktualisiert.",
-      "checkoutCancelled": "Bezahlung abgebrochen. Es wurden keine Gebühren erhoben."
+      "checkoutCancelled": "Bezahlung abgebrochen. Es wurden keine Gebühren erhoben.",
+      "org": "Organisation"
     },
     "Solve": {
       "title": "Aufgabenlöser",
@@ -595,5 +596,45 @@
     "accuracy": "Genauigkeit",
     "topics": "Themen",
     "badges": "Abzeichen"
+  },
+  "Org": {
+    "title": "Meine Organisationen",
+    "createOrg": "Organisation erstellen",
+    "noOrgs": "Sie sind noch keiner Organisation beigetreten.",
+    "joinHint": "Bitten Sie Ihren Lehrer um einen Einladungscode, oder erstellen Sie Ihre eigene.",
+    "typeSchool": "Schule",
+    "typeNetwork": "Netzwerk",
+    "typeState": "Behörde",
+    "roleStudent": "Schüler",
+    "roleTeacher": "Lehrer",
+    "roleAdmin": "Admin",
+    "roleDirector": "Direktor",
+    "roleSecretary": "Sekretär",
+    "members": "Mitglieder",
+    "classes": "Klassen",
+    "orgName": "Organisationsname",
+    "orgType": "Typ",
+    "create": "Erstellen",
+    "cancel": "Abbrechen"
+  },
+  "Class": {
+    "title": "Klasse",
+    "inviteCode": "Einladungscode",
+    "students": "Schüler",
+    "createClass": "Klasse erstellen",
+    "className": "Klassenname",
+    "regenerateCode": "Code regenerieren",
+    "copyCode": "Code kopieren",
+    "codeCopied": "Code kopiert!",
+    "noStudents": "Noch keine Schüler in dieser Klasse.",
+    "teacher": "Lehrer"
+  },
+  "Join": {
+    "title": "Einer Klasse beitreten",
+    "placeholder": "Einladungscode eingeben",
+    "submit": "Beitreten",
+    "success": "Erfolgreich beigetreten!",
+    "error": "Ungültiger Einladungscode",
+    "joining": "Beitritt..."
   }
 }
