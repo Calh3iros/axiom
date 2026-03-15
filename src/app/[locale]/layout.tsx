@@ -84,14 +84,14 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
         <link
           rel="icon"
-          href="/icon-192.png"
+          href="/icon-192.png?v=2"
           sizes="192x192"
           type="image/png"
         />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-192.png?v=2" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
