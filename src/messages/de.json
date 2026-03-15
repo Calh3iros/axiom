@@ -53,7 +53,17 @@
       "level_2": "Grundlagen",
       "level_3": "Mittelstufe",
       "level_4": "Fortgeschritten",
-      "level_5": "Meister"
+      "level_5": "Meister",
+      "statsSolved": "Gelöst",
+      "statsAccuracy": "Genauigkeit",
+      "statsTopics": "Themen",
+      "statsStreak": "Serie",
+      "statsBadges": "Abzeichen",
+      "streakCalendar": "Lernaktivität",
+      "calendarLess": "Weniger",
+      "calendarMore": "Mehr",
+      "badgesSection": "Abzeichen",
+      "viewPublicProfile": "Öffentliches Profil"
     },
     "Settings": {
       "title": "Einstellungen",
@@ -91,7 +101,9 @@
       "privacyPolicy": "Datenschutzrichtlinie",
       "termsOfService": "Nutzungsbedingungen",
       "planElite": "Axiom Elite",
-      "planEliteDesc": "Unbegrenzter Zugang zu allen Funktionen + Prioritätssupport"
+      "planEliteDesc": "Unbegrenzter Zugang zu allen Funktionen + Prioritätssupport",
+      "publicProfile": "Öffentliches Profil",
+      "publicProfileDesc": "Teile deinen Fortschritt über einen öffentlichen Link"
     },
     "Learn": {
       "title": "Interaktiver Tutor",
@@ -574,5 +586,14 @@
       "name": "Interdisziplinär",
       "desc": "Lerne 3+ verschiedene Fächer"
     }
+  },
+  "Profile": {
+    "studentProfile": "Studentenprofil",
+    "memberSince": "Mitglied seit",
+    "dayStreak": "Tage Serie",
+    "solved": "Gelöst",
+    "accuracy": "Genauigkeit",
+    "topics": "Themen",
+    "badges": "Abzeichen"
   }
 }

@@ -53,7 +53,17 @@
       "level_2": "Básico",
       "level_3": "Intermedio",
       "level_4": "Avanzado",
-      "level_5": "Maestro"
+      "level_5": "Maestro",
+      "statsSolved": "Resueltos",
+      "statsAccuracy": "Precisión",
+      "statsTopics": "Temas",
+      "statsStreak": "Racha",
+      "statsBadges": "Insignias",
+      "streakCalendar": "Actividad de Estudio",
+      "calendarLess": "Menos",
+      "calendarMore": "Más",
+      "badgesSection": "Logros",
+      "viewPublicProfile": "Ver Perfil Público"
     },
     "Settings": {
       "title": "Ajustes",
@@ -91,7 +101,9 @@
       "privacyPolicy": "Política de Privacidad",
       "termsOfService": "Términos de Servicio",
       "planElite": "Axiom Elite",
-      "planEliteDesc": "Acceso ilimitado a todos los recursos + soporte prioritario"
+      "planEliteDesc": "Acceso ilimitado a todos los recursos + soporte prioritario",
+      "publicProfile": "Perfil Público",
+      "publicProfileDesc": "Comparte tu progreso con un enlace público"
     },
     "Learn": {
       "title": "Tutor Interactivo",
@@ -574,5 +586,14 @@
       "name": "Interdisciplinario",
       "desc": "Estudia 3+ materias"
     }
+  },
+  "Profile": {
+    "studentProfile": "Perfil del Estudiante",
+    "memberSince": "Miembro desde",
+    "dayStreak": "días de racha",
+    "solved": "Resueltos",
+    "accuracy": "Precisión",
+    "topics": "Temas",
+    "badges": "Logros"
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { toggleProfilePublic } from "@/lib/actions/profile";
 import {
   User,
   Crown,
@@ -30,6 +31,7 @@ type Profile = {
   stripe_subscription_id: string | null;
   created_at: string;
   badges: string[] | null;
+  is_profile_public: boolean;
 };
 
 export default function SettingsPage() {
@@ -55,7 +57,7 @@ export default function SettingsPage() {
         const { data } = (await supabase
           .from("profiles")
           .select(
-            "plan, stripe_customer_id, stripe_subscription_id, created_at, badges"
+            "plan, stripe_customer_id, stripe_subscription_id, created_at, badges, is_profile_public"
           )
           .eq("id", user.id)
           .single()) as { data: Profile | null };
@@ -232,6 +234,40 @@ export default function SettingsPage() {
         </div>
 
         <BadgeGrid />
+      </div>
+
+      {/* ── Profile Visibility ── */}
+      <div className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-[var(--color-text-primary)]">
+              🌐 {t("publicProfile")}
+            </h2>
+            <p className="text-xs text-[var(--color-text-secondary)]">
+              {t("publicProfileDesc")}
+            </p>
+          </div>
+          <button
+            onClick={async () => {
+              const newVal = !profile?.is_profile_public;
+              await toggleProfilePublic(newVal);
+              setProfile((prev) =>
+                prev ? { ...prev, is_profile_public: newVal } : prev
+              );
+            }}
+            className={`relative h-6 w-11 rounded-full transition-colors ${
+              profile?.is_profile_public
+                ? "bg-[var(--color-ax-blue)]"
+                : "bg-[var(--color-bg2)] border border-[var(--color-border)]"
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                profile?.is_profile_public ? "translate-x-5" : "translate-x-0.5"
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* ── Plan Card ── */}

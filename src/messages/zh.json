@@ -53,7 +53,17 @@
       "level_2": "基础",
       "level_3": "中级",
       "level_4": "高级",
-      "level_5": "大师"
+      "level_5": "大师",
+      "statsSolved": "已解决",
+      "statsAccuracy": "准确率",
+      "statsTopics": "主题",
+      "statsStreak": "连续",
+      "statsBadges": "徽章",
+      "streakCalendar": "学习活动",
+      "calendarLess": "少",
+      "calendarMore": "多",
+      "badgesSection": "成就",
+      "viewPublicProfile": "查看公开资料"
     },
     "Settings": {
       "title": "设置",
@@ -91,7 +101,9 @@
       "privacyPolicy": "隐私政策",
       "termsOfService": "服务条款",
       "planElite": "Axiom Elite",
-      "planEliteDesc": "无限访问所有功能 + 优先支持"
+      "planEliteDesc": "无限访问所有功能 + 优先支持",
+      "publicProfile": "公开资料",
+      "publicProfileDesc": "通过公开链接分享你的进度"
     },
     "Learn": {
       "title": "互动导师",
@@ -574,5 +586,14 @@
       "name": "跨学科",
       "desc": "学习3+不同学科"
     }
+  },
+  "Profile": {
+    "studentProfile": "学生资料",
+    "memberSince": "注册于",
+    "dayStreak": "天连续",
+    "solved": "已解决",
+    "accuracy": "准确率",
+    "topics": "主题",
+    "badges": "成就"
   }
 }

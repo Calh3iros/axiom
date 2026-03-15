@@ -53,7 +53,17 @@
       "level_2": "Basic",
       "level_3": "Intermediate",
       "level_4": "Advanced",
-      "level_5": "Master"
+      "level_5": "Master",
+      "statsSolved": "Solved",
+      "statsAccuracy": "Accuracy",
+      "statsTopics": "Topics",
+      "statsStreak": "Streak",
+      "statsBadges": "Badges",
+      "streakCalendar": "Study Activity",
+      "calendarLess": "Less",
+      "calendarMore": "More",
+      "badgesSection": "Badges",
+      "viewPublicProfile": "View Public Profile"
     },
     "Settings": {
       "title": "Settings",
@@ -91,7 +101,9 @@
       "privacyPolicy": "Privacy Policy",
       "termsOfService": "Terms of Service",
       "planElite": "Axiom Elite",
-      "planEliteDesc": "Unlimited access to all features + priority support"
+      "planEliteDesc": "Unlimited access to all features + priority support",
+      "publicProfile": "Public Profile",
+      "publicProfileDesc": "Share your progress with anyone via a public link"
     },
     "Learn": {
       "title": "Learn Tutor",
@@ -574,5 +586,14 @@
       "name": "Interdisciplinary",
       "desc": "Study 3+ different subjects"
     }
+  },
+  "Profile": {
+    "studentProfile": "Student Profile",
+    "memberSince": "Member since",
+    "dayStreak": "day streak",
+    "solved": "Solved",
+    "accuracy": "Accuracy",
+    "topics": "Topics",
+    "badges": "Badges"
   }
 }
