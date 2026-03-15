@@ -88,6 +88,19 @@ Plataforma educacional com IA (Gemini 2.5 Flash) para estudantes universitários
   - Prompts instruíram IA a usar `$...$` inline e `$$...$$` display (LaTeX) em vez de code blocks
   - Equações renderizadas como no livro: $4x^2 - 5x - 12 = 0$
 
+### Fase 2: Badge System ✅ (15/03/2026)
+
+- Tabela `badges_catalog` (12 badges em 4 categorias: mastery, consistency, volume, milestone)
+- Tabela `user_badges` com RLS (user vê apenas próprios badges, service role pode inserir)
+- Badge Engine (`src/lib/badges.ts`): 6 criteria types (solves_total, correct_total, correct_streak, streak_days, topic_level_5, subjects_count)
+- Integração no background worker do `chat/route.ts`: `checkAndUnlockBadges()` após cada atualização MBLID
+- `BadgeGrid` component: grid responsivo, badges desbloqueados com glow amarelo, bloqueados grayscale
+- `BadgeUnlockToast` component: toast slide-in com auto-dismiss
+- Settings page: seção Achievements dinâmica (substituiu 2 badges hardcoded por 12 do banco)
+- i18n: 72 chaves (12 badges × 6 locales: name + desc)
+- Migration: `supabase/migrations/20260315_badges.sql`
+- Write, Humanize, Panic: INTOCADOS (guardrail de escopo)
+
 ---
 
 ## ESTRUTURA DE PASTAS IMPORTANTE
