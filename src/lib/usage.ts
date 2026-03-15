@@ -319,53 +319,74 @@ export async function incrementUsage(
     amount,
   });
 
-  // 3. Streak & badge logic (skip anonymous) ------------------------------
+  // 3. Streak logic — interaction-based with freeze (skip anonymous) ------
   if (!userId.startsWith('anon:')) {
     const { data: profile } = (await supabaseAdmin
       .from('profiles')
-      .select('current_streak, last_active_date, badges')
+      .select('current_streak, last_active_date, streak_freeze_available, streak_last_interaction_date, plan')
       .eq('id', userId)
       .single()) as {
       data: {
         current_streak: number | null;
         last_active_date: string | null;
-        badges: string[] | null;
+        streak_freeze_available: number | null;
+        streak_last_interaction_date: string | null;
+        plan: string | null;
       } | null;
     };
 
     if (profile) {
       const lastActive = profile.last_active_date;
       const currentStreak = profile.current_streak || 0;
+      const plan = normalisePlan(profile.plan);
+      const isPaid = plan === 'pro' || plan === 'elite';
+      let freezeAvailable = profile.streak_freeze_available || 0;
+
+      // Weekly freeze reset: if last active was a different ISO week, grant 1 freeze to paid
+      if (isPaid && lastActive && lastActive !== today) {
+        const lastDate = new Date(lastActive);
+        const todayDate = new Date(today);
+        const getWeek = (d: Date) => {
+          const jan1 = new Date(d.getFullYear(), 0, 1);
+          return Math.ceil(((d.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7);
+        };
+        if (getWeek(todayDate) !== getWeek(lastDate) || todayDate.getFullYear() !== lastDate.getFullYear()) {
+          freezeAvailable = 1; // Reset to 1 freeze per week for paid plans
+        }
+      }
 
       let newStreak = currentStreak;
 
       if (lastActive !== today) {
-        newStreak = 1;
         if (lastActive === yesterday) {
+          // Consecutive day — increment streak
           newStreak = currentStreak + 1;
+        } else if (lastActive) {
+          // Gap detected — check freeze
+          const lastDate = new Date(lastActive);
+          const todayDate = new Date(today);
+          const gapDays = Math.floor((todayDate.getTime() - lastDate.getTime()) / 86400000);
+
+          if (gapDays === 2 && freezeAvailable > 0) {
+            // Missed exactly 1 day + has freeze → keep streak, consume freeze
+            newStreak = currentStreak + 1;
+            freezeAvailable -= 1;
+          } else {
+            // Gap too big or no freeze → reset
+            newStreak = 1;
+          }
+        } else {
+          // First ever interaction
+          newStreak = 1;
         }
-      }
 
-      const existingBadges = profile.badges || [];
-      const newBadges = [...existingBadges];
-      let badgesUpdated = false;
-
-      if (newStreak >= 7 && !existingBadges.includes('1_week_scholar')) {
-        newBadges.push('1_week_scholar');
-        badgesUpdated = true;
-      }
-      if (newStreak >= 30 && !existingBadges.includes('monthly_master')) {
-        newBadges.push('monthly_master');
-        badgesUpdated = true;
-      }
-
-      if (lastActive !== today || badgesUpdated) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (supabaseAdmin.from('profiles') as any)
           .update({
             current_streak: newStreak,
             last_active_date: today,
-            badges: newBadges,
+            streak_last_interaction_date: today,
+            streak_freeze_available: freezeAvailable,
           })
           .eq('id', userId);
       }
