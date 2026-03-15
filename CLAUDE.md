@@ -157,7 +157,10 @@ docs/
 - 7 indexes de performance
 - Server actions: `createOrganization`, `createClass`, `getOrgDashboard`, `getClassDashboard`, `addOrgMember`, `removeOrgMember`
 - Invite system: `joinByInviteCode` (auto-join org + class), `regenerateInviteCode`, `leaveClass`
-- UI (Phase 5B): pendente para próxima sessão
+- UI (Phase 5B): `/org` dashboard, `/org/[orgId]` detalhe, `/org/[orgId]/class/[classId]` turma, `/join` convite
+- Sidebar: link "Organização" (Building2 icon)
+- Componentes: OrgCard, ClassCard, MemberList, CreateOrgModal, CreateClassModal
+- i18n: ~35 chaves × 6 locales
 
 ---
 
