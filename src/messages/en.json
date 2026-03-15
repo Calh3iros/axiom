@@ -362,11 +362,31 @@
       "headerTask": "Task",
       "headerWithout": "Without",
       "headerAxiom": "With Axiom",
-      "row1": ["Solve 1 problem", "30 – 60 min", "5 seconds"],
-      "row2": ["Write 1,000-word essay", "3 – 5 hours", "15 minutes"],
-      "row3": ["Build study plan", "1 – 2 hours", "1 click"],
-      "row4": ["Humanize 2,000 words", "45 min", "10 seconds"],
-      "row5": ["Full exam prep", "6 – 10 hours", "2 hours"],
+      "row1": [
+        "Solve 1 problem",
+        "30 – 60 min",
+        "5 seconds"
+      ],
+      "row2": [
+        "Write 1,000-word essay",
+        "3 – 5 hours",
+        "15 minutes"
+      ],
+      "row3": [
+        "Build study plan",
+        "1 – 2 hours",
+        "1 click"
+      ],
+      "row4": [
+        "Humanize 2,000 words",
+        "45 min",
+        "10 seconds"
+      ],
+      "row5": [
+        "Full exam prep",
+        "6 – 10 hours",
+        "2 hours"
+      ],
       "footer": "Average student saves ~200 hours per semester"
     },
     "pricing": {
@@ -503,6 +523,56 @@
           "content": "For questions about these terms, contact us at support@axiom.study."
         }
       ]
+    }
+  },
+  "Badges": {
+    "firstSolve": {
+      "name": "First Solve",
+      "desc": "Solve your first problem"
+    },
+    "solves10": {
+      "name": "Problem Solver",
+      "desc": "Solve 10 problems"
+    },
+    "solves50": {
+      "name": "Veteran",
+      "desc": "Solve 50 problems"
+    },
+    "solves100": {
+      "name": "Centurion",
+      "desc": "Solve 100 problems"
+    },
+    "firstCorrect": {
+      "name": "Got It!",
+      "desc": "Get your first correct answer"
+    },
+    "streak10Correct": {
+      "name": "Flawless",
+      "desc": "10 correct answers in a row"
+    },
+    "streak3Day": {
+      "name": "Spark",
+      "desc": "3-day study streak"
+    },
+    "streak7Day": {
+      "name": "Iron Week",
+      "desc": "7-day study streak"
+    },
+    "streak30Day": {
+      "name": "Unstoppable",
+      "desc": "30-day study streak"
+    },
+    "firstMastery": {
+      "name": "First Mastery",
+      "desc": "Master a topic (level 5)"
+    },
+    "mastery5Topics": {
+      "name": "Polymath",
+      "desc": "Master 5 topics"
+    },
+    "multiSubject": {
+      "name": "Interdisciplinary",
+      "desc": "Study 3+ different subjects"
     }
   }
 }

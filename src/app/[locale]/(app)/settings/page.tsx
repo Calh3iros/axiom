@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
+import { BadgeGrid } from "@/components/shared/badge-grid";
 
 type Profile = {
   plan: "free" | "pro" | "elite";
@@ -230,57 +231,7 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Badge 1: 1-Week Scholar */}
-          <div
-            className={`flex flex-col items-center justify-center rounded-xl border p-4 ${
-              profile?.badges?.includes("1_week_scholar")
-                ? "border-[var(--color-ax-yellow)]/20 bg-[var(--color-ax-yellow)]/10"
-                : "border-[var(--color-border)] bg-[var(--color-bg0)] opacity-60 grayscale"
-            }`}
-          >
-            <div
-              className={`mb-2 flex h-12 w-12 items-center justify-center rounded-full ${
-                profile?.badges?.includes("1_week_scholar")
-                  ? "bg-[var(--color-ax-yellow)]/20 text-[var(--color-ax-yellow)]"
-                  : "bg-[var(--color-bg2)] text-[var(--color-dim)]"
-              }`}
-            >
-              🔥
-            </div>
-            <p className="text-center text-sm font-bold text-[var(--color-text-primary)]">
-              {t("scholar7")}
-            </p>
-            <p className="mt-1 text-center text-[10px] text-[var(--color-text-secondary)]">
-              {t("scholar7Desc")}
-            </p>
-          </div>
-
-          {/* Badge 2: Monthly Master */}
-          <div
-            className={`flex flex-col items-center justify-center rounded-xl border p-4 ${
-              profile?.badges?.includes("monthly_master")
-                ? "border-[var(--color-ax-blue)]/20 bg-[var(--color-ax-blue)]/10"
-                : "border-[var(--color-border)] bg-[var(--color-bg0)] opacity-60 grayscale"
-            }`}
-          >
-            <div
-              className={`mb-2 flex h-12 w-12 items-center justify-center rounded-full ${
-                profile?.badges?.includes("monthly_master")
-                  ? "bg-[var(--color-ax-blue)]/20 text-[var(--color-ax-blue)]"
-                  : "bg-[var(--color-bg2)] text-[var(--color-dim)]"
-              }`}
-            >
-              🎖️
-            </div>
-            <p className="text-center text-sm font-bold text-[var(--color-text-primary)]">
-              {t("master30")}
-            </p>
-            <p className="mt-1 text-center text-[10px] text-[var(--color-text-secondary)]">
-              {t("master30Desc")}
-            </p>
-          </div>
-        </div>
+        <BadgeGrid />
       </div>
 
       {/* ── Plan Card ── */}

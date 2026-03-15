@@ -362,11 +362,31 @@
       "headerTask": "Aufgabe",
       "headerWithout": "Ohne",
       "headerAxiom": "Mit Axiom",
-      "row1": ["1 Problem lösen", "30 – 60 Min", "5 Sekunden"],
-      "row2": ["1.000-Wort-Aufsatz schreiben", "3 – 5 Stunden", "15 Minuten"],
-      "row3": ["Lernplan erstellen", "1 – 2 Stunden", "1 Klick"],
-      "row4": ["2.000 Wörter humanisieren", "45 Min", "10 Sekunden"],
-      "row5": ["Volle Prüfungsvorbereitung", "6 – 10 Stunden", "2 Stunden"],
+      "row1": [
+        "1 Problem lösen",
+        "30 – 60 Min",
+        "5 Sekunden"
+      ],
+      "row2": [
+        "1.000-Wort-Aufsatz schreiben",
+        "3 – 5 Stunden",
+        "15 Minuten"
+      ],
+      "row3": [
+        "Lernplan erstellen",
+        "1 – 2 Stunden",
+        "1 Klick"
+      ],
+      "row4": [
+        "2.000 Wörter humanisieren",
+        "45 Min",
+        "10 Sekunden"
+      ],
+      "row5": [
+        "Volle Prüfungsvorbereitung",
+        "6 – 10 Stunden",
+        "2 Stunden"
+      ],
       "footer": "Durchschnittlicher Student spart ~200 Stunden pro Semester"
     },
     "pricing": {
@@ -503,6 +523,56 @@
           "content": "For questions about these terms, contact us at support@axiom.study."
         }
       ]
+    }
+  },
+  "Badges": {
+    "firstSolve": {
+      "name": "Erste Lösung",
+      "desc": "Löse dein erstes Problem"
+    },
+    "solves10": {
+      "name": "Problemlöser",
+      "desc": "Löse 10 Probleme"
+    },
+    "solves50": {
+      "name": "Veteran",
+      "desc": "Löse 50 Probleme"
+    },
+    "solves100": {
+      "name": "Zenturio",
+      "desc": "Löse 100 Probleme"
+    },
+    "firstCorrect": {
+      "name": "Richtig!",
+      "desc": "Erste richtige Antwort"
+    },
+    "streak10Correct": {
+      "name": "Fehlerfrei",
+      "desc": "10 richtige Antworten in Folge"
+    },
+    "streak3Day": {
+      "name": "Funke",
+      "desc": "3-Tage-Lernserie"
+    },
+    "streak7Day": {
+      "name": "Eiserne Woche",
+      "desc": "7-Tage-Lernserie"
+    },
+    "streak30Day": {
+      "name": "Unaufhaltbar",
+      "desc": "30-Tage-Lernserie"
+    },
+    "firstMastery": {
+      "name": "Erste Meisterschaft",
+      "desc": "Meistere ein Thema (Level 5)"
+    },
+    "mastery5Topics": {
+      "name": "Universalgelehrter",
+      "desc": "Meistere 5 Themen"
+    },
+    "multiSubject": {
+      "name": "Interdisziplinär",
+      "desc": "Lerne 3+ verschiedene Fächer"
     }
   }
 }

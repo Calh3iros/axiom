@@ -362,15 +362,31 @@
       "headerTask": "Tarefa",
       "headerWithout": "Sem",
       "headerAxiom": "Com Axiom",
-      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
+      "row1": [
+        "Resolver 1 problema",
+        "30 – 60 min",
+        "5 segundos"
+      ],
       "row2": [
         "Escrever redação de 1.000 palavras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": ["Montar plano de estudo", "1 – 2 horas", "1 clique"],
-      "row4": ["Humanizar 2.000 palavras", "45 min", "10 segundos"],
-      "row5": ["Preparação completa para prova", "6 – 10 horas", "2 horas"],
+      "row3": [
+        "Montar plano de estudo",
+        "1 – 2 horas",
+        "1 clique"
+      ],
+      "row4": [
+        "Humanizar 2.000 palavras",
+        "45 min",
+        "10 segundos"
+      ],
+      "row5": [
+        "Preparação completa para prova",
+        "6 – 10 horas",
+        "2 horas"
+      ],
       "footer": "Estudante médio economiza ~200 horas por semestre"
     },
     "pricing": {
@@ -507,6 +523,56 @@
           "content": "For questions about these terms, contact us at support@axiom.study."
         }
       ]
+    }
+  },
+  "Badges": {
+    "firstSolve": {
+      "name": "Primeira Resolução",
+      "desc": "Resolva seu primeiro problema"
+    },
+    "solves10": {
+      "name": "Resolvedor",
+      "desc": "Resolva 10 problemas"
+    },
+    "solves50": {
+      "name": "Veterano",
+      "desc": "Resolva 50 problemas"
+    },
+    "solves100": {
+      "name": "Centurião",
+      "desc": "Resolva 100 problemas"
+    },
+    "firstCorrect": {
+      "name": "Acertou!",
+      "desc": "Acerte sua primeira resposta"
+    },
+    "streak10Correct": {
+      "name": "Sem Erro",
+      "desc": "10 acertos consecutivos"
+    },
+    "streak3Day": {
+      "name": "Faísca",
+      "desc": "Sequência de 3 dias"
+    },
+    "streak7Day": {
+      "name": "Semana de Ferro",
+      "desc": "Sequência de 7 dias"
+    },
+    "streak30Day": {
+      "name": "Imparável",
+      "desc": "Sequência de 30 dias"
+    },
+    "firstMastery": {
+      "name": "Primeiro Domínio",
+      "desc": "Domine um tópico (nível 5)"
+    },
+    "mastery5Topics": {
+      "name": "Polímata",
+      "desc": "Domine 5 tópicos"
+    },
+    "multiSubject": {
+      "name": "Interdisciplinar",
+      "desc": "Estude 3+ matérias diferentes"
     }
   }
 }

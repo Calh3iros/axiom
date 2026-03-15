@@ -353,6 +353,21 @@ ${text}
                   `Knowledge map updated for ${userId}: ${analysisData.subject}/${analysisData.topic} -> Mastery: ${analysisData.understanding_score}`
                 );
               }
+
+              // --- BADGE ENGINE: Check and unlock badges after data update ---
+              try {
+                const { checkAndUnlockBadges } = await import(
+                  "@/lib/badges"
+                );
+                const newBadges = await checkAndUnlockBadges(userId);
+                if (newBadges.length > 0) {
+                  console.warn(
+                    `🏆 Badges unlocked for ${userId}: ${newBadges.join(", ")}`
+                  );
+                }
+              } catch (badgeErr) {
+                console.error("Badge engine error (non-fatal):", badgeErr);
+              }
             } catch (err) {
               console.error("MBLID Background Worker Error:", err);
             }

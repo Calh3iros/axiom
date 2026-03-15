@@ -362,15 +362,31 @@
       "headerTask": "Tarea",
       "headerWithout": "Sin",
       "headerAxiom": "Con Axiom",
-      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
+      "row1": [
+        "Resolver 1 problema",
+        "30 – 60 min",
+        "5 segundos"
+      ],
       "row2": [
         "Escribir ensayo de 1.000 palabras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": ["Crear plan de estudio", "1 – 2 horas", "1 clic"],
-      "row4": ["Humanizar 2.000 palabras", "45 min", "10 segundos"],
-      "row5": ["Preparación completa para examen", "6 – 10 horas", "2 horas"],
+      "row3": [
+        "Crear plan de estudio",
+        "1 – 2 horas",
+        "1 clic"
+      ],
+      "row4": [
+        "Humanizar 2.000 palabras",
+        "45 min",
+        "10 segundos"
+      ],
+      "row5": [
+        "Preparación completa para examen",
+        "6 – 10 horas",
+        "2 horas"
+      ],
       "footer": "El estudiante promedio ahorra ~200 horas por semestre"
     },
     "pricing": {
@@ -507,6 +523,56 @@
           "content": "For questions about these terms, contact us at support@axiom.study."
         }
       ]
+    }
+  },
+  "Badges": {
+    "firstSolve": {
+      "name": "Primera Solución",
+      "desc": "Resuelve tu primer problema"
+    },
+    "solves10": {
+      "name": "Solucionador",
+      "desc": "Resuelve 10 problemas"
+    },
+    "solves50": {
+      "name": "Veterano",
+      "desc": "Resuelve 50 problemas"
+    },
+    "solves100": {
+      "name": "Centurión",
+      "desc": "Resuelve 100 problemas"
+    },
+    "firstCorrect": {
+      "name": "¡Correcto!",
+      "desc": "Acierta tu primera respuesta"
+    },
+    "streak10Correct": {
+      "name": "Sin Errores",
+      "desc": "10 aciertos consecutivos"
+    },
+    "streak3Day": {
+      "name": "Chispa",
+      "desc": "Racha de 3 días"
+    },
+    "streak7Day": {
+      "name": "Semana de Hierro",
+      "desc": "Racha de 7 días"
+    },
+    "streak30Day": {
+      "name": "Imparable",
+      "desc": "Racha de 30 días"
+    },
+    "firstMastery": {
+      "name": "Primer Dominio",
+      "desc": "Domina un tema (nivel 5)"
+    },
+    "mastery5Topics": {
+      "name": "Polímata",
+      "desc": "Domina 5 temas"
+    },
+    "multiSubject": {
+      "name": "Interdisciplinario",
+      "desc": "Estudia 3+ materias"
     }
   }
 }

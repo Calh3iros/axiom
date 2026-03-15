@@ -362,11 +362,31 @@
       "headerTask": "任务",
       "headerWithout": "没有",
       "headerAxiom": "用Axiom",
-      "row1": ["解1道题", "30-60分钟", "5秒"],
-      "row2": ["写1000字论文", "3-5小时", "15分钟"],
-      "row3": ["制定学习计划", "1-2小时", "1次点击"],
-      "row4": ["人性化2000字", "45分钟", "10秒"],
-      "row5": ["完整考试准备", "6-10小时", "2小时"],
+      "row1": [
+        "解1道题",
+        "30-60分钟",
+        "5秒"
+      ],
+      "row2": [
+        "写1000字论文",
+        "3-5小时",
+        "15分钟"
+      ],
+      "row3": [
+        "制定学习计划",
+        "1-2小时",
+        "1次点击"
+      ],
+      "row4": [
+        "人性化2000字",
+        "45分钟",
+        "10秒"
+      ],
+      "row5": [
+        "完整考试准备",
+        "6-10小时",
+        "2小时"
+      ],
       "footer": "平均每个学生每学期节省约200小时"
     },
     "pricing": {
@@ -503,6 +523,56 @@
           "content": "For questions about these terms, contact us at support@axiom.study."
         }
       ]
+    }
+  },
+  "Badges": {
+    "firstSolve": {
+      "name": "首次解题",
+      "desc": "解决你的第一个问题"
+    },
+    "solves10": {
+      "name": "解题者",
+      "desc": "解决10个问题"
+    },
+    "solves50": {
+      "name": "老手",
+      "desc": "解决50个问题"
+    },
+    "solves100": {
+      "name": "百夫长",
+      "desc": "解决100个问题"
+    },
+    "firstCorrect": {
+      "name": "答对了！",
+      "desc": "第一次答对"
+    },
+    "streak10Correct": {
+      "name": "零失误",
+      "desc": "连续答对10题"
+    },
+    "streak3Day": {
+      "name": "火花",
+      "desc": "连续学习3天"
+    },
+    "streak7Day": {
+      "name": "铁周",
+      "desc": "连续学习7天"
+    },
+    "streak30Day": {
+      "name": "势不可挡",
+      "desc": "连续学习30天"
+    },
+    "firstMastery": {
+      "name": "首次精通",
+      "desc": "精通一个主题（等级5）"
+    },
+    "mastery5Topics": {
+      "name": "博学者",
+      "desc": "精通5个主题"
+    },
+    "multiSubject": {
+      "name": "跨学科",
+      "desc": "学习3+不同学科"
     }
   }
 }

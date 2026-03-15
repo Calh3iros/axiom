@@ -362,11 +362,31 @@
       "headerTask": "Tâche",
       "headerWithout": "Sans",
       "headerAxiom": "Avec Axiom",
-      "row1": ["Résoudre 1 problème", "30 – 60 min", "5 secondes"],
-      "row2": ["Écrire un essai de 1 000 mots", "3 – 5 heures", "15 minutes"],
-      "row3": ["Créer un plan d'étude", "1 – 2 heures", "1 clic"],
-      "row4": ["Humaniser 2 000 mots", "45 min", "10 secondes"],
-      "row5": ["Préparation complète exam", "6 – 10 heures", "2 heures"],
+      "row1": [
+        "Résoudre 1 problème",
+        "30 – 60 min",
+        "5 secondes"
+      ],
+      "row2": [
+        "Écrire un essai de 1 000 mots",
+        "3 – 5 heures",
+        "15 minutes"
+      ],
+      "row3": [
+        "Créer un plan d'étude",
+        "1 – 2 heures",
+        "1 clic"
+      ],
+      "row4": [
+        "Humaniser 2 000 mots",
+        "45 min",
+        "10 secondes"
+      ],
+      "row5": [
+        "Préparation complète exam",
+        "6 – 10 heures",
+        "2 heures"
+      ],
       "footer": "L'étudiant moyen économise ~200 heures par semestre"
     },
     "pricing": {
@@ -503,6 +523,56 @@
           "content": "For questions about these terms, contact us at support@axiom.study."
         }
       ]
+    }
+  },
+  "Badges": {
+    "firstSolve": {
+      "name": "Première Résolution",
+      "desc": "Résolvez votre premier problème"
+    },
+    "solves10": {
+      "name": "Résolveur",
+      "desc": "Résolvez 10 problèmes"
+    },
+    "solves50": {
+      "name": "Vétéran",
+      "desc": "Résolvez 50 problèmes"
+    },
+    "solves100": {
+      "name": "Centurion",
+      "desc": "Résolvez 100 problèmes"
+    },
+    "firstCorrect": {
+      "name": "Bravo !",
+      "desc": "Obtenez votre première bonne réponse"
+    },
+    "streak10Correct": {
+      "name": "Sans Faute",
+      "desc": "10 bonnes réponses d'affilée"
+    },
+    "streak3Day": {
+      "name": "Étincelle",
+      "desc": "Série de 3 jours"
+    },
+    "streak7Day": {
+      "name": "Semaine de Fer",
+      "desc": "Série de 7 jours"
+    },
+    "streak30Day": {
+      "name": "Inarrêtable",
+      "desc": "Série de 30 jours"
+    },
+    "firstMastery": {
+      "name": "Première Maîtrise",
+      "desc": "Maîtrisez un sujet (niveau 5)"
+    },
+    "mastery5Topics": {
+      "name": "Polymathe",
+      "desc": "Maîtrisez 5 sujets"
+    },
+    "multiSubject": {
+      "name": "Interdisciplinaire",
+      "desc": "Étudiez 3+ matières"
     }
   }
 }
