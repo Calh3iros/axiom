@@ -150,6 +150,15 @@ docs/
 - Legacy cleanup: removida lógica de `badges[]` array (supersedida por `user_badges` table da Phase 2)
 - Tudo em `usage.ts` (linhas 322-385), zero novos arquivos ou schema changes
 
+## Camada Institucional (Phase 5A — Schema + Backend)
+
+- 4 tabelas: `organizations` (school/network/state + hierarquia), `org_memberships` (5 roles), `classes` (invite code), `class_memberships`
+- 8 RLS policies multi-role: student vê turma, teacher vê turmas próprias, director vê escola
+- 7 indexes de performance
+- Server actions: `createOrganization`, `createClass`, `getOrgDashboard`, `getClassDashboard`, `addOrgMember`, `removeOrgMember`
+- Invite system: `joinByInviteCode` (auto-join org + class), `regenerateInviteCode`, `leaveClass`
+- UI (Phase 5B): pendente para próxima sessão
+
 ---
 
 ## ESTADO: ✅ PROJETO 100% COMPLETO (44/44 itens)
