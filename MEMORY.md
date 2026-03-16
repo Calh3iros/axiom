@@ -39,3 +39,13 @@
   na org. Enforcement: bloqueia join se cheio, auto-suspend se expirou.
   Aprovação agora abre modal com campos de contrato (limite, expiração, notas).
   Alertas de renovação no admin. Sem Stripe — contrato manual.
+
+## 2026-03-16 — INCIDENT
+- Scripts de i18n destruíram estrutura nested do Dashboard em todos os 6 locales.
+  Causa: scripts faziam read→modify→write do JSON inteiro, apagando sub-objetos
+  nested ao adicionar chaves flat.
+- REGRA: NUNCA escrever scripts que fazem JSON.stringify do arquivo de mensagens
+  inteiro após modificar apenas uma parte. Sempre ler, preservar estrutura
+  completa, adicionar chaves no nível correto de nesting, e só então escrever.
+- REGRA: Após qualquer modificação de i18n, verificar que TODAS as chaves
+  nested existentes ainda estão presentes (contar chaves antes e depois).
