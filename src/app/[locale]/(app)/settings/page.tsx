@@ -34,6 +34,7 @@ type Profile = {
   badges: string[] | null;
   is_profile_public: boolean;
   full_name: string | null;
+  is_super_admin: boolean;
 };
 
 export default function SettingsPage() {
@@ -63,7 +64,7 @@ export default function SettingsPage() {
         const { data } = (await supabase
           .from("profiles")
           .select(
-            "plan, stripe_customer_id, stripe_subscription_id, created_at, badges, is_profile_public, full_name"
+            "plan, stripe_customer_id, stripe_subscription_id, created_at, badges, is_profile_public, full_name, is_super_admin"
           )
           .eq("id", user.id)
           .single()) as { data: Profile | null };
@@ -653,6 +654,18 @@ export default function SettingsPage() {
                 Cancel
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Admin Dashboard link — only for super admins */}
+        {profile?.is_super_admin && (
+          <div className="mt-8 border-t border-[var(--color-border)] pt-6">
+            <Link
+              href="/admin"
+              className="text-sm text-[var(--color-dim)] transition-colors hover:text-[var(--color-ax-blue)]"
+            >
+              {t("adminDashboard")} →
+            </Link>
           </div>
         )}
       </div>
