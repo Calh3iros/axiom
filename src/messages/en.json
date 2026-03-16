@@ -434,7 +434,11 @@
     "create": "Create",
     "cancel": "Cancel",
     "childOrgs": "Sub-organizations",
-    "viaHierarchy": "via hierarchy"
+    "viaHierarchy": "via hierarchy",
+    "students": "Students",
+    "limitReached": "Limit reached",
+    "nearLimit": "Near limit",
+    "expiresAt": "Expires"
   },
   "Class": {
     "title": "Class",
@@ -588,6 +592,21 @@
     "seedDemo.remove": "Remove Demo",
     "seedDemo.seeding": "Creating...",
     "seedDemo.removing": "Removing...",
-    "seedDemo.confirmRemove": "Are you sure you want to remove all demo data?"
+    "seedDemo.confirmRemove": "Are you sure you want to remove all demo data?",
+    "contract.approveTitle": "Approve Organization",
+    "contract.editTitle": "Edit Contract",
+    "contract.maxStudents": "Student Limit",
+    "contract.unlimited": "Unlimited (leave empty)",
+    "contract.expiresAt": "Expiration Date",
+    "contract.notes": "Contract Notes",
+    "contract.notesPlaceholder": "e.g. $5/student/month, annual contract, proposal #1234",
+    "contract.save": "Save Changes",
+    "contract.edit": "Edit Contract",
+    "contract.reactivate": "Reactivate",
+    "contract.renewalAlerts": "Renewal Alerts",
+    "contract.expiring30d": "Expiring in 30 days",
+    "contract.nearCapacity": "Near Capacity (>80%)",
+    "contract.expired": "Expired",
+    "contract.remaining": "remaining"
   }
 }

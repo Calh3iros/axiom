@@ -434,7 +434,11 @@
     "create": "Erstellen",
     "cancel": "Abbrechen",
     "childOrgs": "Unterorganisationen",
-    "viaHierarchy": "über Hierarchie"
+    "viaHierarchy": "über Hierarchie",
+    "students": "Schüler",
+    "limitReached": "Limit erreicht",
+    "nearLimit": "Nahe am Limit",
+    "expiresAt": "Läuft ab am"
   },
   "Class": {
     "title": "Klasse",
@@ -588,6 +592,21 @@
     "seedDemo.remove": "Demo entfernen",
     "seedDemo.seeding": "Erstelle...",
     "seedDemo.removing": "Entferne...",
-    "seedDemo.confirmRemove": "Sind Sie sicher, dass Sie alle Demo-Daten entfernen möchten?"
+    "seedDemo.confirmRemove": "Sind Sie sicher, dass Sie alle Demo-Daten entfernen möchten?",
+    "contract.approveTitle": "Organisation genehmigen",
+    "contract.editTitle": "Vertrag bearbeiten",
+    "contract.maxStudents": "Schülerlimit",
+    "contract.unlimited": "Unbegrenzt (leer lassen)",
+    "contract.expiresAt": "Ablaufdatum",
+    "contract.notes": "Vertragsnotizen",
+    "contract.notesPlaceholder": "z.B. 5€/Schüler/Monat, Jahresvertrag, Angebot #1234",
+    "contract.save": "Änderungen speichern",
+    "contract.edit": "Vertrag bearbeiten",
+    "contract.reactivate": "Reaktivieren",
+    "contract.renewalAlerts": "Verlängerungshinweise",
+    "contract.expiring30d": "Läuft in 30 Tagen ab",
+    "contract.nearCapacity": "Nahe am Limit (>80%)",
+    "contract.expired": "Abgelaufen",
+    "contract.remaining": "verbleibend"
   }
 }

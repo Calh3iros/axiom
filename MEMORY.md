@@ -34,3 +34,8 @@
   PDF captura DOM com html2canvas, aplica fundo branco temporário pra legibilidade.
   Deps: jspdf + html2canvas.
   Buckets dinâmicos: ≤7d=diário, ≤90d=semanal, >90d=mensal.
+
+- Phase 8B: Controle de acesso B2B. max_students e access_expires_at
+  na org. Enforcement: bloqueia join se cheio, auto-suspend se expirou.
+  Aprovação agora abre modal com campos de contrato (limite, expiração, notas).
+  Alertas de renovação no admin. Sem Stripe — contrato manual.

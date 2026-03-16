@@ -52,12 +52,25 @@ export async function getPendingOrgsCount() {
   return count || 0;
 }
 
-export async function approveOrg(orgId: string) {
+export async function approveOrg(
+  orgId: string,
+  options?: { maxStudents?: number | null; expiresAt?: string | null; contractNotes?: string | null }
+) {
   await requireSuperAdmin();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData: any = {
+    status: "active",
+    approved_at: new Date().toISOString(),
+  };
+
+  if (options?.maxStudents !== undefined) updateData.max_students = options.maxStudents;
+  if (options?.expiresAt !== undefined) updateData.access_expires_at = options.expiresAt;
+  if (options?.contractNotes !== undefined) updateData.contract_notes = options.contractNotes;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabaseAdmin.from("organizations") as any)
-    .update({ status: "active", approved_at: new Date().toISOString() })
+    .update(updateData)
     .eq("id", orgId);
 
   if (error) throw new Error(error.message);
@@ -88,6 +101,100 @@ export async function suspendOrg(orgId: string) {
 
   if (error) throw new Error(error.message);
   return { success: true };
+}
+
+export async function updateOrgContract(
+  orgId: string,
+  data: { maxStudents?: number | null; expiresAt?: string | null; contractNotes?: string | null }
+) {
+  await requireSuperAdmin();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData: any = {};
+  if (data.maxStudents !== undefined) updateData.max_students = data.maxStudents;
+  if (data.expiresAt !== undefined) updateData.access_expires_at = data.expiresAt;
+  if (data.contractNotes !== undefined) updateData.contract_notes = data.contractNotes;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseAdmin.from("organizations") as any)
+    .update(updateData)
+    .eq("id", orgId);
+
+  if (error) throw new Error(error.message);
+  return { success: true };
+}
+
+export async function getOrgStudentCount(orgId: string): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { count } = await (supabaseAdmin.from("org_memberships") as any)
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", orgId)
+    .eq("role", "student");
+  return count || 0;
+}
+
+export async function getRenewalAlerts() {
+  await requireSuperAdmin();
+
+  const now = new Date();
+  const in30d = new Date(now.getTime() + 30 * 86400000).toISOString();
+
+  // Orgs expiring in next 30 days
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: expiringSoon } = await (supabaseAdmin.from("organizations") as any)
+    .select("id, name, type, access_expires_at, max_students")
+    .eq("status", "active")
+    .not("access_expires_at", "is", null)
+    .lte("access_expires_at", in30d)
+    .gte("access_expires_at", now.toISOString())
+    .order("access_expires_at");
+
+  // Expired (suspended because of expiry)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: expired } = await (supabaseAdmin.from("organizations") as any)
+    .select("id, name, type, access_expires_at")
+    .eq("status", "suspended")
+    .not("access_expires_at", "is", null)
+    .lt("access_expires_at", now.toISOString())
+    .order("access_expires_at");
+
+  // Orgs with max_students — check capacity
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: withLimits } = await (supabaseAdmin.from("organizations") as any)
+    .select("id, name, type, max_students")
+    .eq("status", "active")
+    .not("max_students", "is", null);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const nearCapacity: any[] = [];
+  for (const org of withLimits || []) {
+    const count = await getOrgStudentCount(org.id);
+    const pct = Math.round((count / org.max_students) * 100);
+    if (pct >= 80) {
+      nearCapacity.push({
+        id: org.id,
+        name: org.name,
+        type: org.type,
+        current: count,
+        max: org.max_students,
+        pct,
+      });
+    }
+  }
+  nearCapacity.sort((a, b) => b.pct - a.pct);
+
+  // Add daysLeft to expiringSoon
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const expiringWithDays = (expiringSoon || []).map((o: any) => ({
+    ...o,
+    daysLeft: Math.ceil((new Date(o.access_expires_at).getTime() - now.getTime()) / 86400000),
+  }));
+
+  return {
+    expiringSoon: expiringWithDays,
+    expired: expired || [],
+    nearCapacity,
+  };
 }
 
 // ─── Platform KPIs ───────────────────────────────────────────────────────

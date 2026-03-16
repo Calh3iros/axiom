@@ -434,7 +434,11 @@
     "create": "创建",
     "cancel": "取消",
     "childOrgs": "子组织",
-    "viaHierarchy": "通过层级"
+    "viaHierarchy": "通过层级",
+    "students": "学生",
+    "limitReached": "已达上限",
+    "nearLimit": "接近上限",
+    "expiresAt": "到期日"
   },
   "Class": {
     "title": "班级",
@@ -588,6 +592,21 @@
     "seedDemo.remove": "移除演示",
     "seedDemo.seeding": "创建中...",
     "seedDemo.removing": "移除中...",
-    "seedDemo.confirmRemove": "你确定要移除所有演示数据吗？"
+    "seedDemo.confirmRemove": "你确定要移除所有演示数据吗？",
+    "contract.approveTitle": "批准组织",
+    "contract.editTitle": "编辑合同",
+    "contract.maxStudents": "学生上限",
+    "contract.unlimited": "无限制（留空）",
+    "contract.expiresAt": "到期日期",
+    "contract.notes": "合同备注",
+    "contract.notesPlaceholder": "例如：每学生5元/月，年度合同，报价单#1234",
+    "contract.save": "保存更改",
+    "contract.edit": "编辑合同",
+    "contract.reactivate": "重新激活",
+    "contract.renewalAlerts": "续约提醒",
+    "contract.expiring30d": "30天内到期",
+    "contract.nearCapacity": "接近上限 (>80%)",
+    "contract.expired": "已过期",
+    "contract.remaining": "剩余"
   }
 }

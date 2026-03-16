@@ -30,6 +30,8 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
   const [showDashboard, setShowDashboard] = useState(true);
   const [dashLoading, setDashLoading] = useState(false);
   const [secLoading, setSecLoading] = useState(false);
+  const [expiresWarning, setExpiresWarning] = useState(false);
+  const [expiresFormatted, setExpiresFormatted] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
@@ -44,6 +46,17 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
     setOrgRanking(rankRes);
     setDashData(dirRes);
     setSecData(secRes);
+
+    // Pre-compute expiry display
+    if (res?.org?.access_expires_at) {
+      const exDate = new Date(res.org.access_expires_at);
+      setExpiresWarning(exDate.getTime() < Date.now() + 30 * 86400000);
+      setExpiresFormatted(exDate.toLocaleDateString("pt-BR"));
+    } else {
+      setExpiresWarning(false);
+      setExpiresFormatted(null);
+    }
+
     setLoading(false);
   }, [orgId]);
 
@@ -103,6 +116,31 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           {" · "}
           {t(`role${data.myRole.charAt(0).toUpperCase() + data.myRole.slice(1)}` as "roleStudent" | "roleTeacher" | "roleAdmin" | "roleDirector" | "roleSecretary")}
         </p>
+
+        {/* Capacity + Expiry indicators (elevated roles only) */}
+        {isElevated && data.org.max_students != null && (
+          <div className="mt-2 flex items-center gap-2">
+            <Users className="h-4 w-4" style={{ color: data.studentCount >= data.org.max_students ? "#ef4444" : data.studentCount >= data.org.max_students * 0.8 ? "#f59e0b" : "#22c55e" }} />
+            <span className="text-sm font-medium" style={{ color: data.studentCount >= data.org.max_students ? "#ef4444" : data.studentCount >= data.org.max_students * 0.8 ? "#f59e0b" : "#94a3b8" }}>
+              {t("students")}: {data.studentCount}/{data.org.max_students}
+            </span>
+            {data.studentCount >= data.org.max_students && (
+              <span className="rounded-full px-2 py-0.5 text-xs font-semibold" style={{ background: "#450a0a", color: "#f87171" }}>
+                {t("limitReached")}
+              </span>
+            )}
+            {data.studentCount >= data.org.max_students * 0.8 && data.studentCount < data.org.max_students && (
+              <span className="rounded-full px-2 py-0.5 text-xs font-semibold" style={{ background: "#422006", color: "#fbbf24" }}>
+                {t("nearLimit")}
+              </span>
+            )}
+          </div>
+        )}
+        {isElevated && expiresFormatted && (
+          <div className="mt-1 flex items-center gap-2 text-sm" style={{ color: expiresWarning ? "#f59e0b" : "#64748b" }}>
+            <span>⏱ {t("expiresAt")}: {expiresFormatted}</span>
+          </div>
+        )}
       </div>
 
       {/* Classes */}

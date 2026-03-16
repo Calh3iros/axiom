@@ -1,5 +1,6 @@
 "use server";
 
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 // ─── Types ───────────────────────────────────────────────────────────────
@@ -208,7 +209,7 @@ export async function getOrgDashboard(orgId: string) {
   const [orgRes, membersRes, classesRes] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from("organizations") as any)
-      .select("id, name, type, created_at")
+      .select("id, name, type, created_at, max_students, access_expires_at, contract_notes")
       .eq("id", orgId)
       .single(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -222,6 +223,23 @@ export async function getOrgDashboard(orgId: string) {
       .eq("org_id", orgId)
       .order("created_at", { ascending: false }),
   ]);
+
+  // Auto-suspend if expired
+  const orgData = orgRes.data;
+  if (orgData?.access_expires_at) {
+    const expiresAt = new Date(orgData.access_expires_at);
+    if (expiresAt < new Date() && orgCheck?.status === "active") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabaseAdmin.from("organizations") as any)
+        .update({ status: "suspended" })
+        .eq("id", orgId);
+    }
+  }
+
+  // Count students for capacity display
+  const members = membersRes.data || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const studentCount = members.filter((m: any) => m.role === "student").length;
 
   // For elevated roles, also fetch child orgs
   let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
@@ -245,6 +263,7 @@ export async function getOrgDashboard(orgId: string) {
     members: membersRes?.data || [],
     classes: classesRes?.data || [],
     childOrgs,
+    studentCount,
   };
 }
 

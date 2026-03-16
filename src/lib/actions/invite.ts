@@ -1,10 +1,12 @@
 "use server";
 
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 /**
  * Join a class using an invite code.
  * Also auto-joins the organization as a student if not already a member.
+ * Enforces: org status, max_students limit, access_expires_at.
  */
 export async function joinByInviteCode(code: string) {
   const supabase = await createClient();
@@ -37,7 +39,48 @@ export async function joinByInviteCode(code: string) {
 
   if (existing) return { error: "Already in this class" };
 
-  // Auto-join org as student (if not already member)
+  // ─── Enforcement: org status, expiry, capacity ──────────────────
+  // Use supabaseAdmin to bypass RLS and read org data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: org } = await (supabaseAdmin.from("organizations") as any)
+    .select("id, status, max_students, access_expires_at")
+    .eq("id", cls.org_id)
+    .single();
+
+  if (!org) return { error: "Organization not found" };
+
+  // Check if org is active
+  if (org.status !== "active") {
+    return { error: "This organization is not active. Contact the administrator." };
+  }
+
+  // Check expiry — auto-suspend if expired
+  if (org.access_expires_at) {
+    const expiresAt = new Date(org.access_expires_at);
+    if (expiresAt < new Date()) {
+      // Auto-suspend the org
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabaseAdmin.from("organizations") as any)
+        .update({ status: "suspended" })
+        .eq("id", org.id);
+      return { error: "This organization's access has expired. Contact the administrator." };
+    }
+  }
+
+  // Check student capacity (only students count, not teachers/directors/etc.)
+  if (org.max_students != null) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { count } = await (supabaseAdmin.from("org_memberships") as any)
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", org.id)
+      .eq("role", "student");
+
+    if ((count || 0) >= org.max_students) {
+      return { error: "This organization has reached its student limit. Contact the administrator." };
+    }
+  }
+
+  // ─── Auto-join org as student (if not already member) ───────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: orgMember } = await (supabase.from("org_memberships") as any)
     .select("id")
