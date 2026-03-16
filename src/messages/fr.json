@@ -694,5 +694,78 @@
     "successTitle": "Demande Envoyée !",
     "successDesc": "Notre équipe examinera votre demande et vous contactera sous 48 heures.",
     "backHome": "Retour à l'Accueil"
+  },
+  "Admin": {
+    "nav": {
+      "approvals": "Approbations",
+      "platform": "Plateforme",
+      "users": "Utilisateurs"
+    },
+    "backToApp": "Retour à l'app",
+    "loading": "Chargement...",
+    "cancel": "Annuler",
+    "approvals": {
+      "title": "Demandes d'Organisation",
+      "tab": {
+        "pending": "En attente",
+        "active": "Approuvées",
+        "rejected": "Rejetées",
+        "suspended": "Suspendues"
+      },
+      "col": {
+        "name": "Organisation",
+        "type": "Type",
+        "requester": "Demandeur",
+        "date": "Date",
+        "actions": "Actions",
+        "role": "Rôle",
+        "message": "Message"
+      },
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "suspend": "Suspendre",
+      "confirmReject": "Confirmer le Rejet",
+      "rejectTitle": "Rejeter l'Organisation",
+      "rejectPlaceholder": "Raison du rejet...",
+      "approvedAt": "Approuvée le",
+      "empty": "Aucune organisation dans cette catégorie"
+    },
+    "platform": {
+      "title": "Vue de la Plateforme",
+      "totalUsers": "Total Utilisateurs",
+      "active7d": "Actifs (7j)",
+      "active30d": "Actifs (30j)",
+      "activeOrgs": "Orgs Actives",
+      "signupsPerWeek": "Inscriptions Hebdomadaires",
+      "dau": "Utilisateurs Actifs Quotidiens",
+      "planDist": "Distribution des Plans",
+      "moduleUsage": "Utilisation des Modules (30j)",
+      "module": {
+        "solves": "Solve",
+        "writes": "Write",
+        "humanizes": "Humanize",
+        "learns": "Learn"
+      }
+    },
+    "users": {
+      "title": "Utilisateurs Individuels",
+      "searchPlaceholder": "Rechercher par nom ou email...",
+      "allPlans": "Tous les Plans",
+      "allActivity": "Toute Activité",
+      "active30d": "Actifs (30j)",
+      "inactive30d": "Inactifs (30j)",
+      "col": {
+        "name": "Nom",
+        "email": "Email",
+        "plan": "Plan",
+        "signup": "Inscription",
+        "lastActive": "Dernier Actif",
+        "streak": "Série",
+        "solved": "Résolus",
+        "badges": "Badges"
+      },
+      "empty": "Aucun utilisateur trouvé",
+      "showing": "{start}-{end} de {total}"
+    }
   }
 }

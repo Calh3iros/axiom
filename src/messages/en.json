@@ -694,5 +694,78 @@
     "successTitle": "Request Submitted!",
     "successDesc": "Our team will review your request and contact you within 48 hours.",
     "backHome": "Back to Home"
+  },
+  "Admin": {
+    "nav": {
+      "approvals": "Approvals",
+      "platform": "Platform",
+      "users": "Users"
+    },
+    "backToApp": "Back to app",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "approvals": {
+      "title": "Organization Requests",
+      "tab": {
+        "pending": "Pending",
+        "active": "Approved",
+        "rejected": "Rejected",
+        "suspended": "Suspended"
+      },
+      "col": {
+        "name": "Organization",
+        "type": "Type",
+        "requester": "Requester",
+        "date": "Date",
+        "actions": "Actions",
+        "role": "Role",
+        "message": "Message"
+      },
+      "approve": "Approve",
+      "reject": "Reject",
+      "suspend": "Suspend",
+      "confirmReject": "Confirm Reject",
+      "rejectTitle": "Reject Organization",
+      "rejectPlaceholder": "Reason for rejection...",
+      "approvedAt": "Approved at",
+      "empty": "No organizations in this category"
+    },
+    "platform": {
+      "title": "Platform Overview",
+      "totalUsers": "Total Users",
+      "active7d": "Active (7d)",
+      "active30d": "Active (30d)",
+      "activeOrgs": "Active Orgs",
+      "signupsPerWeek": "Weekly Signups",
+      "dau": "Daily Active Users",
+      "planDist": "Plan Distribution",
+      "moduleUsage": "Module Usage (30d)",
+      "module": {
+        "solves": "Solve",
+        "writes": "Write",
+        "humanizes": "Humanize",
+        "learns": "Learn"
+      }
+    },
+    "users": {
+      "title": "Individual Users",
+      "searchPlaceholder": "Search by name or email...",
+      "allPlans": "All Plans",
+      "allActivity": "All Activity",
+      "active30d": "Active (30d)",
+      "inactive30d": "Inactive (30d)",
+      "col": {
+        "name": "Name",
+        "email": "Email",
+        "plan": "Plan",
+        "signup": "Signup",
+        "lastActive": "Last Active",
+        "streak": "Streak",
+        "solved": "Solved",
+        "badges": "Badges"
+      },
+      "empty": "No users found",
+      "showing": "{start}-{end} of {total}"
+    }
   }
 }

@@ -694,5 +694,78 @@
     "successTitle": "Anfrage gesendet!",
     "successDesc": "Unser Team wird Ihre Anfrage prüfen und Sie innerhalb von 48 Stunden kontaktieren.",
     "backHome": "Zurück zur Startseite"
+  },
+  "Admin": {
+    "nav": {
+      "approvals": "Genehmigungen",
+      "platform": "Plattform",
+      "users": "Benutzer"
+    },
+    "backToApp": "Zurück zur App",
+    "loading": "Laden...",
+    "cancel": "Abbrechen",
+    "approvals": {
+      "title": "Organisationsanfragen",
+      "tab": {
+        "pending": "Ausstehend",
+        "active": "Genehmigt",
+        "rejected": "Abgelehnt",
+        "suspended": "Gesperrt"
+      },
+      "col": {
+        "name": "Organisation",
+        "type": "Typ",
+        "requester": "Antragsteller",
+        "date": "Datum",
+        "actions": "Aktionen",
+        "role": "Rolle",
+        "message": "Nachricht"
+      },
+      "approve": "Genehmigen",
+      "reject": "Ablehnen",
+      "suspend": "Sperren",
+      "confirmReject": "Ablehnung bestätigen",
+      "rejectTitle": "Organisation ablehnen",
+      "rejectPlaceholder": "Grund der Ablehnung...",
+      "approvedAt": "Genehmigt am",
+      "empty": "Keine Organisationen in dieser Kategorie"
+    },
+    "platform": {
+      "title": "Plattformübersicht",
+      "totalUsers": "Gesamtbenutzer",
+      "active7d": "Aktiv (7T)",
+      "active30d": "Aktiv (30T)",
+      "activeOrgs": "Aktive Orgs",
+      "signupsPerWeek": "Wöchentliche Anmeldungen",
+      "dau": "Tägliche Aktive Benutzer",
+      "planDist": "Planverteilung",
+      "moduleUsage": "Modulnutzung (30T)",
+      "module": {
+        "solves": "Solve",
+        "writes": "Write",
+        "humanizes": "Humanize",
+        "learns": "Learn"
+      }
+    },
+    "users": {
+      "title": "Einzelbenutzer",
+      "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+      "allPlans": "Alle Pläne",
+      "allActivity": "Alle Aktivitäten",
+      "active30d": "Aktiv (30T)",
+      "inactive30d": "Inaktiv (30T)",
+      "col": {
+        "name": "Name",
+        "email": "E-Mail",
+        "plan": "Plan",
+        "signup": "Anmeldung",
+        "lastActive": "Zuletzt Aktiv",
+        "streak": "Serie",
+        "solved": "Gelöst",
+        "badges": "Abzeichen"
+      },
+      "empty": "Keine Benutzer gefunden",
+      "showing": "{start}-{end} von {total}"
+    }
   }
 }

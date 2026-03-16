@@ -694,5 +694,78 @@
     "successTitle": "¡Solicitud Enviada!",
     "successDesc": "Nuestro equipo revisará su solicitud y lo contactará en 48 horas.",
     "backHome": "Volver al Inicio"
+  },
+  "Admin": {
+    "nav": {
+      "approvals": "Aprobaciones",
+      "platform": "Plataforma",
+      "users": "Usuarios"
+    },
+    "backToApp": "Volver a la app",
+    "loading": "Cargando...",
+    "cancel": "Cancelar",
+    "approvals": {
+      "title": "Solicitudes de Organización",
+      "tab": {
+        "pending": "Pendientes",
+        "active": "Aprobadas",
+        "rejected": "Rechazadas",
+        "suspended": "Suspendidas"
+      },
+      "col": {
+        "name": "Organización",
+        "type": "Tipo",
+        "requester": "Solicitante",
+        "date": "Fecha",
+        "actions": "Acciones",
+        "role": "Cargo",
+        "message": "Mensaje"
+      },
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "suspend": "Suspender",
+      "confirmReject": "Confirmar Rechazo",
+      "rejectTitle": "Rechazar Organización",
+      "rejectPlaceholder": "Motivo del rechazo...",
+      "approvedAt": "Aprobada el",
+      "empty": "No hay organizaciones en esta categoría"
+    },
+    "platform": {
+      "title": "Visión de Plataforma",
+      "totalUsers": "Total Usuarios",
+      "active7d": "Activos (7d)",
+      "active30d": "Activos (30d)",
+      "activeOrgs": "Orgs Activas",
+      "signupsPerWeek": "Registros Semanales",
+      "dau": "Usuarios Activos Diarios",
+      "planDist": "Distribución de Planes",
+      "moduleUsage": "Uso por Módulo (30d)",
+      "module": {
+        "solves": "Solve",
+        "writes": "Write",
+        "humanizes": "Humanize",
+        "learns": "Learn"
+      }
+    },
+    "users": {
+      "title": "Usuarios Individuales",
+      "searchPlaceholder": "Buscar por nombre o email...",
+      "allPlans": "Todos los Planes",
+      "allActivity": "Toda Actividad",
+      "active30d": "Activos (30d)",
+      "inactive30d": "Inactivos (30d)",
+      "col": {
+        "name": "Nombre",
+        "email": "Email",
+        "plan": "Plan",
+        "signup": "Registro",
+        "lastActive": "Último Activo",
+        "streak": "Racha",
+        "solved": "Resueltos",
+        "badges": "Insignias"
+      },
+      "empty": "No se encontraron usuarios",
+      "showing": "{start}-{end} de {total}"
+    }
   }
 }

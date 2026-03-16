@@ -694,5 +694,78 @@
     "successTitle": "申请已提交！",
     "successDesc": "我们的团队将在48小时内审核并联系您。",
     "backHome": "返回首页"
+  },
+  "Admin": {
+    "nav": {
+      "approvals": "审批",
+      "platform": "平台",
+      "users": "用户"
+    },
+    "backToApp": "返回应用",
+    "loading": "加载中...",
+    "cancel": "取消",
+    "approvals": {
+      "title": "组织申请",
+      "tab": {
+        "pending": "待处理",
+        "active": "已批准",
+        "rejected": "已拒绝",
+        "suspended": "已暂停"
+      },
+      "col": {
+        "name": "组织",
+        "type": "类型",
+        "requester": "申请人",
+        "date": "日期",
+        "actions": "操作",
+        "role": "角色",
+        "message": "留言"
+      },
+      "approve": "批准",
+      "reject": "拒绝",
+      "suspend": "暂停",
+      "confirmReject": "确认拒绝",
+      "rejectTitle": "拒绝组织",
+      "rejectPlaceholder": "拒绝原因...",
+      "approvedAt": "批准于",
+      "empty": "此类别无组织"
+    },
+    "platform": {
+      "title": "平台概览",
+      "totalUsers": "总用户",
+      "active7d": "活跃(7天)",
+      "active30d": "活跃(30天)",
+      "activeOrgs": "活跃组织",
+      "signupsPerWeek": "每周注册",
+      "dau": "每日活跃用户",
+      "planDist": "计划分布",
+      "moduleUsage": "模块使用(30天)",
+      "module": {
+        "solves": "Solve",
+        "writes": "Write",
+        "humanizes": "Humanize",
+        "learns": "Learn"
+      }
+    },
+    "users": {
+      "title": "个人用户",
+      "searchPlaceholder": "按名称或邮箱搜索...",
+      "allPlans": "所有计划",
+      "allActivity": "所有活动",
+      "active30d": "活跃(30天)",
+      "inactive30d": "不活跃(30天)",
+      "col": {
+        "name": "姓名",
+        "email": "邮箱",
+        "plan": "计划",
+        "signup": "注册",
+        "lastActive": "最后活跃",
+        "streak": "连续",
+        "solved": "已解",
+        "badges": "徽章"
+      },
+      "empty": "未找到用户",
+      "showing": "{start}-{end} / {total}"
+    }
   }
 }

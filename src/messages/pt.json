@@ -694,5 +694,78 @@
     "successTitle": "Solicitação Enviada!",
     "successDesc": "Nossa equipe analisará sua solicitação e entrará em contato em até 48 horas.",
     "backHome": "Voltar ao Início"
+  },
+  "Admin": {
+    "nav": {
+      "approvals": "Aprovações",
+      "platform": "Plataforma",
+      "users": "Usuários"
+    },
+    "backToApp": "Voltar ao app",
+    "loading": "Carregando...",
+    "cancel": "Cancelar",
+    "approvals": {
+      "title": "Solicitações de Organização",
+      "tab": {
+        "pending": "Pendentes",
+        "active": "Aprovadas",
+        "rejected": "Rejeitadas",
+        "suspended": "Suspensas"
+      },
+      "col": {
+        "name": "Organização",
+        "type": "Tipo",
+        "requester": "Solicitante",
+        "date": "Data",
+        "actions": "Ações",
+        "role": "Cargo",
+        "message": "Mensagem"
+      },
+      "approve": "Aprovar",
+      "reject": "Rejeitar",
+      "suspend": "Suspender",
+      "confirmReject": "Confirmar Rejeição",
+      "rejectTitle": "Rejeitar Organização",
+      "rejectPlaceholder": "Motivo da rejeição...",
+      "approvedAt": "Aprovada em",
+      "empty": "Nenhuma organização nesta categoria"
+    },
+    "platform": {
+      "title": "Visão da Plataforma",
+      "totalUsers": "Total de Usuários",
+      "active7d": "Ativos (7d)",
+      "active30d": "Ativos (30d)",
+      "activeOrgs": "Orgs Ativas",
+      "signupsPerWeek": "Cadastros Semanais",
+      "dau": "Usuários Ativos Diários",
+      "planDist": "Distribuição de Planos",
+      "moduleUsage": "Uso por Módulo (30d)",
+      "module": {
+        "solves": "Solve",
+        "writes": "Write",
+        "humanizes": "Humanize",
+        "learns": "Learn"
+      }
+    },
+    "users": {
+      "title": "Usuários Individuais",
+      "searchPlaceholder": "Buscar por nome ou email...",
+      "allPlans": "Todos os Planos",
+      "allActivity": "Toda Atividade",
+      "active30d": "Ativos (30d)",
+      "inactive30d": "Inativos (30d)",
+      "col": {
+        "name": "Nome",
+        "email": "Email",
+        "plan": "Plano",
+        "signup": "Cadastro",
+        "lastActive": "Último Ativo",
+        "streak": "Sequência",
+        "solved": "Resolvidos",
+        "badges": "Conquistas"
+      },
+      "empty": "Nenhum usuário encontrado",
+      "showing": "{start}-{end} de {total}"
+    }
   }
 }
