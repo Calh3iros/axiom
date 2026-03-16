@@ -85,7 +85,7 @@ export async function getOrgDashboard(orgId: string) {
       .single(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from("org_memberships") as any)
-      .select("user_id, role, joined_at")
+      .select("user_id, role, joined_at, profiles(full_name, avatar_url, email)")
       .eq("org_id", orgId)
       .order("role"),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -157,7 +157,7 @@ export async function getClassDashboard(classId: string) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: students } = await (supabase.from("class_memberships") as any)
-    .select("user_id, joined_at")
+    .select("user_id, joined_at, profiles:user_id(full_name, avatar_url, email)")
     .eq("class_id", classId)
     .order("joined_at");
 

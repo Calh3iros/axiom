@@ -104,7 +104,13 @@
       "planElite": "Axiom Elite",
       "planEliteDesc": "无限访问所有功能 + 优先支持",
       "publicProfile": "公开资料",
-      "publicProfileDesc": "通过公开链接分享你的进度"
+      "publicProfileDesc": "通过公开链接分享你的进度",
+      "editName": "显示名称",
+      "editNameDesc": "这是其他用户看到的您的名字。",
+      "edit": "编辑",
+      "save": "保存",
+      "cancelEdit": "取消",
+      "nameUpdated": "名称更新成功！"
     },
     "Learn": {
       "title": "互动导师",

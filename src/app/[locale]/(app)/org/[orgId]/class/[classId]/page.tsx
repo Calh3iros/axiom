@@ -8,6 +8,30 @@ import { Link } from "@/i18n/routing";
 import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
 
+interface ProfileData {
+  full_name: string | null;
+  avatar_url: string | null;
+  email: string | null;
+}
+
+interface Student {
+  user_id: string;
+  joined_at: string;
+  profiles?: ProfileData;
+}
+
+function getDisplayName(s: Student): string {
+  if (s.profiles?.full_name) return s.profiles.full_name;
+  if (s.profiles?.email) return s.profiles.email.split("@")[0];
+  return "User";
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
 export default function ClassDetailPage({
   params,
 }: {
@@ -130,24 +154,38 @@ export default function ClassDetailPage({
           </div>
         ) : (
           <div className="space-y-2">
-            {data.students.map((s: { user_id: string; joined_at: string }) => (
-              <div
-                key={s.user_id}
-                className="flex items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] px-4 py-3"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 text-xs font-bold text-blue-400">
-                    {s.user_id.slice(0, 2).toUpperCase()}
+            {data.students.map((s: Student) => {
+              const name = getDisplayName(s);
+              const avatarUrl = s.profiles?.avatar_url;
+
+              return (
+                <div
+                  key={s.user_id}
+                  className="flex items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] px-4 py-3"
+                >
+                  <div className="flex items-center gap-3">
+                    {avatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={avatarUrl}
+                        alt=""
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 text-xs font-bold text-blue-400">
+                        {getInitials(name)}
+                      </div>
+                    )}
+                    <span className="text-sm font-medium text-[var(--color-text-primary)]">
+                      {name}
+                    </span>
                   </div>
-                  <span className="font-mono text-xs text-[var(--color-dim)]">
-                    {s.user_id.slice(0, 8)}…
+                  <span className="text-xs text-[var(--color-dim)]">
+                    {new Date(s.joined_at).toLocaleDateString()}
                   </span>
                 </div>
-                <span className="text-xs text-[var(--color-dim)]">
-                  {new Date(s.joined_at).toLocaleDateString()}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

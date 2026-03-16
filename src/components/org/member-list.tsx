@@ -2,10 +2,17 @@
 
 import { useTranslations } from "next-intl";
 
+interface ProfileData {
+  full_name: string | null;
+  avatar_url: string | null;
+  email: string | null;
+}
+
 interface Member {
   user_id: string;
   role: string;
   joined_at: string;
+  profiles?: ProfileData;
 }
 
 interface MemberListProps {
@@ -20,6 +27,18 @@ const roleColors: Record<string, string> = {
   secretary: "bg-red-500/15 text-red-400 border-red-500/20",
 };
 
+function getDisplayName(m: Member): string {
+  if (m.profiles?.full_name) return m.profiles.full_name;
+  if (m.profiles?.email) return m.profiles.email.split("@")[0];
+  return "User";
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
 export function MemberList({ members }: MemberListProps) {
   const t = useTranslations("Org");
 
@@ -33,17 +52,29 @@ export function MemberList({ members }: MemberListProps) {
           | "roleDirector"
           | "roleSecretary";
 
+        const name = getDisplayName(m);
+        const avatarUrl = m.profiles?.avatar_url;
+
         return (
           <div
             key={m.user_id}
             className="flex items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg2)] px-4 py-3"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-bg1)] text-xs font-bold text-[var(--color-dim)]">
-                {m.user_id.slice(0, 2).toUpperCase()}
-              </div>
-              <span className="font-mono text-xs text-[var(--color-dim)]">
-                {m.user_id.slice(0, 8)}…
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={avatarUrl}
+                  alt=""
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-ax-blue)]/15 text-xs font-bold text-[var(--color-ax-blue)]">
+                  {getInitials(name)}
+                </div>
+              )}
+              <span className="text-sm font-medium text-[var(--color-text-primary)]">
+                {name}
               </span>
             </div>
             <span

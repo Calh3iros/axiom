@@ -104,7 +104,13 @@
       "planElite": "Axiom Elite",
       "planEliteDesc": "Acesso ilimitado a todos os recursos + suporte prioritário",
       "publicProfile": "Perfil Público",
-      "publicProfileDesc": "Compartilhe seu progresso via link público"
+      "publicProfileDesc": "Compartilhe seu progresso via link público",
+      "editName": "Nome de Exibição",
+      "editNameDesc": "É assim que seu nome aparece para outros usuários.",
+      "edit": "Editar",
+      "save": "Salvar",
+      "cancelEdit": "Cancelar",
+      "nameUpdated": "Nome atualizado com sucesso!"
     },
     "Learn": {
       "title": "Tutor Interativo",

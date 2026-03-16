@@ -17,6 +17,7 @@ import {
   Headphones,
   FileText,
   BookOpen,
+  Pencil,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
@@ -32,6 +33,7 @@ type Profile = {
   created_at: string;
   badges: string[] | null;
   is_profile_public: boolean;
+  full_name: string | null;
 };
 
 export default function SettingsPage() {
@@ -46,6 +48,10 @@ export default function SettingsPage() {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [nameEditing, setNameEditing] = useState(false);
+  const [nameSaving, setNameSaving] = useState(false);
+  const [nameSuccess, setNameSuccess] = useState(false);
   const t = useTranslations("Dashboard.Settings");
 
   useEffect(() => {
@@ -57,11 +63,12 @@ export default function SettingsPage() {
         const { data } = (await supabase
           .from("profiles")
           .select(
-            "plan, stripe_customer_id, stripe_subscription_id, created_at, badges, is_profile_public"
+            "plan, stripe_customer_id, stripe_subscription_id, created_at, badges, is_profile_public, full_name"
           )
           .eq("id", user.id)
           .single()) as { data: Profile | null };
         setProfile(data);
+        if (data?.full_name) setEditName(data.full_name);
       }
       setLoading(false);
     });
@@ -143,8 +150,24 @@ export default function SettingsPage() {
 
   const isEmailProvider = user?.app_metadata?.provider === "email";
   const displayName =
-    user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+    profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
   const avatarUrl = user?.user_metadata?.avatar_url;
+
+  const handleSaveName = async () => {
+    const trimmed = editName.trim();
+    if (trimmed.length < 2 || trimmed.length > 50) return;
+    setNameSaving(true);
+    const supabase = createClient();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from("profiles") as any)
+      .update({ full_name: trimmed })
+      .eq("id", user?.id);
+    setProfile((prev) => prev ? { ...prev, full_name: trimmed } : prev);
+    setNameEditing(false);
+    setNameSaving(false);
+    setNameSuccess(true);
+    setTimeout(() => setNameSuccess(false), 3000);
+  };
   const memberSince = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString("en-US", {
         month: "long",
@@ -220,6 +243,70 @@ export default function SettingsPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* ── Edit Name ── */}
+      <div className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--color-ax-blue)]/20 bg-[var(--color-ax-blue)]/10">
+            <Pencil className="h-5 w-5 text-[var(--color-ax-blue)]" />
+          </div>
+          <div>
+            <h3 className="font-bold text-[var(--color-text-primary)]">
+              {t("editName")}
+            </h3>
+            <p className="text-xs text-[var(--color-text-secondary)]">
+              {t("editNameDesc")}
+            </p>
+          </div>
+        </div>
+
+        {nameEditing ? (
+          <div className="space-y-3">
+            <input
+              type="text"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              maxLength={50}
+              className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all placeholder:text-[var(--color-dim)] focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 focus:outline-none"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={handleSaveName}
+                disabled={nameSaving || editName.trim().length < 2}
+                className="flex items-center gap-2 rounded-xl bg-[var(--color-ax-blue)] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-orange-500 disabled:opacity-50"
+              >
+                {nameSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                {t("save")}
+              </button>
+              <button
+                onClick={() => { setNameEditing(false); setEditName(profile?.full_name || displayName); }}
+                className="rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)]"
+              >
+                {t("cancelEdit")}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-[var(--color-text-primary)]">
+              {displayName}
+            </span>
+            <button
+              onClick={() => setNameEditing(true)}
+              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-[var(--color-ax-blue)] transition-colors hover:bg-[var(--color-ax-blue)]/10"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              {t("edit")}
+            </button>
+          </div>
+        )}
+        {nameSuccess && (
+          <div className="mt-3 flex items-center gap-2 rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-sm text-orange-400">
+            <Check className="h-4 w-4" />
+            {t("nameUpdated")}
+          </div>
+        )}
       </div>
 
       {/* ── Achievements Card ── */}

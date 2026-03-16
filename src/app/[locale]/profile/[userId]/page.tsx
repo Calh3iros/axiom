@@ -11,8 +11,8 @@ export async function generateMetadata({
 }) {
   const { userId } = await params;
   return {
-    title: `Student Profile | Axiom`,
-    description: `View learning progress for student ${userId.substring(0, 8)}`,
+    title: `${userId.substring(0, 8)} | Axiom`,
+    description: `View learning progress`,
   };
 }
 
@@ -29,7 +29,7 @@ export default async function PublicProfilePage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: profile } = await (supabase
     .from("profiles")
-    .select("id, plan, current_streak, is_profile_public, created_at")
+    .select("id, plan, current_streak, is_profile_public, created_at, full_name, avatar_url, email")
     .eq("id", userId)
     .single() as any);
 
@@ -90,11 +90,16 @@ export default async function PublicProfilePage({
     <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 p-6 md:p-10">
       {/* Profile Header */}
       <div className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6 text-center">
-        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-[var(--color-ax-blue)]/25 bg-[var(--color-ax-blue)]/10">
-          <Brain className="h-8 w-8 text-[var(--color-ax-blue)]" />
+        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-[var(--color-ax-blue)]/25 bg-[var(--color-ax-blue)]/10 overflow-hidden">
+          {profile.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <Brain className="h-8 w-8 text-[var(--color-ax-blue)]" />
+          )}
         </div>
         <h1 className="text-xl font-bold text-[var(--color-text-primary)]">
-          {t("studentProfile")}
+          {profile.full_name || profile.email?.split("@")[0] || t("studentProfile")}
         </h1>
         <p className="mt-1 text-xs text-[var(--color-dim)]">
           {t("memberSince")} {memberDate} · 🔥 {profile.current_streak || 0} {t("dayStreak")}
