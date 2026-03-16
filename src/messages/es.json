@@ -644,5 +644,27 @@
     "success": "¡Te uniste con éxito!",
     "error": "Código de invitación inválido",
     "joining": "Uniéndose..."
+  },
+  "Rankings": {
+    "classRanking": "Ranking de la Clase",
+    "orgRanking": "Panel de Rendimiento",
+    "orgName": "Organización",
+    "className": "Clase",
+    "student": "Estudiante",
+    "students": "Estudiantes",
+    "problemsSolved": "Resueltos",
+    "activeUsage": "Actividad",
+    "streakDays": "Racha",
+    "accuracy": "Precisión",
+    "topicsMastered": "Dominados",
+    "badges": "Insignias",
+    "avgSolved": "Prom. Resueltos",
+    "avgAccuracy": "Prom. Precisión",
+    "active7d": "Activos 7d",
+    "noActivity": "Sin actividad aún. Los datos aparecerán cuando los estudiantes usen Axiom.",
+    "noClasses": "No hay clases para clasificar todavía.",
+    "you": "tú",
+    "hide": "Ocultar",
+    "show": "Mostrar"
   }
 }

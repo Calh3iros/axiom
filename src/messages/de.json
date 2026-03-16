@@ -644,5 +644,27 @@
     "success": "Erfolgreich beigetreten!",
     "error": "Ungültiger Einladungscode",
     "joining": "Beitritt..."
+  },
+  "Rankings": {
+    "classRanking": "Klassenranking",
+    "orgRanking": "Leistungsübersicht",
+    "orgName": "Organisation",
+    "className": "Klasse",
+    "student": "Schüler",
+    "students": "Schüler",
+    "problemsSolved": "Gelöst",
+    "activeUsage": "Aktivität",
+    "streakDays": "Serie",
+    "accuracy": "Genauigkeit",
+    "topicsMastered": "Gemeistert",
+    "badges": "Abzeichen",
+    "avgSolved": "Ø Gelöst",
+    "avgAccuracy": "Ø Genauigkeit",
+    "active7d": "Aktiv 7T",
+    "noActivity": "Noch keine Aktivität. Daten erscheinen, sobald Schüler Axiom nutzen.",
+    "noClasses": "Noch keine Klassen zum Ranken.",
+    "you": "du",
+    "hide": "Ausblenden",
+    "show": "Anzeigen"
   }
 }

@@ -644,5 +644,27 @@
     "success": "Successfully joined!",
     "error": "Invalid invite code",
     "joining": "Joining..."
+  },
+  "Rankings": {
+    "classRanking": "Class Ranking",
+    "orgRanking": "Performance Dashboard",
+    "orgName": "Organization",
+    "className": "Class",
+    "student": "Student",
+    "students": "Students",
+    "problemsSolved": "Solved",
+    "activeUsage": "Activity",
+    "streakDays": "Streak",
+    "accuracy": "Accuracy",
+    "topicsMastered": "Mastered",
+    "badges": "Badges",
+    "avgSolved": "Avg Solved",
+    "avgAccuracy": "Avg Accuracy",
+    "active7d": "Active 7d",
+    "noActivity": "No activity yet. Data will appear once students start using Axiom.",
+    "noClasses": "No classes to rank yet.",
+    "you": "you",
+    "hide": "Hide",
+    "show": "Show"
   }
 }

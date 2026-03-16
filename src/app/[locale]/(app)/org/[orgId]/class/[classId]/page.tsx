@@ -1,12 +1,15 @@
 "use client";
 
-import { ArrowLeft, Copy, Check, RefreshCw, Users } from "lucide-react";
+import { ArrowLeft, Copy, Check, RefreshCw, Users, Trophy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
 import { Link } from "@/i18n/routing";
 import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
+import { getClassRanking } from "@/lib/actions/rankings";
+import { ClassRankingTable } from "@/components/rankings/class-ranking-table";
+import { createClient } from "@/lib/supabase/client";
 
 interface ProfileData {
   full_name: string | null;
@@ -39,15 +42,30 @@ export default function ClassDetailPage({
 }) {
   const { orgId, classId } = use(params);
   const t = useTranslations("Class");
+  const tr = useTranslations("Rankings");
   const [data, setData] = useState<Awaited<ReturnType<typeof getClassDashboard>>>(null);
+  const [ranking, setRanking] = useState<Awaited<ReturnType<typeof getClassRanking>>>(null);
+  const [currentUserId, setCurrentUserId] = useState("");
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
+  const [showRanking, setShowRanking] = useState(true);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await getClassDashboard(classId);
+    const [res, rankRes] = await Promise.all([
+      getClassDashboard(classId),
+      getClassRanking(classId),
+    ]);
     setData(res);
+    setRanking(rankRes);
+
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) setCurrentUserId(user.id);
+
     setLoading(false);
   }, [classId]);
 
@@ -86,6 +104,8 @@ export default function ClassDetailPage({
       </div>
     );
   }
+
+  const isManager = ranking?.role ? ["teacher", "admin", "director", "secretary"].includes(ranking.role) : data.isTeacher;
 
   return (
     <div className="space-y-8">
@@ -135,6 +155,33 @@ export default function ClassDetailPage({
           </div>
           {copied && (
             <p className="mt-2 text-xs text-green-400">{t("codeCopied")}</p>
+          )}
+        </div>
+      )}
+
+      {/* Ranking */}
+      {ranking && ranking.rows.length > 0 && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-yellow-400" />
+              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+                {tr("classRanking")}
+              </h2>
+            </div>
+            <button
+              onClick={() => setShowRanking(!showRanking)}
+              className="text-xs text-[var(--color-dim)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              {showRanking ? tr("hide") : tr("show")}
+            </button>
+          </div>
+          {showRanking && (
+            <ClassRankingTable
+              rows={ranking.rows}
+              currentUserId={currentUserId}
+              isManager={isManager}
+            />
           )}
         </div>
       )}

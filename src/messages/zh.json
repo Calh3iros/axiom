@@ -644,5 +644,27 @@
     "success": "加入成功！",
     "error": "无效的邀请码",
     "joining": "加入中..."
+  },
+  "Rankings": {
+    "classRanking": "班级排名",
+    "orgRanking": "绩效面板",
+    "orgName": "组织",
+    "className": "班级",
+    "student": "学生",
+    "students": "学生",
+    "problemsSolved": "已解决",
+    "activeUsage": "活跃度",
+    "streakDays": "连续天数",
+    "accuracy": "正确率",
+    "topicsMastered": "已掌握",
+    "badges": "徽章",
+    "avgSolved": "平均解决",
+    "avgAccuracy": "平均正确率",
+    "active7d": "7天活跃",
+    "noActivity": "暂无活动。学生开始使用 Axiom 后数据将会显示。",
+    "noClasses": "暂无班级可排名。",
+    "you": "你",
+    "hide": "隐藏",
+    "show": "显示"
   }
 }

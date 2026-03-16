@@ -644,5 +644,27 @@
     "success": "Entrada realizada com sucesso!",
     "error": "Código de convite inválido",
     "joining": "Entrando..."
+  },
+  "Rankings": {
+    "classRanking": "Ranking da Turma",
+    "orgRanking": "Painel de Desempenho",
+    "orgName": "Organização",
+    "className": "Turma",
+    "student": "Aluno",
+    "students": "Alunos",
+    "problemsSolved": "Resolvidos",
+    "activeUsage": "Atividade",
+    "streakDays": "Sequência",
+    "accuracy": "Precisão",
+    "topicsMastered": "Dominados",
+    "badges": "Medalhas",
+    "avgSolved": "Média Resolvidos",
+    "avgAccuracy": "Média Precisão",
+    "active7d": "Ativos 7d",
+    "noActivity": "Nenhuma atividade ainda. Dados aparecerão quando alunos usarem o Axiom.",
+    "noClasses": "Nenhuma turma para ranquear ainda.",
+    "you": "você",
+    "hide": "Ocultar",
+    "show": "Mostrar"
   }
 }

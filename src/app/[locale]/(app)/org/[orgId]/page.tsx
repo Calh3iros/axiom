@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Plus, Users, BookOpen, Building2 } from "lucide-react";
+import { ArrowLeft, Plus, Users, BookOpen, Building2, Trophy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
@@ -9,19 +9,27 @@ import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { Link } from "@/i18n/routing";
 import { getOrgDashboard } from "@/lib/actions/organization";
+import { getOrgClassRanking } from "@/lib/actions/rankings";
+import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 
 export default function OrgDetailPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = use(params);
   const t = useTranslations("Org");
   const tc = useTranslations("Class");
+  const tr = useTranslations("Rankings");
   const [data, setData] = useState<Awaited<ReturnType<typeof getOrgDashboard>>>(null);
+  const [orgRanking, setOrgRanking] = useState<Awaited<ReturnType<typeof getOrgClassRanking>>>(null);
   const [showClassModal, setShowClassModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await getOrgDashboard(orgId);
+    const [res, rankRes] = await Promise.all([
+      getOrgDashboard(orgId),
+      getOrgClassRanking(orgId),
+    ]);
     setData(res);
+    setOrgRanking(rankRes);
     setLoading(false);
   }, [orgId]);
 
@@ -46,6 +54,7 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
   }
 
   const canManage = ["teacher", "admin", "director"].includes(data.myRole);
+  const isElevated = ["admin", "director", "secretary"].includes(data.myRole);
 
   return (
     <div className="space-y-8">
@@ -105,6 +114,23 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           </div>
         )}
       </div>
+
+      {/* Org Ranking (director/admin/secretary only) */}
+      {isElevated && orgRanking && (
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-yellow-400" />
+            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+              {tr("orgRanking")}
+            </h2>
+          </div>
+          <OrgRankingView
+            classRows={orgRanking.rows}
+            orgId={orgId}
+            childOrgRows={orgRanking.childOrgRows}
+          />
+        </div>
+      )}
       {/* Child Orgs (hierarchy) */}
       {data.childOrgs && data.childOrgs.length > 0 && (
         <div>
