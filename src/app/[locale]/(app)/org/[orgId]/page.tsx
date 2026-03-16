@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Plus, Users, BookOpen } from "lucide-react";
+import { ArrowLeft, Plus, Users, BookOpen, Building2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
@@ -105,6 +105,34 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           </div>
         )}
       </div>
+      {/* Child Orgs (hierarchy) */}
+      {data.childOrgs && data.childOrgs.length > 0 && (
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-orange-400" />
+            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+              {t("childOrgs")} ({data.childOrgs.length})
+            </h2>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {data.childOrgs.map((child: { id: string; name: string; type: string }) => (
+              <Link key={child.id} href={`/org/${child.id}`}>
+                <div className="group cursor-pointer rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-4 transition-all hover:border-[var(--color-ax-blue)]/30">
+                  <div className="flex items-center gap-2">
+                    <Building2 className={`h-4 w-4 ${child.type === 'school' ? 'text-blue-400' : child.type === 'network' ? 'text-purple-400' : 'text-orange-400'}`} />
+                    <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-ax-blue)]">
+                      {child.name}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-[var(--color-dim)]">
+                    {t(`type${child.type.charAt(0).toUpperCase() + child.type.slice(1)}` as "typeSchool" | "typeNetwork" | "typeState")}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Members */}
       <div>

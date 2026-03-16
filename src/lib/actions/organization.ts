@@ -6,6 +6,20 @@ import { createClient } from "@/lib/supabase/server";
 export type OrgRole = "student" | "teacher" | "admin" | "director" | "secretary";
 export type OrgType = "school" | "network" | "state";
 
+const ELEVATED_ROLES: OrgRole[] = ["admin", "director", "secretary"];
+
+// ─── Hierarchy Helpers ───────────────────────────────────────────────────
+
+/**
+ * Get all descendant org IDs from a root org via recursive CTE.
+ * Uses the get_org_subtree() SQL function (LIMIT 500, max depth 10).
+ */
+async function getOrgSubtreeIds(supabase: Awaited<ReturnType<typeof createClient>>, rootId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase as any).rpc("get_org_subtree", { root_id: rootId });
+  return (data || []) as { org_id: string; depth: number }[];
+}
+
 // ─── Organization CRUD ──────────────────────────────────────────────────
 
 /**
@@ -38,7 +52,8 @@ export async function createOrganization(name: string, type: OrgType) {
 }
 
 /**
- * Get all organizations the current user is a member of.
+ * Get all organizations the current user is a member of,
+ * PLUS child orgs visible through hierarchy for elevated roles.
  */
 export async function getMyOrganizations() {
   const supabase = await createClient();
@@ -47,13 +62,37 @@ export async function getMyOrganizations() {
   } = await supabase.auth.getUser();
   if (!user) return [];
 
+  // Get direct memberships
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase.from("org_memberships") as any)
-    .select("role, org_id, organizations(id, name, type, created_at)")
+  const { data: directMemberships } = await (supabase.from("org_memberships") as any)
+    .select("role, org_id, organizations(id, name, type, parent_id, created_at)")
     .eq("user_id", user.id)
     .order("joined_at", { ascending: false });
 
-  return data || [];
+  const memberships = directMemberships || [];
+
+  // For elevated roles, also fetch child orgs
+  const childOrgIds = new Set<string>();
+  for (const m of memberships) {
+    if (ELEVATED_ROLES.includes(m.role)) {
+      const subtree = await getOrgSubtreeIds(supabase, m.org_id);
+      for (const node of subtree) {
+        if (node.depth > 0) childOrgIds.add(node.org_id);
+      }
+    }
+  }
+
+  // Fetch child orgs data if any
+  let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
+  if (childOrgIds.size > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data } = await (supabase.from("organizations") as any)
+      .select("id, name, type, parent_id, created_at")
+      .in("id", Array.from(childOrgIds));
+    childOrgs = data || [];
+  }
+
+  return { memberships, childOrgs };
 }
 
 /**
@@ -95,11 +134,28 @@ export async function getOrgDashboard(orgId: string) {
       .order("created_at", { ascending: false }),
   ]);
 
+  // For elevated roles, also fetch child orgs
+  let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
+  if (ELEVATED_ROLES.includes(membership.role)) {
+    const subtree = await getOrgSubtreeIds(supabase, orgId);
+    const childIds = subtree.filter(n => n.depth > 0).map(n => n.org_id);
+    if (childIds.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data } = await (supabase.from("organizations") as any)
+        .select("id, name, type, parent_id, created_at")
+        .in("id", childIds)
+        .order("type")
+        .order("name");
+      childOrgs = data || [];
+    }
+  }
+
   return {
     org: orgRes?.data,
     myRole: membership.role as OrgRole,
     members: membersRes?.data || [],
     classes: classesRes?.data || [],
+    childOrgs,
   };
 }
 

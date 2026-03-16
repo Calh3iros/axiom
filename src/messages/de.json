@@ -607,7 +607,7 @@
     "title": "Meine Organisationen",
     "createOrg": "Organisation erstellen",
     "noOrgs": "Sie sind noch keiner Organisation beigetreten.",
-    "joinHint": "Bitten Sie Ihren Lehrer um einen Einladungscode, oder erstellen Sie Ihre eigene.",
+    "joinHint": "Erstellen Sie eine Organisation oder treten Sie einer mit einem Einladungscode bei.",
     "typeSchool": "Schule",
     "typeNetwork": "Netzwerk",
     "typeState": "Behörde",
@@ -621,7 +621,9 @@
     "orgName": "Organisationsname",
     "orgType": "Typ",
     "create": "Erstellen",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "childOrgs": "Unterorganisationen",
+    "viaHierarchy": "über Hierarchie"
   },
   "Class": {
     "title": "Klasse",

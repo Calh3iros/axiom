@@ -607,7 +607,7 @@
     "title": "我的组织",
     "createOrg": "创建组织",
     "noOrgs": "您还没有加入任何组织。",
-    "joinHint": "向老师索要邀请码，或创建自己的组织。",
+    "joinHint": "创建组织或使用邀请码加入。",
     "typeSchool": "学校",
     "typeNetwork": "网络",
     "typeState": "教育局",
@@ -621,7 +621,9 @@
     "orgName": "组织名称",
     "orgType": "类型",
     "create": "创建",
-    "cancel": "取消"
+    "cancel": "取消",
+    "childOrgs": "子组织",
+    "viaHierarchy": "通过层级"
   },
   "Class": {
     "title": "班级",

@@ -607,7 +607,7 @@
     "title": "Mis Organizaciones",
     "createOrg": "Crear Organización",
     "noOrgs": "Aún no formas parte de ninguna organización.",
-    "joinHint": "Pide a tu profesor un código de invitación, o crea la tuya.",
+    "joinHint": "Crea una organización o únete con un código de invitación.",
     "typeSchool": "Escuela",
     "typeNetwork": "Red",
     "typeState": "Secretaría",
@@ -621,7 +621,9 @@
     "orgName": "Nombre de la organización",
     "orgType": "Tipo",
     "create": "Crear",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "childOrgs": "Sub-organizaciones",
+    "viaHierarchy": "vía jerarquía"
   },
   "Class": {
     "title": "Clase",
