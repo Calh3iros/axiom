@@ -21,7 +21,7 @@ export async function checkAndUnlockBadges(
 ): Promise<string[]> {
   try {
     // 1. Get all badges from catalog
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const { data: catalog } = await (supabaseAdmin
       .from("badges_catalog")
       .select("id, criteria_type, criteria_value")
@@ -30,7 +30,7 @@ export async function checkAndUnlockBadges(
     if (!catalog || catalog.length === 0) return [];
 
     // 2. Get badges already unlocked by this user
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const { data: unlocked } = await (supabaseAdmin
       .from("user_badges")
       .select("badge_id")
@@ -42,18 +42,18 @@ export async function checkAndUnlockBadges(
 
     // 3. Gather user stats (batched queries)
     const [kmData, profileData, challengeData] = await Promise.all([
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabaseAdmin
         .from("knowledge_map")
         .select("subject, level, correct_count, current_streak")
         .eq("user_id", userId) as any),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabaseAdmin
         .from("profiles")
         .select("current_streak")
         .eq("id", userId)
         .single() as any),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabaseAdmin
         .from("student_profiles")
         .select("total_problems_solved, total_correct")

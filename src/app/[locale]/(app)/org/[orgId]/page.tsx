@@ -7,10 +7,10 @@ import { useState, useEffect, useCallback, use } from "react";
 import { ClassCard } from "@/components/org/class-card";
 import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
+import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { Link } from "@/i18n/routing";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
-import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 
 export default function OrgDetailPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = use(params);

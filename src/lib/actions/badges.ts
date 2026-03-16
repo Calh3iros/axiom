@@ -41,12 +41,12 @@ export async function getUserBadges(): Promise<{
 
   // Fetch catalog and user badges in parallel
   const [catalogRes, unlockedRes] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("badges_catalog")
       .select("id, icon, name_key, description_key, category, criteria_type, criteria_value, sort_order")
       .order("sort_order") as any),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("user_badges")
       .select("badge_id, unlocked_at")

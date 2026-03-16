@@ -15,7 +15,7 @@ type StatsHeaderProps = {
 
 export function StatsHeader({
   totalSolved,
-  totalCorrect,
+  totalCorrect: _totalCorrect,
   accuracy,
   topicsCount,
   streak,

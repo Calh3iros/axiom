@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function getPublicProfile(userId: string) {
   const supabase = await createClient();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const { data: profile } = await (supabase
     .from("profiles")
     .select("id, plan, current_streak, is_profile_public, created_at")
@@ -20,19 +20,19 @@ export async function getPublicProfile(userId: string) {
 
   // Fetch stats in parallel
   const [spData, kmData, badgeData] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("student_profiles")
       .select("total_problems_solved, total_correct, grade_level, study_goal")
       .eq("id", userId)
       .single() as any),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("knowledge_map")
       .select("subject, topic, mastery_score, level")
       .eq("user_id", userId)
       .order("mastery_score", { ascending: false }) as any),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("user_badges")
       .select("badge_id, unlocked_at")
@@ -98,7 +98,7 @@ export async function getStreakCalendar(userId?: string) {
   const ninetyDaysAgo = new Date();
   ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const { data } = await (supabase
     .from("challenge_log")
     .select("created_at")

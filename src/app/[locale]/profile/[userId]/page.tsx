@@ -26,7 +26,7 @@ export default async function PublicProfilePage({
   const supabase = await createClient();
 
   // Fetch profile (only if public)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const { data: profile } = await (supabase
     .from("profiles")
     .select("id, plan, current_streak, is_profile_public, created_at, full_name, avatar_url, email")
@@ -39,25 +39,25 @@ export default async function PublicProfilePage({
 
   // Fetch stats
   const [spRes, kmRes, badgeRes, catalogRes] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("student_profiles")
       .select("total_problems_solved, total_correct")
       .eq("id", userId)
       .single() as any),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("knowledge_map")
       .select("subject, topic, mastery_score, level, correct_count, incorrect_count, interactions_count")
       .eq("user_id", userId)
       .order("subject")
       .order("mastery_score", { ascending: false }) as any),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("user_badges")
       .select("badge_id, unlocked_at")
       .eq("user_id", userId) as any),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     (supabase
       .from("badges_catalog")
       .select("id, icon, name_key, category")

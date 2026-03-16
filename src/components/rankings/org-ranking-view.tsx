@@ -2,8 +2,9 @@
 
 import { Building2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { ClassAggregateRow, OrgAggregateRow } from "@/lib/actions/rankings";
+
 import { Link } from "@/i18n/routing";
+import type { ClassAggregateRow, OrgAggregateRow } from "@/lib/actions/rankings";
 
 interface Props {
   classRows: ClassAggregateRow[];

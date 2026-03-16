@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+
 import type { StudentRankingRow, RankingSortField } from "@/lib/actions/rankings";
 
 interface Props {

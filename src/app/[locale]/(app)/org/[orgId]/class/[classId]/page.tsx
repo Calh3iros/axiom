@@ -4,11 +4,11 @@ import { ArrowLeft, Copy, Check, RefreshCw, Users, Trophy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
+import { ClassRankingTable } from "@/components/rankings/class-ranking-table";
 import { Link } from "@/i18n/routing";
 import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
 import { getClassRanking } from "@/lib/actions/rankings";
-import { ClassRankingTable } from "@/components/rankings/class-ranking-table";
 import { createClient } from "@/lib/supabase/client";
 
 interface ProfileData {

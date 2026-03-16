@@ -1,7 +1,6 @@
 "use client";
 
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import { toggleProfilePublic } from "@/lib/actions/profile";
 import {
   User,
   Crown,
@@ -22,9 +21,10 @@ import {
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 
-import { Link } from "@/i18n/routing";
-import { createClient } from "@/lib/supabase/client";
 import { BadgeGrid } from "@/components/shared/badge-grid";
+import { Link } from "@/i18n/routing";
+import { toggleProfilePublic } from "@/lib/actions/profile";
+import { createClient } from "@/lib/supabase/client";
 
 type Profile = {
   plan: "free" | "pro" | "elite";

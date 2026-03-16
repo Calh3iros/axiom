@@ -34,24 +34,24 @@ export default async function DashboardPage() {
         .eq("user_id", user.id)
         .order("subject", { ascending: true })
         .order("mastery_score", { ascending: false }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabase
         .from("profiles")
         .select("current_streak, is_profile_public")
         .eq("id", user.id)
         .single() as any),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabase
         .from("student_profiles")
         .select("total_problems_solved, total_correct")
         .eq("id", user.id)
         .single() as any),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabase
         .from("user_badges")
         .select("badge_id")
         .eq("user_id", user.id) as any),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (supabase
         .from("badges_catalog")
         .select("id") as any),

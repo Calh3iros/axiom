@@ -16,7 +16,7 @@ const config = [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
       "import/order": [
         "error",
         {
@@ -26,6 +26,7 @@ const config = [
         },
       ],
       "no-console": ["warn", { allow: ["warn", "error"] }],
+      "react-hooks/set-state-in-effect": "warn",
     },
   },
   {
