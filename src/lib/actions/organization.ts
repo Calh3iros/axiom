@@ -8,6 +8,21 @@ export type OrgType = "school" | "network" | "state";
 
 const ELEVATED_ROLES: OrgRole[] = ["admin", "director", "secretary"];
 
+/**
+ * Check if current user is super_admin.
+ */
+async function isSuperAdmin(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase.from("profiles") as any)
+    .select("is_super_admin")
+    .eq("id", userId)
+    .single();
+  return data?.is_super_admin === true;
+}
+
 // ─── Hierarchy Helpers ───────────────────────────────────────────────────
 
 /**
@@ -23,7 +38,7 @@ async function getOrgSubtreeIds(supabase: Awaited<ReturnType<typeof createClient
 // ─── Organization CRUD ──────────────────────────────────────────────────
 
 /**
- * Create a new organization. The creator becomes admin automatically.
+ * Create a new organization. ONLY super_admin can create directly.
  */
 export async function createOrganization(name: string, type: OrgType) {
   const supabase = await createClient();
@@ -32,9 +47,14 @@ export async function createOrganization(name: string, type: OrgType) {
   } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
+  // Only super_admin can create orgs directly
+  if (!(await isSuperAdmin(supabase, user.id))) {
+    return { error: "Only administrators can create organizations" };
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: org, error } = await (supabase.from("organizations") as any)
-    .insert({ name, type, created_by: user.id })
+    .insert({ name, type, created_by: user.id, status: "active" })
     .select("id")
     .single();
 
@@ -49,6 +69,65 @@ export async function createOrganization(name: string, type: OrgType) {
   });
 
   return { orgId: org.id };
+}
+
+/**
+ * Public org request — no auth required. Creates org with status='pending'.
+ */
+export async function requestOrganization(data: {
+  name: string;
+  type: string;
+  institution_id: string;
+  requested_by_name: string;
+  requested_by_role: string;
+  requested_by_email: string;
+  requested_by_phone: string;
+  message?: string;
+}) {
+  // Server-side validation
+  if (!data.name?.trim()) return { error: "Institution name is required" };
+  if (!data.institution_id?.trim()) return { error: "Institution ID (CNPJ) is required" };
+  if (!data.requested_by_name?.trim()) return { error: "Your name is required" };
+  if (!data.requested_by_role?.trim()) return { error: "Your role is required" };
+  if (!data.requested_by_email?.trim()) return { error: "Email is required" };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.requested_by_email))
+    return { error: "Invalid email format" };
+  if (!data.requested_by_phone?.trim()) return { error: "Phone is required" };
+  if (!["school", "network", "state"].includes(data.type))
+    return { error: "Invalid org type" };
+
+  // Use admin client for unauthenticated insert
+  const { supabaseAdmin } = await import("@/lib/supabase/admin");
+
+  // Rate limit: check recent pending requests from this email
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: recent } = await (supabaseAdmin.from("organizations") as any)
+    .select("id")
+    .eq("requested_by_email", data.requested_by_email)
+    .eq("status", "pending")
+    .gte("requested_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+
+  if (recent && recent.length >= 3) {
+    return { error: "Too many requests. Please try again in 24 hours." };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseAdmin.from("organizations") as any)
+    .insert({
+      name: data.name.trim(),
+      type: data.type,
+      status: "pending",
+      institution_id: data.institution_id.trim(),
+      requested_by_name: data.requested_by_name.trim(),
+      requested_by_role: data.requested_by_role.trim(),
+      requested_by_email: data.requested_by_email.trim().toLowerCase(),
+      requested_by_phone: data.requested_by_phone.trim(),
+      request_message: data.message?.trim() || null,
+      requested_at: new Date().toISOString(),
+    });
+
+  if (error) return { error: error.message };
+  return { success: true };
 }
 
 /**
@@ -114,6 +193,16 @@ export async function getOrgDashboard(orgId: string) {
     .single();
 
   if (!membership) return null;
+
+  // Check org status — only super_admin can view non-active orgs
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: orgCheck } = await (supabase.from("organizations") as any)
+    .select("status")
+    .eq("id", orgId)
+    .single();
+  if (orgCheck?.status !== "active") {
+    if (!(await isSuperAdmin(supabase, user.id))) return null;
+  }
 
   // Fetch org, members, classes in parallel
   const [orgRes, membersRes, classesRes] = await Promise.all([

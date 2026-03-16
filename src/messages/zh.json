@@ -666,5 +666,33 @@
     "you": "你",
     "hide": "隐藏",
     "show": "显示"
+  },
+  "RequestOrg": {
+    "title": "申请机构访问",
+    "subtitle": "请填写表格，我们的团队将在48小时内审核您的请求。",
+    "institutionName": "机构名称",
+    "institutionNamePlaceholder": "例：示范小学",
+    "orgType": "机构类型",
+    "typeSchool": "学校",
+    "typeNetwork": "私立集团",
+    "typeState": "省教育厅",
+    "institutionId": "注册号 / 税号",
+    "institutionIdPlaceholder": "官方注册号",
+    "requesterName": "您的全名",
+    "requesterRole": "您的职务",
+    "selectRole": "选择职务...",
+    "roleDirector": "校长",
+    "roleCoordinator": "协调员",
+    "roleSecretary": "秘书 / 管理员",
+    "roleOther": "其他",
+    "requesterEmail": "机构邮箱",
+    "requesterPhone": "电话",
+    "message": "备注（可选）",
+    "messagePlaceholder": "关于您机构的补充信息...",
+    "submit": "提交申请",
+    "disclaimer": "提交即确认您有权代表该机构。",
+    "successTitle": "申请已提交！",
+    "successDesc": "我们的团队将在48小时内审核并联系您。",
+    "backHome": "返回首页"
   }
 }

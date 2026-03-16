@@ -666,5 +666,33 @@
     "you": "vous",
     "hide": "Masquer",
     "show": "Afficher"
+  },
+  "RequestOrg": {
+    "title": "Demander l'Accès Institutionnel",
+    "subtitle": "Remplissez le formulaire et notre équipe examinera votre demande sous 48 heures.",
+    "institutionName": "Nom de l'Institution",
+    "institutionNamePlaceholder": "ex: École Primaire Exemple",
+    "orgType": "Type d'Institution",
+    "typeSchool": "École",
+    "typeNetwork": "Réseau Privé",
+    "typeState": "Secrétariat d'État à l'Éducation",
+    "institutionId": "N° d'Identification",
+    "institutionIdPlaceholder": "SIRET ou enregistrement officiel",
+    "requesterName": "Votre Nom Complet",
+    "requesterRole": "Votre Fonction",
+    "selectRole": "Sélectionnez votre fonction...",
+    "roleDirector": "Directeur/Directrice",
+    "roleCoordinator": "Coordinateur/Coordinatrice",
+    "roleSecretary": "Secrétaire / Admin",
+    "roleOther": "Autre",
+    "requesterEmail": "Email Institutionnel",
+    "requesterPhone": "Téléphone",
+    "message": "Notes (optionnel)",
+    "messagePlaceholder": "Informations supplémentaires sur votre institution...",
+    "submit": "Envoyer la Demande",
+    "disclaimer": "En soumettant, vous confirmez être autorisé à représenter cette institution.",
+    "successTitle": "Demande Envoyée !",
+    "successDesc": "Notre équipe examinera votre demande et vous contactera sous 48 heures.",
+    "backHome": "Retour à l'Accueil"
   }
 }

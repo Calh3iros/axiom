@@ -666,5 +666,33 @@
     "you": "tú",
     "hide": "Ocultar",
     "show": "Mostrar"
+  },
+  "RequestOrg": {
+    "title": "Solicitar Acceso Institucional",
+    "subtitle": "Complete el formulario y nuestro equipo revisará su solicitud en 48 horas.",
+    "institutionName": "Nombre de la Institución",
+    "institutionNamePlaceholder": "ej: Escuela Municipal Ejemplo",
+    "orgType": "Tipo de Institución",
+    "typeSchool": "Escuela",
+    "typeNetwork": "Red Privada",
+    "typeState": "Secretaría Estatal de Educación",
+    "institutionId": "Registro / ID Fiscal",
+    "institutionIdPlaceholder": "Registro oficial",
+    "requesterName": "Su Nombre Completo",
+    "requesterRole": "Su Cargo",
+    "selectRole": "Seleccione su cargo...",
+    "roleDirector": "Director(a)",
+    "roleCoordinator": "Coordinador(a)",
+    "roleSecretary": "Secretario(a) / Admin",
+    "roleOther": "Otro",
+    "requesterEmail": "Email Institucional",
+    "requesterPhone": "Teléfono",
+    "message": "Notas (opcional)",
+    "messagePlaceholder": "Información adicional sobre su institución...",
+    "submit": "Enviar Solicitud",
+    "disclaimer": "Al enviar, confirma estar autorizado para representar esta institución.",
+    "successTitle": "¡Solicitud Enviada!",
+    "successDesc": "Nuestro equipo revisará su solicitud y lo contactará en 48 horas.",
+    "backHome": "Volver al Inicio"
   }
 }

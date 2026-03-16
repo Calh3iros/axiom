@@ -666,5 +666,33 @@
     "you": "você",
     "hide": "Ocultar",
     "show": "Mostrar"
+  },
+  "RequestOrg": {
+    "title": "Solicitar Acesso Institucional",
+    "subtitle": "Preencha o formulário e nossa equipe analisará sua solicitação em até 48 horas.",
+    "institutionName": "Nome da Instituição",
+    "institutionNamePlaceholder": "ex: Escola Municipal Exemplo",
+    "orgType": "Tipo de Instituição",
+    "typeSchool": "Escola",
+    "typeNetwork": "Rede Privada",
+    "typeState": "Secretaria Estadual de Educação",
+    "institutionId": "CNPJ / Registro Institucional",
+    "institutionIdPlaceholder": "CNPJ ou registro oficial",
+    "requesterName": "Seu Nome Completo",
+    "requesterRole": "Seu Cargo",
+    "selectRole": "Selecione seu cargo...",
+    "roleDirector": "Diretor(a)",
+    "roleCoordinator": "Coordenador(a)",
+    "roleSecretary": "Secretário(a) / Admin",
+    "roleOther": "Outro",
+    "requesterEmail": "Email Institucional",
+    "requesterPhone": "Telefone",
+    "message": "Observações (opcional)",
+    "messagePlaceholder": "Informações adicionais sobre sua instituição...",
+    "submit": "Enviar Solicitação",
+    "disclaimer": "Ao enviar, você confirma que está autorizado a representar esta instituição.",
+    "successTitle": "Solicitação Enviada!",
+    "successDesc": "Nossa equipe analisará sua solicitação e entrará em contato em até 48 horas.",
+    "backHome": "Voltar ao Início"
   }
 }

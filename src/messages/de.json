@@ -666,5 +666,33 @@
     "you": "du",
     "hide": "Ausblenden",
     "show": "Anzeigen"
+  },
+  "RequestOrg": {
+    "title": "Institutionellen Zugang beantragen",
+    "subtitle": "Füllen Sie das Formular aus. Unser Team prüft Ihre Anfrage innerhalb von 48 Stunden.",
+    "institutionName": "Name der Institution",
+    "institutionNamePlaceholder": "z.B. Grundschule Beispiel",
+    "orgType": "Art der Institution",
+    "typeSchool": "Schule",
+    "typeNetwork": "Privates Netzwerk",
+    "typeState": "Bildungsministerium",
+    "institutionId": "Registrierung / Steuer-ID",
+    "institutionIdPlaceholder": "Offizielle Registrierung",
+    "requesterName": "Ihr vollständiger Name",
+    "requesterRole": "Ihre Funktion",
+    "selectRole": "Funktion wählen...",
+    "roleDirector": "Direktor/in",
+    "roleCoordinator": "Koordinator/in",
+    "roleSecretary": "Sekretär/in / Admin",
+    "roleOther": "Andere",
+    "requesterEmail": "Institutionelle E-Mail",
+    "requesterPhone": "Telefon",
+    "message": "Anmerkungen (optional)",
+    "messagePlaceholder": "Zusätzliche Informationen über Ihre Institution...",
+    "submit": "Anfrage senden",
+    "disclaimer": "Mit dem Absenden bestätigen Sie, dass Sie berechtigt sind, diese Institution zu vertreten.",
+    "successTitle": "Anfrage gesendet!",
+    "successDesc": "Unser Team wird Ihre Anfrage prüfen und Sie innerhalb von 48 Stunden kontaktieren.",
+    "backHome": "Zurück zur Startseite"
   }
 }

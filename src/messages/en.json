@@ -666,5 +666,33 @@
     "you": "you",
     "hide": "Hide",
     "show": "Show"
+  },
+  "RequestOrg": {
+    "title": "Request Institutional Access",
+    "subtitle": "Fill out the form below and our team will review your request within 48 hours.",
+    "institutionName": "Institution Name",
+    "institutionNamePlaceholder": "e.g. Springfield Elementary School",
+    "orgType": "Institution Type",
+    "typeSchool": "School",
+    "typeNetwork": "Private Network",
+    "typeState": "State Education Department",
+    "institutionId": "Registration / Tax ID",
+    "institutionIdPlaceholder": "CNPJ or official registration",
+    "requesterName": "Your Full Name",
+    "requesterRole": "Your Role",
+    "selectRole": "Select your role...",
+    "roleDirector": "Director / Principal",
+    "roleCoordinator": "Coordinator",
+    "roleSecretary": "Secretary / Admin",
+    "roleOther": "Other",
+    "requesterEmail": "Institutional Email",
+    "requesterPhone": "Phone",
+    "message": "Additional Notes (optional)",
+    "messagePlaceholder": "Any additional information about your institution...",
+    "submit": "Submit Request",
+    "disclaimer": "By submitting, you confirm that you are authorized to represent this institution.",
+    "successTitle": "Request Submitted!",
+    "successDesc": "Our team will review your request and contact you within 48 hours.",
+    "backHome": "Back to Home"
   }
 }

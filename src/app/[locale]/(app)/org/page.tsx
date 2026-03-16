@@ -1,10 +1,9 @@
 "use client";
 
-import { Building2, Plus, LogIn, ChevronRight } from "lucide-react";
+import { Building2, LogIn, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback } from "react";
 
-import { CreateOrgModal } from "@/components/org/create-org-modal";
 import { OrgCard } from "@/components/org/org-card";
 import { Link } from "@/i18n/routing";
 import { getMyOrganizations } from "@/lib/actions/organization";
@@ -27,14 +26,12 @@ export default function OrgListPage() {
   const t = useTranslations("Org");
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [childOrgs, setChildOrgs] = useState<OrgData[]>([]);
-  const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchOrgs = useCallback(async () => {
     setLoading(true);
     const result = await getMyOrganizations();
     if (Array.isArray(result)) {
-      // backward compat: old shape was plain array
       setMemberships(result as Membership[]);
       setChildOrgs([]);
     } else {
@@ -48,7 +45,6 @@ export default function OrgListPage() {
     fetchOrgs();
   }, [fetchOrgs]);
 
-  // Group child orgs by parent
   const directOrgIds = new Set(memberships.map(m => m.org_id));
 
   return (
@@ -60,22 +56,13 @@ export default function OrgListPage() {
             {t("title")}
           </h1>
         </div>
-        <div className="flex gap-3">
-          <Link
-            href="/join"
-            className="flex items-center gap-2 rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg2)]"
-          >
-            <LogIn className="h-4 w-4" />
-            Join
-          </Link>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 rounded-lg bg-[var(--color-ax-blue)] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-          >
-            <Plus className="h-4 w-4" />
-            {t("createOrg")}
-          </button>
-        </div>
+        <Link
+          href="/join"
+          className="flex items-center gap-2 rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg2)]"
+        >
+          <LogIn className="h-4 w-4" />
+          Join
+        </Link>
       </div>
 
       {loading ? (
@@ -90,7 +77,6 @@ export default function OrgListPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Direct memberships */}
           <div className="grid gap-4 md:grid-cols-2">
             {memberships.map((o) => (
               <OrgCard
@@ -101,7 +87,6 @@ export default function OrgListPage() {
             ))}
           </div>
 
-          {/* Child orgs from hierarchy */}
           {childOrgs.length > 0 && (
             <div>
               <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--color-text-secondary)]">
@@ -130,12 +115,6 @@ export default function OrgListPage() {
           )}
         </div>
       )}
-
-      <CreateOrgModal
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        onCreated={fetchOrgs}
-      />
     </div>
   );
 }
