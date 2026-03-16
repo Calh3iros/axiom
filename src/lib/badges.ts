@@ -50,7 +50,7 @@ export async function checkAndUnlockBadges(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabaseAdmin
         .from("profiles")
-        .select("streak_count")
+        .select("current_streak")
         .eq("id", userId)
         .single() as any),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,7 +62,7 @@ export async function checkAndUnlockBadges(
     ]);
 
     const kmRows = kmData?.data || [];
-    const streakDays = profileData?.data?.streak_count || 0;
+    const streakDays = profileData?.data?.current_streak || 0;
     const totalSolved = challengeData?.data?.total_problems_solved || 0;
     const totalCorrect = challengeData?.data?.total_correct || 0;
 
