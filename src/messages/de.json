@@ -30,7 +30,16 @@
     "weeklyEvolutionSchool": "Wöchentliche Entwicklung (Schule)",
     "engagementAlerts": "Engagement-Warnungen",
     "schoolComparison": "Schulvergleich",
-    "schools": "Schulen"
+    "schools": "Schulen",
+    "period.7d": "7 Tage",
+    "period.30d": "30 Tage",
+    "period.90d": "90 Tage",
+    "period.180d": "6 Monate",
+    "period.year": "Schuljahr",
+    "period.custom": "Benutzerdefiniert",
+    "exportPdf": "PDF exportieren",
+    "exportingPdf": "Bericht wird erstellt...",
+    "noDataInPeriod": "Keine Aktivität in diesem Zeitraum."
   },
   "FAQ": {
     "backToHome": "Zurück zur Startseite",

@@ -28,3 +28,9 @@
   Server actions verificam role do user ANTES de executar query.
 - dashboard.ts: getTeacherDashboard, getDirectorDashboard, getSecretaryDashboard
 - Components em src/components/dashboard/dashboard-views.tsx
+
+- Phase 8A: Analytics completo. Filtro de período (7d/30d/90d/180d/ano/custom)
+  em todos os dashboards. Export PDF com gráficos pra gestores.
+  PDF captura DOM com html2canvas, aplica fundo branco temporário pra legibilidade.
+  Deps: jspdf + html2canvas.
+  Buckets dinâmicos: ≤7d=diário, ≤90d=semanal, >90d=mensal.

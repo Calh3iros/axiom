@@ -30,7 +30,16 @@
     "weeklyEvolutionSchool": "每周进展（学校）",
     "engagementAlerts": "参与度警报",
     "schoolComparison": "学校比较",
-    "schools": "学校"
+    "schools": "学校",
+    "period.7d": "7天",
+    "period.30d": "30天",
+    "period.90d": "90天",
+    "period.180d": "6个月",
+    "period.year": "学年",
+    "period.custom": "自定义",
+    "exportPdf": "导出PDF",
+    "exportingPdf": "正在生成报告...",
+    "noDataInPeriod": "此期间没有活动。"
   },
   "FAQ": {
     "backToHome": "返回首页",

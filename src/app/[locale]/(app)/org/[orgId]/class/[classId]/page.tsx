@@ -51,6 +51,7 @@ export default function ClassDetailPage({
   const [dashData, setDashData] = useState<any>(null);
   const [currentUserId, setCurrentUserId] = useState("");
   const [loading, setLoading] = useState(true);
+  const [dashLoading, setDashLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
   const [showRanking, setShowRanking] = useState(true);
@@ -79,6 +80,13 @@ export default function ClassDetailPage({
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handlePeriodChange = async (range: { startDate: string; endDate: string }) => {
+    setDashLoading(true);
+    const res = await getTeacherDashboard(classId, range);
+    setDashData(res);
+    setDashLoading(false);
+  };
 
   const handleCopy = async () => {
     if (!data?.classInfo.invite_code) return;
@@ -183,7 +191,7 @@ export default function ClassDetailPage({
               {showDashboard ? tr("hide") : tr("show")}
             </button>
           </div>
-          {showDashboard && <TeacherDashboard data={dashData} />}
+          {showDashboard && <TeacherDashboard data={dashData} onPeriodChange={handlePeriodChange} loading={dashLoading} title={data?.classInfo?.name} />}
         </div>
       )}
 

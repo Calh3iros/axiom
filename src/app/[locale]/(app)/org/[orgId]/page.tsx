@@ -28,6 +28,8 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
   const [secData, setSecData] = useState<any>(null);
   const [showClassModal, setShowClassModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(true);
+  const [dashLoading, setDashLoading] = useState(false);
+  const [secLoading, setSecLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
@@ -48,6 +50,20 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleDirPeriodChange = async (range: { startDate: string; endDate: string }) => {
+    setDashLoading(true);
+    const res = await getDirectorDashboard(orgId, range);
+    setDashData(res);
+    setDashLoading(false);
+  };
+
+  const handleSecPeriodChange = async (range: { startDate: string; endDate: string }) => {
+    setSecLoading(true);
+    const res = await getSecretaryDashboard(orgId, range);
+    setSecData(res);
+    setSecLoading(false);
+  };
 
   if (loading) {
     return (
@@ -146,8 +162,8 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           </div>
           {showDashboard && (
             <>
-              {dashData && <DirectorDashboard data={dashData} onDrillDown={(classId) => router.push(`/org/${orgId}/class/${classId}`)} />}
-              {secData && <SecretaryDashboard data={secData} onDrillDown={(id) => router.push(`/org/${id}`)} />}
+              {dashData && <DirectorDashboard data={dashData} onDrillDown={(classId) => router.push(`/org/${orgId}/class/${classId}`)} onPeriodChange={handleDirPeriodChange} loading={dashLoading} title={data?.org?.name} />}
+              {secData && <SecretaryDashboard data={secData} onDrillDown={(id) => router.push(`/org/${id}`)} onPeriodChange={handleSecPeriodChange} loading={secLoading} title={data?.org?.name} />}
             </>
           )}
         </div>
