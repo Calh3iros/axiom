@@ -1,14 +1,16 @@
 "use client";
 
-import { ArrowLeft, Plus, Users, BookOpen, Building2, Trophy } from "lucide-react";
+import { ArrowLeft, Plus, Users, BookOpen, Building2, Trophy, BarChart3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
+import { DirectorDashboard, SecretaryDashboard } from "@/components/dashboard/dashboard-views";
 import { ClassCard } from "@/components/org/class-card";
 import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
+import { getDirectorDashboard, getSecretaryDashboard } from "@/lib/actions/dashboard";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
 
@@ -17,19 +19,29 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
   const t = useTranslations("Org");
   const tc = useTranslations("Class");
   const tr = useTranslations("Rankings");
+  const router = useRouter();
   const [data, setData] = useState<Awaited<ReturnType<typeof getOrgDashboard>>>(null);
   const [orgRanking, setOrgRanking] = useState<Awaited<ReturnType<typeof getOrgClassRanking>>>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [dashData, setDashData] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [secData, setSecData] = useState<any>(null);
   const [showClassModal, setShowClassModal] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [res, rankRes] = await Promise.all([
+    const [res, rankRes, dirRes, secRes] = await Promise.all([
       getOrgDashboard(orgId),
       getOrgClassRanking(orgId),
+      getDirectorDashboard(orgId),
+      getSecretaryDashboard(orgId),
     ]);
     setData(res);
     setOrgRanking(rankRes);
+    setDashData(dirRes);
+    setSecData(secRes);
     setLoading(false);
   }, [orgId]);
 
@@ -114,6 +126,32 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           </div>
         )}
       </div>
+
+      {/* Dashboard (directors/admins/secretaries) */}
+      {isElevated && (dashData || secData) && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-indigo-400" />
+              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+                Dashboard
+              </h2>
+            </div>
+            <button
+              onClick={() => setShowDashboard(!showDashboard)}
+              className="text-xs text-[var(--color-dim)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              {showDashboard ? tr("hide") : tr("show")}
+            </button>
+          </div>
+          {showDashboard && (
+            <>
+              {dashData && <DirectorDashboard data={dashData} onDrillDown={(classId) => router.push(`/org/${orgId}/class/${classId}`)} />}
+              {secData && <SecretaryDashboard data={secData} onDrillDown={(id) => router.push(`/org/${id}`)} />}
+            </>
+          )}
+        </div>
+      )}
 
       {/* Org Ranking (director/admin/secretary only) */}
       {isElevated && orgRanking && (

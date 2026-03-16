@@ -1,11 +1,13 @@
 "use client";
 
-import { ArrowLeft, Copy, Check, RefreshCw, Users, Trophy } from "lucide-react";
+import { ArrowLeft, Copy, Check, RefreshCw, Users, Trophy, BarChart3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
+import { TeacherDashboard } from "@/components/dashboard/dashboard-views";
 import { ClassRankingTable } from "@/components/rankings/class-ranking-table";
 import { Link } from "@/i18n/routing";
+import { getTeacherDashboard } from "@/lib/actions/dashboard";
 import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
 import { getClassRanking } from "@/lib/actions/rankings";
@@ -45,20 +47,25 @@ export default function ClassDetailPage({
   const tr = useTranslations("Rankings");
   const [data, setData] = useState<Awaited<ReturnType<typeof getClassDashboard>>>(null);
   const [ranking, setRanking] = useState<Awaited<ReturnType<typeof getClassRanking>>>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [dashData, setDashData] = useState<any>(null);
   const [currentUserId, setCurrentUserId] = useState("");
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
   const [showRanking, setShowRanking] = useState(true);
+  const [showDashboard, setShowDashboard] = useState(true);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [res, rankRes] = await Promise.all([
+    const [res, rankRes, dashRes] = await Promise.all([
       getClassDashboard(classId),
       getClassRanking(classId),
+      getTeacherDashboard(classId),
     ]);
     setData(res);
     setRanking(rankRes);
+    setDashData(dashRes);
 
     const supabase = createClient();
     const {
@@ -156,6 +163,27 @@ export default function ClassDetailPage({
           {copied && (
             <p className="mt-2 text-xs text-green-400">{t("codeCopied")}</p>
           )}
+        </div>
+      )}
+
+      {/* Dashboard (managers only) */}
+      {isManager && dashData && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-indigo-400" />
+              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+                Dashboard
+              </h2>
+            </div>
+            <button
+              onClick={() => setShowDashboard(!showDashboard)}
+              className="text-xs text-[var(--color-dim)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              {showDashboard ? tr("hide") : tr("show")}
+            </button>
+          </div>
+          {showDashboard && <TeacherDashboard data={dashData} />}
         </div>
       )}
 

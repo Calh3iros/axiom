@@ -18,3 +18,13 @@
 - CI fix: nunca tinha funcionado (91 runs vermelhos). Corrigido pnpm version,
   lockfile, env vars placeholders, lint warnings.
 - ESLint: no-explicit-any mudado de error pra warn (tech debt, revisitar)
+
+- Phase 7: Dashboards gestores com Recharts. 3 níveis: teacher (turma),
+  director (escola), secretary (rede/estado).
+- Seed demo: dados fictícios pra demonstração em vendas.
+  75 alunos, 3 turmas, 3 meses de atividade, distribuição realista.
+  Identificáveis por org name "Escola Demonstração", deletáveis via /admin/seed-demo.
+- Dashboard queries usam supabaseAdmin pra bypassar RLS.
+  Server actions verificam role do user ANTES de executar query.
+- dashboard.ts: getTeacherDashboard, getDirectorDashboard, getSecretaryDashboard
+- Components em src/components/dashboard/dashboard-views.tsx

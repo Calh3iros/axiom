@@ -1,6 +1,6 @@
 "use client";
 
-import { ClipboardCheck, BarChart3, Users, Shield } from "lucide-react";
+import { ClipboardCheck, BarChart3, Users, Shield, FlaskConical } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -10,6 +10,7 @@ const navItems = [
   { key: "approvals", href: "/admin", icon: ClipboardCheck },
   { key: "platform", href: "/admin/platform", icon: BarChart3 },
   { key: "users", href: "/admin/users", icon: Users },
+  { key: "seedDemo", href: "/admin/seed-demo", icon: FlaskConical },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
