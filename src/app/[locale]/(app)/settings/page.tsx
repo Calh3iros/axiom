@@ -19,6 +19,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useState, useEffect } from "react";
 
 import { BadgeGrid } from "@/components/shared/badge-grid";
@@ -95,6 +96,7 @@ export default function SettingsPage() {
   const handleUpgrade = async () => {
     try {
       const { STRIPE_PRICES } = await import("@/lib/stripe/config");
+      posthog.capture("upgrade_clicked", { plan: "pro", source: "settings" });
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

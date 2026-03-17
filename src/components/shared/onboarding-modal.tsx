@@ -11,6 +11,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useState, useEffect } from "react";
 
 import { createClient } from "@/lib/supabase/client";
@@ -212,6 +213,7 @@ export function OnboardingModal() {
     } else {
       await markOnboardingComplete();
     }
+    posthog.capture("onboarding_completed", { completed_step: step + 1, skipped: step < totalSteps - 1 });
     setShow(false);
   };
 
@@ -220,6 +222,7 @@ export function OnboardingModal() {
       setStep(step + 1);
     } else {
       await saveStudentProfile();
+      posthog.capture("onboarding_completed", { completed_step: totalSteps, skipped: false });
       localStorage.setItem(STORAGE_KEY, "true");
       setShow(false);
     }

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useState, useEffect, useCallback } from "react";
 
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
@@ -92,8 +93,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
+      if (event === "SIGNED_IN" && session?.user && !sessionStorage.getItem("axiom_signup_tracked")) {
+        sessionStorage.setItem("axiom_signup_tracked", "true");
+        posthog.capture("signup_completed", { method: session.user.app_metadata?.provider === "google" ? "google" : "email" });
+      }
     });
 
     return () => subscription.unsubscribe();

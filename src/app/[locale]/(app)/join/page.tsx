@@ -2,6 +2,7 @@
 
 import { LogIn, CheckCircle, AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 import { useRouter } from "@/i18n/routing";
@@ -25,6 +26,7 @@ export default function JoinPage() {
     if (result.error) {
       setError(result.error);
     } else {
+      posthog.capture("org_joined", { method: "invite_code" });
       setSuccess(result.className || t("success"));
       setTimeout(() => router.push("/org"), 1500);
     }

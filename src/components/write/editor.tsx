@@ -13,7 +13,8 @@ import {
   Download,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useState, useCallback } from "react";
+import posthog from "posthog-js";
+import { useState, useCallback, useEffect } from "react";
 
 import { exportAsPDF, exportAsDOCX } from "@/lib/export-utils";
 
@@ -63,6 +64,16 @@ export function WriteEditor() {
   const [activeTab, setActiveTab] = useState<"output" | "citations">("output");
   const locale = useLocale();
   const t = useTranslations("Dashboard.Components");
+
+  useEffect(() => {
+    const key = "axiom_tracked_features";
+    const tracked: string[] = JSON.parse(sessionStorage.getItem(key) || "[]");
+    if (!tracked.includes("write")) {
+      tracked.push("write");
+      sessionStorage.setItem(key, JSON.stringify(tracked));
+      posthog.capture("feature_used", { feature: "write" });
+    }
+  }, []);
 
   const handleAction = useCallback(
     async (action: WriteAction) => {

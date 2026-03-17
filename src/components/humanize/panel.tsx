@@ -11,7 +11,8 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import posthog from "posthog-js";
+import { useState, useEffect } from "react";
 
 import { detectAI, type DetectionResult } from "@/lib/ai/detect";
 
@@ -39,6 +40,16 @@ export function HumanizerPanel() {
   const locale = useLocale();
   const t = useTranslations("Dashboard.Components");
 
+  useEffect(() => {
+    const key = "axiom_tracked_features";
+    const tracked: string[] = JSON.parse(sessionStorage.getItem(key) || "[]");
+    if (!tracked.includes("humanize")) {
+      tracked.push("humanize");
+      sessionStorage.setItem(key, JSON.stringify(tracked));
+      posthog.capture("feature_used", { feature: "humanize" });
+    }
+  }, []);
+
   const handleHumanize = async () => {
     if (!input) return;
 
@@ -51,6 +62,7 @@ export function HumanizerPanel() {
       });
 
       if (res.status === 429 || res.status === 402) {
+        posthog.capture("paywall_hit", { feature: "humanize", current_plan: "free" });
         setShowPaywall(true);
         setLoading(false);
         return;

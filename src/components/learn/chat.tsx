@@ -4,7 +4,8 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Send, Loader2, BookOpen } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import posthog from "posthog-js";
+import { useState, useEffect } from "react";
 
 import { MarkdownMessage } from "../shared/markdown-message";
 
@@ -12,6 +13,16 @@ export function LearnChat() {
   const [input, setInput] = useState("");
   const locale = useLocale();
   const t = useTranslations("Dashboard.Learn");
+
+  useEffect(() => {
+    const key = "axiom_tracked_features";
+    const tracked: string[] = JSON.parse(sessionStorage.getItem(key) || "[]");
+    if (!tracked.includes("learn")) {
+      tracked.push("learn");
+      sessionStorage.setItem(key, JSON.stringify(tracked));
+      posthog.capture("feature_used", { feature: "learn" });
+    }
+  }, []);
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({

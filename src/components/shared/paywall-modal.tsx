@@ -1,6 +1,7 @@
 'use client';
 
 import { X, Zap, Crown, Sparkles } from 'lucide-react';
+import posthog from 'posthog-js';
 import { useState } from 'react';
 
 import { STRIPE_PRICES } from '@/lib/stripe/config';
@@ -119,6 +120,7 @@ export function PaywallModal({
   const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null);
 
   const handleCheckout = async (priceId: string, plan: PlanType) => {
+    posthog.capture("upgrade_clicked", { plan, source: "paywall_modal" });
     try {
       setLoadingPlan(plan);
       const locale = window.location.pathname.split('/')[1] || 'en';

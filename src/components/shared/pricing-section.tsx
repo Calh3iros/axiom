@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
@@ -15,6 +16,7 @@ export function PricingSection() {
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleCheckout = async (plan: "pro" | "elite") => {
+    posthog.capture("upgrade_clicked", { plan, source: "pricing_page" });
     setLoading(plan);
     try {
       // Check if user is authenticated before calling checkout API

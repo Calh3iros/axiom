@@ -13,6 +13,7 @@ import {
   Download,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -120,6 +121,8 @@ export function SolveChat({
       text: input || "What is this? Please solve it step by step.",
       files: files.length > 0 ? files : undefined,
     });
+
+    posthog.capture("exercise_submitted", { has_image: !!localAttachment });
 
     setInput("");
     setLocalAttachment(null);

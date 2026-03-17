@@ -3,10 +3,22 @@
 import { UIMessage } from "ai";
 import { Loader2, MessageSquare, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 
 import { SolveChat } from "@/components/solve/chat";
 import { getChats, getChatMessages, deleteChat } from "@/lib/actions/chat";
+
+// Track feature_used with sessionStorage dedup
+function trackFeature(feature: string) {
+  const key = "axiom_tracked_features";
+  const tracked: string[] = JSON.parse(sessionStorage.getItem(key) || "[]");
+  if (!tracked.includes(feature)) {
+    tracked.push(feature);
+    sessionStorage.setItem(key, JSON.stringify(tracked));
+    posthog.capture("feature_used", { feature });
+  }
+}
 
 export default function SolvePage() {
   const [chats, setChats] = useState<
@@ -28,6 +40,7 @@ export default function SolvePage() {
   // Initial chat loading - standard data-fetching pattern
 
   useEffect(() => {
+    trackFeature("solve");
     getChats().then(setChats);
   }, []);
 
