@@ -751,7 +751,8 @@
     "nav": {
       "approvals": "审批",
       "platform": "平台",
-      "users": "用户"
+      "users": "用户",
+      "seedDemo": "演示"
     },
     "backToApp": "返回应用",
     "loading": "加载中...",

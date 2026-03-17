@@ -751,7 +751,8 @@
     "nav": {
       "approvals": "Aprovações",
       "platform": "Plataforma",
-      "users": "Usuários"
+      "users": "Usuários",
+      "seedDemo": "Demo"
     },
     "backToApp": "Voltar ao app",
     "loading": "Carregando...",
