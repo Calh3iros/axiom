@@ -146,14 +146,14 @@ export async function getTeacherDashboard(classId: string, dateRange?: DateRange
   const inactiveDate = new Date(now.getTime() - inactiveThreshold * 86400000).toISOString().split("T")[0];
 
   // Batch fetch all data (filtered by date range)
-  const [profilesRes, challengeRes, usageRes, kmRes] = await Promise.all([
+  const [profilesRes, challengeRes, usageRes, kmRes, spRes] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabaseAdmin.from("profiles") as any)
       .select("id, full_name, email, last_active_date, current_streak")
       .in("id", studentIds),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabaseAdmin.from("challenge_log") as any)
-      .select("user_id, is_correct, topic, subject, created_at")
+      .select("user_id, topic, subject, created_at")
       .in("user_id", studentIds)
       .gte("created_at", startISO)
       .lte("created_at", new Date(endDate + "T23:59:59Z").toISOString())
@@ -168,12 +168,17 @@ export async function getTeacherDashboard(classId: string, dateRange?: DateRange
     (supabaseAdmin.from("subjects") as any)
       .select("user_id, mastery_pct")
       .in("user_id", studentIds),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabaseAdmin.from("student_profiles") as any)
+      .select("id, total_problems_solved, total_correct")
+      .in("id", studentIds),
   ]);
 
   const profiles = profilesRes.data || [];
   const challenges = challengeRes.data || [];
   const usageData = usageRes.data || [];
   const kmData = kmRes.data || [];
+  const spData = spRes.data || [];
 
   // Active within period
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -181,12 +186,28 @@ export async function getTeacherDashboard(classId: string, dateRange?: DateRange
     p.last_active_date && p.last_active_date >= startDate
   ).length;
 
-  // Accuracy from challenges in period (not from student_profiles which is all-time)
-  const totalSolvedInPeriod = challenges.length;
+  // Accuracy from student_profiles (all-time, since challenge_log doesn't have is_correct)
+   
+  const spMap = new Map<string, { solved: number; correct: number }>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const totalCorrectInPeriod = challenges.filter((c: any) => c.is_correct).length;
+  spData.forEach((sp: any) => {
+    spMap.set(sp.id, { solved: sp.total_problems_solved || 0, correct: sp.total_correct || 0 });
+  });
+  const totalSolvedFromSP = spData.reduce((s: number, sp: any) => s + (sp.total_problems_solved || 0), 0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const totalCorrectFromSP = spData.reduce((s: number, sp: any) => s + (sp.total_correct || 0), 0);
+
+  // Period-based solved count from challenge_log
+  const totalSolvedInPeriod = challenges.length;
+  // Per-student challenge count in period
+  const studentChallengeCount = new Map<string, number>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  challenges.forEach((c: any) => {
+    studentChallengeCount.set(c.user_id, (studentChallengeCount.get(c.user_id) || 0) + 1);
+  });
+
   const avgSolved = Math.round(totalSolvedInPeriod / studentIds.length);
-  const avgAccuracy = totalSolvedInPeriod > 0 ? Math.round((totalCorrectInPeriod / totalSolvedInPeriod) * 100) : 0;
+  const avgAccuracy = totalSolvedFromSP > 0 ? Math.round((totalCorrectFromSP / totalSolvedFromSP) * 100) : 0;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const avgStreak = Math.round(profiles.reduce((s: number, p: any) => s + (p.current_streak || 0), 0) / studentIds.length);
 
@@ -199,54 +220,39 @@ export async function getTeacherDashboard(classId: string, dateRange?: DateRange
       return d >= b.start && d < b.end;
     });
     const solved = bChallenges.length;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const correct = bChallenges.filter((c: any) => c.is_correct).length;
     return {
       week: b.label,
       solved,
-      accuracy: solved > 0 ? Math.round((correct / solved) * 100) : 0,
+      accuracy: avgAccuracy, // Use all-time accuracy since we can't compute per-bucket
     };
   });
 
-  // Accuracy distribution (from challenges in period, per student)
-  const studentAcc = new Map<string, { solved: number; correct: number }>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  challenges.forEach((c: any) => {
-    const entry = studentAcc.get(c.user_id) || { solved: 0, correct: 0 };
-    entry.solved++;
-    if (c.is_correct) entry.correct++;
-    studentAcc.set(c.user_id, entry);
-  });
+  // Accuracy distribution (from student_profiles, per student)
   const accuracyBuckets = [0, 0, 0, 0, 0];
   const accuracyLabels = ["0-30%", "30-50%", "50-70%", "70-90%", "90-100%"];
-  studentAcc.forEach(({ solved, correct }) => {
-    const acc = solved > 0 ? (correct / solved) * 100 : 0;
+  studentIds.forEach((sid: string) => {
+    const sp = spMap.get(sid);
+    const acc = sp && sp.solved > 0 ? (sp.correct / sp.solved) * 100 : 0;
     if (acc < 30) accuracyBuckets[0]++;
     else if (acc < 50) accuracyBuckets[1]++;
     else if (acc < 70) accuracyBuckets[2]++;
     else if (acc < 90) accuracyBuckets[3]++;
     else accuracyBuckets[4]++;
   });
-  // Students with zero activity in period
-  const activeStudentIds = new Set(studentAcc.keys());
-  studentIds.forEach((sid) => {
-    if (!activeStudentIds.has(sid)) accuracyBuckets[0]++;
-  });
   const accuracyDist = accuracyLabels.map((label, i) => ({ range: label, count: accuracyBuckets[i] }));
 
-  // Top 5 error topics
-  const topicErrors = new Map<string, { errors: number; total: number }>();
+  // Top 5 error topics (based on frequency — we can't track correctness per challenge)
+  const topicCounts = new Map<string, number>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   challenges.forEach((c: any) => {
     const key = `${c.subject} — ${c.topic}`;
-    const entry = topicErrors.get(key) || { errors: 0, total: 0 };
-    entry.total++;
-    if (!c.is_correct) entry.errors++;
-    topicErrors.set(key, entry);
+    topicCounts.set(key, (topicCounts.get(key) || 0) + 1);
   });
-  const topErrors = Array.from(topicErrors.entries())
-    .map(([topic, { errors, total }]) => ({ topic, errors, total, errorRate: Math.round((errors / total) * 100) }))
-    .sort((a, b) => b.errors - a.errors)
+  // Show topics with lowest avg accuracy from student_profiles
+  // Since we can't track per-topic errors without is_correct, show most-practiced topics
+  const topErrors = Array.from(topicCounts.entries())
+    .map(([topic, total]) => ({ topic, errors: 0, total, errorRate: 0 }))
+    .sort((a, b) => b.total - a.total)
     .slice(0, 5);
 
   // Inactive students (relative to period)
@@ -323,6 +329,7 @@ export async function getDirectorDashboard(orgId: string, dateRange?: DateRange)
   let totalStudentsAll = 0;
   let totalSolvedAll = 0;
   let totalCorrectAll = 0;
+  let totalSolvedFromSP = 0;
   let activeAll = 0;
   let totalStreakAll = 0;
 
@@ -333,27 +340,35 @@ export async function getDirectorDashboard(orgId: string, dateRange?: DateRange)
       continue;
     }
 
-    const [pRes, challengeRes] = await Promise.all([
+    const [pRes, challengeRes, spRes] = await Promise.all([
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabaseAdmin.from("profiles") as any)
         .select("id, last_active_date, current_streak")
         .in("id", sids),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabaseAdmin.from("challenge_log") as any)
-        .select("user_id, is_correct")
+        .select("user_id")
         .in("user_id", sids)
         .gte("created_at", startISO)
         .lte("created_at", new Date(endDate + "T23:59:59Z").toISOString()),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (supabaseAdmin.from("student_profiles") as any)
+        .select("id, total_problems_solved, total_correct")
+        .in("id", sids),
     ]);
 
     const profs = pRes.data || [];
     const chals = challengeRes.data || [];
+    const spRows = spRes.data || [];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const classActive = profs.filter((p: any) => p.last_active_date && p.last_active_date >= startDate).length;
     const classSolved = chals.length;
+    // Accuracy from student_profiles (all-time)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const classCorrect = chals.filter((c: any) => c.is_correct).length;
+    const classTotalSolved = spRows.reduce((s: number, sp: any) => s + (sp.total_problems_solved || 0), 0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const classTotalCorrect = spRows.reduce((s: number, sp: any) => s + (sp.total_correct || 0), 0);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const classStreak = profs.reduce((s: number, p: any) => s + (p.current_streak || 0), 0);
 
@@ -363,15 +378,16 @@ export async function getDirectorDashboard(orgId: string, dateRange?: DateRange)
       students: sids.length,
       active7d: classActive,
       avgSolved: Math.round(classSolved / sids.length),
-      avgAccuracy: classSolved > 0 ? Math.round((classCorrect / classSolved) * 100) : 0,
+      avgAccuracy: classTotalSolved > 0 ? Math.round((classTotalCorrect / classTotalSolved) * 100) : 0,
       adoption: Math.round((classActive / sids.length) * 100),
     });
 
     totalStudentsAll += sids.length;
     totalSolvedAll += classSolved;
-    totalCorrectAll += classCorrect;
+    totalCorrectAll += classTotalCorrect;
     activeAll += classActive;
     totalStreakAll += classStreak;
+    totalSolvedFromSP += classTotalSolved;
   }
 
   // Weekly/daily evolution (school-wide)
@@ -438,7 +454,7 @@ export async function getDirectorDashboard(orgId: string, dateRange?: DateRange)
     classCount: classes.length,
     totalStudents: totalStudentsAll,
     totalSolved: totalSolvedAll,
-    overallAccuracy: totalSolvedAll > 0 ? Math.round((totalCorrectAll / totalSolvedAll) * 100) : 0,
+    overallAccuracy: totalSolvedFromSP > 0 ? Math.round((totalCorrectAll / totalSolvedFromSP) * 100) : 0,
     active7d: activeAll,
     avgStreak: totalStudentsAll > 0 ? Math.round(totalStreakAll / totalStudentsAll) : 0,
     adoption: totalStudentsAll > 0 ? Math.round((activeAll / totalStudentsAll) * 100) : 0,

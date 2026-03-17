@@ -251,13 +251,10 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
         const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
         const subject = pick(SUBJECTS);
         const topic = pick(TOPICS[subject]);
-        const level = Math.min(5, Math.max(1, Math.round(gaussianRand(archetype.accuracy * 4, 0.8))));
+        const _level = Math.min(5, Math.max(1, Math.round(gaussianRand(archetype.accuracy * 4, 0.8))));
         const isCorrect = Math.random() < gaussianRand(archetype.accuracy, 0.1);
         allChallengeRows.push({
-          user_id: userId, subject, topic, level, is_correct: isCorrect,
-          challenge_text: `Demo challenge #${i + 1}`,
-          student_answer: isCorrect ? "correct answer" : "wrong answer",
-          feedback: isCorrect ? "Correto!" : "Incorreto. Revise o conceito.",
+          user_id: userId, subject, topic,
           created_at: date.toISOString(),
         });
         totalSolved++;
