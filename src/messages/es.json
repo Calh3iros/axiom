@@ -844,7 +844,19 @@
     "contract.expiring30d": "Expirando en 30 días",
     "contract.nearCapacity": "Cerca del Límite (>80%)",
     "contract.expired": "Expiradas",
-    "contract.remaining": "restantes"
+    "contract.remaining": "restantes",
+    "seedDemo": {
+      "title": "Seed Demo",
+      "schoolName": "Escola Demonstração",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "description": "Crea datos de demostración para probar dashboards institucionales: vistas de profesor, director y secretaría con datos realistas.",
+      "seeding": "Creando datos demo...",
+      "activate": "Activar Demo",
+      "removing": "Eliminando...",
+      "remove": "Eliminar Demo",
+      "confirmRemove": "¿Seguro que deseas eliminar todos los datos de demostración? Esta acción no se puede deshacer."
+    }
   },
   "Schools": {
     "nav": {

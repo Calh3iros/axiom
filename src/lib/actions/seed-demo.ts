@@ -82,7 +82,7 @@ function generateStudentArchetype() {
 // ─── Seed Action ─────────────────────────────────────────────────────────
 
 export async function seedDemoData(): Promise<{ success: boolean; message: string }> {
-  await requireSuperAdmin();
+  const adminUser = await requireSuperAdmin();
 
   // Check if demo org already exists
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,6 +101,7 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
         name: DEMO_ORG_NAME,
         type: "school",
         status: "active",
+        created_by: adminUser.id,
         requested_at: ninetyDaysAgo.toISOString(),
         approved_at: ninetyDaysAgo.toISOString(),
         requested_by_name: "Admin Demo",

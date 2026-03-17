@@ -844,7 +844,19 @@
     "contract.expiring30d": "Expire sous 30 jours",
     "contract.nearCapacity": "Proche de la Limite (>80%)",
     "contract.expired": "Expirées",
-    "contract.remaining": "restants"
+    "contract.remaining": "restants",
+    "seedDemo": {
+      "title": "Seed Demo",
+      "schoolName": "Escola Demonstração",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "description": "Créez des données de démonstration pour tester les tableaux de bord institutionnels avec des données réalistes.",
+      "seeding": "Création des données...",
+      "activate": "Activer la démo",
+      "removing": "Suppression...",
+      "remove": "Supprimer la démo",
+      "confirmRemove": "Êtes-vous sûr de vouloir supprimer toutes les données de démonstration ? Cette action est irréversible."
+    }
   },
   "Schools": {
     "nav": {

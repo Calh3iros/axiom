@@ -844,7 +844,19 @@
     "contract.expiring30d": "30天内到期",
     "contract.nearCapacity": "接近上限 (>80%)",
     "contract.expired": "已过期",
-    "contract.remaining": "剩余"
+    "contract.remaining": "剩余",
+    "seedDemo": {
+      "title": "种子演示",
+      "schoolName": "Escola Demonstração",
+      "active": "已激活",
+      "inactive": "未激活",
+      "description": "创建演示数据以测试机构仪表盘：教师、校长和秘书视图，包含真实学生数据。",
+      "seeding": "正在创建演示数据...",
+      "activate": "激活演示",
+      "removing": "正在删除...",
+      "remove": "删除演示",
+      "confirmRemove": "确定要删除所有演示数据吗？此操作无法撤销。"
+    }
   },
   "Schools": {
     "nav": {
