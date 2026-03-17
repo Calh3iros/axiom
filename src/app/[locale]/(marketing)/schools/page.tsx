@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { Link } from "@/i18n/routing";
 
+import "../../landing.css";
 import "./schools.css";
 
 export async function generateMetadata({
