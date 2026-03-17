@@ -97,7 +97,7 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     const localeMatch = pathname.match(/^\/([a-zA-Z]{2})(\/|$)/);
     const userLocale = localeMatch ? localeMatch[1] : "en";
-    url.pathname = `/${userLocale}/solve`;
+    url.pathname = `/${userLocale}/map`;
     return NextResponse.redirect(url);
   }
 
