@@ -105,81 +105,145 @@ function SchoolsContent() {
         <div className="sch-tag">{t("solution.tag")}</div>
         <h2 className="sch-title">{t("solution.title")}</h2>
         <div className="sch-dashboards">
-          {[
-            {
-              title: t("solution.teacherTitle"),
-              icon: "👩‍🏫",
-              bullets: [t("solution.teacherBullet1"), t("solution.teacherBullet2"), t("solution.teacherBullet3")],
-              color: "#3b82f6",
-            },
-            {
-              title: t("solution.directorTitle"),
-              icon: "🎓",
-              bullets: [t("solution.directorBullet1"), t("solution.directorBullet2"), t("solution.directorBullet3")],
-              color: "#8b5cf6",
-            },
-            {
-              title: t("solution.secretaryTitle"),
-              icon: "🏛️",
-              bullets: [t("solution.secretaryBullet1"), t("solution.secretaryBullet2"), t("solution.secretaryBullet3")],
-              color: "#f59e0b",
-            },
-          ].map((dash, i) => {
-            const dashImages = [
-              "/images/schools/teacher-dashboard.png",
-              "/images/schools/director-dashboard.png",
-              "/images/schools/secretary-dashboard.png",
-            ];
-            return (
-            <div key={i} className="sch-dash-card">
-              <div className="sch-dash-header" style={{ borderColor: dash.color }}>
-                <span className="sch-dash-icon">{dash.icon}</span>
-                <h3>{dash.title}</h3>
-              </div>
-              <div className="sch-dash-screenshot">
-                <Image
-                  src={dashImages[i]}
-                  alt={dash.title}
-                  width={900}
-                  height={500}
-                  className="sch-dash-img"
-                  unoptimized
-                />
-                <div className="sch-dash-label">{t("solution.demoLabel")}</div>
-              </div>
-              <div className="sch-dash-preview" style={{ borderColor: dash.color }}>
-                <div className="sch-dash-mock">
-                  <div className="sch-mock-row">
-                    <div className="sch-mock-stat" style={{ background: dash.color + "22" }}>
-                      <div className="sch-mock-num" style={{ color: dash.color }}>87%</div>
-                      <div className="sch-mock-label">Engagement</div>
-                    </div>
-                    <div className="sch-mock-stat" style={{ background: dash.color + "22" }}>
-                      <div className="sch-mock-num" style={{ color: dash.color }}>342</div>
-                      <div className="sch-mock-label">Active</div>
-                    </div>
-                    <div className="sch-mock-stat" style={{ background: dash.color + "22" }}>
-                      <div className="sch-mock-num" style={{ color: dash.color }}>24</div>
-                      <div className="sch-mock-label">Alerts</div>
-                    </div>
+          {/* ─── Director Dashboard ─── */}
+          <div className="sch-dash-card">
+            <div className="sch-dash-header" style={{ borderColor: "#8b5cf6" }}>
+              <span className="sch-dash-icon">🎓</span>
+              <h3>{t("solution.directorTitle")}</h3>
+            </div>
+            {/* Real screenshots */}
+            <div className="sch-dash-real-screenshots">
+              <Image src="/images/schools/director-overview.png" alt={t("solution.directorTitle") + " — Overview"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <Image src="/images/schools/Director-charts.png" alt={t("solution.directorTitle") + " — Charts"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <div className="sch-dash-label">{t("solution.demoLabel")}</div>
+            </div>
+            {/* AI-generated image */}
+            <div className="sch-dash-screenshot">
+              <Image src="/images/schools/director-dashboard.png" alt={t("solution.directorTitle")} width={900} height={500} className="sch-dash-img" unoptimized />
+            </div>
+            {/* HTML mockup */}
+            <div className="sch-dash-preview" style={{ borderColor: "#8b5cf6" }}>
+              <div className="sch-dash-mock">
+                <div className="sch-mock-row">
+                  <div className="sch-mock-stat" style={{ background: "#8b5cf622" }}>
+                    <div className="sch-mock-num" style={{ color: "#8b5cf6" }}>87%</div>
+                    <div className="sch-mock-label">Engagement</div>
                   </div>
-                  <div className="sch-mock-bars">
-                    {[85, 72, 93, 68, 78].map((v, j) => (
-                      <div key={j} className="sch-mock-bar-wrap">
-                        <div className="sch-mock-bar" style={{ width: `${v}%`, background: dash.color }} />
-                      </div>
-                    ))}
+                  <div className="sch-mock-stat" style={{ background: "#8b5cf622" }}>
+                    <div className="sch-mock-num" style={{ color: "#8b5cf6" }}>342</div>
+                    <div className="sch-mock-label">Active</div>
+                  </div>
+                  <div className="sch-mock-stat" style={{ background: "#8b5cf622" }}>
+                    <div className="sch-mock-num" style={{ color: "#8b5cf6" }}>24</div>
+                    <div className="sch-mock-label">Alerts</div>
                   </div>
                 </div>
+                <div className="sch-mock-bars">
+                  {[85, 72, 93, 68, 78].map((v, j) => (
+                    <div key={j} className="sch-mock-bar-wrap">
+                      <div className="sch-mock-bar" style={{ width: `${v}%`, background: "#8b5cf6" }} />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <ul className="sch-dash-bullets">
-                {dash.bullets.map((b, j) => (
-                  <li key={j}><span className="sch-check" style={{ color: dash.color }}>✓</span> {b}</li>
-                ))}
-              </ul>
             </div>
-            );
-          })}
+            <ul className="sch-dash-bullets">
+              {[t("solution.directorBullet1"), t("solution.directorBullet2"), t("solution.directorBullet3")].map((b, j) => (
+                <li key={j}><span className="sch-check" style={{ color: "#8b5cf6" }}>✓</span> {b}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ─── Teacher Dashboard ─── */}
+          <div className="sch-dash-card">
+            <div className="sch-dash-header" style={{ borderColor: "#3b82f6" }}>
+              <span className="sch-dash-icon">👩‍🏫</span>
+              <h3>{t("solution.teacherTitle")}</h3>
+            </div>
+            {/* Real screenshots */}
+            <div className="sch-dash-real-screenshots">
+              <Image src="/images/schools/Teacher-class.png" alt={t("solution.teacherTitle") + " — Class"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <Image src="/images/schools/Teacher-ranking.png" alt={t("solution.teacherTitle") + " — Ranking"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <div className="sch-dash-label">{t("solution.demoLabel")}</div>
+            </div>
+            {/* AI-generated image */}
+            <div className="sch-dash-screenshot">
+              <Image src="/images/schools/teacher-dashboard.png" alt={t("solution.teacherTitle")} width={900} height={500} className="sch-dash-img" unoptimized />
+            </div>
+            {/* HTML mockup */}
+            <div className="sch-dash-preview" style={{ borderColor: "#3b82f6" }}>
+              <div className="sch-dash-mock">
+                <div className="sch-mock-row">
+                  <div className="sch-mock-stat" style={{ background: "#3b82f622" }}>
+                    <div className="sch-mock-num" style={{ color: "#3b82f6" }}>87%</div>
+                    <div className="sch-mock-label">Engagement</div>
+                  </div>
+                  <div className="sch-mock-stat" style={{ background: "#3b82f622" }}>
+                    <div className="sch-mock-num" style={{ color: "#3b82f6" }}>342</div>
+                    <div className="sch-mock-label">Active</div>
+                  </div>
+                  <div className="sch-mock-stat" style={{ background: "#3b82f622" }}>
+                    <div className="sch-mock-num" style={{ color: "#3b82f6" }}>24</div>
+                    <div className="sch-mock-label">Alerts</div>
+                  </div>
+                </div>
+                <div className="sch-mock-bars">
+                  {[85, 72, 93, 68, 78].map((v, j) => (
+                    <div key={j} className="sch-mock-bar-wrap">
+                      <div className="sch-mock-bar" style={{ width: `${v}%`, background: "#3b82f6" }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <ul className="sch-dash-bullets">
+              {[t("solution.teacherBullet1"), t("solution.teacherBullet2"), t("solution.teacherBullet3")].map((b, j) => (
+                <li key={j}><span className="sch-check" style={{ color: "#3b82f6" }}>✓</span> {b}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ─── Secretary Dashboard (unchanged) ─── */}
+          <div className="sch-dash-card">
+            <div className="sch-dash-header" style={{ borderColor: "#f59e0b" }}>
+              <span className="sch-dash-icon">🏛️</span>
+              <h3>{t("solution.secretaryTitle")}</h3>
+            </div>
+            <div className="sch-dash-screenshot">
+              <Image src="/images/schools/secretary-dashboard.png" alt={t("solution.secretaryTitle")} width={900} height={500} className="sch-dash-img" unoptimized />
+              <div className="sch-dash-label">{t("solution.demoLabel")}</div>
+            </div>
+            <div className="sch-dash-preview" style={{ borderColor: "#f59e0b" }}>
+              <div className="sch-dash-mock">
+                <div className="sch-mock-row">
+                  <div className="sch-mock-stat" style={{ background: "#f59e0b22" }}>
+                    <div className="sch-mock-num" style={{ color: "#f59e0b" }}>87%</div>
+                    <div className="sch-mock-label">Engagement</div>
+                  </div>
+                  <div className="sch-mock-stat" style={{ background: "#f59e0b22" }}>
+                    <div className="sch-mock-num" style={{ color: "#f59e0b" }}>342</div>
+                    <div className="sch-mock-label">Active</div>
+                  </div>
+                  <div className="sch-mock-stat" style={{ background: "#f59e0b22" }}>
+                    <div className="sch-mock-num" style={{ color: "#f59e0b" }}>24</div>
+                    <div className="sch-mock-label">Alerts</div>
+                  </div>
+                </div>
+                <div className="sch-mock-bars">
+                  {[85, 72, 93, 68, 78].map((v, j) => (
+                    <div key={j} className="sch-mock-bar-wrap">
+                      <div className="sch-mock-bar" style={{ width: `${v}%`, background: "#f59e0b" }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <ul className="sch-dash-bullets">
+              {[t("solution.secretaryBullet1"), t("solution.secretaryBullet2"), t("solution.secretaryBullet3")].map((b, j) => (
+                <li key={j}><span className="sch-check" style={{ color: "#f59e0b" }}>✓</span> {b}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 

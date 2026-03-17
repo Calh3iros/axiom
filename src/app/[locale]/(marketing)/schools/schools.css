@@ -239,6 +239,19 @@
   font-weight: 700;
   flex-shrink: 0;
 }
+/* ── REAL SCREENSHOTS ── */
+.sch-dash-real-screenshots {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px 4px;
+}
+.sch-real-screenshot {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+}
 
 /* ── HOW IT WORKS ── */
 .sch-steps {
