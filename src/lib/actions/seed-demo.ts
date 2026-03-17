@@ -275,10 +275,9 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
         const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
         const subject = pick(SUBJECTS);
         const topic = pick(TOPICS[subject]);
-        const _level = Math.min(5, Math.max(1, Math.round(gaussianRand(archetype.accuracy * 4, 0.8))));
         const isCorrect = Math.random() < gaussianRand(archetype.accuracy, 0.1);
         allChallengeRows.push({
-          user_id: userId, subject, topic,
+          user_id: userId, subject, topic, success: isCorrect,
           created_at: date.toISOString(),
         });
         totalSolved++;
@@ -333,11 +332,11 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
       // Badges
       const badgeIds = ["first_solve"];
-      if (totalSolved >= 10) badgeIds.push("10_problems");
-      if (totalSolved >= 50) badgeIds.push("50_problems");
+      if (totalSolved >= 10) badgeIds.push("10_solves");
+      if (totalSolved >= 50) badgeIds.push("50_solves");
       if (streakDays >= 3) badgeIds.push("3_day_streak");
       if (streakDays >= 7) badgeIds.push("7_day_streak");
-      if (archetype.type === "excellent") badgeIds.push("first_master", "accuracy_star");
+      if (archetype.type === "excellent") badgeIds.push("first_mastery", "first_correct");
       for (const bid of badgeIds) {
         allBadgeRows.push({ user_id: userId, badge_id: bid, unlocked_at: now.toISOString() });
       }
