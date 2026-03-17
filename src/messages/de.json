@@ -167,7 +167,10 @@
       "copyOutput": "Ausgabe kopieren",
       "copyBtn": "Kopieren",
       "axiomUltra": "Axiom Ultra",
-      "ultraPlanIncludes": "DER ULTRA-PLAN BEINHALTET:"
+      "ultraPlanIncludes": "DER ULTRA-PLAN BEINHALTET:",
+      "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "errorRateLimit": "Zu viele Anfragen. Bitte warte einen Moment.",
+      "errorRetry": "Erneut versuchen"
     },
     "Onboarding": {
       "welcome": "WILLKOMMEN BEI AXIOM",
@@ -223,7 +226,10 @@
       "sug3": "Wie funktioniert Rekursion?",
       "sug4": "Bereite mich auf meine Physikprüfung vor",
       "thinking": "Denke nach...",
-      "inputPlaceholder": "Frag alles... \"Bring mir etwas bei über...\""
+      "inputPlaceholder": "Frag alles... \"Bring mir etwas bei über...\"",
+      "errorGeneric": "Etwas ist bei deiner Lernsitzung schiefgelaufen. Bitte versuche es erneut.",
+      "errorRateLimit": "Zu viele Anfragen. Bitte warte einen Moment.",
+      "errorRetry": "Erneut versuchen"
     },
     "Write": {
       "title": "Essay-Schreiber",

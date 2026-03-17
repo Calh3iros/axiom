@@ -167,7 +167,10 @@
       "copyOutput": "Copy output",
       "copyBtn": "Copy",
       "axiomUltra": "Axiom Ultra",
-      "ultraPlanIncludes": "ULTRA PLAN INCLUDES:"
+      "ultraPlanIncludes": "ULTRA PLAN INCLUDES:",
+      "errorGeneric": "Something went wrong. Please try again.",
+      "errorRateLimit": "Too many requests. Please wait a moment.",
+      "errorRetry": "Try again"
     },
     "Onboarding": {
       "welcome": "WELCOME TO AXIOM",
@@ -223,7 +226,10 @@
       "sug3": "How does recursion work?",
       "sug4": "Prep me for my physics exam",
       "thinking": "Thinking...",
-      "inputPlaceholder": "Ask me anything... \"Teach me about...\""
+      "inputPlaceholder": "Ask me anything... \"Teach me about...\"",
+      "errorGeneric": "Something went wrong with your study session. Please try again.",
+      "errorRateLimit": "Too many requests. Please wait a moment.",
+      "errorRetry": "Try again"
     },
     "Write": {
       "title": "Essay Writer",

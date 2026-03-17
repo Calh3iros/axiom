@@ -167,7 +167,10 @@
       "copyOutput": "Copier le résultat",
       "copyBtn": "Copier",
       "axiomUltra": "Axiom Ultra",
-      "ultraPlanIncludes": "LE PLAN ULTRA COMPREND :"
+      "ultraPlanIncludes": "LE PLAN ULTRA COMPREND :",
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+      "errorRateLimit": "Trop de requêtes. Veuillez patienter.",
+      "errorRetry": "Réessayer"
     },
     "Onboarding": {
       "welcome": "BIENVENUE SUR AXIOM",
@@ -223,7 +226,10 @@
       "sug3": "Comment fonctionne la récursivité ?",
       "sug4": "Prépare-moi pour mon examen de physique",
       "thinking": "Réflexion...",
-      "inputPlaceholder": "Demandez n'importe quoi... \"Explique-moi...\""
+      "inputPlaceholder": "Demandez n'importe quoi... \"Explique-moi...\"",
+      "errorGeneric": "Une erreur est survenue dans votre session d'étude. Veuillez réessayer.",
+      "errorRateLimit": "Trop de requêtes. Veuillez patienter.",
+      "errorRetry": "Réessayer"
     },
     "Write": {
       "title": "Rédacteur",

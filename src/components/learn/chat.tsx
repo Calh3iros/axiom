@@ -6,6 +6,7 @@ import { Send, Loader2, BookOpen } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import posthog from "posthog-js";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 import { MarkdownMessage } from "../shared/markdown-message";
 
@@ -29,7 +30,11 @@ export function LearnChat() {
       api: "/api/chat",
       body: { type: "learn", locale },
     }),
-    onError: (err: Error) => console.error("Learn Chat Error:", err.message),
+    onError: (err: Error) => {
+      console.error("Learn Chat Error:", err.message);
+      const msg = err.message?.includes("429") ? t("errorRateLimit") : t("errorGeneric");
+      toast.error(msg);
+    },
   });
 
   const isLoading = status === "submitted" || status === "streaming";

@@ -167,7 +167,10 @@
       "copyOutput": "Copiar resultado",
       "copyBtn": "Copiar",
       "axiomUltra": "Axiom Ultra",
-      "ultraPlanIncludes": "EL PLAN ULTRA INCLUYE:"
+      "ultraPlanIncludes": "EL PLAN ULTRA INCLUYE:",
+      "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+      "errorRateLimit": "Demasiadas solicitudes. Espera un momento.",
+      "errorRetry": "Reintentar"
     },
     "Onboarding": {
       "welcome": "BIENVENIDO A AXIOM",
@@ -223,7 +226,10 @@
       "sug3": "¿Cómo funciona la recursión?",
       "sug4": "Prepárame para mi examen de física",
       "thinking": "Pensando...",
-      "inputPlaceholder": "Pregunta cualquier cosa... \"Enséñame sobre...\""
+      "inputPlaceholder": "Pregunta cualquier cosa... \"Enséñame sobre...\"",
+      "errorGeneric": "Algo salió mal en tu sesión de estudio. Inténtalo de nuevo.",
+      "errorRateLimit": "Demasiadas solicitudes. Espera un momento.",
+      "errorRetry": "Reintentar"
     },
     "Write": {
       "title": "Redactor",

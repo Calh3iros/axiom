@@ -61,7 +61,11 @@ export function SolveChat({
         return res;
       },
     }),
-    onError: (err: Error) => console.error("Chat API Error:", err.message),
+    onError: (err: Error) => {
+      console.error("Chat API Error:", err.message);
+      const msg = err.message?.includes("429") ? t("errorRateLimit") : t("errorGeneric");
+      toast.error(msg);
+    },
     onFinish: () => {
       // Micro-rewards!
       const rewards = [

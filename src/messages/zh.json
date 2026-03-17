@@ -167,7 +167,10 @@
       "copyOutput": "复制输出",
       "copyBtn": "复制",
       "axiomUltra": "Axiom Ultra",
-      "ultraPlanIncludes": "ULTRA 计划包括："
+      "ultraPlanIncludes": "ULTRA 计划包括：",
+      "errorGeneric": "出了点问题。请重试。",
+      "errorRateLimit": "请求过多。请稍等片刻。",
+      "errorRetry": "重试"
     },
     "Onboarding": {
       "welcome": "欢迎使用 AXIOM",
@@ -223,7 +226,10 @@
       "sug3": "递归是怎么工作的？",
       "sug4": "帮我准备物理考试",
       "thinking": "思考中...",
-      "inputPlaceholder": "随便问...“教我...”"
+      "inputPlaceholder": "随便问...“教我...”",
+      "errorGeneric": "学习会话出了点问题。请重试。",
+      "errorRateLimit": "请求过多。请稍等片刻。",
+      "errorRetry": "重试"
     },
     "Write": {
       "title": "论文写手",
