@@ -67,3 +67,12 @@
   com CTA → /solve em vez de mostrar zeros.
 - Redirect pós-signup: /solve → /map (auth callback + middleware).
   Fluxo: signup → /map → onboarding modal → empty states → CTA → /solve.
+
+## 2026-03-17 — E2E SMOKE TESTS
+- Deletados 3 specs quebrados (example, core-loop, monetization) que dependiam
+  de auth/Stripe e nunca passaram em CI.
+- Criados 9 smoke tests em tests/e2e/smoke.spec.ts:
+  3 public page loads, 2 i18n key checks (en/pt), 4 auth redirects.
+- playwright.config.ts: 1 projeto Chromium, webServer auto-starta pnpm start.
+- CI pipeline: validate i18n → lint → build → install Chromium → E2E smoke.
+- Local: npx playwright test (5.9s, 9/9 pass)
