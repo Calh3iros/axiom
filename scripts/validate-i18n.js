@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 
 /**
- * validate-i18n.js — Structural integrity check for i18n message files.
- * 
- * WHAT IT DOES:
- * 1. Reads en.json as the reference locale
- * 2. Discovers ALL nested sub-objects inside every top-level namespace
- * 3. Verifies that every locale has the same nested structure
- * 4. Exits with code 1 if any nested object is missing → blocks CI
- * 
+ * validate-i18n.js — Structural & key integrity check for i18n message files.
+ *
+ * CHECKS:
+ * 1. All nested objects in en.json exist in every locale
+ * 2. All LEAF KEYS in en.json exist in every locale (no silent fallback)
+ * 3. No orphan leaf keys in any locale (not present in en.json)
+ * 4. Top-level namespace parity
+ *
+ * EXIT 0 = all checks pass
+ * EXIT 1 = missing or orphan keys found → blocks CI
+ *
  * USAGE: node scripts/validate-i18n.js
- * 
- * This runs in CI BEFORE the build step. If any future i18n script
- * destroys nested structure, CI fails before the broken code deploys.
+ * Runs in CI BEFORE build step.
  */
 
 const fs = require('fs');
@@ -20,99 +21,119 @@ const path = require('path');
 
 const MESSAGES_DIR = path.join(__dirname, '..', 'src', 'messages');
 const LOCALES = ['en', 'pt', 'es', 'fr', 'de', 'zh'];
-const REFERENCE_LOCALE = 'en';
+const REF = 'en';
 
-// ─── Helper: find all nested objects recursively ────────────────────
+// ─── Helpers ────────────────────────────────────────────────────────
 
+/** Find all nested objects (recursive), returns [{path, keyCount}] */
 function findNestedObjects(obj, prefix = '') {
   const result = [];
   for (const [key, value] of Object.entries(obj)) {
     if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
-      const path = prefix ? `${prefix}.${key}` : key;
-      result.push({ path, keyCount: Object.keys(value).length });
-      // Recurse one level deeper (for deeply nested structures)
-      const deeper = findNestedObjects(value, path);
-      result.push(...deeper);
+      const p = prefix ? `${prefix}.${key}` : key;
+      result.push({ path: p, keyCount: Object.keys(value).length });
+      result.push(...findNestedObjects(value, p));
     }
   }
   return result;
 }
 
+/** Extract all leaf keys with full dotted path */
+function getLeafKeys(obj, prefix = '') {
+  const keys = [];
+  for (const [key, value] of Object.entries(obj)) {
+    const p = prefix ? `${prefix}.${key}` : key;
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      keys.push(...getLeafKeys(value, p));
+    } else {
+      keys.push(p);
+    }
+  }
+  return keys;
+}
+
 // ─── Main ───────────────────────────────────────────────────────────
 
-console.log('🔍 Validating i18n structure...\n');
+console.log('🔍 Validating i18n structure & keys...\n');
 
-// 1. Read reference locale
-const refPath = path.join(MESSAGES_DIR, `${REFERENCE_LOCALE}.json`);
+const refPath = path.join(MESSAGES_DIR, `${REF}.json`);
 if (!fs.existsSync(refPath)) {
   console.error(`❌ Reference file not found: ${refPath}`);
   process.exit(1);
 }
 
 const refData = JSON.parse(fs.readFileSync(refPath, 'utf-8'));
-
-// 2. Discover all nested objects in reference
-const refNested = findNestedObjects(refData);
-console.log(`📋 Reference (${REFERENCE_LOCALE}.json): ${refNested.length} nested objects found\n`);
-
-for (const { path: p, keyCount } of refNested) {
-  console.log(`   ${p} (${keyCount} keys)`);
-}
-
-console.log('');
-
-// 3. Validate each locale
 let errors = 0;
 
+// ─── CHECK 1: Nested objects ────────────────────────────────────────
+
+const refNested = findNestedObjects(refData);
+console.log(`📋 Nested objects in ${REF}.json: ${refNested.length}\n`);
+
 for (const locale of LOCALES) {
-  const localePath = path.join(MESSAGES_DIR, `${locale}.json`);
-  
-  if (!fs.existsSync(localePath)) {
+  const lp = path.join(MESSAGES_DIR, `${locale}.json`);
+  if (!fs.existsSync(lp)) {
     console.error(`❌ ${locale}.json: FILE NOT FOUND`);
     errors++;
     continue;
   }
+  const ld = JSON.parse(fs.readFileSync(lp, 'utf-8'));
+  const ln = new Set(findNestedObjects(ld).map(n => n.path));
 
-  const localeData = JSON.parse(fs.readFileSync(localePath, 'utf-8'));
-  const localeNested = findNestedObjects(localeData);
-  const localeNestedPaths = new Set(localeNested.map(n => n.path));
-
-  let localeMissing = 0;
-
-  for (const { path: refPath, keyCount } of refNested) {
-    if (!localeNestedPaths.has(refPath)) {
-      console.error(`❌ ${locale}.json: MISSING nested object "${refPath}" (${keyCount} keys in reference)`);
-      localeMissing++;
+  const missing = refNested.filter(r => !ln.has(r.path));
+  if (missing.length > 0) {
+    for (const m of missing) {
+      console.error(`❌ ${locale}.json: MISSING nested object "${m.path}" (${m.keyCount} keys)`);
       errors++;
     }
-  }
-
-  if (localeMissing === 0) {
+  } else {
     console.log(`✅ ${locale}.json: all ${refNested.length} nested objects present`);
   }
 }
 
-console.log('');
+// ─── CHECK 2: Leaf key completeness ─────────────────────────────────
 
-// 4. Also validate that top-level namespaces exist in all locales
-const refTopKeys = Object.keys(refData);
+console.log('');
+const refLeafKeys = getLeafKeys(refData);
+const refLeafSet = new Set(refLeafKeys);
+console.log(`📋 Leaf keys in ${REF}.json: ${refLeafKeys.length}\n`);
+
 for (const locale of LOCALES) {
-  if (locale === REFERENCE_LOCALE) continue;
-  const localeData = JSON.parse(fs.readFileSync(path.join(MESSAGES_DIR, `${locale}.json`), 'utf-8'));
-  const missingTop = refTopKeys.filter(k => !(k in localeData));
-  if (missingTop.length > 0) {
-    console.error(`⚠️  ${locale}.json: Missing top-level namespaces: ${missingTop.join(', ')}`);
-    // Warning only, not a hard error (some namespaces may not be translated yet)
+  const lp = path.join(MESSAGES_DIR, `${locale}.json`);
+  if (!fs.existsSync(lp)) continue;
+  const ld = JSON.parse(fs.readFileSync(lp, 'utf-8'));
+  const localeLeafKeys = getLeafKeys(ld);
+  const localeLeafSet = new Set(localeLeafKeys);
+
+  // Missing in locale (present in en, absent in locale)
+  const missing = refLeafKeys.filter(k => !localeLeafSet.has(k));
+  // Orphan in locale (present in locale, absent in en)
+  const orphan = localeLeafKeys.filter(k => !refLeafSet.has(k));
+
+  if (missing.length === 0 && orphan.length === 0) {
+    console.log(`✅ ${locale}.json: ${localeLeafKeys.length} leaf keys, 0 missing, 0 orphans`);
+  } else {
+    if (missing.length > 0) {
+      console.error(`❌ ${locale}.json: MISSING ${missing.length} leaf key(s):`);
+      for (const k of missing) console.error(`   - ${k}`);
+      errors += missing.length;
+    }
+    if (orphan.length > 0) {
+      console.error(`❌ ${locale}.json: ${orphan.length} ORPHAN key(s) (not in en.json):`);
+      for (const k of orphan) console.error(`   - ${k}`);
+      errors += orphan.length;
+    }
   }
 }
 
-// 5. Exit
+// ─── Result ─────────────────────────────────────────────────────────
+
+console.log('');
 if (errors > 0) {
-  console.error(`\n❌ VALIDATION FAILED: ${errors} missing nested object(s).`);
-  console.error('   Fix: restore the missing nested objects from git history.');
-  console.error('   Run: node /tmp/comprehensive-i18n-restore.js');
+  console.error(`❌ VALIDATION FAILED: ${errors} issue(s) found.`);
   process.exit(1);
 } else {
-  console.log('✅ All i18n structure checks passed.');
+  console.log(`✅ All ${LOCALES.length} locales have ${refLeafKeys.length} leaf keys, 0 missing, 0 orphans.`);
+  console.log('✅ All i18n checks passed.');
   process.exit(0);
 }
