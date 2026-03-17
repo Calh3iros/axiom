@@ -49,3 +49,12 @@
   completa, adicionar chaves no nível correto de nesting, e só então escrever.
 - REGRA: Após qualquer modificação de i18n, verificar que TODAS as chaves
   nested existentes ainda estão presentes (contar chaves antes e depois).
+
+## 2026-03-17 — PERMANENT FIX
+- i18n quebrou pela 2ª vez (5 sub-objetos nested faltando: Write, Humanize,
+  Panic, Auth, Share — total original é 12, não 7).
+- Fix permanente: scripts/validate-i18n.js roda no CI ANTES do build.
+  Se nested keys desaparecerem, CI falha antes do deploy.
+- REGRA ABSOLUTA: NUNCA modifique arquivos de mensagens com scripts
+  que fazem read→modify→write do JSON inteiro. Sempre usar o
+  validate-i18n.js DEPOIS de qualquer modificação pra confirmar.

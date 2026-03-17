@@ -13,6 +13,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Validate i18n structure
+        run: node scripts/validate-i18n.js
       - run: pnpm lint
       - run: pnpm build
         env:
