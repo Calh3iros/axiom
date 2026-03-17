@@ -58,3 +58,12 @@
 - REGRA ABSOLUTA: NUNCA modifique arquivos de mensagens com scripts
   que fazem read→modify→write do JSON inteiro. Sempre usar o
   validate-i18n.js DEPOIS de qualquer modificação pra confirmar.
+
+## 2026-03-17 — ONBOARDING + EMPTY STATES
+- Onboarding gate: localStorage → Supabase (student_profiles.onboarding_completed)
+  com localStorage como cache secundário pra evitar flicker.
+  Coluna já existia na migration 20260314_mblid_core.sql.
+- Empty state no StatsHeader: quando totalSolved === 0, banner motivacional
+  com CTA → /solve em vez de mostrar zeros.
+- Redirect pós-signup: /solve → /map (auth callback + middleware).
+  Fluxo: signup → /map → onboarding modal → empty states → CTA → /solve.
