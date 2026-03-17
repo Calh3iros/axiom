@@ -234,11 +234,30 @@ export async function getOrgClassRanking(
     .eq("org_id", orgId)
     .single();
 
-  if (!membership || !isElevatedRole(membership.role)) return null;
+  // Super_admin bypass: read-only director access without membership
+  let effectiveRole = membership?.role || null;
+  let isSuperAdminUser = false;
+  if (!effectiveRole) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: profile } = await (supabase.from("profiles") as any)
+      .select("is_super_admin").eq("id", user.id).single();
+    if (profile?.is_super_admin) {
+      effectiveRole = "director";
+      isSuperAdminUser = true;
+    }
+  }
+
+  if (!effectiveRole || !isElevatedRole(effectiveRole)) return null;
+
+  // Super_admin uses supabaseAdmin to bypass RLS
+   
+  const { supabaseAdmin } = isSuperAdminUser ? await import("@/lib/supabase/admin") : { supabaseAdmin: null };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
 
   // Get classes in this org
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: classes } = await (supabase.from("classes") as any)
+  const { data: classes } = await (db.from("classes") as any)
     .select("id, name")
     .eq("org_id", orgId);
 
@@ -248,7 +267,7 @@ export async function getOrgClassRanking(
 
   for (const cls of classes) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: members } = await (supabase.from("class_memberships") as any)
+    const { data: members } = await (db.from("class_memberships") as any)
       .select("user_id")
       .eq("class_id", cls.id);
 
@@ -269,11 +288,11 @@ export async function getOrgClassRanking(
 
     const [spRes, profilesRes] = await Promise.all([
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase.from("student_profiles") as any)
+      (db.from("student_profiles") as any)
         .select("id, total_problems_solved, total_correct")
         .in("id", uids),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase.from("profiles") as any)
+      (db.from("profiles") as any)
         .select("id, last_active_date")
         .in("id", uids),
     ]);
@@ -315,9 +334,9 @@ export async function getOrgClassRanking(
 
   // For secretary/admin: also aggregate child orgs
   let childOrgRows: OrgAggregateRow[] | undefined;
-  if (["admin", "secretary"].includes(membership.role)) {
+  if (["admin", "secretary", "director"].includes(effectiveRole)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: subtree } = await (supabase as any).rpc("get_org_subtree", {
+    const { data: subtree } = await (db as any).rpc("get_org_subtree", {
       root_id: orgId,
     });
 
@@ -327,14 +346,14 @@ export async function getOrgClassRanking(
 
     if (childIds.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: childOrgs } = await (supabase.from("organizations") as any)
+      const { data: childOrgs } = await (db.from("organizations") as any)
         .select("id, name, type")
         .in("id", childIds);
 
       childOrgRows = [];
       for (const org of childOrgs || []) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: orgMembers } = await (supabase.from("org_memberships") as any)
+        const { data: orgMembers } = await (db.from("org_memberships") as any)
           .select("user_id")
           .eq("org_id", org.id)
           .eq("role", "student");
@@ -354,12 +373,12 @@ export async function getOrgClassRanking(
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: spData } = await (supabase.from("student_profiles") as any)
+        const { data: spData } = await (db.from("student_profiles") as any)
           .select("id, total_problems_solved, total_correct")
           .in("id", stuIds);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: pData } = await (supabase.from("profiles") as any)
+        const { data: pData } = await (db.from("profiles") as any)
           .select("id, last_active_date")
           .in("id", stuIds);
 

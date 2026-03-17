@@ -194,33 +194,39 @@ export async function getOrgDashboard(orgId: string) {
     .single();
 
   // Super_admin bypass: read-only director-level access without membership
-  const effectiveRole = membership?.role || (await isSuperAdmin(supabase, user.id) ? "director" : null);
+  const isSuperAdminUser = !membership && (await isSuperAdmin(supabase, user.id));
+  const effectiveRole = membership?.role || (isSuperAdminUser ? "director" : null);
   if (!effectiveRole) return null;
+
+  // Super_admin has no membership → RLS blocks data queries.
+  // Use supabaseAdmin to bypass RLS for read-only access.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
 
   // Check org status — only super_admin can view non-active orgs
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: orgCheck } = await (supabase.from("organizations") as any)
+  const { data: orgCheck } = await (db.from("organizations") as any)
     .select("status")
     .eq("id", orgId)
     .single();
   if (orgCheck?.status !== "active") {
-    if (!(await isSuperAdmin(supabase, user.id))) return null;
+    if (!isSuperAdminUser) return null;
   }
 
   // Fetch org, members, classes in parallel
   const [orgRes, membersRes, classesRes] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase.from("organizations") as any)
+    (db.from("organizations") as any)
       .select("id, name, type, created_at, max_students, access_expires_at, contract_notes")
       .eq("id", orgId)
       .single(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase.from("org_memberships") as any)
+    (db.from("org_memberships") as any)
       .select("user_id, role, joined_at, profiles(full_name, avatar_url, email)")
       .eq("org_id", orgId)
       .order("role"),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase.from("classes") as any)
+    (db.from("classes") as any)
       .select("id, name, invite_code, teacher_id, created_at")
       .eq("org_id", orgId)
       .order("created_at", { ascending: false }),
@@ -246,11 +252,12 @@ export async function getOrgDashboard(orgId: string) {
   // For elevated roles, also fetch child orgs
   let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
   if (ELEVATED_ROLES.includes(effectiveRole as OrgRole)) {
-    const subtree = await getOrgSubtreeIds(supabase, orgId);
+    // get_org_subtree RPC needs the user client for auth context
+    const subtree = await getOrgSubtreeIds(isSuperAdminUser ? supabaseAdmin as any : supabase, orgId);
     const childIds = subtree.filter(n => n.depth > 0).map(n => n.org_id);
     if (childIds.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data } = await (supabase.from("organizations") as any)
+      const { data } = await (db.from("organizations") as any)
         .select("id, name, type, parent_id, created_at")
         .in("id", childIds)
         .order("type")
