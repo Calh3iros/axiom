@@ -331,7 +331,8 @@
       "compare": "Compare",
       "pricing": "Pricing",
       "login": "Log in",
-      "startFree": "Start Free →"
+      "startFree": "Start Free →",
+      "forSchools": "For Schools"
     },
     "hero": {
       "timeLeft": "Time Left:",
@@ -515,7 +516,8 @@
       "privacy": "Privacy",
       "terms": "Terms",
       "faq": "FAQ",
-      "contact": "support@axiom-solver.com"
+      "contact": "support@axiom-solver.com",
+      "forSchools": "For Schools"
     }
   },
   "Legal": {
@@ -843,5 +845,92 @@
     "contract.nearCapacity": "Near Capacity (>80%)",
     "contract.expired": "Expired",
     "contract.remaining": "remaining"
+  },
+  "Schools": {
+    "nav": {
+      "forSchools": "For Schools"
+    },
+    "hero": {
+      "title": "Axiom for Schools & Institutions",
+      "subtitle": "Track every student's performance with AI. Real-time dashboards, PDF reports, total control.",
+      "ctaWhatsApp": "Chat on WhatsApp",
+      "ctaEmail": "Request a Quote by Email"
+    },
+    "problem": {
+      "tag": "THE CHALLENGE",
+      "title": "Sound familiar?",
+      "card1": "I don't know which students are falling behind",
+      "card2": "I have no data to make pedagogical decisions",
+      "card3": "Manual reports consume hours every week",
+      "card4": "Every teacher uses different tools"
+    },
+    "solution": {
+      "tag": "THE SOLUTION",
+      "title": "Everything in one place",
+      "teacherTitle": "Teacher Dashboard",
+      "teacherBullet1": "Class overview with individual student metrics",
+      "teacherBullet2": "Inactivity alerts and engagement tracking",
+      "teacherBullet3": "Topics with highest error rates identified",
+      "directorTitle": "Director Dashboard",
+      "directorBullet1": "Compare performance across all classes",
+      "directorBullet2": "Adoption rate and usage trends",
+      "directorBullet3": "Exportable PDF reports per class",
+      "secretaryTitle": "Secretary Dashboard",
+      "secretaryBullet1": "Network-wide school comparison",
+      "secretaryBullet2": "Aggregated metrics across the entire organization",
+      "secretaryBullet3": "Strategic reports for board presentations"
+    },
+    "howItWorks": {
+      "tag": "HOW IT WORKS",
+      "title": "From contract to results in 4 steps",
+      "step1Title": "Institutional Contract",
+      "step1Desc": "Per-school pricing, no surprises",
+      "step2Title": "Setup in 24h",
+      "step2Desc": "We create classes and import students",
+      "step3Title": "Students Access via Code",
+      "step3Desc": "No installation needed, works on any phone",
+      "step4Title": "Track Everything",
+      "step4Desc": "Dashboards updated in real-time"
+    },
+    "features": {
+      "tag": "FEATURES",
+      "title": "Everything your school needs",
+      "feat1": "Solve exercises with AI",
+      "feat1desc": "Step-by-step solutions in 5 seconds",
+      "feat2": "Essay correction",
+      "feat2desc": "AI-powered writing assistant",
+      "feat3": "Humanize AI text",
+      "feat3desc": "Undetectable by AI detectors",
+      "feat4": "Adaptive guided study",
+      "feat4desc": "Personalized learning paths",
+      "feat5": "PDF reports by class",
+      "feat5desc": "Export and share with stakeholders",
+      "feat6": "Access control & expiration",
+      "feat6desc": "Manage licenses and permissions"
+    },
+    "pricing": {
+      "tag": "PRICING",
+      "title": "Institutional Plan",
+      "bullet1": "Unlimited access for all students and managers",
+      "bullet2": "Exclusive tracking dashboards",
+      "bullet3": "Exportable PDF reports",
+      "bullet4": "Dedicated support",
+      "bullet5": "Priority onboarding and training",
+      "priceLabel": "Contact us for a custom quote",
+      "ctaQuote": "Request a Quote"
+    },
+    "cta": {
+      "title": "Bring Axiom to your school",
+      "responseTime": "Response within 24h",
+      "ctaWhatsApp": "Chat on WhatsApp",
+      "ctaEmail": "Send Email"
+    },
+    "footer": {
+      "copy": "© 2026 Axiom. Study smarter.",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "faq": "FAQ",
+      "forSchools": "For Schools"
+    }
   }
 }

@@ -331,7 +331,8 @@
       "compare": "Compare",
       "pricing": "Planos",
       "login": "Entrar",
-      "startFree": "Começar Grátis →"
+      "startFree": "Começar Grátis →",
+      "forSchools": "Para Escolas"
     },
     "hero": {
       "timeLeft": "Tempo Restante:",
@@ -515,7 +516,8 @@
       "privacy": "Privacidade",
       "terms": "Termos",
       "faq": "FAQ",
-      "contact": "support@axiom-solver.com"
+      "contact": "support@axiom-solver.com",
+      "forSchools": "Para Escolas"
     }
   },
   "Legal": {
@@ -843,5 +845,92 @@
     "contract.nearCapacity": "Perto do Limite (>80%)",
     "contract.expired": "Expiradas",
     "contract.remaining": "restantes"
+  },
+  "Schools": {
+    "nav": {
+      "forSchools": "Para Escolas"
+    },
+    "hero": {
+      "title": "Axiom para Escolas e Instituições",
+      "subtitle": "Acompanhe o desempenho de cada aluno com IA. Dashboards em tempo real, relatórios PDF, controle total.",
+      "ctaWhatsApp": "Fale pelo WhatsApp",
+      "ctaEmail": "Solicitar Cotação por Email"
+    },
+    "problem": {
+      "tag": "O DESAFIO",
+      "title": "Parece familiar?",
+      "card1": "Não sei quais alunos estão ficando pra trás",
+      "card2": "Não tenho dados pra tomar decisão pedagógica",
+      "card3": "Relatórios manuais consomem horas toda semana",
+      "card4": "Cada professor usa ferramentas diferentes"
+    },
+    "solution": {
+      "tag": "A SOLUÇÃO",
+      "title": "Tudo em um só lugar",
+      "teacherTitle": "Dashboard do Professor",
+      "teacherBullet1": "Visão da turma com métricas individuais",
+      "teacherBullet2": "Alertas de inatividade e acompanhamento de engajamento",
+      "teacherBullet3": "Tópicos com maiores taxas de erro identificados",
+      "directorTitle": "Dashboard do Diretor",
+      "directorBullet1": "Compare desempenho entre todas as turmas",
+      "directorBullet2": "Taxa de adoção e tendências de uso",
+      "directorBullet3": "Relatórios PDF exportáveis por turma",
+      "secretaryTitle": "Dashboard da Secretaria",
+      "secretaryBullet1": "Comparação entre escolas da rede",
+      "secretaryBullet2": "Métricas agregadas de toda a organização",
+      "secretaryBullet3": "Relatórios estratégicos para apresentações"
+    },
+    "howItWorks": {
+      "tag": "COMO FUNCIONA",
+      "title": "Do contrato aos resultados em 4 passos",
+      "step1Title": "Contrato Institucional",
+      "step1Desc": "Preço por escola, sem surpresas",
+      "step2Title": "Configuração em 24h",
+      "step2Desc": "Criamos turmas e importamos alunos",
+      "step3Title": "Alunos Acessam via Código",
+      "step3Desc": "Sem instalação, funciona no celular",
+      "step4Title": "Acompanhe Tudo",
+      "step4Desc": "Dashboards atualizados em tempo real"
+    },
+    "features": {
+      "tag": "FUNCIONALIDADES",
+      "title": "Tudo que sua escola precisa",
+      "feat1": "Resolve exercícios com IA",
+      "feat1desc": "Soluções passo a passo em 5 segundos",
+      "feat2": "Correção de redações",
+      "feat2desc": "Assistente de escrita com IA",
+      "feat3": "Humaniza textos de IA",
+      "feat3desc": "Indetectável por detectores de IA",
+      "feat4": "Estudo guiado adaptativo",
+      "feat4desc": "Caminhos de aprendizado personalizados",
+      "feat5": "Relatórios PDF por turma",
+      "feat5desc": "Exporte e compartilhe com gestores",
+      "feat6": "Controle de acesso e expiração",
+      "feat6desc": "Gerencie licenças e permissões"
+    },
+    "pricing": {
+      "tag": "PREÇOS",
+      "title": "Plano Institucional",
+      "bullet1": "Acesso ilimitado para todos os alunos e gestores",
+      "bullet2": "Dashboards exclusivos de acompanhamento",
+      "bullet3": "Relatórios PDF exportáveis",
+      "bullet4": "Suporte dedicado",
+      "bullet5": "Onboarding e treinamento prioritários",
+      "priceLabel": "Entre em contato para cotação personalizada",
+      "ctaQuote": "Solicitar Cotação"
+    },
+    "cta": {
+      "title": "Leve o Axiom para sua escola",
+      "responseTime": "Resposta em até 24h",
+      "ctaWhatsApp": "Fale pelo WhatsApp",
+      "ctaEmail": "Enviar Email"
+    },
+    "footer": {
+      "copy": "© 2026 Axiom. Estude mais inteligente.",
+      "privacy": "Privacidade",
+      "terms": "Termos",
+      "faq": "FAQ",
+      "forSchools": "Para Escolas"
+    }
   }
 }

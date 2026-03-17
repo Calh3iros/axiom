@@ -137,6 +137,7 @@ export default function LandingPage() {
           <a href="#features">{t("nav.features")}</a>
           <a href="#compare">{t("nav.compare")}</a>
           <a href="#pricing">{t("nav.pricing")}</a>
+          <Link href="/schools">{t("nav.forSchools")}</Link>
         </div>
         <div className="nav-right">
           <LanguageSwitcher />
@@ -745,6 +746,7 @@ export default function LandingPage() {
           <Link href="/legal/privacy">{t("footer.privacy")}</Link>
           <Link href="/legal/terms">{t("footer.terms")}</Link>
           <Link href="/faq">{t("footer.faq")}</Link>
+          <Link href="/schools">{t("footer.forSchools")}</Link>
           <a href="mailto:support@axiom-solver.com">support@axiom-solver.com</a>
         </div>
       </footer>

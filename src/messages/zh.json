@@ -331,7 +331,8 @@
       "compare": "对比",
       "pricing": "价格",
       "login": "登录",
-      "startFree": "免费开始 →"
+      "startFree": "免费开始 →",
+      "forSchools": "学校方案"
     },
     "hero": {
       "timeLeft": "剩余时间：",
@@ -515,7 +516,8 @@
       "privacy": "隐私政策",
       "terms": "服务条款",
       "faq": "FAQ",
-      "contact": "support@axiom-solver.com"
+      "contact": "support@axiom-solver.com",
+      "forSchools": "学校方案"
     }
   },
   "Legal": {
@@ -843,5 +845,92 @@
     "contract.nearCapacity": "接近上限 (>80%)",
     "contract.expired": "已过期",
     "contract.remaining": "剩余"
+  },
+  "Schools": {
+    "nav": {
+      "forSchools": "学校方案"
+    },
+    "hero": {
+      "title": "Axiom 学校与教育机构方案",
+      "subtitle": "用AI追踪每个学生的表现。实时仪表盘、PDF报告、完全掌控。",
+      "ctaWhatsApp": "WhatsApp咨询",
+      "ctaEmail": "邮件获取报价"
+    },
+    "problem": {
+      "tag": "挑战",
+      "title": "听起来熟悉吗？",
+      "card1": "不知道哪些学生正在掉队",
+      "card2": "没有数据支持教学决策",
+      "card3": "手动报告每周耗费数小时",
+      "card4": "每个老师使用不同的工具"
+    },
+    "solution": {
+      "tag": "解决方案",
+      "title": "一站式管理",
+      "teacherTitle": "教师仪表盘",
+      "teacherBullet1": "班级概览与个人学生指标",
+      "teacherBullet2": "不活跃警报和参与度追踪",
+      "teacherBullet3": "识别错误率最高的主题",
+      "directorTitle": "校长仪表盘",
+      "directorBullet1": "比较所有班级的表现",
+      "directorBullet2": "采用率和使用趋势",
+      "directorBullet3": "可导出的PDF班级报告",
+      "secretaryTitle": "秘书处仪表盘",
+      "secretaryBullet1": "全网络学校对比",
+      "secretaryBullet2": "整个组织的汇总指标",
+      "secretaryBullet3": "为董事会演示的战略报告"
+    },
+    "howItWorks": {
+      "tag": "如何运作",
+      "title": "从签约到成果只需4步",
+      "step1Title": "机构合同",
+      "step1Desc": "按校定价，无隐藏费用",
+      "step2Title": "24小时完成配置",
+      "step2Desc": "我们创建班级并导入学生",
+      "step3Title": "学生通过代码访问",
+      "step3Desc": "无需安装，手机即可使用",
+      "step4Title": "全面追踪",
+      "step4Desc": "仪表盘实时更新"
+    },
+    "features": {
+      "tag": "功能",
+      "title": "学校所需的一切",
+      "feat1": "AI解题",
+      "feat1desc": "5秒内逐步解答",
+      "feat2": "作文批改",
+      "feat2desc": "AI写作助手",
+      "feat3": "人性化AI文本",
+      "feat3desc": "AI检测器无法识别",
+      "feat4": "自适应引导学习",
+      "feat4desc": "个性化学习路径",
+      "feat5": "班级PDF报告",
+      "feat5desc": "导出并分享给相关方",
+      "feat6": "访问控制与到期管理",
+      "feat6desc": "管理许可证和权限"
+    },
+    "pricing": {
+      "tag": "价格",
+      "title": "机构计划",
+      "bullet1": "所有学生和管理者无限访问",
+      "bullet2": "专属追踪仪表盘",
+      "bullet3": "可导出PDF报告",
+      "bullet4": "专属客服支持",
+      "bullet5": "优先入职培训",
+      "priceLabel": "联系我们获取定制报价",
+      "ctaQuote": "获取报价"
+    },
+    "cta": {
+      "title": "将Axiom带到您的学校",
+      "responseTime": "24小时内回复",
+      "ctaWhatsApp": "WhatsApp咨询",
+      "ctaEmail": "发送邮件"
+    },
+    "footer": {
+      "copy": "© 2026 Axiom。更聪明地学习。",
+      "privacy": "隐私",
+      "terms": "条款",
+      "faq": "FAQ",
+      "forSchools": "学校方案"
+    }
   }
 }

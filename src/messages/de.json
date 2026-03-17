@@ -331,7 +331,8 @@
       "compare": "Vergleichen",
       "pricing": "Preise",
       "login": "Anmelden",
-      "startFree": "Kostenlos Starten →"
+      "startFree": "Kostenlos Starten →",
+      "forSchools": "Für Schulen"
     },
     "hero": {
       "timeLeft": "Verbleibende Zeit:",
@@ -515,7 +516,8 @@
       "privacy": "Datenschutz",
       "terms": "AGB",
       "faq": "FAQ",
-      "contact": "support@axiom-solver.com"
+      "contact": "support@axiom-solver.com",
+      "forSchools": "Für Schulen"
     }
   },
   "Legal": {
@@ -843,5 +845,92 @@
     "contract.nearCapacity": "Nahe am Limit (>80%)",
     "contract.expired": "Abgelaufen",
     "contract.remaining": "verbleibend"
+  },
+  "Schools": {
+    "nav": {
+      "forSchools": "Für Schulen"
+    },
+    "hero": {
+      "title": "Axiom für Schulen und Institutionen",
+      "subtitle": "Verfolgen Sie die Leistung jedes Schülers mit KI. Echtzeit-Dashboards, PDF-Berichte, volle Kontrolle.",
+      "ctaWhatsApp": "Über WhatsApp chatten",
+      "ctaEmail": "Angebot per E-Mail anfordern"
+    },
+    "problem": {
+      "tag": "DIE HERAUSFORDERUNG",
+      "title": "Kommt Ihnen das bekannt vor?",
+      "card1": "Ich weiß nicht, welche Schüler zurückfallen",
+      "card2": "Ich habe keine Daten für pädagogische Entscheidungen",
+      "card3": "Manuelle Berichte kosten jede Woche Stunden",
+      "card4": "Jeder Lehrer nutzt andere Werkzeuge"
+    },
+    "solution": {
+      "tag": "DIE LÖSUNG",
+      "title": "Alles an einem Ort",
+      "teacherTitle": "Lehrer-Dashboard",
+      "teacherBullet1": "Klassenübersicht mit individuellen Schülermetriken",
+      "teacherBullet2": "Inaktivitätswarnungen und Engagement-Tracking",
+      "teacherBullet3": "Themen mit den höchsten Fehlerquoten identifiziert",
+      "directorTitle": "Direktor-Dashboard",
+      "directorBullet1": "Leistungsvergleich zwischen allen Klassen",
+      "directorBullet2": "Adoptionsrate und Nutzungstrends",
+      "directorBullet3": "Exportierbare PDF-Berichte pro Klasse",
+      "secretaryTitle": "Sekretariats-Dashboard",
+      "secretaryBullet1": "Schulvergleich im gesamten Netzwerk",
+      "secretaryBullet2": "Aggregierte Metriken der gesamten Organisation",
+      "secretaryBullet3": "Strategische Berichte für Vorstandspräsentationen"
+    },
+    "howItWorks": {
+      "tag": "SO FUNKTIONIERT ES",
+      "title": "Vom Vertrag zu Ergebnissen in 4 Schritten",
+      "step1Title": "Institutioneller Vertrag",
+      "step1Desc": "Preis pro Schule, keine Überraschungen",
+      "step2Title": "Einrichtung in 24h",
+      "step2Desc": "Wir erstellen Klassen und importieren Schüler",
+      "step3Title": "Zugang per Code",
+      "step3Desc": "Keine Installation nötig, funktioniert auf jedem Handy",
+      "step4Title": "Alles Verfolgen",
+      "step4Desc": "Dashboards in Echtzeit aktualisiert"
+    },
+    "features": {
+      "tag": "FUNKTIONEN",
+      "title": "Alles was Ihre Schule braucht",
+      "feat1": "Löst Aufgaben mit KI",
+      "feat1desc": "Schritt-für-Schritt-Lösungen in 5 Sekunden",
+      "feat2": "Aufsatzkorrektur",
+      "feat2desc": "KI-gestützter Schreibassistent",
+      "feat3": "KI-Texte humanisieren",
+      "feat3desc": "Nicht erkennbar durch KI-Detektoren",
+      "feat4": "Adaptives geführtes Lernen",
+      "feat4desc": "Personalisierte Lernpfade",
+      "feat5": "PDF-Berichte pro Klasse",
+      "feat5desc": "Exportieren und teilen Sie mit Stakeholdern",
+      "feat6": "Zugriffskontrolle und Ablauf",
+      "feat6desc": "Verwalten Sie Lizenzen und Berechtigungen"
+    },
+    "pricing": {
+      "tag": "PREISE",
+      "title": "Institutioneller Plan",
+      "bullet1": "Unbegrenzter Zugang für alle Schüler und Verwalter",
+      "bullet2": "Exklusive Tracking-Dashboards",
+      "bullet3": "Exportierbare PDF-Berichte",
+      "bullet4": "Dedizierter Support",
+      "bullet5": "Prioritäres Onboarding und Schulung",
+      "priceLabel": "Kontaktieren Sie uns für ein individuelles Angebot",
+      "ctaQuote": "Angebot Anfordern"
+    },
+    "cta": {
+      "title": "Bringen Sie Axiom an Ihre Schule",
+      "responseTime": "Antwort innerhalb von 24h",
+      "ctaWhatsApp": "Über WhatsApp chatten",
+      "ctaEmail": "E-Mail Senden"
+    },
+    "footer": {
+      "copy": "© 2026 Axiom. Intelligenter lernen.",
+      "privacy": "Datenschutz",
+      "terms": "AGB",
+      "faq": "FAQ",
+      "forSchools": "Für Schulen"
+    }
   }
 }

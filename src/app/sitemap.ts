@@ -4,7 +4,7 @@ const BASE_URL = "https://axiom-solver.com";
 const LOCALES = ["en", "pt", "es", "fr", "de", "zh"];
 
 // Public pages that should be indexed
-const PUBLIC_PAGES = ["", "/privacy", "/terms", "/faq", "/pricing"];
+const PUBLIC_PAGES = ["", "/privacy", "/terms", "/faq", "/pricing", "/schools"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];

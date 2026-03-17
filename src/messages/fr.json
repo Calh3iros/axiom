@@ -331,7 +331,8 @@
       "compare": "Comparer",
       "pricing": "Tarifs",
       "login": "Connexion",
-      "startFree": "Commencer Gratuit →"
+      "startFree": "Commencer Gratuit →",
+      "forSchools": "Pour les Écoles"
     },
     "hero": {
       "timeLeft": "Temps Restant :",
@@ -515,7 +516,8 @@
       "privacy": "Confidentialité",
       "terms": "Conditions",
       "faq": "FAQ",
-      "contact": "support@axiom-solver.com"
+      "contact": "support@axiom-solver.com",
+      "forSchools": "Pour les Écoles"
     }
   },
   "Legal": {
@@ -843,5 +845,92 @@
     "contract.nearCapacity": "Proche de la Limite (>80%)",
     "contract.expired": "Expirées",
     "contract.remaining": "restants"
+  },
+  "Schools": {
+    "nav": {
+      "forSchools": "Pour les Écoles"
+    },
+    "hero": {
+      "title": "Axiom pour les Écoles et Institutions",
+      "subtitle": "Suivez les performances de chaque élève grâce à l'IA. Tableaux de bord en temps réel, rapports PDF, contrôle total.",
+      "ctaWhatsApp": "Discuter sur WhatsApp",
+      "ctaEmail": "Demander un Devis par Email"
+    },
+    "problem": {
+      "tag": "LE DÉFI",
+      "title": "Ça vous dit quelque chose ?",
+      "card1": "Je ne sais pas quels élèves décrochent",
+      "card2": "Je n'ai pas de données pour prendre des décisions pédagogiques",
+      "card3": "Les rapports manuels prennent des heures chaque semaine",
+      "card4": "Chaque enseignant utilise des outils différents"
+    },
+    "solution": {
+      "tag": "LA SOLUTION",
+      "title": "Tout en un seul endroit",
+      "teacherTitle": "Tableau de bord Enseignant",
+      "teacherBullet1": "Vue de la classe avec métriques individuelles",
+      "teacherBullet2": "Alertes d'inactivité et suivi de l'engagement",
+      "teacherBullet3": "Sujets avec les taux d'erreur les plus élevés identifiés",
+      "directorTitle": "Tableau de bord Directeur",
+      "directorBullet1": "Comparez les performances entre toutes les classes",
+      "directorBullet2": "Taux d'adoption et tendances d'utilisation",
+      "directorBullet3": "Rapports PDF exportables par classe",
+      "secretaryTitle": "Tableau de bord Secrétariat",
+      "secretaryBullet1": "Comparaison entre les écoles du réseau",
+      "secretaryBullet2": "Métriques agrégées de toute l'organisation",
+      "secretaryBullet3": "Rapports stratégiques pour les présentations"
+    },
+    "howItWorks": {
+      "tag": "COMMENT ÇA MARCHE",
+      "title": "Du contrat aux résultats en 4 étapes",
+      "step1Title": "Contrat Institutionnel",
+      "step1Desc": "Prix par école, sans surprises",
+      "step2Title": "Configuration en 24h",
+      "step2Desc": "Nous créons les classes et importons les élèves",
+      "step3Title": "Accès par Code",
+      "step3Desc": "Sans installation, fonctionne sur tout téléphone",
+      "step4Title": "Suivez Tout",
+      "step4Desc": "Tableaux de bord mis à jour en temps réel"
+    },
+    "features": {
+      "tag": "FONCTIONNALITÉS",
+      "title": "Tout ce dont votre école a besoin",
+      "feat1": "Résout les exercices avec l'IA",
+      "feat1desc": "Solutions étape par étape en 5 secondes",
+      "feat2": "Correction de dissertations",
+      "feat2desc": "Assistant d'écriture IA",
+      "feat3": "Humanise les textes IA",
+      "feat3desc": "Indétectable par les détecteurs d'IA",
+      "feat4": "Étude guidée adaptative",
+      "feat4desc": "Parcours d'apprentissage personnalisés",
+      "feat5": "Rapports PDF par classe",
+      "feat5desc": "Exportez et partagez avec les parties prenantes",
+      "feat6": "Contrôle d'accès et expiration",
+      "feat6desc": "Gérez les licences et permissions"
+    },
+    "pricing": {
+      "tag": "TARIFS",
+      "title": "Plan Institutionnel",
+      "bullet1": "Accès illimité pour tous les élèves et gestionnaires",
+      "bullet2": "Tableaux de bord exclusifs de suivi",
+      "bullet3": "Rapports PDF exportables",
+      "bullet4": "Support dédié",
+      "bullet5": "Onboarding et formation prioritaires",
+      "priceLabel": "Contactez-nous pour un devis personnalisé",
+      "ctaQuote": "Demander un Devis"
+    },
+    "cta": {
+      "title": "Apportez Axiom à votre école",
+      "responseTime": "Réponse sous 24h",
+      "ctaWhatsApp": "Discuter sur WhatsApp",
+      "ctaEmail": "Envoyer un Email"
+    },
+    "footer": {
+      "copy": "© 2026 Axiom. Étudiez plus intelligemment.",
+      "privacy": "Confidentialité",
+      "terms": "Conditions",
+      "faq": "FAQ",
+      "forSchools": "Pour les Écoles"
+    }
   }
 }
