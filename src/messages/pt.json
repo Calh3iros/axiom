@@ -274,6 +274,14 @@
       "stopWaiting": "Pare de esperar. Comece a resolver.",
       "joinThousands": "Junte-se a milhares de estudantes recebendo soluções instantâneas passo a passo para as perguntas mais difíceis.",
       "createFree": "Crie sua conta grátis"
+    },
+    "period": {
+      "7d": "7 dias",
+      "30d": "30 dias",
+      "90d": "90 dias",
+      "180d": "6 meses",
+      "year": "Ano letivo",
+      "custom": "Personalizado"
     }
   },
   "FAQ": {
@@ -687,7 +695,8 @@
     "copyCode": "Copiar Código",
     "codeCopied": "Código copiado!",
     "noStudents": "Nenhum aluno nesta turma ainda.",
-    "teacher": "Professor"
+    "teacher": "Professor",
+    "classes": "Turmas"
   },
   "Join": {
     "title": "Entrar em uma Turma",

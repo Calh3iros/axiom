@@ -69,31 +69,47 @@ export async function getClassRanking(
   } = await supabase.auth.getUser();
   if (!user) return null;
 
+  // Check super_admin for RLS bypass
+   
+  let isSuperAdminUser = false;
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: prof } = await (supabase.from("profiles") as any)
+      .select("is_super_admin").eq("id", user.id).single();
+    isSuperAdminUser = prof?.is_super_admin === true;
+  }
+   
+  const { supabaseAdmin: sbAdmin } = isSuperAdminUser ? await import("@/lib/supabase/admin") : { supabaseAdmin: null };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db: any = isSuperAdminUser ? sbAdmin : supabase;
+
   // Get the class and verify access
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: cls } = await (supabase.from("classes") as any)
+  const { data: cls } = await (db.from("classes") as any)
     .select("id, org_id, teacher_id")
     .eq("id", classId)
     .single();
   if (!cls) return null;
 
   // Determine user's role
-  let role = "student";
-  if (cls.teacher_id === user.id) {
-    role = "teacher";
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: membership } = await (supabase.from("org_memberships") as any)
-      .select("role")
-      .eq("user_id", user.id)
-      .eq("org_id", cls.org_id)
-      .single();
-    if (membership) role = membership.role;
+  let role = isSuperAdminUser ? "director" : "student";
+  if (!isSuperAdminUser) {
+    if (cls.teacher_id === user.id) {
+      role = "teacher";
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: membership } = await (supabase.from("org_memberships") as any)
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("org_id", cls.org_id)
+        .single();
+      if (membership) role = membership.role;
+    }
   }
 
   // Get students in class
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: students } = await (supabase.from("class_memberships") as any)
+  const { data: students } = await (db.from("class_memberships") as any)
     .select("user_id")
     .eq("class_id", classId);
 
@@ -105,28 +121,28 @@ export async function getClassRanking(
   const [profilesRes, studentProfilesRes, usageRes, kmRes, badgesRes] =
     await Promise.all([
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase.from("profiles") as any)
+      (db.from("profiles") as any)
         .select("id, full_name, avatar_url, email, current_streak")
         .in("id", userIds),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase.from("student_profiles") as any)
+      (db.from("student_profiles") as any)
         .select("id, total_problems_solved, total_correct")
         .in("id", userIds),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase.from("usage") as any)
+      (db.from("usage") as any)
         .select("user_id, solves, writes, learns")
         .in("user_id", userIds),
       // Performance: only fetch if elevated
       isElevatedRole(role)
         ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (supabase.from("knowledge_map") as any)
+          (db.from("knowledge_map") as any)
             .select("user_id, level")
             .in("user_id", userIds)
             .gte("level", 5)
         : Promise.resolve({ data: [] }),
       isElevatedRole(role)
         ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (supabase.from("user_badges") as any)
+          (db.from("user_badges") as any)
             .select("user_id")
             .in("user_id", userIds)
         : Promise.resolve({ data: [] }),

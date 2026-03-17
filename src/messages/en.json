@@ -274,6 +274,14 @@
       "stopWaiting": "Stop waiting. Start solving.",
       "joinThousands": "Join thousands of students getting instant, step-by-step solutions to their hardest questions.",
       "createFree": "Create your free account"
+    },
+    "period": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days",
+      "180d": "6 months",
+      "year": "School year",
+      "custom": "Custom"
     }
   },
   "FAQ": {
@@ -687,7 +695,8 @@
     "copyCode": "Copy Code",
     "codeCopied": "Code copied!",
     "noStudents": "No students in this class yet.",
-    "teacher": "Teacher"
+    "teacher": "Teacher",
+    "classes": "Classes"
   },
   "Join": {
     "title": "Join a Class",

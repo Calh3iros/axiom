@@ -149,7 +149,7 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-green-400" />
             <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-              {tc("title")}s ({data.classes.length})
+              {tc("classes")} ({data.classes.length})
             </h2>
           </div>
           {canManage && (

@@ -320,8 +320,20 @@ export async function getClassDashboard(classId: string) {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
+  // Check if super_admin for RLS bypass
+   
+  let isSuperAdminUser = false;
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: profile } = await (supabase.from("profiles") as any)
+      .select("is_super_admin").eq("id", user.id).single();
+    isSuperAdminUser = profile?.is_super_admin === true;
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: cls } = await (supabase.from("classes") as any)
+  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: cls } = await (db.from("classes") as any)
     .select("id, name, invite_code, teacher_id, org_id, created_at")
     .eq("id", classId)
     .single();
@@ -329,7 +341,7 @@ export async function getClassDashboard(classId: string) {
   if (!cls) return null;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: students } = await (supabase.from("class_memberships") as any)
+  const { data: students } = await (db.from("class_memberships") as any)
     .select("user_id, joined_at, profiles:user_id(full_name, avatar_url, email)")
     .eq("class_id", classId)
     .order("joined_at");
@@ -337,7 +349,7 @@ export async function getClassDashboard(classId: string) {
   return {
     classInfo: cls,
     students: students || [],
-    isTeacher: cls.teacher_id === user.id,
+    isTeacher: cls.teacher_id === user.id || isSuperAdminUser,
   };
 }
 

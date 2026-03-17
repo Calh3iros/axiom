@@ -274,6 +274,14 @@
       "stopWaiting": "不要等待。开始解决。",
       "joinThousands": "加入成千上万的学生，获取最难问题的即时逐步解决方案。",
       "createFree": "创建您的免费帐户"
+    },
+    "period": {
+      "7d": "7天",
+      "30d": "30天",
+      "90d": "90天",
+      "180d": "6个月",
+      "year": "学年",
+      "custom": "自定义"
     }
   },
   "FAQ": {
@@ -687,7 +695,8 @@
     "copyCode": "复制码",
     "codeCopied": "已复制！",
     "noStudents": "该班级暂无学生。",
-    "teacher": "教师"
+    "teacher": "教师",
+    "classes": "班级"
   },
   "Join": {
     "title": "加入班级",
