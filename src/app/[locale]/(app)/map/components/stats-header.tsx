@@ -29,12 +29,12 @@ export function StatsHeader({
   // Empty state: no exercises solved yet
   if (totalSolved === 0) {
     return (
-      <div className="relative overflow-hidden rounded-xl border border-[var(--color-ax-blue)]/20 bg-gradient-to-r from-[var(--color-ax-blue)]/5 via-[var(--color-bg1)] to-orange-500/5 p-6">
+      <div className="relative rounded-xl border border-[var(--color-ax-blue)]/20 bg-gradient-to-r from-[var(--color-ax-blue)]/5 via-[var(--color-bg1)] to-orange-500/5 p-6">
         <div className="relative z-10 flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-ax-blue)]/10 text-[var(--color-ax-blue)]">
             <Rocket className="h-7 w-7" />
           </div>
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             <h3 className="text-lg font-bold text-[var(--color-text-primary)]">
               {t("emptyStatsTitle")}
             </h3>
