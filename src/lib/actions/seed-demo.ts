@@ -91,12 +91,13 @@ async function runInChunks<T>(items: (() => Promise<T>)[], chunkSize: number): P
 
 /**
  * Create a demo user or return existing if email already exists.
- * Handles re-seed after partial cleanup.
+ * 3-tier fallback: createUser → profiles lookup → auth listUsers (delete + recreate).
  */
 async function getOrCreateDemoUser(
   email: string,
   fullName: string
-): Promise<string | null> {
+): Promise<string> {
+  // Attempt 1: create new user
   const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
     email,
     password: "DemoPassword123!",
@@ -105,15 +106,30 @@ async function getOrCreateDemoUser(
   });
   if (created?.user?.id) return created.user.id;
 
-  // If user already exists (duplicate email), look them up
+  // Attempt 2: user exists — look up in profiles
   if (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: profile } = await (supabaseAdmin.from("profiles") as any)
       .select("id").eq("email", email).single();
-    if (profile) return profile.id;
+    if (profile?.id) return profile.id;
+
+    // Attempt 3: user exists in auth but profile missing (cascade-deleted).
+    // Delete the orphan auth user and recreate.
+    const { data: { users } } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
+    const orphan = users?.find((u: { email?: string }) => u.email === email);
+    if (orphan) {
+      await supabaseAdmin.auth.admin.deleteUser(orphan.id);
+      const { data: recreated } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password: "DemoPassword123!",
+        email_confirm: true,
+        user_metadata: { full_name: fullName },
+      });
+      if (recreated?.user?.id) return recreated.user.id;
+    }
   }
 
-  return null;
+  throw new Error(`Failed to create/find user: ${email} — ${error?.message}`);
 }
 
 // ─── Seed Action (Optimized: batched inserts, parallel auth) ─────────────
@@ -151,35 +167,31 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
     // 2. Create director (1 auth call)
     const directorEmail = `${DEMO_PREFIX}director@${DEMO_EMAIL_DOMAIN}`;
     const directorId = await getOrCreateDemoUser(directorEmail, "Dr. Roberto Mendes");
-    if (directorId) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("profiles") as any)
-        .update({ full_name: "Dr. Roberto Mendes", email: directorEmail })
-        .eq("id", directorId);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("org_memberships") as any)
-        .upsert({ user_id: directorId, org_id: orgId, role: "director" }, { onConflict: "user_id,org_id" });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("profiles") as any)
+      .update({ full_name: "Dr. Roberto Mendes", email: directorEmail })
+      .eq("id", directorId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("org_memberships") as any)
+      .upsert({ user_id: directorId, org_id: orgId, role: "director" }, { onConflict: "user_id,org_id" });
 
     // 3. Create 3 teachers (3 auth calls — sequential is fine, only 3)
     const classNames = ["9º Ano A", "9º Ano B", "8º Ano A"];
     const teacherNames = ["Prof. Ana Costa", "Prof. Carlos Lima", "Prof. Patrícia Santos"];
     const classIds: string[] = [];
-    const teacherIds: (string | null)[] = [];
+    const teacherIds: string[] = [];
 
     for (let c = 0; c < 3; c++) {
       const teacherEmail = `${DEMO_PREFIX}teacher${c + 1}@${DEMO_EMAIL_DOMAIN}`;
       const teacherId = await getOrCreateDemoUser(teacherEmail, teacherNames[c]);
       teacherIds.push(teacherId);
-      if (teacherId) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabaseAdmin.from("profiles") as any)
-          .update({ full_name: teacherNames[c], email: teacherEmail })
-          .eq("id", teacherId);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabaseAdmin.from("org_memberships") as any)
-          .upsert({ user_id: teacherId, org_id: orgId, role: "teacher" }, { onConflict: "user_id,org_id" });
-      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabaseAdmin.from("profiles") as any)
+        .update({ full_name: teacherNames[c], email: teacherEmail })
+        .eq("id", teacherId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabaseAdmin.from("org_memberships") as any)
+        .upsert({ user_id: teacherId, org_id: orgId, role: "teacher" }, { onConflict: "user_id,org_id" });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: cls } = await (supabaseAdmin.from("classes") as any)
         .insert({ name: classNames[c], org_id: orgId, teacher_id: teacherId })

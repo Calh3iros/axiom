@@ -498,26 +498,33 @@ export async function getSecretaryDashboard(orgId: string, dateRange?: DateRange
       continue;
     }
 
-    const [pRes, challengeRes] = await Promise.all([
+    const [pRes, challengeRes, spRes] = await Promise.all([
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabaseAdmin.from("profiles") as any)
         .select("id, last_active_date").in("id", sids),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabaseAdmin.from("challenge_log") as any)
-        .select("user_id, is_correct")
+        .select("user_id")
         .in("user_id", sids)
         .gte("created_at", new Date(startDate).toISOString())
         .lte("created_at", new Date((dateRange || getDefaultRange()).endDate + "T23:59:59Z").toISOString()),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (supabaseAdmin.from("student_profiles") as any)
+        .select("id, total_problems_solved, total_correct")
+        .in("id", sids),
     ]);
 
     const profs = pRes.data || [];
     const chals = challengeRes.data || [];
+    const spRows = spRes.data || [];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const active = profs.filter((p: any) => p.last_active_date && p.last_active_date >= startDate).length;
     const solved = chals.length;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const correct = chals.filter((c: any) => c.is_correct).length;
+    const spTotalSolved = spRows.reduce((s: number, sp: any) => s + (sp.total_problems_solved || 0), 0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const spTotalCorrect = spRows.reduce((s: number, sp: any) => s + (sp.total_correct || 0), 0);
 
     schoolComparison.push({
       orgId: org.id,
@@ -526,7 +533,7 @@ export async function getSecretaryDashboard(orgId: string, dateRange?: DateRange
       students: sids.length,
       active7d: active,
       avgSolved: Math.round(solved / sids.length),
-      avgAccuracy: solved > 0 ? Math.round((correct / solved) * 100) : 0,
+      avgAccuracy: spTotalSolved > 0 ? Math.round((spTotalCorrect / spTotalSolved) * 100) : 0,
       adoption: Math.round((active / sids.length) * 100),
     });
   }
