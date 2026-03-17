@@ -88,3 +88,13 @@
   7. org_joined (join/page.tsx — após joinByInviteCode sucesso)
 - REGRA: NUNCA rastrear PII (nome, email, conteúdo de exercício, respostas AI)
 - Deduplicação feature_used: sessionStorage key "axiom_tracked_features"
+
+## 2026-03-17 — /SCHOOLS B2B LANDING PAGE
+- Rota: /schools — página institucional para diretores de escola
+- 8 seções: Hero B2B, Problema, Solução (dashboards mockup), Como Funciona, Features, Pricing Institucional, CTA (WhatsApp+Email), Footer
+- WhatsApp: wa.me/5581996800181 | Email: mysupport@axiom-solver.com
+- Nav + Footer da landing principal: link "Para Escolas" adicionado
+- Middleware: /schools adicionado às rotas públicas
+- Sitemap: /schools em 6 locales
+- i18n: namespace "Schools" — 69 keys × 6 locales = 669 total
+- SEO: title + description únicos por locale via generateMetadata
