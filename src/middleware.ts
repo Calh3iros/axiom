@@ -16,6 +16,7 @@ const publicRoutes = [
   "/privacy",
   "/terms",
   "/faq",
+  "/schools",
 ];
 // Static/API routes to skip entirely
 const skipRoutes = [
