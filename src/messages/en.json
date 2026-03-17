@@ -221,6 +221,50 @@
       "sug4": "Prep me for my physics exam",
       "thinking": "Thinking...",
       "inputPlaceholder": "Ask me anything... \"Teach me about...\""
+    },
+    "Write": {
+      "title": "Essay Writer",
+      "description": "AI-powered writing assistant. Generate outlines, expand ideas, add citations, and more."
+    },
+    "Humanize": {
+      "title": "AI Humanizer",
+      "description": "Rewrite AI-generated text to sound naturally human. Bypass detectors with a single click."
+    },
+    "Panic": {
+      "backBtn": "Back to Tutor",
+      "title": "Panic Mode",
+      "description": "Generate a complete exam prep package in seconds",
+      "subjectPlaceholder": "Subject (e.g. Organic Chemistry)",
+      "chapterPlaceholder": "Chapter or topic (optional)",
+      "generating": "Generating study package...",
+      "activateBtn": "🚨 ACTIVATE PANIC MODE",
+      "tabSummary": "Summary",
+      "tabQA": "Q&A",
+      "tabFlashcards": "Flashcards",
+      "tabPlan": "Study Plan",
+      "emergencyActive": "EMERGENCY MODE ACTIVE",
+      "clickToFlip": "Click a card to flip it"
+    },
+    "Auth": {
+      "checkInbox": "Check your inbox",
+      "checkEmail": "Check your email",
+      "orContinue": "or continue with email",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "you@email.com",
+      "minChars": "Min. 6 characters"
+    },
+    "Share": {
+      "chatNotFound": "Chat not found",
+      "invalidLink": "This link may be invalid or the chat is no longer shared.",
+      "solvedBy": "Solved by Axiom in 5 seconds",
+      "returnHome": "Return to Axiom",
+      "tryFree": "Try Free",
+      "sharedSolution": "Shared Solution:",
+      "untitledChat": "Untitled Session",
+      "snapshotDesc": "This is a read-only snapshot of a conversation solved by Axiom AI.",
+      "stopWaiting": "Stop waiting. Start solving.",
+      "joinThousands": "Join thousands of students getting instant, step-by-step solutions to their hardest questions.",
+      "createFree": "Create your free account"
     }
   },
   "FAQ": {

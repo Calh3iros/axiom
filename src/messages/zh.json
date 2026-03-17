@@ -221,6 +221,50 @@
       "sug4": "帮我准备物理考试",
       "thinking": "思考中...",
       "inputPlaceholder": "随便问...“教我...”"
+    },
+    "Write": {
+      "title": "论文写手",
+      "description": "人工智能写作助手。生成大纲，扩展思路，添加引用等。"
+    },
+    "Humanize": {
+      "title": "人工智能人性化",
+      "description": "重写人工智能生成的文本，使其听起来像自然人。一键绕过检测器。"
+    },
+    "Panic": {
+      "backBtn": "返回导师",
+      "title": "恐慌模式",
+      "description": "在几秒钟内生成完整的备考包",
+      "subjectPlaceholder": "科目（如：有机化学）",
+      "chapterPlaceholder": "章节或主题（可选）",
+      "generating": "正在生成学习包...",
+      "activateBtn": "🚨 激活恐慌模式",
+      "tabSummary": "摘要",
+      "tabQA": "问答",
+      "tabFlashcards": "抽认卡",
+      "tabPlan": "学习计划",
+      "emergencyActive": "紧急模式处于活动状态",
+      "clickToFlip": "点击卡片翻转"
+    },
+    "Auth": {
+      "checkInbox": "检查你的收件箱",
+      "checkEmail": "验证你的电子邮件",
+      "orContinue": "或使用电子邮件继续",
+      "namePlaceholder": "你的名字",
+      "emailPlaceholder": "you@email.com",
+      "minChars": "最少 6 个字符"
+    },
+    "Share": {
+      "chatNotFound": "找不到聊天",
+      "invalidLink": "此链接可能无效或聊天不再共享。",
+      "solvedBy": "Axiom 在 5 秒内解决",
+      "returnHome": "返回 Axiom",
+      "tryFree": "免费试用",
+      "sharedSolution": "共享的解决方案：",
+      "untitledChat": "无标题会话",
+      "snapshotDesc": "这是Axiom AI解决的对话的只读快照。",
+      "stopWaiting": "不要等待。开始解决。",
+      "joinThousands": "加入成千上万的学生，获取最难问题的即时逐步解决方案。",
+      "createFree": "创建您的免费帐户"
     }
   },
   "FAQ": {

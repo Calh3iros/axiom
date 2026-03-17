@@ -221,6 +221,50 @@
       "sug4": "Prépare-moi pour mon examen de physique",
       "thinking": "Réflexion...",
       "inputPlaceholder": "Demandez n'importe quoi... \"Explique-moi...\""
+    },
+    "Write": {
+      "title": "Rédacteur",
+      "description": "Assistant de rédaction par IA. Générez des plans, développez des idées, ajoutez des citations, et plus."
+    },
+    "Humanize": {
+      "title": "Humaniseur d'IA",
+      "description": "Réécrivez les textes générés par l'IA pour qu'ils paraissent humains. Contournez les détecteurs en un clic."
+    },
+    "Panic": {
+      "backBtn": "Retour au Tuteur",
+      "title": "Mode Panique",
+      "description": "Générez un package de préparation aux examens en quelques secondes",
+      "subjectPlaceholder": "Matière (ex: Chimie Organique)",
+      "chapterPlaceholder": "Chapitre ou sujet (optionnel)",
+      "generating": "Génération en cours...",
+      "activateBtn": "🚨 ACTIVER LE MODE PANIQUE",
+      "tabSummary": "Résumé",
+      "tabQA": "Questions-Réponses",
+      "tabFlashcards": "Flashcards",
+      "tabPlan": "Plan d'Étude",
+      "emergencyActive": "MODE D URGENT ACTIF",
+      "clickToFlip": "Cliquez sur une carte pour la retourner"
+    },
+    "Auth": {
+      "checkInbox": "Vérifiez votre boîte de réception",
+      "checkEmail": "Vérifiez votre e-mail",
+      "orContinue": "ou continuez avec l'e-mail",
+      "namePlaceholder": "Votre nom",
+      "emailPlaceholder": "vous@email.com",
+      "minChars": "Min. 6 caractères"
+    },
+    "Share": {
+      "chatNotFound": "Discussion introuvable",
+      "invalidLink": "Ce lien peut être invalide ou la discussion n'est plus partagée.",
+      "solvedBy": "Résolu par Axiom en 5 secondes",
+      "returnHome": "Retour à Axiom",
+      "tryFree": "Essayer Gratuitement",
+      "sharedSolution": "Solution Partagée :",
+      "untitledChat": "Session sans titre",
+      "snapshotDesc": "Ceci est un aperçu en lecture seule d'une conversation résolue par Axiom AI.",
+      "stopWaiting": "Arrêtez d'attendre. Commencez à résoudre.",
+      "joinThousands": "Rejoignez des milliers d'étudiants obtenant des solutions instantanées étape par étape à leurs questions les plus difficiles.",
+      "createFree": "Créez votre compte gratuit"
     }
   },
   "FAQ": {

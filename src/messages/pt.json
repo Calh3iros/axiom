@@ -221,6 +221,50 @@
       "sug4": "Me prepare para a prova de física",
       "thinking": "Pensando...",
       "inputPlaceholder": "Pergunte qualquer coisa... \"Me ensine sobre...\""
+    },
+    "Write": {
+      "title": "Redator",
+      "description": "Assistente de redação por IA. Crie esboços, expanda ideias, adicione citações e muito mais."
+    },
+    "Humanize": {
+      "title": "Humanizador de IA",
+      "description": "Reescreva textos gerados por IA para soarem naturais. Burle detectores com um clique."
+    },
+    "Panic": {
+      "backBtn": "Voltar ao Tutor",
+      "title": "Modo Pânico",
+      "description": "Gere um pacote completo de estudo em segundos",
+      "subjectPlaceholder": "Matéria (ex: Química Orgânica)",
+      "chapterPlaceholder": "Capítulo ou tópico (opcional)",
+      "generating": "Gerando pacote de estudo...",
+      "activateBtn": "🚨 ATIVAR MODO PÂNICO",
+      "tabSummary": "Resumo",
+      "tabQA": "P&R",
+      "tabFlashcards": "Flashcards",
+      "tabPlan": "Plano de Estudo",
+      "emergencyActive": "MODO DE EMERGÊNCIA ATIVO",
+      "clickToFlip": "Clique em um card para virar"
+    },
+    "Auth": {
+      "checkInbox": "Olhe sua caixa de entrada",
+      "checkEmail": "Verifique seu email",
+      "orContinue": "ou continue com email",
+      "namePlaceholder": "Seu nome",
+      "emailPlaceholder": "voce@email.com",
+      "minChars": "Mín. 6 caracteres"
+    },
+    "Share": {
+      "chatNotFound": "Chat não encontrado",
+      "invalidLink": "Este link pode ser inválido ou o chat não é mais compartilhado.",
+      "solvedBy": "Resolvido pelo Axiom em 5 segundos",
+      "returnHome": "Voltar para o Axiom",
+      "tryFree": "Testar Grátis",
+      "sharedSolution": "Solução Compartilhada:",
+      "untitledChat": "Sessão sem título",
+      "snapshotDesc": "Este é um instantâneo somente leitura de uma conversa resolvida pela Axiom AI.",
+      "stopWaiting": "Pare de esperar. Comece a resolver.",
+      "joinThousands": "Junte-se a milhares de estudantes recebendo soluções instantâneas passo a passo para as perguntas mais difíceis.",
+      "createFree": "Crie sua conta grátis"
     }
   },
   "FAQ": {

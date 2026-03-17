@@ -221,6 +221,50 @@
       "sug4": "Prepárame para mi examen de física",
       "thinking": "Pensando...",
       "inputPlaceholder": "Pregunta cualquier cosa... \"Enséñame sobre...\""
+    },
+    "Write": {
+      "title": "Redactor",
+      "description": "Asistente de escritura con IA. Crea esquemas, amplía ideas, añade citas y más."
+    },
+    "Humanize": {
+      "title": "Humanizador de IA",
+      "description": "Reescribe el texto generado por IA para que suene humano. Evita los detectores con un clic."
+    },
+    "Panic": {
+      "backBtn": "Volver al Tutor",
+      "title": "Modo Pánico",
+      "description": "Genera un paquete completo de estudio en segundos",
+      "subjectPlaceholder": "Materia (ej: Química Orgánica)",
+      "chapterPlaceholder": "Capítulo o tema (opcional)",
+      "generating": "Generando paquete de estudio...",
+      "activateBtn": "🚨 ACTIVAR MODO PÁNICO",
+      "tabSummary": "Resumen",
+      "tabQA": "P y R",
+      "tabFlashcards": "Tarjetas",
+      "tabPlan": "Plan de Estudio",
+      "emergencyActive": "MODO DE EMERGENCIA ACTIVO",
+      "clickToFlip": "Haz clic en una tarjeta para voltearla"
+    },
+    "Auth": {
+      "checkInbox": "Revisa tu bandeja de entrada",
+      "checkEmail": "Verifica tu correo electrónico",
+      "orContinue": "o continúa con correo electrónico",
+      "namePlaceholder": "Tu nombre",
+      "emailPlaceholder": "tu@email.com",
+      "minChars": "Mín. 6 caracteres"
+    },
+    "Share": {
+      "chatNotFound": "Chat no encontrado",
+      "invalidLink": "Este enlace puede no ser válido o el chat ya no está compartido.",
+      "solvedBy": "Resuelto por Axiom en 5 segundos",
+      "returnHome": "Volver a Axiom",
+      "tryFree": "Probar Gratis",
+      "sharedSolution": "Solución Compartida:",
+      "untitledChat": "Sesión sin título",
+      "snapshotDesc": "Esta es una instantánea de solo lectura de una conversación resuelta por Axiom AI.",
+      "stopWaiting": "Deja de esperar. Empieza a resolver.",
+      "joinThousands": "Únete a miles de estudiantes que obtienen soluciones instantáneas paso a paso a sus preguntas más difíciles.",
+      "createFree": "Crea tu cuenta gratis"
     }
   },
   "FAQ": {

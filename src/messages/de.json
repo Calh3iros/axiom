@@ -221,6 +221,50 @@
       "sug4": "Bereite mich auf meine Physikprüfung vor",
       "thinking": "Denke nach...",
       "inputPlaceholder": "Frag alles... \"Bring mir etwas bei über...\""
+    },
+    "Write": {
+      "title": "Essay-Schreiber",
+      "description": "KI-gesteuerter Schreibassistent. Erstellen Sie Gliederungen, erweitern Sie Ideen, fügen Sie Zitate hinzu und mehr."
+    },
+    "Humanize": {
+      "title": "KI-Vermenschlicher",
+      "description": "Schreiben Sie KI-generierten Text so um, dass er natürlich menschlich klingt. Umgehen Sie Detektoren mit einem Klick."
+    },
+    "Panic": {
+      "backBtn": "Zurück zum Tutor",
+      "title": "Panik-Modus",
+      "description": "Generiere ein komplettes Prüfungsvorbereitungspaket in Sekunden",
+      "subjectPlaceholder": "Fach (z.B. Organische Chemie)",
+      "chapterPlaceholder": "Kapitel oder Thema (optional)",
+      "generating": "Generiere Studienpaket...",
+      "activateBtn": "🚨 PANIK-MODUS AKTIVIEREN",
+      "tabSummary": "Zusammenfassung",
+      "tabQA": "F&A",
+      "tabFlashcards": "Karteikarten",
+      "tabPlan": "Studienplan",
+      "emergencyActive": "NOTFALLMODUS AKTIV",
+      "clickToFlip": "Klicke auf eine Karte, um sie umzudrehen"
+    },
+    "Auth": {
+      "checkInbox": "Überprüfe deinen Posteingang",
+      "checkEmail": "Überprüfe deine E-Mail",
+      "orContinue": "oder weiter mit E-Mail",
+      "namePlaceholder": "Dein Name",
+      "emailPlaceholder": "du@email.com",
+      "minChars": "Min. 6 Zeichen"
+    },
+    "Share": {
+      "chatNotFound": "Chat nicht gefunden",
+      "invalidLink": "Dieser Link ist möglicherweise ungültig oder der Chat wird nicht mehr geteilt.",
+      "solvedBy": "Gelöst von Axiom in 5 Sekunden",
+      "returnHome": "Zurück zu Axiom",
+      "tryFree": "Kostenlos testen",
+      "sharedSolution": "Geteilte Lösung:",
+      "untitledChat": "Unbenannte Sitzung",
+      "snapshotDesc": "Dies ist ein schreibgeschützter Schnappschuss eines Gesprächs, das von Axiom AI gelöst wurde.",
+      "stopWaiting": "Hör auf zu warten. Fange an zu lösen.",
+      "joinThousands": "Schließe dich Tausenden von Studenten an, die sofortige Schritt-für-Schritt-Lösungen für ihre härtesten Fragen erhalten.",
+      "createFree": "Erstelle dein kostenloses Konto"
     }
   },
   "FAQ": {
