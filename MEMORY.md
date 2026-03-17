@@ -76,3 +76,15 @@
 - playwright.config.ts: 1 projeto Chromium, webServer auto-starta pnpm start.
 - CI pipeline: validate i18n → lint → build → install Chromium → E2E smoke.
 - Local: npx playwright test (5.9s, 9/9 pass)
+
+## 2026-03-17 — POSTHOG PRODUCT EVENTS
+- 7 eventos implementados via posthog.capture() (client-side, posthog-js):
+  1. signup_completed (app-shell.tsx — onAuthStateChange SIGNED_IN)
+  2. onboarding_completed (onboarding-modal.tsx — dismiss/next)
+  3. exercise_submitted (solve/chat.tsx — onSubmitForm)
+  4. feature_used (solve/write/humanize/learn — sessionStorage dedup)
+  5. upgrade_clicked (paywall-modal + pricing-section + settings)
+  6. paywall_hit (humanize/panel.tsx — 429/402 response)
+  7. org_joined (join/page.tsx — após joinByInviteCode sucesso)
+- REGRA: NUNCA rastrear PII (nome, email, conteúdo de exercício, respostas AI)
+- Deduplicação feature_used: sessionStorage key "axiom_tracked_features"
