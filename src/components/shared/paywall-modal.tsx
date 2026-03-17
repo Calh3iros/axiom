@@ -2,7 +2,7 @@
 
 import { X, Zap, Crown, Sparkles } from 'lucide-react';
 import posthog from 'posthog-js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { STRIPE_PRICES } from '@/lib/stripe/config';
 import type { PlanType } from '@/lib/usage';
@@ -118,6 +118,10 @@ export function PaywallModal({
 }: PaywallModalProps) {
   const [isYearly, setIsYearly] = useState(true);
   const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null);
+
+  useEffect(() => {
+    posthog.capture("paywall_hit", { feature: reason, current_plan: currentPlan });
+  }, [reason, currentPlan]);
 
   const handleCheckout = async (priceId: string, plan: PlanType) => {
     posthog.capture("upgrade_clicked", { plan, source: "paywall_modal" });

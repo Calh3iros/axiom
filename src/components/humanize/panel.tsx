@@ -62,7 +62,6 @@ export function HumanizerPanel() {
       });
 
       if (res.status === 429 || res.status === 402) {
-        posthog.capture("paywall_hit", { feature: "humanize", current_plan: "free" });
         setShowPaywall(true);
         setLoading(false);
         return;
