@@ -107,15 +107,55 @@ export function OnboardingModal() {
   const totalSteps = slides.length + 1; // 4 info slides + 1 profile slide
 
   useEffect(() => {
-    // Only show if user hasn't seen onboarding
-    if (typeof window !== "undefined") {
-      const seen = localStorage.getItem(STORAGE_KEY);
-      if (!seen) {
-        // Small delay so the page loads first
+    if (typeof window === "undefined") return;
+
+    // Fast path: localStorage cache says already seen → don't show
+    const cached = localStorage.getItem(STORAGE_KEY);
+    if (cached === "true") return;
+
+    // Query Supabase to check DB-persisted onboarding state
+    const checkOnboarding = async () => {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data } = await (supabase.from("student_profiles") as any)
+          .select("onboarding_completed")
+          .eq("id", user.id)
+          .single();
+
+        if (data?.onboarding_completed) {
+          // DB says completed — sync localStorage cache and don't show
+          localStorage.setItem(STORAGE_KEY, "true");
+          return;
+        }
+
+        // If no row exists (old user) but they have activity, treat as completed
+        if (!data) {
+          // Check if user has any solved problems (existing user)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { count } = await (supabase.from("knowledge_map") as any)
+            .select("id", { count: "exact", head: true })
+            .eq("user_id", user.id);
+          if (count && count > 0) {
+            localStorage.setItem(STORAGE_KEY, "true");
+            return;
+          }
+        }
+
+        // New user or onboarding not completed — show modal
         const timer = setTimeout(() => setShow(true), 800);
         return () => clearTimeout(timer);
+      } catch {
+        // On error, don't show modal (fail closed)
       }
-    }
+    };
+
+    checkOnboarding();
   }, []);
 
   const saveStudentProfile = async () => {
@@ -147,12 +187,32 @@ export function OnboardingModal() {
     }
   };
 
+  const markOnboardingComplete = async () => {
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase.from("student_profiles") as any).upsert(
+          { id: user.id, onboarding_completed: true },
+          { onConflict: "id" }
+        );
+      }
+    } catch {
+      // Best effort
+    }
+    localStorage.setItem(STORAGE_KEY, "true");
+  };
+
   const handleDismiss = async () => {
     if (step === totalSteps - 1) {
       await saveStudentProfile();
+    } else {
+      await markOnboardingComplete();
     }
     setShow(false);
-    localStorage.setItem(STORAGE_KEY, "true");
   };
 
   const handleNext = async () => {
@@ -160,8 +220,8 @@ export function OnboardingModal() {
       setStep(step + 1);
     } else {
       await saveStudentProfile();
-      setShow(false);
       localStorage.setItem(STORAGE_KEY, "true");
+      setShow(false);
     }
   };
 
