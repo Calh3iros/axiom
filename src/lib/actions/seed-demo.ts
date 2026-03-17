@@ -89,6 +89,33 @@ async function runInChunks<T>(items: (() => Promise<T>)[], chunkSize: number): P
   return results;
 }
 
+/**
+ * Create a demo user or return existing if email already exists.
+ * Handles re-seed after partial cleanup.
+ */
+async function getOrCreateDemoUser(
+  email: string,
+  fullName: string
+): Promise<string | null> {
+  const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+    email,
+    password: "DemoPassword123!",
+    email_confirm: true,
+    user_metadata: { full_name: fullName },
+  });
+  if (created?.user?.id) return created.user.id;
+
+  // If user already exists (duplicate email), look them up
+  if (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: profile } = await (supabaseAdmin.from("profiles") as any)
+      .select("id").eq("email", email).single();
+    if (profile) return profile.id;
+  }
+
+  return null;
+}
+
 // ─── Seed Action (Optimized: batched inserts, parallel auth) ─────────────
 
 export async function seedDemoData(): Promise<{ success: boolean; message: string }> {
@@ -123,20 +150,15 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     // 2. Create director (1 auth call)
     const directorEmail = `${DEMO_PREFIX}director@${DEMO_EMAIL_DOMAIN}`;
-    const { data: dirAuth } = await supabaseAdmin.auth.admin.createUser({
-      email: directorEmail,
-      password: "DemoPassword123!",
-      email_confirm: true,
-      user_metadata: { full_name: "Dr. Roberto Mendes" },
-    });
-    if (dirAuth?.user) {
+    const directorId = await getOrCreateDemoUser(directorEmail, "Dr. Roberto Mendes");
+    if (directorId) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabaseAdmin.from("profiles") as any)
         .update({ full_name: "Dr. Roberto Mendes", email: directorEmail })
-        .eq("id", dirAuth.user.id);
+        .eq("id", directorId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabaseAdmin.from("org_memberships") as any)
-        .insert({ user_id: dirAuth.user.id, org_id: orgId, role: "director" });
+        .upsert({ user_id: directorId, org_id: orgId, role: "director" }, { onConflict: "user_id,org_id" });
     }
 
     // 3. Create 3 teachers (3 auth calls — sequential is fine, only 3)
@@ -147,13 +169,7 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     for (let c = 0; c < 3; c++) {
       const teacherEmail = `${DEMO_PREFIX}teacher${c + 1}@${DEMO_EMAIL_DOMAIN}`;
-      const { data: tAuth } = await supabaseAdmin.auth.admin.createUser({
-        email: teacherEmail,
-        password: "DemoPassword123!",
-        email_confirm: true,
-        user_metadata: { full_name: teacherNames[c] },
-      });
-      const teacherId = tAuth?.user?.id || null;
+      const teacherId = await getOrCreateDemoUser(teacherEmail, teacherNames[c]);
       teacherIds.push(teacherId);
       if (teacherId) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,13 +178,14 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
           .eq("id", teacherId);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (supabaseAdmin.from("org_memberships") as any)
-          .insert({ user_id: teacherId, org_id: orgId, role: "teacher" });
+          .upsert({ user_id: teacherId, org_id: orgId, role: "teacher" }, { onConflict: "user_id,org_id" });
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: cls } = await (supabaseAdmin.from("classes") as any)
         .insert({ name: classNames[c], org_id: orgId, teacher_id: teacherId })
         .select("id")
         .single();
+      if (!cls) throw new Error(`Failed to create class ${classNames[c]}`);
       classIds.push(cls.id);
     }
 
@@ -186,14 +203,9 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
       const archetype = generateStudentArchetype();
 
       return async () => {
-        const { data: sAuth } = await supabaseAdmin.auth.admin.createUser({
-          email,
-          password: "DemoPassword123!",
-          email_confirm: true,
-          user_metadata: { full_name: fullName },
-        });
-        if (sAuth?.user?.id) {
-          studentData.push({ userId: sAuth.user.id, classIdx, archetype, fullName, email });
+        const userId = await getOrCreateDemoUser(email, fullName);
+        if (userId) {
+          studentData.push({ userId, classIdx, archetype, fullName, email });
         }
       };
     });
