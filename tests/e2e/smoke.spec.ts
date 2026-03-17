@@ -87,23 +87,23 @@ test.describe('i18n — No Raw Keys Visible', () => {
 
 test.describe('Auth Redirects', () => {
   test('/map without auth redirects to login', async ({ page }) => {
-    const response = await page.goto('/en/map');
+    await page.goto('/en/map');
     // After redirect chain, should end up on login page
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10000 });
   });
 
   test('/solve without auth redirects to login', async ({ page }) => {
-    const response = await page.goto('/en/solve');
+    await page.goto('/en/solve');
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10000 });
   });
 
   test('/admin without auth redirects to login', async ({ page }) => {
-    const response = await page.goto('/en/admin');
+    await page.goto('/en/admin');
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10000 });
   });
 
   test('/settings without auth redirects to login', async ({ page }) => {
-    const response = await page.goto('/en/settings');
+    await page.goto('/en/settings');
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10000 });
   });
 });
