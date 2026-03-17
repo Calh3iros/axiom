@@ -409,3 +409,13 @@ export async function getAdminUsers(filters: {
     pageSize,
   };
 }
+
+// ─── Demo Org Helper ─────────────────────────────────────────────────────
+
+export async function getDemoOrgId(): Promise<string | null> {
+  await requireSuperAdmin();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabaseAdmin.from("organizations") as any)
+    .select("id").eq("name", "Escola Demonstração").single();
+  return data?.id || null;
+}

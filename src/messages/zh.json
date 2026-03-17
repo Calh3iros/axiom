@@ -798,7 +798,8 @@
         "writes": "Write",
         "humanizes": "Humanize",
         "learns": "Learn"
-      }
+      },
+      "viewDemoDashboard": "查看演示仪表盘"
     },
     "users": {
       "title": "个人用户",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, Building2, Crown, TrendingUp, Users } from "lucide-react";
+import { Activity, Building2, Crown, FlaskConical, TrendingUp, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import {
@@ -8,7 +8,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 
-import { getAdminPlatformStats } from "@/lib/actions/admin";
+import { Link } from "@/i18n/routing";
+import { getAdminPlatformStats, getDemoOrgId } from "@/lib/actions/admin";
 
 type Stats = Awaited<ReturnType<typeof getAdminPlatformStats>>;
 
@@ -18,10 +19,18 @@ const MODULE_COLORS = ["#818cf8", "#22c55e", "#f59e0b", "#ec4899"];
 export default function AdminPlatformPage() {
   const t = useTranslations("Admin");
   const [stats, setStats] = useState<Stats | null>(null);
+  const [demoOrgId, setDemoOrgId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAdminPlatformStats().then((d) => { setStats(d); setLoading(false); }).catch(() => setLoading(false));
+    Promise.all([
+      getAdminPlatformStats(),
+      getDemoOrgId(),
+    ]).then(([d, dId]) => {
+      setStats(d);
+      setDemoOrgId(dId);
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="admin-loading">{t("loading")}</div>;
@@ -44,6 +53,22 @@ export default function AdminPlatformPage() {
   return (
     <div>
       <h1 className="admin-page-title">{t("platform.title")}</h1>
+
+      {/* Demo Org Card */}
+      {demoOrgId && (
+        <div className="demo-org-card">
+          <div className="demo-org-left">
+            <FlaskConical style={{ color: "#818cf8", width: 24, height: 24 }} />
+            <div>
+              <h3 className="demo-org-name">Escola Demonstração</h3>
+              <span className="demo-org-badge">ACTIVE</span>
+            </div>
+          </div>
+          <Link href={`/org/${demoOrgId}`} className="demo-org-btn">
+            📊 {t("platform.viewDemoDashboard")}
+          </Link>
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="kpi-grid">
@@ -148,6 +173,12 @@ export default function AdminPlatformPage() {
         .chart-card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; padding: 20px; }
         .chart-title { font-size: 14px; color: #94a3b8; margin: 0 0 16px; font-weight: 600; }
         @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+        .demo-org-card { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #12121a 0%, #1a1a30 100%); border: 1px solid #2d2d5e; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
+        .demo-org-left { display: flex; align-items: center; gap: 14px; }
+        .demo-org-name { font-size: 16px; font-weight: 700; color: #f1f5f9; margin: 0 0 4px; }
+        .demo-org-badge { font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 20px; background: #16513d; color: #4ade80; text-transform: uppercase; letter-spacing: 0.05em; }
+        .demo-org-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+        .demo-org-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3); }
       `}</style>
     </div>
   );

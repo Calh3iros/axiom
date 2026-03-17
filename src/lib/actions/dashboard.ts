@@ -24,10 +24,19 @@ async function getManagerRole(orgId: string): Promise<{ userId: string; role: st
     .eq("org_id", orgId)
     .single();
 
-  if (!membership) return null;
-  const elevated = ["teacher", "admin", "director", "secretary"];
-  if (!elevated.includes(membership.role)) return null;
-  return { userId: user.id, role: membership.role };
+  if (membership) {
+    const elevated = ["teacher", "admin", "director", "secretary"];
+    if (!elevated.includes(membership.role)) return null;
+    return { userId: user.id, role: membership.role };
+  }
+
+  // Super_admin bypass: read-only director-level access without membership
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profile } = await (supabase.from("profiles") as any)
+    .select("is_super_admin").eq("id", user.id).single();
+  if (profile?.is_super_admin) return { userId: user.id, role: "director" };
+
+  return null;
 }
 
 async function getClassOrgId(classId: string): Promise<{ orgId: string; teacherId: string | null } | null> {

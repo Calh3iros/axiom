@@ -193,7 +193,9 @@ export async function getOrgDashboard(orgId: string) {
     .eq("org_id", orgId)
     .single();
 
-  if (!membership) return null;
+  // Super_admin bypass: read-only director-level access without membership
+  const effectiveRole = membership?.role || (await isSuperAdmin(supabase, user.id) ? "director" : null);
+  if (!effectiveRole) return null;
 
   // Check org status — only super_admin can view non-active orgs
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -243,7 +245,7 @@ export async function getOrgDashboard(orgId: string) {
 
   // For elevated roles, also fetch child orgs
   let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
-  if (ELEVATED_ROLES.includes(membership.role)) {
+  if (ELEVATED_ROLES.includes(effectiveRole as OrgRole)) {
     const subtree = await getOrgSubtreeIds(supabase, orgId);
     const childIds = subtree.filter(n => n.depth > 0).map(n => n.org_id);
     if (childIds.length > 0) {
@@ -259,7 +261,7 @@ export async function getOrgDashboard(orgId: string) {
 
   return {
     org: orgRes?.data,
-    myRole: membership.role as OrgRole,
+    myRole: effectiveRole as OrgRole,
     members: membersRes?.data || [],
     classes: classesRes?.data || [],
     childOrgs,
