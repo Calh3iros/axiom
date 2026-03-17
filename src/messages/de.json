@@ -510,10 +510,10 @@
     }
   },
   "Legal": {
-    "backToHome": "← Back to home",
+    "backToHome": "← Zurück zur Startseite",
     "privacy": {
-      "title": "Privacy Policy",
-      "lastUpdated": "Last updated: February 2026",
+      "title": "Datenschutzrichtlinie",
+      "lastUpdated": "Zuletzt aktualisiert: Februar 2026",
       "sections": [
         {
           "title": "1. Information We Collect",
@@ -547,8 +547,8 @@
       ]
     },
     "terms": {
-      "title": "Terms of Service",
-      "lastUpdated": "Last updated: February 2026",
+      "title": "Nutzungsbedingungen",
+      "lastUpdated": "Zuletzt aktualisiert: Februar 2026",
       "sections": [
         {
           "title": "1. Acceptance of Terms",
@@ -798,7 +798,7 @@
       "col": {
         "name": "Name",
         "email": "E-Mail",
-        "plan": "Plan",
+        "plan": "Tarif",
         "signup": "Anmeldung",
         "lastActive": "Zuletzt Aktiv",
         "streak": "Serie",

@@ -79,7 +79,7 @@
       "statsAccuracy": "Précision",
       "statsTopics": "Sujets",
       "statsStreak": "Série",
-      "statsBadges": "Badges",
+      "statsBadges": "Insignes",
       "streakCalendar": "Activité d'Étude",
       "calendarLess": "Moins",
       "calendarMore": "Plus",
@@ -510,10 +510,10 @@
     }
   },
   "Legal": {
-    "backToHome": "← Back to home",
+    "backToHome": "← Retour à l'accueil",
     "privacy": {
-      "title": "Privacy Policy",
-      "lastUpdated": "Last updated: February 2026",
+      "title": "Politique de confidentialité",
+      "lastUpdated": "Dernière mise à jour : février 2026",
       "sections": [
         {
           "title": "1. Information We Collect",
@@ -547,8 +547,8 @@
       ]
     },
     "terms": {
-      "title": "Terms of Service",
-      "lastUpdated": "Last updated: February 2026",
+      "title": "Conditions d'utilisation",
+      "lastUpdated": "Dernière mise à jour : février 2026",
       "sections": [
         {
           "title": "1. Acceptance of Terms",
@@ -698,7 +698,7 @@
     "streakDays": "Série",
     "accuracy": "Précision",
     "topicsMastered": "Maîtrisés",
-    "badges": "Badges",
+    "badges": "Insignes",
     "avgSolved": "Moy. Résolus",
     "avgAccuracy": "Moy. Précision",
     "active7d": "Actifs 7j",
@@ -797,13 +797,13 @@
       "inactive30d": "Inactifs (30j)",
       "col": {
         "name": "Nom",
-        "email": "Email",
-        "plan": "Plan",
+        "email": "E-mail",
+        "plan": "Forfait",
         "signup": "Inscription",
         "lastActive": "Dernier Actif",
         "streak": "Série",
         "solved": "Résolus",
-        "badges": "Badges"
+        "badges": "Insignes"
       },
       "empty": "Aucun utilisateur trouvé",
       "showing": "{start}-{end} de {total}"
