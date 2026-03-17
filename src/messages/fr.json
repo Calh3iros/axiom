@@ -878,7 +878,8 @@
       "secretaryTitle": "Tableau de bord Secrétariat",
       "secretaryBullet1": "Comparaison entre les écoles du réseau",
       "secretaryBullet2": "Métriques agrégées de toute l'organisation",
-      "secretaryBullet3": "Rapports stratégiques pour les présentations"
+      "secretaryBullet3": "Rapports stratégiques pour les présentations",
+      "demoLabel": "Aperçu du tableau de bord — données de démonstration"
     },
     "howItWorks": {
       "tag": "COMMENT ÇA MARCHE",

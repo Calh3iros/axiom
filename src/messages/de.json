@@ -878,7 +878,8 @@
       "secretaryTitle": "Sekretariats-Dashboard",
       "secretaryBullet1": "Schulvergleich im gesamten Netzwerk",
       "secretaryBullet2": "Aggregierte Metriken der gesamten Organisation",
-      "secretaryBullet3": "Strategische Berichte für Vorstandspräsentationen"
+      "secretaryBullet3": "Strategische Berichte für Vorstandspräsentationen",
+      "demoLabel": "Dashboard-Vorschau — Demodaten"
     },
     "howItWorks": {
       "tag": "SO FUNKTIONIERT ES",

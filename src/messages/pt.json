@@ -878,7 +878,8 @@
       "secretaryTitle": "Dashboard da Secretaria",
       "secretaryBullet1": "Comparação entre escolas da rede",
       "secretaryBullet2": "Métricas agregadas de toda a organização",
-      "secretaryBullet3": "Relatórios estratégicos para apresentações"
+      "secretaryBullet3": "Relatórios estratégicos para apresentações",
+      "demoLabel": "Preview do dashboard — dados de demonstração"
     },
     "howItWorks": {
       "tag": "COMO FUNCIONA",

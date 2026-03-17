@@ -159,6 +159,22 @@
   color: var(--color-text-primary, #f1f1f1);
   margin: 0;
 }
+.sch-dash-screenshot {
+  padding: 16px 20px 4px;
+}
+.sch-dash-img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.sch-dash-label {
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-text-secondary, #666);
+  margin-top: 8px;
+  font-style: italic;
+}
 .sch-dash-preview {
   padding: 16px 20px;
   border-bottom: 1px solid rgba(255,255,255,0.06);

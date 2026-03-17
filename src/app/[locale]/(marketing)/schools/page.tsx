@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
@@ -123,11 +124,28 @@ function SchoolsContent() {
               bullets: [t("solution.secretaryBullet1"), t("solution.secretaryBullet2"), t("solution.secretaryBullet3")],
               color: "#f59e0b",
             },
-          ].map((dash, i) => (
+          ].map((dash, i) => {
+            const dashImages = [
+              "/images/schools/teacher-dashboard.png",
+              "/images/schools/director-dashboard.png",
+              "/images/schools/secretary-dashboard.png",
+            ];
+            return (
             <div key={i} className="sch-dash-card">
               <div className="sch-dash-header" style={{ borderColor: dash.color }}>
                 <span className="sch-dash-icon">{dash.icon}</span>
                 <h3>{dash.title}</h3>
+              </div>
+              <div className="sch-dash-screenshot">
+                <Image
+                  src={dashImages[i]}
+                  alt={dash.title}
+                  width={900}
+                  height={500}
+                  className="sch-dash-img"
+                  unoptimized
+                />
+                <div className="sch-dash-label">{t("solution.demoLabel")}</div>
               </div>
               <div className="sch-dash-preview" style={{ borderColor: dash.color }}>
                 <div className="sch-dash-mock">
@@ -160,7 +178,8 @@ function SchoolsContent() {
                 ))}
               </ul>
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

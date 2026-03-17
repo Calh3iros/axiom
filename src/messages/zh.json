@@ -878,7 +878,8 @@
       "secretaryTitle": "秘书处仪表盘",
       "secretaryBullet1": "全网络学校对比",
       "secretaryBullet2": "整个组织的汇总指标",
-      "secretaryBullet3": "为董事会演示的战略报告"
+      "secretaryBullet3": "为董事会演示的战略报告",
+      "demoLabel": "仪表盘预览 — 演示数据"
     },
     "howItWorks": {
       "tag": "如何运作",

@@ -878,7 +878,8 @@
       "secretaryTitle": "Secretary Dashboard",
       "secretaryBullet1": "Network-wide school comparison",
       "secretaryBullet2": "Aggregated metrics across the entire organization",
-      "secretaryBullet3": "Strategic reports for board presentations"
+      "secretaryBullet3": "Strategic reports for board presentations",
+      "demoLabel": "Dashboard preview — demo data"
     },
     "howItWorks": {
       "tag": "HOW IT WORKS",
