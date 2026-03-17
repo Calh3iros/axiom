@@ -84,7 +84,10 @@
       "calendarLess": "Menos",
       "calendarMore": "Más",
       "badgesSection": "Logros",
-      "viewPublicProfile": "Ver Perfil Público"
+      "viewPublicProfile": "Ver Perfil Público",
+      "emptyStatsTitle": "Comienza tu viaje de aprendizaje",
+      "emptyStatsDesc": "¡Resuelve tu primer ejercicio y observa cómo cobran vida tus estadísticas!",
+      "emptyStatsCta": "Resolver primer ejercicio"
     },
     "Solve": {
       "title": "Solucionador",

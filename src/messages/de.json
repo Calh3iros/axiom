@@ -84,7 +84,10 @@
       "calendarLess": "Weniger",
       "calendarMore": "Mehr",
       "badgesSection": "Abzeichen",
-      "viewPublicProfile": "Öffentliches Profil"
+      "viewPublicProfile": "Öffentliches Profil",
+      "emptyStatsTitle": "Starten Sie Ihre Lernreise",
+      "emptyStatsDesc": "Lösen Sie Ihre erste Aufgabe und sehen Sie, wie Ihre Statistiken zum Leben erwachen!",
+      "emptyStatsCta": "Erste Aufgabe lösen"
     },
     "Solve": {
       "title": "Aufgabenlöser",

@@ -84,7 +84,10 @@
       "calendarLess": "Less",
       "calendarMore": "More",
       "badgesSection": "Badges",
-      "viewPublicProfile": "View Public Profile"
+      "viewPublicProfile": "View Public Profile",
+      "emptyStatsTitle": "Start your learning journey",
+      "emptyStatsDesc": "Solve your first exercise and watch your stats come to life!",
+      "emptyStatsCta": "Solve first exercise"
     },
     "Solve": {
       "title": "Homework Solver",

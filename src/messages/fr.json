@@ -84,7 +84,10 @@
       "calendarLess": "Moins",
       "calendarMore": "Plus",
       "badgesSection": "Récompenses",
-      "viewPublicProfile": "Voir Profil Public"
+      "viewPublicProfile": "Voir Profil Public",
+      "emptyStatsTitle": "Commencez votre parcours d'apprentissage",
+      "emptyStatsDesc": "Résolvez votre premier exercice et regardez vos statistiques prendre vie !",
+      "emptyStatsCta": "Résoudre le premier exercice"
     },
     "Solve": {
       "title": "Solveur",

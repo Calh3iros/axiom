@@ -84,7 +84,10 @@
       "calendarLess": "少",
       "calendarMore": "多",
       "badgesSection": "成就",
-      "viewPublicProfile": "查看公开资料"
+      "viewPublicProfile": "查看公开资料",
+      "emptyStatsTitle": "开启你的学习之旅",
+      "emptyStatsDesc": "解决你的第一道练习题，看看你的统计数据如何活起来！",
+      "emptyStatsCta": "解决第一道题"
     },
     "Solve": {
       "title": "作业解答器",
