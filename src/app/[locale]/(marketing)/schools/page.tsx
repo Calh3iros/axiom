@@ -114,7 +114,7 @@ function SchoolsContent() {
             {/* Real screenshots */}
             <div className="sch-dash-real-screenshots">
               <Image src="/images/schools/director-overview.png" alt={t("solution.directorTitle") + " — Overview"} width={900} height={500} className="sch-real-screenshot" unoptimized />
-              <Image src="/images/schools/Director-charts.png" alt={t("solution.directorTitle") + " — Charts"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <Image src="/images/schools/director-charts.png" alt={t("solution.directorTitle") + " — Charts"} width={900} height={500} className="sch-real-screenshot" unoptimized />
               <div className="sch-dash-label">{t("solution.demoLabel")}</div>
             </div>
             {/* AI-generated image */}
@@ -162,8 +162,8 @@ function SchoolsContent() {
             </div>
             {/* Real screenshots */}
             <div className="sch-dash-real-screenshots">
-              <Image src="/images/schools/Teacher-class.png" alt={t("solution.teacherTitle") + " — Class"} width={900} height={500} className="sch-real-screenshot" unoptimized />
-              <Image src="/images/schools/Teacher-ranking.png" alt={t("solution.teacherTitle") + " — Ranking"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <Image src="/images/schools/teacher-class.png" alt={t("solution.teacherTitle") + " — Class"} width={900} height={500} className="sch-real-screenshot" unoptimized />
+              <Image src="/images/schools/teacher-ranking.png" alt={t("solution.teacherTitle") + " — Ranking"} width={900} height={500} className="sch-real-screenshot" unoptimized />
               <div className="sch-dash-label">{t("solution.demoLabel")}</div>
             </div>
             {/* AI-generated image */}
