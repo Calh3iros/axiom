@@ -170,7 +170,13 @@
       "ultraPlanIncludes": "DER ULTRA-PLAN BEINHALTET:",
       "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
       "errorRateLimit": "Zu viele Anfragen. Bitte warte einen Moment.",
-      "errorRetry": "Erneut versuchen"
+      "errorRetry": "Erneut versuchen",
+      "modeTrain": "Trainieren",
+      "modeSocratic": "Sokratisch",
+      "modeVerify": "Überprüfen",
+      "modeTipTrain": "Vollständige Schritt-für-Schritt-Lösung",
+      "modeTipSocratic": "Die KI leitet dich mit Fragen, ohne die Antwort zu geben",
+      "modeTipVerify": "Sende deine Antwort und die KI überprüft sie"
     },
     "Onboarding": {
       "welcome": "WILLKOMMEN BEI AXIOM",

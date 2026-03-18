@@ -170,7 +170,13 @@
       "ultraPlanIncludes": "ULTRA 计划包括：",
       "errorGeneric": "出了点问题。请重试。",
       "errorRateLimit": "请求过多。请稍等片刻。",
-      "errorRetry": "重试"
+      "errorRetry": "重试",
+      "modeTrain": "训练",
+      "modeSocratic": "苏格拉底",
+      "modeVerify": "验证",
+      "modeTipTrain": "完整的逐步解决方案",
+      "modeTipSocratic": "AI通过提问引导你，不直接给出答案",
+      "modeTipVerify": "发送你的答案，AI帮你检查"
     },
     "Onboarding": {
       "welcome": "欢迎使用 AXIOM",

@@ -170,7 +170,13 @@
       "ultraPlanIncludes": "LE PLAN ULTRA COMPREND :",
       "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
       "errorRateLimit": "Trop de requêtes. Veuillez patienter.",
-      "errorRetry": "Réessayer"
+      "errorRetry": "Réessayer",
+      "modeTrain": "Entraîner",
+      "modeSocratic": "Socratique",
+      "modeVerify": "Vérifier",
+      "modeTipTrain": "Solution complète étape par étape",
+      "modeTipSocratic": "L'IA vous guide avec des questions sans donner la réponse",
+      "modeTipVerify": "Envoyez votre réponse et l'IA la vérifie"
     },
     "Onboarding": {
       "welcome": "BIENVENUE SUR AXIOM",

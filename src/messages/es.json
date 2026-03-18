@@ -170,7 +170,13 @@
       "ultraPlanIncludes": "EL PLAN ULTRA INCLUYE:",
       "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
       "errorRateLimit": "Demasiadas solicitudes. Espera un momento.",
-      "errorRetry": "Reintentar"
+      "errorRetry": "Reintentar",
+      "modeTrain": "Entrenar",
+      "modeSocratic": "Socrático",
+      "modeVerify": "Verificar",
+      "modeTipTrain": "Solución completa paso a paso",
+      "modeTipSocratic": "La IA te guía con preguntas sin dar la respuesta",
+      "modeTipVerify": "Envía tu respuesta y la IA la revisa"
     },
     "Onboarding": {
       "welcome": "BIENVENIDO A AXIOM",

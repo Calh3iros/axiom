@@ -170,7 +170,13 @@
       "ultraPlanIncludes": "ULTRA PLAN INCLUDES:",
       "errorGeneric": "Something went wrong. Please try again.",
       "errorRateLimit": "Too many requests. Please wait a moment.",
-      "errorRetry": "Try again"
+      "errorRetry": "Try again",
+      "modeTrain": "Train",
+      "modeSocratic": "Socratic",
+      "modeVerify": "Verify",
+      "modeTipTrain": "Full step-by-step solution",
+      "modeTipSocratic": "AI guides you with questions without giving the answer",
+      "modeTipVerify": "Send your answer and the AI checks it"
     },
     "Onboarding": {
       "welcome": "WELCOME TO AXIOM",
