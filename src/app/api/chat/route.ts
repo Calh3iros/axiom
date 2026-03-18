@@ -301,16 +301,13 @@ ${text}
 
                 // Log the challenge attempt
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await (supabaseAdmin.from("challenge_log") as any).insert({
+                const { error: clErr } = await (supabaseAdmin.from("challenge_log") as any).insert({
                   user_id: userId,
-                  chat_id: chatId,
                   subject: analysisData.subject,
                   topic: analysisData.topic,
-                  level: existing?.level || 1,
-                  student_answer: lastMessage?.content,
-                  is_correct: isCorrect,
-                  feedback: cleanText.substring(0, 500),
+                  success: isCorrect,
                 });
+                if (clErr) console.error("challenge_log insert error:", clErr);
 
                 // Update student_profiles stats
                 const { data: sp } =
@@ -364,8 +361,9 @@ ${text}
                     })
                     .eq("id", existingTopic.id);
                 } else {
+                  // First interaction on this topic — create KM entry
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("knowledge_map") as any).insert({
+                  const { error: kmErr } = await (supabaseAdmin.from("knowledge_map") as any).insert({
                     user_id: userId,
                     subject: analysisData.subject,
                     topic: analysisData.topic,
@@ -376,6 +374,37 @@ ${text}
                     incorrect_count: 0,
                     current_streak: 0,
                   });
+                  if (kmErr) console.error("knowledge_map insert error:", kmErr);
+                }
+
+                // Log the interaction to challenge_log (for heatmap & stats)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const { error: clErr2 } = await (supabaseAdmin.from("challenge_log") as any).insert({
+                  user_id: userId,
+                  subject: analysisData.subject,
+                  topic: analysisData.topic,
+                  success: true, // Non-challenge interactions count as engagement
+                });
+                if (clErr2) console.error("challenge_log insert error (normal):", clErr2);
+
+                // Update student_profiles stats for non-challenge interactions
+                const { data: sp2 } =
+                  await // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (supabaseAdmin.from("student_profiles") as any)
+                    .select("total_problems_solved, total_correct")
+                    .eq("id", userId)
+                    .single();
+
+                if (sp2) {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  await (supabaseAdmin.from("student_profiles") as any)
+                    .update({
+                      total_problems_solved:
+                        (sp2.total_problems_solved || 0) + 1,
+                      total_correct: (sp2.total_correct || 0) + 1,
+                      updated_at: new Date().toISOString(),
+                    })
+                    .eq("id", userId);
                 }
 
                 console.warn(
