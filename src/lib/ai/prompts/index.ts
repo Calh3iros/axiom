@@ -1,6 +1,8 @@
 export { buildSolveMblidPrompt, solveSystemPrompt } from "./solve";
 export type { MblidContext } from "./solve";
 export { buildLearnMblidPrompt, learnSystemPrompt } from "./learn";
+export { buildSocraticPrompt } from "./socratic";
+export { buildVerifyPrompt } from "./verify";
 
 export const PROMPTS = {
   HUMANIZE: (mode: string) => `You are an expert editor and writer.
