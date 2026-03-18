@@ -43,6 +43,7 @@ export function SolveChat({
   const [isSharing, setIsSharing] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [solveMode, setSolveMode] = useState<"train" | "socratic" | "verify">("train");
+  const solveModeRef = useRef<"train" | "socratic" | "verify">("train");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const locale = useLocale();
   const t = useTranslations("Dashboard.Components");
@@ -52,11 +53,13 @@ export function SolveChat({
     const saved = localStorage.getItem("axiom_solve_mode");
     if (saved === "train" || saved === "socratic" || saved === "verify") {
       setSolveMode(saved);
+      solveModeRef.current = saved;
     }
   }, []);
 
   const handleModeChange = (mode: "train" | "socratic" | "verify") => {
     setSolveMode(mode);
+    solveModeRef.current = mode;
     localStorage.setItem("axiom_solve_mode", mode);
   };
 
@@ -71,15 +74,23 @@ export function SolveChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
       body: activeChatId
-        ? { type: "solve", mode: solveMode, chatId: activeChatId, locale }
-        : { type: "solve", mode: solveMode, locale },
+        ? { type: "solve", chatId: activeChatId, locale }
+        : { type: "solve", locale },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fetch: async (url: any, options: any) => {
+        // Inject current solve mode into request body at send-time (not capture-time)
+        if (options?.body) {
+          try {
+            const bodyObj = JSON.parse(options.body);
+            bodyObj.mode = solveModeRef.current;
+            options = { ...options, body: JSON.stringify(bodyObj) };
+          } catch { /* body isn't JSON, pass through */ }
+        }
         const res = await fetch(url, options);
         const id = res.headers.get("x-chat-id");
         if (id && !activeChatId) {
           setActiveChatId(id);
-          window.history.replaceState({}, "", `/solve/${id}`);
+          window.history.replaceState({}, "", `/${locale}/solve/${id}`);
         }
         return res;
       },
