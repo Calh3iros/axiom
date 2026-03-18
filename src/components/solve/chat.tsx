@@ -90,7 +90,7 @@ export function SolveChat({
         const id = res.headers.get("x-chat-id");
         if (id && !activeChatId) {
           setActiveChatId(id);
-          window.history.replaceState({}, "", `/${locale}/solve/${id}`);
+          window.history.replaceState({}, "", `/${locale}/solve`);
         }
         return res;
       },
@@ -166,23 +166,23 @@ export function SolveChat({
     setLocalAttachment(null);
   };
 
-  // Helper to extract text from UIMessage parts
-  {
-  }
+  // Helper to extract text from UIMessage parts (strips assessment tags)
+  const assessmentTagRegex = /\[ASSESSMENT:\s*(?:UNDERSTOOD|PROCEDURAL|NOT_UNDERSTOOD)\s*\]/gi;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getMessageText = (message: any): string => {
-    if (message.content) return message.content;
-    if (message.parts) {
-      return (
-        message.parts
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .filter((p: any) => p.type === "text")
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .map((p: any) => p.text)
-          .join("")
-      );
+    let text = "";
+    if (message.content) {
+      text = message.content;
+    } else if (message.parts) {
+      text = message.parts
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((p: any) => p.type === "text")
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((p: any) => p.text)
+        .join("");
     }
-    return "";
+    // Strip assessment tags from assistant messages before rendering
+    return text.replace(assessmentTagRegex, "").trimEnd();
   };
 
   const shareChat = async () => {
