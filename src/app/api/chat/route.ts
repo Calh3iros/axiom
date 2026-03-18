@@ -309,25 +309,30 @@ ${text}
                 });
                 if (clErr) console.error("challenge_log insert error:", clErr);
 
-                // Update student_profiles stats
-                const { data: sp } =
-                  await // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (supabaseAdmin.from("student_profiles") as any)
-                    .select("total_problems_solved, total_correct")
-                    .eq("id", userId)
-                    .single();
+                // Upsert student_profiles stats
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const { data: sp } = await (supabaseAdmin.from("student_profiles") as any)
+                  .select("total_problems_solved, total_correct")
+                  .eq("id", userId)
+                  .single();
 
                 if (sp) {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   await (supabaseAdmin.from("student_profiles") as any)
                     .update({
-                      total_problems_solved:
-                        (sp.total_problems_solved || 0) + 1,
-                      total_correct:
-                        (sp.total_correct || 0) + (isCorrect ? 1 : 0),
+                      total_problems_solved: (sp.total_problems_solved || 0) + 1,
+                      total_correct: (sp.total_correct || 0) + (isCorrect ? 1 : 0),
                       updated_at: new Date().toISOString(),
                     })
                     .eq("id", userId);
+                } else {
+                  // Row doesn't exist — create it
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  await (supabaseAdmin.from("student_profiles") as any).insert({
+                    id: userId,
+                    total_problems_solved: 1,
+                    total_correct: isCorrect ? 1 : 0,
+                  });
                 }
 
                 console.warn(
@@ -387,24 +392,30 @@ ${text}
                 });
                 if (clErr2) console.error("challenge_log insert error (normal):", clErr2);
 
-                // Update student_profiles stats for non-challenge interactions
-                const { data: sp2 } =
-                  await // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (supabaseAdmin.from("student_profiles") as any)
-                    .select("total_problems_solved, total_correct")
-                    .eq("id", userId)
-                    .single();
+                // Upsert student_profiles stats for non-challenge interactions
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const { data: sp2 } = await (supabaseAdmin.from("student_profiles") as any)
+                  .select("total_problems_solved, total_correct")
+                  .eq("id", userId)
+                  .single();
 
                 if (sp2) {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   await (supabaseAdmin.from("student_profiles") as any)
                     .update({
-                      total_problems_solved:
-                        (sp2.total_problems_solved || 0) + 1,
+                      total_problems_solved: (sp2.total_problems_solved || 0) + 1,
                       total_correct: (sp2.total_correct || 0) + 1,
                       updated_at: new Date().toISOString(),
                     })
                     .eq("id", userId);
+                } else {
+                  // Row doesn't exist — create it
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  await (supabaseAdmin.from("student_profiles") as any).insert({
+                    id: userId,
+                    total_problems_solved: 1,
+                    total_correct: 1,
+                  });
                 }
 
                 console.warn(

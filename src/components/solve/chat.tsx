@@ -246,7 +246,11 @@ export function SolveChat({
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(message as any).parts?.map((part: any, i: number) => {
                   if (part.type === "text" && part.text) {
-                    return <MarkdownMessage key={i} content={part.text} />;
+                    // Strip assessment tags from assistant messages before rendering
+                    const displayText = message.role === "assistant"
+                      ? part.text.replace(assessmentTagRegex, "").trimEnd()
+                      : part.text;
+                    return <MarkdownMessage key={i} content={displayText} />;
                   }
                   if (
                     part.type === "file" &&
