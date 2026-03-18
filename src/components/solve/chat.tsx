@@ -11,10 +11,13 @@ import {
   Check,
   Share2,
   Download,
+  Target,
+  Brain,
+  CheckCircle2,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import posthog from "posthog-js";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 
 import { exportAsPDF, exportAsDOCX } from "@/lib/export-utils";
@@ -39,17 +42,37 @@ export function SolveChat({
   );
   const [isSharing, setIsSharing] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [solveMode, setSolveMode] = useState<"train" | "socratic" | "verify">("train");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const locale = useLocale();
   const t = useTranslations("Dashboard.Components");
+
+  // Initialize mode from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("axiom_solve_mode");
+    if (saved === "train" || saved === "socratic" || saved === "verify") {
+      setSolveMode(saved);
+    }
+  }, []);
+
+  const handleModeChange = (mode: "train" | "socratic" | "verify") => {
+    setSolveMode(mode);
+    localStorage.setItem("axiom_solve_mode", mode);
+  };
+
+  const modeButtons = useMemo(() => [
+    { key: "train" as const, icon: Target, label: t("modeTrain"), tip: t("modeTipTrain") },
+    { key: "socratic" as const, icon: Brain, label: t("modeSocratic"), tip: t("modeTipSocratic") },
+    { key: "verify" as const, icon: CheckCircle2, label: t("modeVerify"), tip: t("modeTipVerify") },
+  ], [t]);
 
   const { messages, sendMessage, status } = useChat({
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: "/api/chat",
       body: activeChatId
-        ? { type: "solve", chatId: activeChatId, locale }
-        : { type: "solve", locale },
+        ? { type: "solve", mode: solveMode, chatId: activeChatId, locale }
+        : { type: "solve", mode: solveMode, locale },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fetch: async (url: any, options: any) => {
         const res = await fetch(url, options);
@@ -373,6 +396,25 @@ export function SolveChat({
 
       {/* Input Area */}
       <div className="border-t border-[var(--color-border)] bg-[var(--color-bg2)] p-4">
+        {/* Mode Toggle */}
+        <div className="mb-3 flex items-center justify-center gap-1 rounded-full border border-[var(--color-border)] bg-[var(--color-bg0)] p-1">
+          {modeButtons.map(({ key, icon: Icon, label, tip }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => handleModeChange(key)}
+              title={tip}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                solveMode === key
+                  ? "bg-[var(--color-ax-blue)] text-black shadow-sm"
+                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)]"
+              }`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{label}</span>
+            </button>
+          ))}
+        </div>
         {localAttachment && (
           <div className="mb-3 flex items-center gap-3">
             <div className="relative inline-block">
