@@ -2,7 +2,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText, convertToModelMessages } from "ai";
 import { NextResponse } from "next/server";
 
-import { buildSolveMblidPrompt, buildLearnMblidPrompt } from "@/lib/ai/prompts";
+import { buildSolveMblidPrompt, buildLearnMblidPrompt, buildSocraticPrompt, buildVerifyPrompt } from "@/lib/ai/prompts";
 import { getAiRatelimit } from "@/lib/ratelimit";
 import { createClient } from "@/lib/supabase/server";
 import { checkUsage, incrementUsage, getUserAndPlan } from "@/lib/usage";
@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     const {
       messages,
       type,
+      mode,
       chatId: providedChatId,
       locale: _locale,
     } = parsed.data;
@@ -90,10 +91,17 @@ export async function POST(req: Request) {
     }
 
     // Build adaptive MBLID prompt with student context
-    let systemInstruction =
-      type === "learn"
-        ? buildLearnMblidPrompt({ studentProfile, topicHistory })
-        : buildSolveMblidPrompt({ studentProfile, topicHistory });
+    const mblidCtx = { studentProfile, topicHistory };
+    let systemInstruction: string;
+    if (type === "learn") {
+      systemInstruction = buildLearnMblidPrompt(mblidCtx);
+    } else if (mode === "socratic") {
+      systemInstruction = buildSocraticPrompt(mblidCtx);
+    } else if (mode === "verify") {
+      systemInstruction = buildVerifyPrompt(mblidCtx);
+    } else {
+      systemInstruction = buildSolveMblidPrompt(mblidCtx);
+    }
 
     systemInstruction += `\n\nCRITICAL: You MUST respond EXCLUSIVELY in the same language that the user used in their last message or image text. If the user asks a question in Portuguese, answer in Portuguese. If they speak in Spanish, answer in Spanish. DO NOT default to English unless the user speaks in English.`;
 
@@ -141,13 +149,21 @@ export async function POST(req: Request) {
       onFinish: async ({ text }) => {
         await incrementUsage(userId, usageType);
 
-        // Save assistant response to DB
-        if (isAuthenticUser && chatId && text) {
+        // --- Parse and strip [ASSESSMENT:xxx] tag ---
+        const assessmentRegex = /\[ASSESSMENT:\s*(UNDERSTOOD|PROCEDURAL|NOT_UNDERSTOOD)\s*\]/i;
+        const assessmentMatch = text.match(assessmentRegex);
+        const assessment = assessmentMatch
+          ? (assessmentMatch[1].toUpperCase() as "UNDERSTOOD" | "PROCEDURAL" | "NOT_UNDERSTOOD")
+          : "PROCEDURAL"; // Default: benefit of the doubt but no streak
+        const cleanText = text.replace(assessmentRegex, "").trimEnd();
+
+        // Save assistant response to DB (stripped of assessment tag)
+        if (isAuthenticUser && chatId && cleanText) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (supabase.from("messages") as any).insert({
             chat_id: chatId,
             role: "assistant",
-            content: text,
+            content: cleanText,
           });
 
           // --- BACKGROUND WORKER: MBLID KNOWLEDGE MAP + CHALLENGE EVALUATOR ---
@@ -219,14 +235,27 @@ ${text}
 
                 const isCorrect = analysisData.student_answer_correct;
 
+                // --- Assessment-aware knowledge map update ---
+                // UNDERSTOOD: correct++ streak++ (normal)
+                // PROCEDURAL: correct++ streak frozen (no increment, no reset)
+                // NOT_UNDERSTOOD: no correct increment, streak resets to 0
+                const countsAsCorrect = assessment !== "NOT_UNDERSTOOD" && isCorrect;
+                const countsAsIncorrect = !countsAsCorrect;
+
                 if (existing) {
                   const newCorrect =
-                    (existing.correct_count || 0) + (isCorrect ? 1 : 0);
+                    (existing.correct_count || 0) + (countsAsCorrect ? 1 : 0);
                   const newIncorrect =
-                    (existing.incorrect_count || 0) + (isCorrect ? 0 : 1);
-                  const newStreak = isCorrect
-                    ? (existing.current_streak || 0) + 1
-                    : 0;
+                    (existing.incorrect_count || 0) + (countsAsIncorrect ? 1 : 0);
+
+                  // Streak logic: UNDERSTOOD=increment, PROCEDURAL=freeze, NOT_UNDERSTOOD=reset
+                  let newStreak = existing.current_streak || 0;
+                  if (assessment === "UNDERSTOOD" && isCorrect) {
+                    newStreak += 1;
+                  } else if (assessment === "NOT_UNDERSTOOD" || !isCorrect) {
+                    newStreak = 0;
+                  }
+                  // PROCEDURAL: streak stays unchanged
 
                   // Level up: 3 consecutive correct at current level
                   let newLevel = existing.level || 1;
@@ -261,12 +290,12 @@ ${text}
                     user_id: userId,
                     subject: analysisData.subject,
                     topic: analysisData.topic,
-                    mastery_score: isCorrect ? 0.2 : 0.05,
+                    mastery_score: countsAsCorrect ? 0.2 : 0.05,
                     interactions_count: 1,
                     level: 1,
-                    correct_count: isCorrect ? 1 : 0,
-                    incorrect_count: isCorrect ? 0 : 1,
-                    current_streak: isCorrect ? 1 : 0,
+                    correct_count: countsAsCorrect ? 1 : 0,
+                    incorrect_count: countsAsCorrect ? 0 : 1,
+                    current_streak: assessment === "UNDERSTOOD" && isCorrect ? 1 : 0,
                   });
                 }
 
@@ -280,7 +309,7 @@ ${text}
                   level: existing?.level || 1,
                   student_answer: lastMessage?.content,
                   is_correct: isCorrect,
-                  feedback: text.substring(0, 500),
+                  feedback: cleanText.substring(0, 500),
                 });
 
                 // Update student_profiles stats
