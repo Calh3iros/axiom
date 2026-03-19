@@ -302,9 +302,11 @@ export async function getStudentReport(
     "10_correct_streak": "10 Correct Streak",
   };
   function humanizeBadgeName(nameKey: string): string {
-    if (badgeDisplayNames[nameKey]) return badgeDisplayNames[nameKey];
+    // Strip common prefixes like "Badges."
+    const cleanKey = nameKey.replace(/^Badges\./, "");
+    if (badgeDisplayNames[cleanKey]) return badgeDisplayNames[cleanKey];
     // Fallback: "first_solve" → "First Solve"
-    return nameKey
+    return cleanKey
       .replace(/_/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase());
   }

@@ -204,7 +204,7 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  const trendLabel = report.activity.trend === "improving" ? "[up] Melhorando" : report.activity.trend === "declining" ? "[down] Em queda" : "[=] Estavel";
+  const trendLabel = report.activity.trend === "improving" ? "Melhorando" : report.activity.trend === "declining" ? "Em queda" : "Estavel";
   doc.text(`Tendencia: ${trendLabel}  |  ${report.activity.exercises_30d} exercicios  |  ${report.activity.days_active_30d} dias ativos`, margin, y);
   y += 5;
   doc.text(`Uso: ${report.usage.solves} resolves  -  ${report.usage.writes} redacoes  -  ${report.usage.humanizes} humanizacoes  -  ${report.usage.learns} aprendizados`, margin, y);
