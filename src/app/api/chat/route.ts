@@ -217,210 +217,177 @@ ${text}
 
               const { supabaseAdmin } = await import("@/lib/supabase/admin");
 
-              if (
+              // --- STEP 1: Normalize subject/topic to prevent duplicates ---
+              const normalizeStr = (s: string) => s?.toLowerCase().trim() || "";
+              const normSubject = normalizeStr(analysisData.subject) || "general";
+              const normTopic = normalizeStr(analysisData.topic) || "general";
+              const understandingScore = analysisData.understanding_score ?? 0.5;
+
+              // --- STEP 2: Determine outcome (challenge vs normal) ---
+              const isChallenge =
                 analysisData.is_student_answering_challenge &&
-                analysisData.student_answer_correct !== null
-              ) {
-                // --- MBLID: Student answered a challenge ---
-                const { data: existing } = await (supabaseAdmin
-                  .from("knowledge_map")
-                  .select(
-                    "id, level, correct_count, incorrect_count, current_streak, mastery_score, interactions_count"
-                  )
-                  .eq("user_id", userId)
-                  .eq("subject", analysisData.subject)
-                  .eq("topic", analysisData.topic)
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  .single() as any);
+                analysisData.student_answer_correct !== null;
 
-                const isCorrect = analysisData.student_answer_correct;
+              let countsAsCorrect = false;
+              let countsAsIncorrect = false;
+              let isNeutral = false;
+              let streakAction: "increment" | "freeze" | "reset" = "freeze";
+              let successFlag = false; // for challenge_log
 
-                // --- Assessment-aware knowledge map update ---
-                // UNDERSTOOD: correct++ streak++ (normal)
-                // PROCEDURAL: correct++ streak frozen (no increment, no reset)
-                // NOT_UNDERSTOOD: no correct increment, streak resets to 0
-                const countsAsCorrect = assessment !== "NOT_UNDERSTOOD" && isCorrect;
-                const countsAsIncorrect = !countsAsCorrect;
+              if (isChallenge) {
+                // Challenge path: binary correct/incorrect from generateObject
+                const isCorrect = analysisData.student_answer_correct!;
+                countsAsCorrect = assessment !== "NOT_UNDERSTOOD" && isCorrect;
+                countsAsIncorrect = !countsAsCorrect;
+                successFlag = isCorrect;
 
-                if (existing) {
-                  const newCorrect =
-                    (existing.correct_count || 0) + (countsAsCorrect ? 1 : 0);
-                  const newIncorrect =
-                    (existing.incorrect_count || 0) + (countsAsIncorrect ? 1 : 0);
-
-                  // Streak logic: UNDERSTOOD=increment, PROCEDURAL=freeze, NOT_UNDERSTOOD=reset
-                  let newStreak = existing.current_streak || 0;
-                  if (assessment === "UNDERSTOOD" && isCorrect) {
-                    newStreak += 1;
-                  } else if (assessment === "NOT_UNDERSTOOD" || !isCorrect) {
-                    newStreak = 0;
-                  }
-                  // PROCEDURAL: streak stays unchanged
-
-                  // Level up: 3 consecutive correct at current level
-                  let newLevel = existing.level || 1;
-                  let resetStreak = newStreak;
-                  if (newStreak >= 3 && newLevel < 5) {
-                    newLevel += 1;
-                    resetStreak = 0; // Reset after level up
-                  }
-
-                  // Mastery: accuracy * 0.6 + (level/5) * 0.4
-                  const accuracy =
-                    newCorrect / Math.max(1, newCorrect + newIncorrect);
-                  const newMastery = accuracy * 0.6 + (newLevel / 5) * 0.4;
-
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("knowledge_map") as any)
-                    .update({
-                      correct_count: newCorrect,
-                      incorrect_count: newIncorrect,
-                      current_streak: resetStreak,
-                      level: newLevel,
-                      mastery_score: newMastery,
-                      interactions_count:
-                        (existing.interactions_count || 0) + 1,
-                      last_interaction_at: new Date().toISOString(),
-                    })
-                    .eq("id", existing.id);
+                // Streak: UNDERSTOOD+correct=increment, PROCEDURAL=freeze, NOT_UNDERSTOOD/wrong=reset
+                if (assessment === "UNDERSTOOD" && isCorrect) {
+                  streakAction = "increment";
+                } else if (assessment === "NOT_UNDERSTOOD" || !isCorrect) {
+                  streakAction = "reset";
+                }
+                // PROCEDURAL: streakAction stays "freeze"
+              } else {
+                // Normal path: use understanding_score thresholds
+                if (understandingScore >= 0.7) {
+                  countsAsCorrect = true;
+                  successFlag = true;
+                  // Only increment streak if assessment is UNDERSTOOD
+                  streakAction = assessment === "UNDERSTOOD" ? "increment" : "freeze";
+                } else if (understandingScore < 0.4) {
+                  countsAsIncorrect = true;
+                  streakAction = "reset";
                 } else {
-                  // First interaction on this topic — create entry
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("knowledge_map") as any).insert({
-                    user_id: userId,
-                    subject: analysisData.subject,
-                    topic: analysisData.topic,
-                    mastery_score: countsAsCorrect ? 0.2 : 0.05,
-                    interactions_count: 1,
-                    level: 1,
-                    correct_count: countsAsCorrect ? 1 : 0,
-                    incorrect_count: countsAsCorrect ? 0 : 1,
-                    current_streak: assessment === "UNDERSTOOD" && isCorrect ? 1 : 0,
-                  });
+                  // Neutral (0.4-0.69): no correct/incorrect change, streak frozen
+                  isNeutral = true;
+                  streakAction = "freeze";
+                }
+              }
+
+              // --- STEP 3: Fetch or create KM entry ---
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const { data: existing } = await (supabaseAdmin
+                .from("knowledge_map")
+                .select(
+                  "id, level, correct_count, incorrect_count, current_streak, mastery_score, interactions_count"
+                )
+                .eq("user_id", userId)
+                .eq("subject", normSubject)
+                .eq("topic", normTopic)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .single() as any);
+
+              if (existing) {
+                // --- STEP 4: Update counts ---
+                const newCorrect =
+                  (existing.correct_count || 0) + (countsAsCorrect ? 1 : 0);
+                const newIncorrect =
+                  (existing.incorrect_count || 0) + (countsAsIncorrect ? 1 : 0);
+
+                // --- STEP 5: Streak logic ---
+                let newStreak = existing.current_streak || 0;
+                if (streakAction === "increment") {
+                  newStreak += 1;
+                } else if (streakAction === "reset") {
+                  newStreak = 0;
+                }
+                // "freeze": newStreak stays unchanged
+
+                // --- STEP 6: Level up (3 consecutive correct → next level) ---
+                let newLevel = existing.level || 1;
+                let finalStreak = newStreak;
+                if (finalStreak >= 3 && newLevel < 5) {
+                  newLevel += 1;
+                  finalStreak = 0; // Reset after level up
                 }
 
-                // Log the challenge attempt
+                // --- STEP 7: Unified mastery formula ---
+                const accuracy =
+                  newCorrect / Math.max(1, newCorrect + newIncorrect);
+                const newMastery = accuracy * 0.6 + (newLevel / 5) * 0.4;
+
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { error: clErr } = await (supabaseAdmin.from("challenge_log") as any).insert({
-                  user_id: userId,
-                  subject: analysisData.subject,
-                  topic: analysisData.topic,
-                  success: isCorrect,
-                });
-                if (clErr) console.error("challenge_log insert error:", clErr);
+                await (supabaseAdmin.from("knowledge_map") as any)
+                  .update({
+                    correct_count: newCorrect,
+                    incorrect_count: newIncorrect,
+                    current_streak: finalStreak,
+                    level: newLevel,
+                    mastery_score: newMastery,
+                    interactions_count:
+                      (existing.interactions_count || 0) + 1,
+                    last_interaction_at: new Date().toISOString(),
+                  })
+                  .eq("id", existing.id);
 
-                // Upsert student_profiles stats
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { data: sp } = await (supabaseAdmin.from("student_profiles") as any)
-                  .select("total_problems_solved, total_correct")
-                  .eq("id", userId)
-                  .single();
-
-                if (sp) {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("student_profiles") as any)
-                    .update({
-                      total_problems_solved: (sp.total_problems_solved || 0) + 1,
-                      total_correct: (sp.total_correct || 0) + (isCorrect ? 1 : 0),
-                      updated_at: new Date().toISOString(),
-                    })
-                    .eq("id", userId);
-                } else {
-                  // Row doesn't exist — create it
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("student_profiles") as any).insert({
-                    id: userId,
-                    total_problems_solved: 1,
-                    total_correct: isCorrect ? 1 : 0,
-                  });
-                }
-
+                const leveledUp = newLevel > (existing.level || 1);
                 console.warn(
-                  `MBLID Challenge: ${userId} — ${analysisData.subject}/${analysisData.topic} — ${isCorrect ? "✅ CORRECT" : "❌ INCORRECT"}`
+                  `MBLID ${isChallenge ? "Challenge" : "Normal"}: ${userId} — ${normSubject}/${normTopic} — ` +
+                  `streak:${finalStreak} lvl:${newLevel}${leveledUp ? " ⬆️ LEVEL UP" : ""} mastery:${newMastery.toFixed(2)}`
                 );
               } else {
-                // --- Normal interaction: existing knowledge map upsert ---
-                const { data: existingTopic } = await (supabaseAdmin
-                  .from("knowledge_map")
-                  .select("id, interactions_count, mastery_score")
-                  .eq("user_id", userId)
-                  .eq("subject", analysisData.subject)
-                  .eq("topic", analysisData.topic)
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  .single() as any);
+                // First interaction on this topic — create entry
+                const initialCorrect = countsAsCorrect ? 1 : 0;
+                const initialIncorrect = countsAsIncorrect ? 1 : 0;
+                const initialStreak = streakAction === "increment" ? 1 : 0;
+                const initialAccuracy =
+                  initialCorrect / Math.max(1, initialCorrect + initialIncorrect);
+                const initialMastery = initialAccuracy * 0.6 + (1 / 5) * 0.4;
 
-                if (existingTopic) {
-                  const newCount = (existingTopic.interactions_count || 1) + 1;
-                  const oldScore = existingTopic.mastery_score || 0;
-                  const newScore =
-                    (oldScore * (existingTopic.interactions_count || 1) +
-                      analysisData.understanding_score) /
-                    newCount;
-
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("knowledge_map") as any)
-                    .update({
-                      interactions_count: newCount,
-                      mastery_score: newScore,
-                      last_interaction_at: new Date().toISOString(),
-                    })
-                    .eq("id", existingTopic.id);
-                } else {
-                  // First interaction on this topic — create KM entry
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const { error: kmErr } = await (supabaseAdmin.from("knowledge_map") as any).insert({
-                    user_id: userId,
-                    subject: analysisData.subject,
-                    topic: analysisData.topic,
-                    mastery_score: analysisData.understanding_score,
-                    interactions_count: 1,
-                    level: 1,
-                    correct_count: 0,
-                    incorrect_count: 0,
-                    current_streak: 0,
-                  });
-                  if (kmErr) console.error("knowledge_map insert error:", kmErr);
-                }
-
-                // Log the interaction to challenge_log (for heatmap & stats)
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { error: clErr2 } = await (supabaseAdmin.from("challenge_log") as any).insert({
+                const { error: kmErr } = await (supabaseAdmin.from("knowledge_map") as any).insert({
                   user_id: userId,
-                  subject: analysisData.subject,
-                  topic: analysisData.topic,
-                  success: true, // Non-challenge interactions count as engagement
+                  subject: normSubject,
+                  topic: normTopic,
+                  mastery_score: isNeutral ? understandingScore * 0.6 + 0.08 : initialMastery,
+                  interactions_count: 1,
+                  level: 1,
+                  correct_count: initialCorrect,
+                  incorrect_count: initialIncorrect,
+                  current_streak: initialStreak,
                 });
-                if (clErr2) console.error("challenge_log insert error (normal):", clErr2);
-
-                // Upsert student_profiles stats for non-challenge interactions
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { data: sp2 } = await (supabaseAdmin.from("student_profiles") as any)
-                  .select("total_problems_solved, total_correct")
-                  .eq("id", userId)
-                  .single();
-
-                if (sp2) {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("student_profiles") as any)
-                    .update({
-                      total_problems_solved: (sp2.total_problems_solved || 0) + 1,
-                      total_correct: (sp2.total_correct || 0) + 1,
-                      updated_at: new Date().toISOString(),
-                    })
-                    .eq("id", userId);
-                } else {
-                  // Row doesn't exist — create it
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  await (supabaseAdmin.from("student_profiles") as any).insert({
-                    id: userId,
-                    total_problems_solved: 1,
-                    total_correct: 1,
-                  });
-                }
+                if (kmErr) console.error("knowledge_map insert error:", kmErr);
 
                 console.warn(
-                  `Knowledge map updated for ${userId}: ${analysisData.subject}/${analysisData.topic} -> Mastery: ${analysisData.understanding_score}`
+                  `MBLID New Entry: ${userId} — ${normSubject}/${normTopic} — ` +
+                  `correct:${initialCorrect} streak:${initialStreak}`
                 );
+              }
+
+              // --- STEP 8: Log to challenge_log (for heatmap & stats) ---
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const { error: clErr } = await (supabaseAdmin.from("challenge_log") as any).insert({
+                user_id: userId,
+                subject: normSubject,
+                topic: normTopic,
+                success: successFlag,
+              });
+              if (clErr) console.error("challenge_log insert error:", clErr);
+
+              // --- STEP 9: Upsert student_profiles ---
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const { data: sp } = await (supabaseAdmin.from("student_profiles") as any)
+                .select("total_problems_solved, total_correct")
+                .eq("id", userId)
+                .single();
+
+              if (sp) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await (supabaseAdmin.from("student_profiles") as any)
+                  .update({
+                    total_problems_solved: (sp.total_problems_solved || 0) + 1,
+                    total_correct: (sp.total_correct || 0) + (successFlag ? 1 : 0),
+                    updated_at: new Date().toISOString(),
+                  })
+                  .eq("id", userId);
+              } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await (supabaseAdmin.from("student_profiles") as any).insert({
+                  id: userId,
+                  total_problems_solved: 1,
+                  total_correct: successFlag ? 1 : 0,
+                });
               }
 
               // --- BADGE ENGINE: Check and unlock badges after data update ---
