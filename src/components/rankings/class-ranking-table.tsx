@@ -9,6 +9,7 @@ interface Props {
   rows: StudentRankingRow[];
   currentUserId: string;
   isManager: boolean;
+  onStudentClick?: (userId: string) => void;
 }
 
 function getInitials(name: string): string {
@@ -19,7 +20,7 @@ function getInitials(name: string): string {
 
 const medals = ["🥇", "🥈", "🥉"];
 
-export function ClassRankingTable({ rows, currentUserId, isManager }: Props) {
+export function ClassRankingTable({ rows, currentUserId, isManager, onStudentClick }: Props) {
   const t = useTranslations("Rankings");
   const [sortBy, setSortBy] = useState<RankingSortField>("problems_solved");
 
@@ -115,11 +116,12 @@ export function ClassRankingTable({ rows, currentUserId, isManager }: Props) {
                       </div>
                     )}
                     <span
+                      onClick={() => onStudentClick && isManager && onStudentClick(row.user_id)}
                       className={`font-medium ${
                         isMe
                           ? "text-[var(--color-ax-blue)]"
                           : "text-[var(--color-text-primary)]"
-                      }`}
+                      } ${onStudentClick && isManager ? "cursor-pointer hover:underline" : ""}`}
                     >
                       {row.full_name}
                       {isMe && (

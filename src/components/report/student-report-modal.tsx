@@ -2,14 +2,12 @@
 
 import { X, FileDown, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import type { StudentReport } from "@/lib/actions/report";
-import { getStudentReport } from "@/lib/actions/report";
 
 interface Props {
-  classId: string;
-  studentId: string;
+  report: StudentReport;
   onClose: () => void;
   onExportPdf?: (report: StudentReport) => void;
 }
@@ -45,21 +43,8 @@ function MasteryBar({ percent }: { percent: number }) {
   );
 }
 
-export function StudentReportModal({ classId, studentId, onClose, onExportPdf }: Props) {
+export function StudentReportModal({ report, onClose, onExportPdf }: Props) {
   const t = useTranslations("Report");
-  const [report, setReport] = useState<StudentReport | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const fetchReport = useCallback(async () => {
-    setLoading(true);
-    const data = await getStudentReport(classId, studentId);
-    setReport(data);
-    setLoading(false);
-  }, [classId, studentId]);
-
-  useEffect(() => {
-    fetchReport();
-  }, [fetchReport]);
 
   // Close on Escape
   useEffect(() => {
@@ -111,15 +96,6 @@ export function StudentReportModal({ classId, studentId, onClose, onExportPdf }:
 
         {/* Content */}
         <div className="max-h-[80vh] overflow-y-auto p-6">
-          {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-ax-blue)] border-t-transparent" />
-            </div>
-          ) : !report ? (
-            <div className="py-20 text-center text-[var(--color-dim)]">
-              {t("notFound")}
-            </div>
-          ) : (
             <div className="space-y-6">
               {/* Header — Student info */}
               <div className="flex items-center gap-4">
@@ -326,7 +302,6 @@ export function StudentReportModal({ classId, studentId, onClose, onExportPdf }:
                 </div>
               )}
             </div>
-          )}
         </div>
       </div>
     </div>

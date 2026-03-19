@@ -1,16 +1,19 @@
 "use client";
 
-import { ArrowLeft, Copy, Check, RefreshCw, Users, Trophy, BarChart3 } from "lucide-react";
+import { ArrowLeft, Copy, Check, RefreshCw, Users, Trophy, BarChart3, FileText, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback, use, useRef } from "react";
 
 import { TeacherDashboard } from "@/components/dashboard/dashboard-views";
 import { ClassRankingTable } from "@/components/rankings/class-ranking-table";
+import { StudentReportModal } from "@/components/report/student-report-modal";
 import { Link } from "@/i18n/routing";
 import { getTeacherDashboard } from "@/lib/actions/dashboard";
 import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
 import { getClassRanking } from "@/lib/actions/rankings";
+import { getStudentReport, type StudentReport } from "@/lib/actions/report";
+import { exportStudentPdf, exportClassPdf } from "@/lib/export-student-pdf";
 import { createClient } from "@/lib/supabase/client";
 
 interface ProfileData {
@@ -56,6 +59,12 @@ export default function ClassDetailPage({
   const [regenerating, setRegenerating] = useState(false);
   const [showRanking, setShowRanking] = useState(true);
   const [showDashboard, setShowDashboard] = useState(true);
+  const [reportModal, setReportModal] = useState<StudentReport | null>(null);
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportDropdown, setReportDropdown] = useState(false);
+  const [generatingBulk, setGeneratingBulk] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const tReport = useTranslations("Report");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -104,6 +113,32 @@ export default function ClassDetailPage({
     setRegenerating(false);
   };
 
+  const handleStudentClick = async (userId: string) => {
+    setReportLoading(true);
+    const report = await getStudentReport(userId, classId);
+    setReportLoading(false);
+    if (report) setReportModal(report);
+  };
+
+  const handleExportPdf = async (report: StudentReport) => {
+    await exportStudentPdf(report);
+  };
+
+  const handleBulkExport = async () => {
+    if (!ranking?.rows) return;
+    setGeneratingBulk(true);
+    setReportDropdown(false);
+    const reports: StudentReport[] = [];
+    for (const row of ranking.rows) {
+      const r = await getStudentReport(row.user_id, classId);
+      if (r) reports.push(r);
+    }
+    if (reports.length > 0) {
+      await exportClassPdf(reports, data?.classInfo?.name || "classe");
+    }
+    setGeneratingBulk(false);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -123,6 +158,7 @@ export default function ClassDetailPage({
   const isManager = ranking?.role ? ["teacher", "admin", "director", "secretary"].includes(ranking.role) : data.isTeacher;
 
   return (
+    <>
     <div className="space-y-8">
       {/* Header */}
       <div>
@@ -133,9 +169,38 @@ export default function ClassDetailPage({
           <ArrowLeft className="h-4 w-4" />
           Back
         </Link>
-        <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">
-          📚 {data.classInfo.name}
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">
+            📚 {data.classInfo.name}
+          </h1>
+          {/* Report generate dropdown */}
+          {isManager && (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setReportDropdown(!reportDropdown)}
+                disabled={generatingBulk}
+                className="flex items-center gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-sm font-medium text-orange-400 transition-colors hover:bg-orange-500/20 disabled:opacity-50"
+              >
+                <FileText className="h-4 w-4" />
+                {generatingBulk ? tReport("generatingPdf") : tReport("generateReports")}
+                <ChevronDown className="h-3 w-3" />
+              </button>
+              {reportDropdown && (
+                <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-1 shadow-xl">
+                  <button
+                    onClick={handleBulkExport}
+                    className="w-full rounded px-3 py-2 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)]"
+                  >
+                    📄 {tReport("fullClass")}
+                  </button>
+                  <p className="px-3 py-1.5 text-[10px] text-[var(--color-dim)]">
+                    {tReport("individualStudent")}: click name in ranking
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Invite Code */}
@@ -217,6 +282,7 @@ export default function ClassDetailPage({
               rows={ranking.rows}
               currentUserId={currentUserId}
               isManager={isManager}
+              onStudentClick={handleStudentClick}
             />
           )}
         </div>
@@ -273,5 +339,25 @@ export default function ClassDetailPage({
         )}
       </div>
     </div>
+
+    {/* Report loading overlay */}
+    {reportLoading && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+        <div className="flex items-center gap-3 rounded-xl bg-[var(--color-bg1)] px-6 py-4">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-orange-500 border-t-transparent" />
+          <span className="text-sm text-[var(--color-text-primary)]">{tReport("generatingPdf")}</span>
+        </div>
+      </div>
+    )}
+
+    {/* Student report modal */}
+    {reportModal && (
+      <StudentReportModal
+        report={reportModal}
+        onClose={() => setReportModal(null)}
+        onExportPdf={handleExportPdf}
+      />
+    )}
+    </>
   );
 }
