@@ -962,5 +962,71 @@
       "faq": "FAQ",
       "forSchools": "学校方案"
     }
+  },
+  "Metadata": {
+    "faq": {
+      "title": "常见问题 | Axiom",
+      "description": "关于Axiom的常见问题解答。计划、价格、功能、安全等。"
+    },
+    "pricing": {
+      "title": "价格 — Free、Pro和Elite计划 | Axiom",
+      "description": "比较Axiom计划。免费开始，Pro每月19美元，Elite每月49美元。用AI解题、写作文和学习。"
+    },
+    "privacy": {
+      "title": "隐私政策 | Axiom",
+      "description": "Axiom如何收集、使用和保护您的数据。更新的隐私政策。"
+    },
+    "terms": {
+      "title": "服务条款 | Axiom",
+      "description": "Axiom的使用条款和条件。"
+    },
+    "login": {
+      "title": "登录 | Axiom",
+      "description": "登录Axiom，用AI解题、写作文和学习。"
+    },
+    "signup": {
+      "title": "注册 | Axiom",
+      "description": "创建免费Axiom账户。用AI秒解作业。"
+    },
+    "share": {
+      "title": "分享的解答 | Axiom",
+      "description": "查看此题在Axiom上的逐步解答。"
+    },
+    "solve": {
+      "title": "解题 | Axiom"
+    },
+    "write": {
+      "title": "写作 | Axiom"
+    },
+    "humanize": {
+      "title": "人性化 | Axiom"
+    },
+    "learn": {
+      "title": "学习 | Axiom"
+    },
+    "settings": {
+      "title": "设置 | Axiom"
+    },
+    "panic": {
+      "title": "紧急模式 | Axiom"
+    },
+    "join": {
+      "title": "加入班级 | Axiom"
+    },
+    "org": {
+      "title": "组织 | Axiom"
+    },
+    "admin": {
+      "title": "管理 | Axiom"
+    },
+    "adminUsers": {
+      "title": "用户 | Axiom"
+    },
+    "adminPlatform": {
+      "title": "平台 | Axiom"
+    },
+    "adminDemo": {
+      "title": "演示 | Axiom"
+    }
   }
 }

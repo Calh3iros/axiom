@@ -962,5 +962,71 @@
       "faq": "FAQ",
       "forSchools": "Para Escolas"
     }
+  },
+  "Metadata": {
+    "faq": {
+      "title": "FAQ — Perguntas Frequentes | Axiom",
+      "description": "Respostas para as dúvidas mais comuns sobre o Axiom. Planos, preços, funcionalidades, segurança e mais."
+    },
+    "pricing": {
+      "title": "Preços — Planos Free, Pro e Elite | Axiom",
+      "description": "Compare os planos do Axiom. Free para começar, Pro por $19/mês, Elite por $49/mês. Resolva exercícios, escreva redações e estude com IA."
+    },
+    "privacy": {
+      "title": "Política de Privacidade | Axiom",
+      "description": "Como o Axiom coleta, usa e protege seus dados. Política de privacidade atualizada."
+    },
+    "terms": {
+      "title": "Termos de Uso | Axiom",
+      "description": "Termos e condições de uso do Axiom."
+    },
+    "login": {
+      "title": "Entrar | Axiom",
+      "description": "Faça login no Axiom para resolver exercícios, escrever redações e estudar com IA."
+    },
+    "signup": {
+      "title": "Criar Conta | Axiom",
+      "description": "Crie sua conta gratuita no Axiom. Resolva exercícios com IA em segundos."
+    },
+    "share": {
+      "title": "Exercício Compartilhado | Axiom",
+      "description": "Veja a resolução passo-a-passo deste exercício no Axiom."
+    },
+    "solve": {
+      "title": "Resolver | Axiom"
+    },
+    "write": {
+      "title": "Escrever | Axiom"
+    },
+    "humanize": {
+      "title": "Humanizar | Axiom"
+    },
+    "learn": {
+      "title": "Aprender | Axiom"
+    },
+    "settings": {
+      "title": "Configurações | Axiom"
+    },
+    "panic": {
+      "title": "Modo Pânico | Axiom"
+    },
+    "join": {
+      "title": "Entrar na Turma | Axiom"
+    },
+    "org": {
+      "title": "Organização | Axiom"
+    },
+    "admin": {
+      "title": "Admin | Axiom"
+    },
+    "adminUsers": {
+      "title": "Usuários | Axiom"
+    },
+    "adminPlatform": {
+      "title": "Plataforma | Axiom"
+    },
+    "adminDemo": {
+      "title": "Demo | Axiom"
+    }
   }
 }

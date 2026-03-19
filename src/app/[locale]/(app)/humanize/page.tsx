@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Humanize | Axiom",
+};
+
 import { useTranslations } from 'next-intl';
 
 import { HumanizerPanel } from '@/components/humanize/panel';

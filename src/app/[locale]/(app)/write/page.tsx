@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Write | Axiom",
+};
+
 import { useTranslations } from 'next-intl';
 
 import { WriteEditor } from '@/components/write/editor';

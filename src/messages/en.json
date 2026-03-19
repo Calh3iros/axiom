@@ -962,5 +962,71 @@
       "faq": "FAQ",
       "forSchools": "For Schools"
     }
+  },
+  "Metadata": {
+    "faq": {
+      "title": "FAQ — Frequently Asked Questions | Axiom",
+      "description": "Answers to the most common questions about Axiom. Plans, pricing, features, security and more."
+    },
+    "pricing": {
+      "title": "Pricing — Free, Pro & Elite Plans | Axiom",
+      "description": "Compare Axiom plans. Free to start, Pro at $19/mo, Elite at $49/mo. Solve homework, write essays, and study with AI."
+    },
+    "privacy": {
+      "title": "Privacy Policy | Axiom",
+      "description": "How Axiom collects, uses and protects your data. Updated privacy policy."
+    },
+    "terms": {
+      "title": "Terms of Service | Axiom",
+      "description": "Terms and conditions for using Axiom."
+    },
+    "login": {
+      "title": "Sign In | Axiom",
+      "description": "Log in to Axiom to solve homework, write essays and study with AI."
+    },
+    "signup": {
+      "title": "Sign Up | Axiom",
+      "description": "Create your free Axiom account. Solve homework with AI in seconds."
+    },
+    "share": {
+      "title": "Shared Solution | Axiom",
+      "description": "View the step-by-step solution to this problem on Axiom."
+    },
+    "solve": {
+      "title": "Solve | Axiom"
+    },
+    "write": {
+      "title": "Write | Axiom"
+    },
+    "humanize": {
+      "title": "Humanize | Axiom"
+    },
+    "learn": {
+      "title": "Learn | Axiom"
+    },
+    "settings": {
+      "title": "Settings | Axiom"
+    },
+    "panic": {
+      "title": "Panic Mode | Axiom"
+    },
+    "join": {
+      "title": "Join Class | Axiom"
+    },
+    "org": {
+      "title": "Organization | Axiom"
+    },
+    "admin": {
+      "title": "Admin | Axiom"
+    },
+    "adminUsers": {
+      "title": "Users | Axiom"
+    },
+    "adminPlatform": {
+      "title": "Platform | Axiom"
+    },
+    "adminDemo": {
+      "title": "Demo | Axiom"
+    }
   }
 }

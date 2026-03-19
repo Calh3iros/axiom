@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Learn | Axiom",
+};
+
 import { useTranslations } from 'next-intl';
 
 import { LearnChat } from '@/components/learn/chat';
