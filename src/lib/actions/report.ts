@@ -69,59 +69,56 @@ export interface StudentReport {
   generated_at: string;
 }
 
-// ─── Auth ────────────────────────────────────────────────────────────────
+// ─── Main Action ─────────────────────────────────────────────────────────
 
-async function requireManagerAccess(orgId: string): Promise<boolean> {
+export async function getStudentReport(
+  studentId: string,
+  classId: string
+): Promise<StudentReport | null> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return false;
+  if (!user) return null;
 
-  // Check org membership with elevated role
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
-    .select("role")
-    .eq("user_id", user.id)
-    .eq("org_id", orgId)
-    .single();
-
-  if (membership) {
-    const elevated = ["teacher", "admin", "director", "secretary"];
-    if (elevated.includes(membership.role)) return true;
+  // Check super_admin for RLS bypass (same pattern as rankings.ts)
+  let isSuperAdminUser = false;
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: prof } = await (supabase.from("profiles") as any)
+      .select("is_super_admin").eq("id", user.id).single();
+    isSuperAdminUser = prof?.is_super_admin === true;
   }
 
-  // Super_admin bypass
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from("profiles") as any)
-    .select("is_super_admin")
-    .eq("id", user.id)
-    .single();
+  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
 
-  return profile?.is_super_admin === true;
-}
-
-// ─── Main Action ─────────────────────────────────────────────────────────
-
-export async function getStudentReport(
-  classId: string,
-  studentId: string
-): Promise<StudentReport | null> {
   // 1. Get class → org_id
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: cls } = await (supabaseAdmin.from("classes") as any)
-    .select("id, name, org_id")
+  const { data: cls } = await (db.from("classes") as any)
+    .select("id, name, org_id, teacher_id")
     .eq("id", classId)
     .single();
   if (!cls) return null;
 
-  // 2. Auth check
-  const authorized = await requireManagerAccess(cls.org_id);
-  if (!authorized) return null;
+  // 2. Auth: super_admin bypasses, otherwise check elevated role
+  if (!isSuperAdminUser) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: membership } = await (db.from("org_memberships") as any)
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("org_id", cls.org_id)
+      .single();
+    const elevated = ["teacher", "admin", "director", "secretary"];
+    const isTeacher = cls.teacher_id === user.id;
+    if (!isTeacher && (!membership || !elevated.includes(membership.role))) {
+      return null;
+    }
+  }
 
   // 3. Verify student is in this class
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabaseAdmin.from("class_memberships") as any)
+  const { data: membership } = await (db.from("class_memberships") as any)
     .select("joined_at")
     .eq("class_id", classId)
     .eq("user_id", studentId)
@@ -146,54 +143,54 @@ export async function getStudentReport(
   ] = await Promise.all([
     // Profile
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("profiles") as any)
+    (db.from("profiles") as any)
       .select("full_name, email, avatar_url, plan, current_streak, created_at")
       .eq("id", studentId)
       .single(),
     // Student profile
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("student_profiles") as any)
+    (db.from("student_profiles") as any)
       .select("total_problems_solved, total_correct, grade_level, study_goal")
       .eq("id", studentId)
       .single(),
     // Organization name
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("organizations") as any)
+    (db.from("organizations") as any)
       .select("name")
       .eq("id", cls.org_id)
       .single(),
     // Knowledge map — all entries
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("knowledge_map") as any)
+    (db.from("knowledge_map") as any)
       .select("subject, topic, level, mastery_score, correct_count, incorrect_count, interactions_count, last_interaction_at")
       .eq("user_id", studentId)
       .order("subject")
       .order("mastery_score", { ascending: false }),
     // Challenge log — all time (for days_active count)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("challenge_log") as any)
+    (db.from("challenge_log") as any)
       .select("created_at")
       .eq("user_id", studentId),
     // Challenge log — last 30 days
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("challenge_log") as any)
+    (db.from("challenge_log") as any)
       .select("created_at")
       .eq("user_id", studentId)
       .gte("created_at", thirtyDaysISO),
     // Usage
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("usage") as any)
+    (db.from("usage") as any)
       .select("solves, writes, humanizes, learns")
       .eq("user_id", studentId),
     // Badges
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("user_badges") as any)
+    (db.from("user_badges") as any)
       .select("badge_id, unlocked_at")
       .eq("user_id", studentId)
       .order("unlocked_at", { ascending: false }),
     // Badge catalog
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("badges_catalog") as any)
+    (db.from("badges_catalog") as any)
       .select("id, icon, name_key")
       .order("sort_order"),
   ]);
