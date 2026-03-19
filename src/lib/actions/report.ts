@@ -282,32 +282,33 @@ export async function getStudentReport(
   }
 
   // Resolve name_key → human-readable display name
+  // DB stores name_key like "Badges.firstSolve.name" — we strip prefix+suffix
   const badgeDisplayNames: Record<string, string> = {
-    first_solve: "First Solve",
-    "10_solves": "10 Problems",
-    "50_solves": "50 Problems",
-    "100_solves": "100 Problems",
-    "500_solves": "500 Problems",
-    "10_correct": "10 Correct",
-    "50_correct": "50 Correct",
-    "100_correct": "100 Correct",
-    "3_streak": "3-Day Streak",
-    "7_streak": "7-Day Streak",
-    "30_streak": "30-Day Streak",
-    "1_topic_mastered": "Topic Mastered",
-    "5_topics_mastered": "5 Topics Mastered",
-    "10_topics_mastered": "10 Topics Mastered",
-    "3_subjects": "3 Subjects",
-    "5_correct_streak": "5 Correct Streak",
-    "10_correct_streak": "10 Correct Streak",
+    // Mapped from badges_catalog name_key (after stripping "Badges." and ".name")
+    firstSolve: "First Solve",
+    solves10: "10 Problems",
+    solves50: "50 Problems",
+    solves100: "100 Problems",
+    firstCorrect: "First Correct",
+    streak10Correct: "10 Correct Streak",
+    streak3Day: "3-Day Streak",
+    streak7Day: "7-Day Streak",
+    streak30Day: "30-Day Streak",
+    firstMastery: "Topic Mastered",
+    mastery5Topics: "5 Topics Mastered",
+    multiSubject: "Multi Subject",
   };
   function humanizeBadgeName(nameKey: string): string {
-    // Strip common prefixes like "Badges."
-    const cleanKey = nameKey.replace(/^Badges\./, "");
+    // Strip "Badges." prefix and ".name"/".desc" suffix
+    const cleanKey = nameKey
+      .replace(/^Badges\./, "")
+      .replace(/\.(name|desc)$/, "");
     if (badgeDisplayNames[cleanKey]) return badgeDisplayNames[cleanKey];
-    // Fallback: "first_solve" → "First Solve"
+    // Fallback: "firstSolve" → "First Solve", "some_key" → "Some Key"
     return cleanKey
+      .replace(/([A-Z])/g, " $1")
       .replace(/_/g, " ")
+      .replace(/^\s+/, "")
       .replace(/\b\w/g, (c) => c.toUpperCase());
   }
 

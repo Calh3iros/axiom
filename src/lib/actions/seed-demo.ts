@@ -242,6 +242,8 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
     const allUsageRows: any[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const allBadgeRows: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const allKnowledgeMapRows: any[] = [];
 
     for (const student of studentData) {
       const { userId, classIdx, archetype, fullName, email } = student;
@@ -303,14 +305,29 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
       }
       for (const t of pickedTopics) {
         const [subj, topic] = t.split("::");
-        const masteryLevel = Math.min(5, Math.max(1, Math.round(gaussianRand(archetype.accuracy * 5, 1.2))));
+        const masteryLevel = Math.min(4, Math.max(1, Math.round(gaussianRand(archetype.accuracy * 4, 1.0))));
         const cc = rand(3, 20);
         const ic = rand(1, Math.max(1, Math.round(cc * (1 - archetype.accuracy))));
+        const masteryScore = Math.min(1, Math.max(0, gaussianRand(archetype.accuracy, 0.2)));
         allSubjectRows.push({
           user_id: userId,
           name: `${subj} - ${topic}`,
           mastery_pct: Math.min(100, masteryLevel * 20),
           queries_count: cc + ic,
+        });
+        // knowledge_map entry (lowercase normalized topic)
+        const lastDaysAgo = rand(0, 30);
+        allKnowledgeMapRows.push({
+          user_id: userId,
+          subject: subj.toLowerCase(),
+          topic: topic.toLowerCase(),
+          level: masteryLevel,
+          mastery_score: Math.round(masteryScore * 100) / 100,
+          correct_count: cc,
+          incorrect_count: ic,
+          current_streak: masteryScore > 0.6 ? rand(1, 5) : 0,
+          interactions_count: cc + ic,
+          last_interaction_at: new Date(now.getTime() - lastDaysAgo * 24 * 60 * 60 * 1000).toISOString(),
         });
       }
 
@@ -386,6 +403,12 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
       await (supabaseAdmin.from("user_badges") as any).upsert(allBadgeRows.slice(i, i + 200), { onConflict: "user_id,badge_id" });
     }
 
+    // Batch insert: knowledge_map in chunks of 200
+    for (let i = 0; i < allKnowledgeMapRows.length; i += 200) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabaseAdmin.from("knowledge_map") as any).upsert(allKnowledgeMapRows.slice(i, i + 200), { onConflict: "user_id,subject,topic" });
+    }
+
     return { success: true, message: `Demo created: ${DEMO_ORG_NAME} with 3 classes × ${studentData.length} students` };
   } catch (err) {
     return { success: false, message: `Error: ${err instanceof Error ? err.message : String(err)}` };
@@ -421,6 +444,8 @@ export async function removeDemoData(): Promise<{ success: boolean; message: str
         (supabaseAdmin.from("user_badges") as any).delete().in("user_id", userIds),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (supabaseAdmin.from("subjects") as any).delete().in("user_id", userIds),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (supabaseAdmin.from("knowledge_map") as any).delete().in("user_id", userIds),
       ]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
