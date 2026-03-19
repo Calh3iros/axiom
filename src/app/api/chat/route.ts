@@ -184,7 +184,7 @@ export async function POST(req: Request) {
                   topic: z
                     .string()
                     .describe(
-                      'Specific topic, e.g. "Derivatives", "Kinematics", "World War II"'
+                      'The fundamental concept name, 2-4 words max, noun form, not verb form. Use the most basic/canonical name. Examples: "linear equations" not "solving linear equations", "derivatives" not "finding derivatives", "french revolution" not "causes of the french revolution". Always lowercase.'
                     ),
                   understanding_score: z
                     .number()
@@ -207,6 +207,8 @@ export async function POST(req: Request) {
                 }),
                 prompt: `Analyze this conversation exchange to extract the topic and evaluate if the student is answering a practice challenge.
 
+TOPIC NAMING RULE: Use the most fundamental, canonical concept name (2-4 words, lowercase, noun form). Strip action verbs like "solving", "calculating", "understanding", "finding". Example: a question about "Solve 2x+5=15" → topic: "linear equations", NOT "solving linear equations" or "algebraic equations".
+
 User Message:
 ${lastMessage?.content || "Unknown"}
 
@@ -222,6 +224,90 @@ ${text}
               const normSubject = normalizeStr(analysisData.subject) || "general";
               const normTopic = normalizeStr(analysisData.topic) || "general";
               const understandingScore = analysisData.understanding_score ?? 0.5;
+
+              // --- STEP 1b: Semantic topic matching against existing user topics ---
+              const stopWords = new Set([
+                // EN
+                "of","the","a","an","in","on","for","and","to","with","by","from","is","are","was","were","be",
+                "solving","finding","calculating","understanding","computing","evaluating","determining","analyzing",
+                // PT
+                "de","do","da","dos","das","no","na","nos","nas","em","o","os","um","uma","e","para","com","por",
+                "resolvendo","calculando","encontrando","entendendo","determinando","analisando","avaliando",
+                // ES
+                "del","el","la","los","las","en","un","una","y","con",
+                "resolviendo","entendiendo","evaluando","analizando",
+                // FR
+                "le","les","des","du","au","aux","et","en","dans","sur","avec",
+                "résoudre","calculer","trouver","comprendre","déterminer","analyser","évaluer",
+                // DE
+                "der","die","das","den","dem","ein","eine","und","in","mit","von","zu","für",
+                "lösen","berechnen","finden","verstehen","bestimmen","analysieren","bewerten",
+              ]);
+
+              const stemSimple = (s: string) =>
+                s.replace(/(ação|ções|ation|tion|ing|ment|ive|ives|ity|ous|al|es|ed|s)$/g, "")
+                  .replace(/\s+/g, " ").trim();
+
+              const findMatchingTopic = (
+                newTopic: string,
+                existingTopics: string[]
+              ): string | null => {
+                if (existingTopics.includes(newTopic)) return newTopic;
+
+                // Stem match
+                const newStem = stemSimple(newTopic);
+                for (const existing of existingTopics) {
+                  if (stemSimple(existing) === newStem) return existing;
+                }
+
+                // Word overlap >= 60% (after removing stopwords)
+                const newFiltered = newTopic
+                  .split(/\s+/)
+                  .filter((w) => !stopWords.has(w) && w.length > 1);
+
+                for (const existing of existingTopics) {
+                  const existFiltered = existing
+                    .split(/\s+/)
+                    .filter((w) => !stopWords.has(w) && w.length > 1);
+
+                  const smaller =
+                    newFiltered.length <= existFiltered.length
+                      ? newFiltered
+                      : existFiltered;
+                  const largerSet = new Set(
+                    newFiltered.length <= existFiltered.length
+                      ? existFiltered
+                      : newFiltered
+                  );
+
+                  if (smaller.length === 0) continue;
+                  const overlap = smaller.filter((w) => largerSet.has(w)).length;
+                  if (overlap / smaller.length >= 0.6) return existing;
+                }
+
+                return null;
+              };
+
+              // Fetch existing topics for this user+subject
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const { data: existingTopicRows } = await (supabaseAdmin
+                .from("knowledge_map")
+                .select("topic")
+                .eq("user_id", userId)
+                .eq("subject", normSubject) as any);
+
+              const existingTopics = (existingTopicRows || []).map(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (r: any) => r.topic as string
+              );
+              const matchedTopic = findMatchingTopic(normTopic, existingTopics);
+              const finalTopic = matchedTopic || normTopic;
+
+              if (matchedTopic && matchedTopic !== normTopic) {
+                console.warn(
+                  `Topic normalized: "${normTopic}" → "${matchedTopic}"`
+                );
+              }
 
               // --- STEP 2: Determine outcome (challenge vs normal) ---
               const isChallenge =
@@ -274,7 +360,7 @@ ${text}
                 )
                 .eq("user_id", userId)
                 .eq("subject", normSubject)
-                .eq("topic", normTopic)
+                .eq("topic", finalTopic)
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .single() as any);
 
@@ -323,7 +409,7 @@ ${text}
 
                 const leveledUp = newLevel > (existing.level || 1);
                 console.warn(
-                  `MBLID ${isChallenge ? "Challenge" : "Normal"}: ${userId} — ${normSubject}/${normTopic} — ` +
+                  `MBLID ${isChallenge ? "Challenge" : "Normal"}: ${userId} — ${normSubject}/${finalTopic} — ` +
                   `streak:${finalStreak} lvl:${newLevel}${leveledUp ? " ⬆️ LEVEL UP" : ""} mastery:${newMastery.toFixed(2)}`
                 );
               } else {
@@ -339,7 +425,7 @@ ${text}
                 const { error: kmErr } = await (supabaseAdmin.from("knowledge_map") as any).insert({
                   user_id: userId,
                   subject: normSubject,
-                  topic: normTopic,
+                  topic: finalTopic,
                   mastery_score: isNeutral ? understandingScore * 0.6 + 0.08 : initialMastery,
                   interactions_count: 1,
                   level: 1,
@@ -350,7 +436,7 @@ ${text}
                 if (kmErr) console.error("knowledge_map insert error:", kmErr);
 
                 console.warn(
-                  `MBLID New Entry: ${userId} — ${normSubject}/${normTopic} — ` +
+                  `MBLID New Entry: ${userId} — ${normSubject}/${finalTopic} — ` +
                   `correct:${initialCorrect} streak:${initialStreak}`
                 );
               }
@@ -360,7 +446,7 @@ ${text}
               const { error: clErr } = await (supabaseAdmin.from("challenge_log") as any).insert({
                 user_id: userId,
                 subject: normSubject,
-                topic: normTopic,
+                topic: finalTopic,
                 success: successFlag,
               });
               if (clErr) console.error("challenge_log insert error:", clErr);
