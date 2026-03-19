@@ -1,5 +1,7 @@
 "use server";
 
+import { sendEmail } from "@/lib/email";
+import { orgApprovedEmailHtml } from "@/lib/email-templates";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -29,7 +31,9 @@ export async function getAllOrgs(status?: string) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let query = (supabaseAdmin.from("organizations") as any)
-    .select("id, name, type, status, created_at, requested_at, requested_by_name, requested_by_email, requested_by_role, requested_by_phone, institution_id, request_message, rejection_reason, approved_at")
+    .select(
+      "id, name, type, status, created_at, requested_at, requested_by_name, requested_by_email, requested_by_role, requested_by_phone, institution_id, request_message, rejection_reason, approved_at"
+    )
     .order("requested_at", { ascending: true });
 
   if (status) {
@@ -54,7 +58,11 @@ export async function getPendingOrgsCount() {
 
 export async function approveOrg(
   orgId: string,
-  options?: { maxStudents?: number | null; expiresAt?: string | null; contractNotes?: string | null }
+  options?: {
+    maxStudents?: number | null;
+    expiresAt?: string | null;
+    contractNotes?: string | null;
+  }
 ) {
   await requireSuperAdmin();
 
@@ -64,9 +72,12 @@ export async function approveOrg(
     approved_at: new Date().toISOString(),
   };
 
-  if (options?.maxStudents !== undefined) updateData.max_students = options.maxStudents;
-  if (options?.expiresAt !== undefined) updateData.access_expires_at = options.expiresAt;
-  if (options?.contractNotes !== undefined) updateData.contract_notes = options.contractNotes;
+  if (options?.maxStudents !== undefined)
+    updateData.max_students = options.maxStudents;
+  if (options?.expiresAt !== undefined)
+    updateData.access_expires_at = options.expiresAt;
+  if (options?.contractNotes !== undefined)
+    updateData.contract_notes = options.contractNotes;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabaseAdmin.from("organizations") as any)
@@ -74,6 +85,27 @@ export async function approveOrg(
     .eq("id", orgId);
 
   if (error) throw new Error(error.message);
+
+  // ── Org approved email (fire-and-forget) ────────────────────────────
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: org } = await (supabaseAdmin.from("organizations") as any)
+      .select("name, requested_by_email")
+      .eq("id", orgId)
+      .single();
+
+    if (org?.requested_by_email) {
+      sendEmail({
+        to: org.requested_by_email,
+        subject: `Your institution has been approved! 🏫`,
+        html: orgApprovedEmailHtml(org.name || "Your institution"),
+      });
+    }
+  } catch (emailErr) {
+    console.error("[admin] Org approval email error:", emailErr);
+  }
+  // ────────────────────────────────────────────────────────────────────
+
   return { success: true };
 }
 
@@ -105,15 +137,22 @@ export async function suspendOrg(orgId: string) {
 
 export async function updateOrgContract(
   orgId: string,
-  data: { maxStudents?: number | null; expiresAt?: string | null; contractNotes?: string | null }
+  data: {
+    maxStudents?: number | null;
+    expiresAt?: string | null;
+    contractNotes?: string | null;
+  }
 ) {
   await requireSuperAdmin();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateData: any = {};
-  if (data.maxStudents !== undefined) updateData.max_students = data.maxStudents;
-  if (data.expiresAt !== undefined) updateData.access_expires_at = data.expiresAt;
-  if (data.contractNotes !== undefined) updateData.contract_notes = data.contractNotes;
+  if (data.maxStudents !== undefined)
+    updateData.max_students = data.maxStudents;
+  if (data.expiresAt !== undefined)
+    updateData.access_expires_at = data.expiresAt;
+  if (data.contractNotes !== undefined)
+    updateData.contract_notes = data.contractNotes;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabaseAdmin.from("organizations") as any)
@@ -141,7 +180,9 @@ export async function getRenewalAlerts() {
 
   // Orgs expiring in next 30 days
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: expiringSoon } = await (supabaseAdmin.from("organizations") as any)
+  const { data: expiringSoon } = await (
+    supabaseAdmin.from("organizations") as any
+  )
     .select("id, name, type, access_expires_at, max_students")
     .eq("status", "active")
     .not("access_expires_at", "is", null)
@@ -160,7 +201,9 @@ export async function getRenewalAlerts() {
 
   // Orgs with max_students — check capacity
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: withLimits } = await (supabaseAdmin.from("organizations") as any)
+  const { data: withLimits } = await (
+    supabaseAdmin.from("organizations") as any
+  )
     .select("id, name, type, max_students")
     .eq("status", "active")
     .not("max_students", "is", null);
@@ -187,7 +230,9 @@ export async function getRenewalAlerts() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const expiringWithDays = (expiringSoon || []).map((o: any) => ({
     ...o,
-    daysLeft: Math.ceil((new Date(o.access_expires_at).getTime() - now.getTime()) / 86400000),
+    daysLeft: Math.ceil(
+      (new Date(o.access_expires_at).getTime() - now.getTime()) / 86400000
+    ),
   }));
 
   return {
@@ -204,19 +249,23 @@ export async function getAdminPlatformStats() {
 
   // Total users
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { count: totalUsers } = await (supabaseAdmin.from("profiles") as any)
-    .select("id", { count: "exact", head: true });
+  const { count: totalUsers } = await (
+    supabaseAdmin.from("profiles") as any
+  ).select("id", { count: "exact", head: true });
 
   // Active orgs
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { count: activeOrgs } = await (supabaseAdmin.from("organizations") as any)
+  const { count: activeOrgs } = await (
+    supabaseAdmin.from("organizations") as any
+  )
     .select("id", { count: "exact", head: true })
     .eq("status", "active");
 
   // Plan distribution
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: planData } = await (supabaseAdmin.from("profiles") as any)
-    .select("plan");
+  const { data: planData } = await (
+    supabaseAdmin.from("profiles") as any
+  ).select("plan");
 
   const plans = { free: 0, pro: 0, elite: 0 };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -245,12 +294,17 @@ export async function getAdminPlatformStats() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: signupData } = await (supabaseAdmin.from("profiles") as any)
     .select("created_at")
-    .gte("created_at", new Date(now.getTime() - 84 * 24 * 60 * 60 * 1000).toISOString())
+    .gte(
+      "created_at",
+      new Date(now.getTime() - 84 * 24 * 60 * 60 * 1000).toISOString()
+    )
     .order("created_at");
 
   const weeklySignups: { week: string; count: number }[] = [];
   for (let i = 11; i >= 0; i--) {
-    const weekStart = new Date(now.getTime() - (i + 1) * 7 * 24 * 60 * 60 * 1000);
+    const weekStart = new Date(
+      now.getTime() - (i + 1) * 7 * 24 * 60 * 60 * 1000
+    );
     const weekEnd = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
     const label = `${weekStart.getMonth() + 1}/${weekStart.getDate()}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -330,18 +384,25 @@ export async function getAdminUsers(filters: {
 
   // Get all user IDs that ARE in an org
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: orgMembers } = await (supabaseAdmin.from("org_memberships") as any)
-    .select("user_id");
-  const orgUserIds = new Set((orgMembers || []).map((m: { user_id: string }) => m.user_id));
+  const { data: orgMembers } = await (
+    supabaseAdmin.from("org_memberships") as any
+  ).select("user_id");
+  const orgUserIds = new Set(
+    (orgMembers || []).map((m: { user_id: string }) => m.user_id)
+  );
 
   // Build query for profiles
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let query = (supabaseAdmin.from("profiles") as any)
-    .select("id, full_name, email, plan, created_at, last_active_date, current_streak, avatar_url, badges", { count: "exact" });
+  let query = (supabaseAdmin.from("profiles") as any).select(
+    "id, full_name, email, plan, created_at, last_active_date, current_streak, avatar_url, badges",
+    { count: "exact" }
+  );
 
   // Search filter
   if (filters.search) {
-    query = query.or(`full_name.ilike.%${filters.search}%,email.ilike.%${filters.search}%`);
+    query = query.or(
+      `full_name.ilike.%${filters.search}%,email.ilike.%${filters.search}%`
+    );
   }
 
   // Plan filter
@@ -351,10 +412,14 @@ export async function getAdminUsers(filters: {
 
   // Activity filter
   if (filters.active === "active") {
-    const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+    const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
     query = query.gte("last_active_date", d30);
   } else if (filters.active === "inactive") {
-    const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+    const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
     query = query.or(`last_active_date.lt.${d30},last_active_date.is.null`);
   }
 
@@ -364,14 +429,16 @@ export async function getAdminUsers(filters: {
   query = query.order(sortBy, { ascending });
 
   // Pagination — fetch more to filter out org users
-  query = query.range(0, (page * pageSize) + pageSize * 3);
+  query = query.range(0, page * pageSize + pageSize * 3);
 
   const { data, count, error } = await query;
   if (error) throw new Error(error.message);
 
   // Filter out org users client-side
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const individualUsers = (data || []).filter((u: any) => !orgUserIds.has(u.id));
+  const individualUsers = (data || []).filter(
+    (u: any) => !orgUserIds.has(u.id)
+  );
 
   // Manual pagination on filtered results
   const paged = individualUsers.slice(offset, offset + pageSize);
@@ -379,7 +446,9 @@ export async function getAdminUsers(filters: {
   // Get total problems solved for these users from student_profiles
   const userIds = paged.map((u: { id: string }) => u.id);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: studentData } = await (supabaseAdmin.from("student_profiles") as any)
+  const { data: studentData } = await (
+    supabaseAdmin.from("student_profiles") as any
+  )
     .select("user_id, total_problems_solved")
     .in("user_id", userIds.length > 0 ? userIds : ["__none__"]);
 
@@ -416,6 +485,8 @@ export async function getDemoOrgId(): Promise<string | null> {
   await requireSuperAdmin();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabaseAdmin.from("organizations") as any)
-    .select("id").eq("name", "Escola Demonstração").single();
+    .select("id")
+    .eq("name", "Escola Demonstração")
+    .single();
   return data?.id || null;
 }

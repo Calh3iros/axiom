@@ -1,9 +1,28 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+import { sendEmail } from "@/lib/email";
+import { upgradeEmailHtml } from "@/lib/email-templates";
 import { planFromPriceId } from "@/lib/stripe/config";
 import { stripe } from "@/lib/stripe/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+
+const PLAN_FEATURES: Record<string, string[]> = {
+  pro: [
+    "Unlimited Solve requests",
+    "Unlimited Write requests",
+    "Unlimited Humanize requests",
+    "Unlimited Learn sessions",
+    "Priority support",
+  ],
+  elite: [
+    "Everything in Pro",
+    "Advanced AI models",
+    "Longer context windows",
+    "Early access to new features",
+    "Dedicated support",
+  ],
+};
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -57,6 +76,30 @@ export async function POST(req: Request) {
           console.warn(
             `[webhook] checkout.session.completed → user=${session.metadata.supabaseUUID} plan=${plan}`
           );
+
+          // ── Upgrade email (fire-and-forget) ───────────────────────
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const { data: profile } = await (
+              supabaseAdmin.from("profiles") as any
+            )
+              .select("email")
+              .eq("id", session.metadata.supabaseUUID)
+              .single();
+
+            if (profile?.email && plan !== "free") {
+              const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+              const features = PLAN_FEATURES[plan] || [];
+              sendEmail({
+                to: profile.email,
+                subject: `Your ${planLabel} plan is active! ✨`,
+                html: upgradeEmailHtml(planLabel, features),
+              });
+            }
+          } catch (emailErr) {
+            console.error("[webhook] Upgrade email error:", emailErr);
+          }
+          // ──────────────────────────────────────────────────────────
         }
       }
       break;
