@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 
 import type { StudentReport } from "@/lib/actions/report";
 
-// ─── Colors ──────────────────────────────────────────────────────────────
+// --- Colors ---------------------------------------------------------------
 const ORANGE = [249, 115, 22] as const; // Axiom orange
 const DARK = [51, 51, 51] as const;
 const DIM = [136, 136, 136] as const;
@@ -14,7 +14,7 @@ const RED_BG = [239, 68, 68] as const;
 const YELLOW_BG = [234, 179, 8] as const;
 const BLUE_BG = [59, 130, 246] as const;
 
-// ─── Helpers ─────────────────────────────────────────────────────────────
+// --- Helpers --------------------------------------------------------------
 function setColor(doc: jsPDF, c: readonly [number, number, number]) {
   doc.setTextColor(c[0], c[1], c[2]);
 }
@@ -23,8 +23,9 @@ function setFillColor(doc: jsPDF, c: readonly [number, number, number]) {
   doc.setFillColor(c[0], c[1], c[2]);
 }
 
-function stars(level: number): string {
-  return "★".repeat(level) + "☆".repeat(5 - level);
+/** Level as ASCII art: [***--] for level 3/5 */
+function levelBar(level: number): string {
+  return "[" + "*".repeat(level) + "-".repeat(5 - level) + "]";
 }
 
 function masteryColor(percent: number): readonly [number, number, number] {
@@ -50,19 +51,28 @@ function formatDate(iso: string): string {
   }
 }
 
+/** Strip any character outside basic Latin (32-126) + accented Latin range */
+function safeText(text: string): string {
+  return text
+    .replace(/—/g, "-")
+    .replace(/·/g, "-")
+    .replace(/…/g, "...")
+    .replace(/[^\x20-\x7E\u00C0-\u00FF]/g, "");
+}
+
 function addFooter(doc: jsPDF, pageNum: number, totalPages: number) {
   const pw = doc.internal.pageSize.getWidth();
   const ph = doc.internal.pageSize.getHeight();
   doc.setFontSize(7);
   setColor(doc, DIM);
   doc.text(
-    "Relatório confidencial — uso exclusivo para fins pedagógicos",
+    "Relatorio confidencial - uso exclusivo para fins pedagogicos",
     pw / 2,
     ph - 10,
     { align: "center" }
   );
   doc.text(
-    "Gerado por Axiom — axiom-solver.com",
+    "Gerado por Axiom - axiom-solver.com",
     pw / 2,
     ph - 6,
     { align: "center" }
@@ -79,7 +89,7 @@ function checkPageBreak(doc: jsPDF, y: number, needed: number, margin: number): 
   return y;
 }
 
-// ─── Export ──────────────────────────────────────────────────────────────
+// --- Export ----------------------------------------------------------------
 
 export async function exportStudentPdf(report: StudentReport): Promise<void> {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -88,7 +98,7 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   const contentW = pw - margin * 2;
   let y: number;
 
-  // ── PAGE 1: Cover + KPIs ────────────────────────────────────────────
+  // -- PAGE 1: Cover + KPIs ------------------------------------------------
   // Header bar
   setFillColor(doc, ORANGE);
   doc.rect(0, 0, pw, 32, "F");
@@ -98,34 +108,34 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   doc.text("AXIOM", margin, 15);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Relatório Individual do Aluno", margin, 24);
+  doc.text("Relatorio Individual do Aluno", margin, 24);
 
   // Student info
   y = 44;
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
   setColor(doc, DARK);
-  doc.text(report.student.name, margin, y);
+  doc.text(safeText(report.student.name), margin, y);
   y += 9;
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
   setColor(doc, DIM);
-  doc.text(`${report.class.name} — ${report.class.org_name}`, margin, y);
+  doc.text(safeText(`${report.class.name} - ${report.class.org_name}`), margin, y);
   y += 6;
   doc.setFontSize(9);
   doc.text(`Dados acumulados desde ${formatDate(report.stats.member_since)}`, margin, y);
   y += 4;
   doc.text(`Gerado em ${formatDate(report.generated_at)}`, margin, y);
 
-  // KPI cards — 5 across
+  // KPI cards -- 5 across
   y += 12;
   const cardW = (contentW - 4 * 3) / 5;
   const kpis = [
-    { label: "Total Resolvido", value: String(report.stats.total_solved), icon: "📚" },
-    { label: "Precisão", value: `${report.stats.accuracy_percent}%`, icon: "🎯" },
-    { label: "Sequência", value: `${report.stats.current_streak} dias`, icon: "🔥" },
-    { label: "Conquistas", value: String(report.stats.badges_count), icon: "🏅" },
-    { label: "Dias Ativos", value: String(report.stats.days_active), icon: "📅" },
+    { label: "TOTAL RESOLVIDO", value: String(report.stats.total_solved) },
+    { label: "PRECISAO", value: `${report.stats.accuracy_percent}%` },
+    { label: "SEQUENCIA", value: `${report.stats.current_streak} dias` },
+    { label: "CONQUISTAS", value: String(report.stats.badges_count) },
+    { label: "DIAS ATIVOS", value: String(report.stats.days_active) },
   ];
 
   for (let i = 0; i < kpis.length; i++) {
@@ -142,7 +152,7 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
     doc.setFontSize(6.5);
     doc.setFont("helvetica", "normal");
     setColor(doc, DIM);
-    doc.text(kpis[i].label.toUpperCase(), x + cardW / 2, y + 20, { align: "center" });
+    doc.text(kpis[i].label, x + cardW / 2, y + 20, { align: "center" });
   }
   y += 36;
 
@@ -155,13 +165,13 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
   setColor(doc, GREEN_BG);
-  doc.text("✅ Pontos Fortes", margin + 4, y + 6);
+  doc.text("(+) PONTOS FORTES", margin + 4, y + 6);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   setColor(doc, DARK);
   const strengthList = report.strengths.length > 0 ? report.strengths.slice(0, 6) : ["Sem pontos fortes identificados ainda"];
   for (let i = 0; i < strengthList.length; i++) {
-    doc.text(`• ${strengthList[i]}`, margin + 4, y + 12 + i * 5.5);
+    doc.text(safeText(`> ${strengthList[i]}`), margin + 4, y + 12 + i * 5.5);
   }
 
   // Weaknesses
@@ -171,13 +181,13 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
   setColor(doc, RED_BG);
-  doc.text("⚠️ Precisa de Reforço", weakX + 4, y + 6);
+  doc.text("(!) PRECISA DE REFORCO", weakX + 4, y + 6);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   setColor(doc, DARK);
-  const weaknessList = report.weaknesses.length > 0 ? report.weaknesses.slice(0, 6) : ["Sem pontos de atenção identificados"];
+  const weaknessList = report.weaknesses.length > 0 ? report.weaknesses.slice(0, 6) : ["Sem pontos de atencao identificados"];
   for (let i = 0; i < weaknessList.length; i++) {
-    doc.text(`• ${weaknessList[i]}`, weakX + 4, y + 12 + i * 5.5);
+    doc.text(safeText(`> ${weaknessList[i]}`), weakX + 4, y + 12 + i * 5.5);
   }
 
   y += Math.max(
@@ -190,16 +200,16 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
   setColor(doc, DARK);
-  doc.text("📊 Atividade Recente (30 dias)", margin, y);
+  doc.text("ATIVIDADE RECENTE (30 DIAS)", margin, y);
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  const trendLabel = report.activity.trend === "improving" ? "↑ Melhorando" : report.activity.trend === "declining" ? "↓ Em queda" : "→ Estável";
-  doc.text(`Tendência: ${trendLabel}  |  ${report.activity.exercises_30d} exercícios  |  ${report.activity.days_active_30d} dias ativos`, margin, y);
+  const trendLabel = report.activity.trend === "improving" ? "[up] Melhorando" : report.activity.trend === "declining" ? "[down] Em queda" : "[=] Estavel";
+  doc.text(`Tendencia: ${trendLabel}  |  ${report.activity.exercises_30d} exercicios  |  ${report.activity.days_active_30d} dias ativos`, margin, y);
   y += 5;
-  doc.text(`Uso: ${report.usage.solves} resolves  ·  ${report.usage.writes} redações  ·  ${report.usage.humanizes} humanizações  ·  ${report.usage.learns} aprendizados`, margin, y);
+  doc.text(`Uso: ${report.usage.solves} resolves  -  ${report.usage.writes} redacoes  -  ${report.usage.humanizes} humanizacoes  -  ${report.usage.learns} aprendizados`, margin, y);
 
-  // ── PAGE 2: Knowledge Map ───────────────────────────────────────────
+  // -- PAGE 2: Knowledge Map -----------------------------------------------
   doc.addPage();
   y = 20;
 
@@ -209,7 +219,7 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
   setColor(doc, WHITE);
-  doc.text("🧠  Mapa de Conhecimento", margin, 10);
+  doc.text("MAPA DE CONHECIMENTO", margin, 10);
   y = 22;
 
   for (const subject of report.subjects) {
@@ -219,22 +229,22 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     setColor(doc, DARK);
-    doc.text(subject.name, margin, y);
+    doc.text(safeText(subject.name), margin, y);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7);
     setColor(doc, DIM);
-    doc.text(`Domínio médio: ${subject.avg_mastery}%  ·  ${subject.topics_mastered}/${subject.total_topics} dominados`, margin + 45, y);
+    doc.text(`Dominio medio: ${subject.avg_mastery}%  -  ${subject.topics_mastered}/${subject.total_topics} dominados`, margin + 45, y);
     y += 4;
 
     // Table header
     doc.setFontSize(6.5);
     doc.setFont("helvetica", "bold");
     setColor(doc, DIM);
-    doc.text("TÓPICO", margin, y);
-    doc.text("NÍVEL", margin + 70, y);
-    doc.text("DOMÍNIO", margin + 95, y);
-    doc.text("✓", margin + 125, y);
-    doc.text("✗", margin + 135, y);
+    doc.text("TOPICO", margin, y);
+    doc.text("NIVEL", margin + 70, y);
+    doc.text("DOMINIO", margin + 95, y);
+    doc.text("OK", margin + 125, y);
+    doc.text("ERR", margin + 135, y);
     y += 1;
     doc.setLineWidth(0.2);
     doc.setDrawColor(220, 220, 220);
@@ -247,12 +257,12 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
       doc.setFontSize(7);
       setColor(doc, DARK);
       // Truncate long topic names
-      const topicName = topic.name.length > 30 ? topic.name.slice(0, 28) + "…" : topic.name;
-      doc.text(topicName, margin, y);
+      const topicName = topic.name.length > 30 ? topic.name.slice(0, 28) + "..." : topic.name;
+      doc.text(safeText(topicName), margin, y);
 
-      // Stars
+      // Level bar
       doc.setFontSize(7);
-      doc.text(stars(topic.level), margin + 70, y);
+      doc.text(levelBar(topic.level), margin + 70, y);
 
       // Mastery bar
       const barX = margin + 95;
@@ -280,7 +290,7 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
     y += 4;
   }
 
-  // ── PAGE 3: Badges ──────────────────────────────────────────────────
+  // -- Badges section -------------------------------------------------------
   if (report.badges.length > 0) {
     y = checkPageBreak(doc, y, 30, margin);
     if (y < 30) {
@@ -290,13 +300,13 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
       setColor(doc, WHITE);
-      doc.text("🏆  Conquistas", margin, 10);
+      doc.text("CONQUISTAS", margin, 10);
       y = 22;
     } else {
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
       setColor(doc, DARK);
-      doc.text("🏆 Conquistas", margin, y);
+      doc.text("CONQUISTAS", margin, y);
       y += 6;
     }
 
@@ -309,41 +319,36 @@ export async function exportStudentPdf(report: StudentReport): Promise<void> {
       const x = margin + col * (badgeW + 3);
       setFillColor(doc, [245, 245, 245]);
       doc.roundedRect(x, y, badgeW, 12, 1.5, 1.5, "F");
-      doc.setFontSize(10);
-      doc.text(report.badges[i].icon, x + 3, y + 8);
       doc.setFontSize(7);
       doc.setFont("helvetica", "bold");
       setColor(doc, DARK);
-      const badgeName = report.badges[i].name.length > 14 ? report.badges[i].name.slice(0, 12) + "…" : report.badges[i].name;
-      doc.text(badgeName, x + 12, y + 6);
+      const badgeName = report.badges[i].name.length > 16 ? report.badges[i].name.slice(0, 14) + "..." : report.badges[i].name;
+      doc.text(safeText(badgeName), x + 4, y + 6);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(5.5);
       setColor(doc, DIM);
-      doc.text(formatDate(report.badges[i].unlocked_at), x + 12, y + 10);
+      doc.text(formatDate(report.badges[i].unlocked_at), x + 4, y + 10);
     }
   }
 
-  // ── Footers on all pages ────────────────────────────────────────────
+  // -- Footers on all pages -------------------------------------------------
   const totalPages = doc.getNumberOfPages();
   for (let p = 1; p <= totalPages; p++) {
     doc.setPage(p);
     addFooter(doc, p, totalPages);
   }
 
-  // ── Save ────────────────────────────────────────────────────────────
+  // -- Save -----------------------------------------------------------------
   const date = new Date().toISOString().split("T")[0];
   const filename = `axiom-relatorio-${slugify(report.student.name)}-${date}.pdf`;
   doc.save(filename);
 }
 
-// ─── Full Class Export ────────────────────────────────────────────────────
+// --- Full Class Export ----------------------------------------------------
 
 export async function exportClassPdf(reports: StudentReport[], className: string): Promise<void> {
   if (reports.length === 0) return;
 
-  // Generate individual PDFs one after another into a single document
-  // For simplicity, we generate each report separately and download
-  // (jsPDF merging would require complex page management)
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const pw = doc.internal.pageSize.getWidth();
   const margin = 20;
@@ -363,14 +368,14 @@ export async function exportClassPdf(reports: StudentReport[], className: string
     doc.text("AXIOM", margin, 12);
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
-    doc.text(`Relatório — ${className}`, margin, 20);
+    doc.text(safeText(`Relatorio - ${className}`), margin, 20);
 
     // Student name
     y = 38;
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     setColor(doc, DARK);
-    doc.text(report.student.name, margin, y);
+    doc.text(safeText(report.student.name), margin, y);
     y += 7;
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
@@ -382,7 +387,7 @@ export async function exportClassPdf(reports: StudentReport[], className: string
     doc.setFontSize(9);
     setColor(doc, DARK);
     doc.setFont("helvetica", "bold");
-    const statLine = `Resolvidos: ${report.stats.total_solved}  |  Precisão: ${report.stats.accuracy_percent}%  |  Sequência: ${report.stats.current_streak}d  |  Conquistas: ${report.stats.badges_count}  |  Dias ativos (30d): ${report.activity.days_active_30d}`;
+    const statLine = `Resolvidos: ${report.stats.total_solved}  |  Precisao: ${report.stats.accuracy_percent}%  |  Sequencia: ${report.stats.current_streak}d  |  Conquistas: ${report.stats.badges_count}  |  Dias ativos (30d): ${report.activity.days_active_30d}`;
     doc.text(statLine, margin, y);
     y += 8;
 
@@ -398,13 +403,13 @@ export async function exportClassPdf(reports: StudentReport[], className: string
         doc.setFontSize(8);
         doc.setFont("helvetica", "bold");
         setColor(doc, DARK);
-        doc.text(`${subject.name} (${subject.avg_mastery}%)`, margin, y);
+        doc.text(safeText(`${subject.name} (${subject.avg_mastery}%)`), margin, y);
         y += 4;
         for (const topic of subject.topics) {
           doc.setFont("helvetica", "normal");
           doc.setFontSize(7);
           setColor(doc, DIM);
-          doc.text(`  ${topic.name}: ${stars(topic.level)} ${topic.mastery_percent}%`, margin, y);
+          doc.text(safeText(`  ${topic.name}: ${levelBar(topic.level)} ${topic.mastery_percent}%`), margin, y);
           y += 4;
           if (y > 270) { doc.addPage(); y = 20; }
         }
@@ -421,17 +426,17 @@ export async function exportClassPdf(reports: StudentReport[], className: string
       doc.text("Pontos Fortes:", margin, y);
       doc.setFont("helvetica", "normal");
       setColor(doc, DARK);
-      doc.text(report.strengths.slice(0, 5).join(", "), margin + 25, y);
+      doc.text(safeText(report.strengths.slice(0, 5).join(", ")), margin + 25, y);
       y += 5;
     }
     if (report.weaknesses.length > 0) {
       doc.setFontSize(8);
       doc.setFont("helvetica", "bold");
       setColor(doc, RED_BG);
-      doc.text("Precisa Reforço:", margin, y);
+      doc.text("Precisa Reforco:", margin, y);
       doc.setFont("helvetica", "normal");
       setColor(doc, DARK);
-      doc.text(report.weaknesses.slice(0, 5).join(", "), margin + 28, y);
+      doc.text(safeText(report.weaknesses.slice(0, 5).join(", ")), margin + 28, y);
       y += 5;
     }
   }

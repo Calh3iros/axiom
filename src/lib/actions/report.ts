@@ -280,13 +280,42 @@ export async function getStudentReport(
   for (const c of (catalogRes.data || []) as { id: string; icon: string; name_key: string }[]) {
     catalogMap.set(c.id, { icon: c.icon, name_key: c.name_key });
   }
+
+  // Resolve name_key → human-readable display name
+  const badgeDisplayNames: Record<string, string> = {
+    first_solve: "First Solve",
+    "10_solves": "10 Problems",
+    "50_solves": "50 Problems",
+    "100_solves": "100 Problems",
+    "500_solves": "500 Problems",
+    "10_correct": "10 Correct",
+    "50_correct": "50 Correct",
+    "100_correct": "100 Correct",
+    "3_streak": "3-Day Streak",
+    "7_streak": "7-Day Streak",
+    "30_streak": "30-Day Streak",
+    "1_topic_mastered": "Topic Mastered",
+    "5_topics_mastered": "5 Topics Mastered",
+    "10_topics_mastered": "10 Topics Mastered",
+    "3_subjects": "3 Subjects",
+    "5_correct_streak": "5 Correct Streak",
+    "10_correct_streak": "10 Correct Streak",
+  };
+  function humanizeBadgeName(nameKey: string): string {
+    if (badgeDisplayNames[nameKey]) return badgeDisplayNames[nameKey];
+    // Fallback: "first_solve" → "First Solve"
+    return nameKey
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
   const badges: StudentReportBadge[] = (
     (badgeRes.data || []) as { badge_id: string; unlocked_at: string }[]
   ).map((b) => {
     const cat = catalogMap.get(b.badge_id);
     return {
-      name: cat?.name_key || b.badge_id,
-      icon: cat?.icon || "🏅",
+      name: humanizeBadgeName(cat?.name_key || b.badge_id),
+      icon: cat?.icon || "",
       unlocked_at: b.unlocked_at,
     };
   });
