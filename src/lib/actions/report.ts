@@ -150,7 +150,7 @@ export async function getStudentReport(
     // Student profile
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("student_profiles") as any)
-      .select("total_problems_solved, total_correct, grade_level, study_goal")
+      .select("total_problems_solved, total_correct, school_year, learning_goal")
       .eq("id", studentId)
       .single(),
     // Organization name
@@ -344,8 +344,8 @@ export async function getStudentReport(
       email: profile.email || "",
       avatar_url: profile.avatar_url || null,
       plan: profile.plan || "free",
-      school_year: sp?.grade_level || null,
-      learning_goal: sp?.study_goal || null,
+      school_year: sp?.school_year || null,
+      learning_goal: sp?.learning_goal || null,
     },
     class: {
       name: cls.name,
