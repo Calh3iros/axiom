@@ -728,7 +728,17 @@
     "students": "Schüler",
     "limitReached": "Limit erreicht",
     "nearLimit": "Nahe am Limit",
-    "expiresAt": "Läuft ab am"
+    "expiresAt": "Läuft ab am",
+    "teachersTitle": "Lehrer",
+    "teacherCode": "LEHRER-CODE",
+    "generateTeacherCode": "Lehrer-Code generieren",
+    "regenerateCode": "Code regenerieren",
+    "regenerateConfirm": "Dies macht den aktuellen Code ungültig. Bereits verknüpfte Lehrer sind nicht betroffen. Fortfahren?",
+    "noTeachers": "Noch keine Lehrer verknüpft. Teilen Sie den Code oben.",
+    "removeTeacher": "Entfernen",
+    "removeConfirm": "Diesen Lehrer aus der Organisation entfernen?",
+    "copyCode": "Code kopieren",
+    "copyLink": "Link kopieren"
   },
   "Class": {
     "title": "Klasse",
@@ -741,7 +751,8 @@
     "codeCopied": "Code kopiert!",
     "noStudents": "Noch keine Schüler in dieser Klasse.",
     "teacher": "Lehrer",
-    "classes": "Klassen"
+    "classes": "Klassen",
+    "copyLink": "Einladungslink kopieren"
   },
   "Join": {
     "title": "Code eingeben",
@@ -868,7 +879,24 @@
         "humanizes": "Humanize",
         "learns": "Learn"
       },
-      "viewDemoDashboard": "Demo-Dashboard anzeigen"
+      "viewDemoDashboard": "Demo-Dashboard anzeigen",
+      "createOrg": "Organisation erstellen",
+      "orgCreated": "Organisation erstellt!",
+      "orgName": "Name",
+      "orgTypeSel": "Typ",
+      "maxStudents": "Max. Schüler",
+      "notes": "Notizen",
+      "notesPlaceholder": "Vertragsnotizen, intern...",
+      "createAndCode": "Erstellen & Code generieren",
+      "copyCode": "Code kopieren",
+      "copyLink": "Link kopieren",
+      "close": "Schließen",
+      "code": "Code",
+      "typeSchool": "Schule",
+      "typeNetwork": "Netzwerk",
+      "typeState": "Sekretariat",
+      "organizations": "Organisationen",
+      "noOrgs": "Keine aktiven Organisationen."
     },
     "users": {
       "title": "Einzelbenutzer",

@@ -728,7 +728,17 @@
     "students": "Students",
     "limitReached": "Limit reached",
     "nearLimit": "Near limit",
-    "expiresAt": "Expires"
+    "expiresAt": "Expires",
+    "teachersTitle": "Teachers",
+    "teacherCode": "TEACHER CODE",
+    "generateTeacherCode": "Generate Teacher Code",
+    "regenerateCode": "Regenerate Code",
+    "regenerateConfirm": "This will invalidate the current code. Already linked teachers are not affected. Continue?",
+    "noTeachers": "No teachers linked yet. Share the code above.",
+    "removeTeacher": "Remove",
+    "removeConfirm": "Remove this teacher from the organization?",
+    "copyCode": "Copy Code",
+    "copyLink": "Copy Link"
   },
   "Class": {
     "title": "Class",
@@ -741,7 +751,8 @@
     "codeCopied": "Code copied!",
     "noStudents": "No students in this class yet.",
     "teacher": "Teacher",
-    "classes": "Classes"
+    "classes": "Classes",
+    "copyLink": "Copy invite link"
   },
   "Join": {
     "title": "Enter your code",
@@ -868,7 +879,24 @@
         "humanizes": "Humanize",
         "learns": "Learn"
       },
-      "viewDemoDashboard": "View Demo Dashboard"
+      "viewDemoDashboard": "View Demo Dashboard",
+      "createOrg": "Create Organization",
+      "orgCreated": "Organization Created!",
+      "orgName": "Name",
+      "orgTypeSel": "Type",
+      "maxStudents": "Max Students",
+      "notes": "Notes",
+      "notesPlaceholder": "Contract notes, internal...",
+      "createAndCode": "Create & Generate Code",
+      "copyCode": "Copy Code",
+      "copyLink": "Copy Link",
+      "close": "Close",
+      "code": "Code",
+      "typeSchool": "School",
+      "typeNetwork": "Network",
+      "typeState": "State",
+      "organizations": "Organizations",
+      "noOrgs": "No active organizations yet."
     },
     "users": {
       "title": "Individual Users",

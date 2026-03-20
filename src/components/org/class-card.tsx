@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Copy, Check } from "lucide-react";
+import { BookOpen, Copy, Check, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -21,6 +21,7 @@ interface ClassCardProps {
 export function ClassCard({ cls, orgId, showCode, studentCount }: ClassCardProps) {
   const t = useTranslations("Class");
   const [copied, setCopied] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -28,6 +29,14 @@ export function ClassCard({ cls, orgId, showCode, studentCount }: ClassCardProps
     await navigator.clipboard.writeText(cls.invite_code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCopyLink = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await navigator.clipboard.writeText(`https://axiom-solver.com/join?code=${cls.invite_code}`);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
   };
 
   return (
@@ -54,6 +63,17 @@ export function ClassCard({ cls, orgId, showCode, studentCount }: ClassCardProps
                   <Check className="h-3.5 w-3.5 text-green-400" />
                 ) : (
                   <Copy className="h-3.5 w-3.5" />
+                )}
+              </button>
+              <button
+                onClick={handleCopyLink}
+                className="rounded p-1 text-[var(--color-dim)] transition-colors hover:text-white"
+                title={t("copyLink")}
+              >
+                {copiedLink ? (
+                  <Check className="h-3.5 w-3.5 text-green-400" />
+                ) : (
+                  <ExternalLink className="h-3.5 w-3.5" />
                 )}
               </button>
             </div>

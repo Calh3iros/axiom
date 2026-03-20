@@ -1,6 +1,9 @@
 "use client";
 
-import { Activity, Building2, Crown, FlaskConical, TrendingUp, Users } from "lucide-react";
+import {
+  Activity, Building2, Crown, FlaskConical, TrendingUp, Users,
+  Plus, Copy, Check, X, ExternalLink,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import {
@@ -9,29 +12,300 @@ import {
 } from "recharts";
 
 import { Link } from "@/i18n/routing";
-import { getAdminPlatformStats, getDemoOrgId } from "@/lib/actions/admin";
+import {
+  getAdminPlatformStats, getDemoOrgId,
+  createOrganizationDirect, getAdminOrgList,
+} from "@/lib/actions/admin";
 
 type Stats = Awaited<ReturnType<typeof getAdminPlatformStats>>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OrgRow = any;
 
 const PLAN_COLORS = { free: "#64748b", pro: "#818cf8", elite: "#f59e0b" };
 const MODULE_COLORS = ["#818cf8", "#22c55e", "#f59e0b", "#ec4899"];
 
+// ── Create Org Modal ──────────────────────────────────────────────────
+function CreateOrgModal({
+  open, onClose, onCreated, t,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onCreated: (orgId: string, code: string) => void;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  const [name, setName] = useState("");
+  const [type, setType] = useState<"school" | "network" | "state">("school");
+  const [maxStudents, setMaxStudents] = useState("500");
+  const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  if (!open) return null;
+
+  const handleCreate = async () => {
+    if (!name.trim()) return;
+    setLoading(true);
+    setError("");
+
+    const expiresAt = new Date(Date.now() + 365 * 86400000)
+      .toISOString()
+      .split("T")[0];
+
+    const result = await createOrganizationDirect({
+      name: name.trim(),
+      type,
+      maxStudents: parseInt(maxStudents) || 500,
+      expiresAt,
+      contractNotes: notes || undefined,
+    });
+
+    setLoading(false);
+    if ("error" in result) {
+      setError(result.error);
+    } else {
+      onCreated(result.orgId, result.code);
+      setName("");
+      setType("school");
+      setMaxStudents("500");
+      setNotes("");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-6 shadow-2xl">
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-white">{t("platform.createOrg")}</h2>
+          <button onClick={onClose} className="text-[#64748b] hover:text-white">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+              {t("platform.orgName")}
+            </label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
+              placeholder="CTC, Marista, GGE..."
+              autoFocus
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+              {t("platform.orgTypeSel")}
+            </label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value as "school" | "network" | "state")}
+              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
+            >
+              <option value="school">{t("platform.typeSchool")}</option>
+              <option value="network">{t("platform.typeNetwork")}</option>
+              <option value="state">{t("platform.typeState")}</option>
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+              {t("platform.maxStudents")}
+            </label>
+            <input
+              type="number"
+              value={maxStudents}
+              onChange={(e) => setMaxStudents(e.target.value)}
+              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+              {t("platform.notes")}
+            </label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={2}
+              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
+              placeholder={t("platform.notesPlaceholder")}
+            />
+          </div>
+
+          {error && (
+            <div className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={handleCreate}
+            disabled={loading || !name.trim()}
+            className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          >
+            {loading ? "..." : t("platform.createAndCode")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Success Modal ─────────────────────────────────────────────────────
+function SuccessModal({
+  open, code, onClose, t,
+}: {
+  open: boolean;
+  code: string;
+  onClose: () => void;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  if (!open) return null;
+
+  const link = `https://axiom-solver.com/join?code=${code}`;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="w-full max-w-sm rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-6 text-center shadow-2xl">
+        <Check className="mx-auto h-10 w-10 text-green-400" />
+        <h2 className="mt-3 text-lg font-bold text-white">{t("platform.orgCreated")}</h2>
+        <div className="mt-4 rounded-lg bg-[#0a0a12] border border-[#2a2a3e] px-4 py-3">
+          <p className="font-mono text-2xl font-bold tracking-wider text-[#f59e0b]">{code}</p>
+        </div>
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={async () => {
+              await navigator.clipboard.writeText(code);
+              setCopiedCode(true);
+              setTimeout(() => setCopiedCode(false), 2000);
+            }}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1e1e2e] px-3 py-2 text-xs font-medium text-white hover:bg-[#2a2a3e]"
+          >
+            {copiedCode ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
+            {t("platform.copyCode")}
+          </button>
+          <button
+            onClick={async () => {
+              await navigator.clipboard.writeText(link);
+              setCopiedLink(true);
+              setTimeout(() => setCopiedLink(false), 2000);
+            }}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1e1e2e] px-3 py-2 text-xs font-medium text-white hover:bg-[#2a2a3e]"
+          >
+            {copiedLink ? <Check className="h-3.5 w-3.5 text-green-400" /> : <ExternalLink className="h-3.5 w-3.5" />}
+            {t("platform.copyLink")}
+          </button>
+        </div>
+        <button
+          onClick={onClose}
+          className="mt-4 w-full rounded-lg border border-[#2a2a3e] py-2 text-sm text-[#94a3b8] hover:text-white"
+        >
+          {t("platform.close")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Org Table ─────────────────────────────────────────────────────────
+function OrgTable({ orgs, t }: { orgs: OrgRow[]; t: ReturnType<typeof useTranslations> }) {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const typeLabels: Record<string, string> = {
+    school: t("platform.typeSchool"),
+    network: t("platform.typeNetwork"),
+    state: t("platform.typeState"),
+  };
+
+  return (
+    <div className="rounded-xl border border-[#1e1e2e] bg-[#12121a] overflow-hidden">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-[#1e1e2e] text-left text-xs uppercase text-[#64748b]">
+            <th className="px-4 py-3">{t("platform.orgName")}</th>
+            <th className="px-4 py-3">{t("platform.orgTypeSel")}</th>
+            <th className="px-4 py-3">{t("platform.code")}</th>
+            <th className="px-4 py-3">{t("platform.maxStudents")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orgs.map((org: OrgRow) => (
+            <tr key={org.id} className="border-b border-[#1e1e2e]/50 hover:bg-[#1a1a2e]">
+              <td className="px-4 py-3">
+                <Link href={`/org/${org.id}`} className="font-medium text-white hover:text-[#818cf8]">
+                  {org.name}
+                </Link>
+              </td>
+              <td className="px-4 py-3 text-[#94a3b8]">{typeLabels[org.type] || org.type}</td>
+              <td className="px-4 py-3">
+                {org.inviteCode ? (
+                  <div className="flex items-center gap-1.5">
+                    <code className="rounded bg-[#0a0a12] px-2 py-0.5 font-mono text-xs text-[#f59e0b]">
+                      {org.inviteCode}
+                    </code>
+                    <button
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(org.inviteCode);
+                        setCopiedId(org.id);
+                        setTimeout(() => setCopiedId(null), 2000);
+                      }}
+                      className="text-[#64748b] hover:text-white"
+                    >
+                      {copiedId === org.id ? (
+                        <Check className="h-3.5 w-3.5 text-green-400" />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5" />
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <span className="text-xs text-[#64748b]">—</span>
+                )}
+              </td>
+              <td className="px-4 py-3 text-[#94a3b8]">{org.max_students || "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────
 export default function AdminPlatformPage() {
   const t = useTranslations("Admin");
   const [stats, setStats] = useState<Stats | null>(null);
   const [demoOrgId, setDemoOrgId] = useState<string | null>(null);
+  const [orgs, setOrgs] = useState<OrgRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [successCode, setSuccessCode] = useState("");
 
   useEffect(() => {
     Promise.all([
       getAdminPlatformStats(),
       getDemoOrgId(),
-    ]).then(([d, dId]) => {
+      getAdminOrgList(),
+    ]).then(([d, dId, orgList]) => {
       setStats(d);
       setDemoOrgId(dId);
+      setOrgs(orgList);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
+
+  const handleCreated = async (orgId: string, code: string) => {
+    setShowCreateModal(false);
+    setSuccessCode(code);
+    // Refresh org list
+    const fresh = await getAdminOrgList();
+    setOrgs(fresh);
+    // Suppress unused variable warning
+    void orgId;
+  };
 
   if (loading) return <div className="admin-loading">{t("loading")}</div>;
   if (!stats) return <div className="admin-loading">Error loading stats</div>;
@@ -93,6 +367,30 @@ export default function AdminPlatformPage() {
             <div className="kpi-label">{plan.charAt(0).toUpperCase() + plan.slice(1)}</div>
           </div>
         ))}
+      </div>
+
+      {/* Organizations */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f1f5f9", margin: 0 }}>
+            {t("platform.organizations")} ({orgs.length})
+          </h2>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="demo-org-btn"
+            style={{ padding: "8px 16px", fontSize: 13, gap: 6 }}
+          >
+            <Plus style={{ width: 16, height: 16 }} />
+            {t("platform.createOrg")}
+          </button>
+        </div>
+        {orgs.length > 0 ? (
+          <OrgTable orgs={orgs} t={t} />
+        ) : (
+          <div style={{ textAlign: "center", padding: "40px 0", color: "#64748b" }}>
+            {t("platform.noOrgs")}
+          </div>
+        )}
       </div>
 
       {/* Charts grid */}
@@ -160,6 +458,20 @@ export default function AdminPlatformPage() {
         </div>
       </div>
 
+      <CreateOrgModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onCreated={handleCreated}
+        t={t}
+      />
+
+      <SuccessModal
+        open={!!successCode}
+        code={successCode}
+        onClose={() => setSuccessCode("")}
+        t={t}
+      />
+
       <style>{`
         .admin-page-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: #f1f5f9; }
         .admin-loading { text-align: center; padding: 60px 0; color: #64748b; }
@@ -177,7 +489,7 @@ export default function AdminPlatformPage() {
         .demo-org-left { display: flex; align-items: center; gap: 14px; }
         .demo-org-name { font-size: 16px; font-weight: 700; color: #f1f5f9; margin: 0 0 4px; }
         .demo-org-badge { font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 20px; background: #16513d; color: #4ade80; text-transform: uppercase; letter-spacing: 0.05em; }
-        .demo-org-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+        .demo-org-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s; cursor: pointer; }
         .demo-org-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3); }
       `}</style>
     </div>

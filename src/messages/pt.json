@@ -728,7 +728,17 @@
     "students": "Alunos",
     "limitReached": "Limite atingido",
     "nearLimit": "Perto do limite",
-    "expiresAt": "Expira em"
+    "expiresAt": "Expira em",
+    "teachersTitle": "Professores",
+    "teacherCode": "CÓDIGO DO PROFESSOR",
+    "generateTeacherCode": "Gerar Código Professor",
+    "regenerateCode": "Regenerar Código",
+    "regenerateConfirm": "Isso invalidará o código atual. Professores já vinculados não são afetados. Continuar?",
+    "noTeachers": "Nenhum professor vinculado. Compartilhe o código acima.",
+    "removeTeacher": "Remover",
+    "removeConfirm": "Remover este professor da organização?",
+    "copyCode": "Copiar Código",
+    "copyLink": "Copiar Link"
   },
   "Class": {
     "title": "Turma",
@@ -741,7 +751,8 @@
     "codeCopied": "Código copiado!",
     "noStudents": "Nenhum aluno nesta turma ainda.",
     "teacher": "Professor",
-    "classes": "Turmas"
+    "classes": "Turmas",
+    "copyLink": "Copiar link de convite"
   },
   "Join": {
     "title": "Informe seu código",
@@ -868,7 +879,24 @@
         "humanizes": "Humanize",
         "learns": "Learn"
       },
-      "viewDemoDashboard": "Ver Dashboard Demo"
+      "viewDemoDashboard": "Ver Dashboard Demo",
+      "createOrg": "Criar Organização",
+      "orgCreated": "Organização Criada!",
+      "orgName": "Nome",
+      "orgTypeSel": "Tipo",
+      "maxStudents": "Máx. Alunos",
+      "notes": "Notas",
+      "notesPlaceholder": "Notas do contrato, internas...",
+      "createAndCode": "Criar e Gerar Código",
+      "copyCode": "Copiar Código",
+      "copyLink": "Copiar Link",
+      "close": "Fechar",
+      "code": "Código",
+      "typeSchool": "Escola",
+      "typeNetwork": "Rede",
+      "typeState": "Secretaria",
+      "organizations": "Organizações",
+      "noOrgs": "Nenhuma organização ativa."
     },
     "users": {
       "title": "Usuários Individuais",

@@ -222,7 +222,7 @@ export async function getOrgDashboard(orgId: string) {
       .single(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("org_memberships") as any)
-      .select("user_id, role, joined_at, profiles(full_name, avatar_url, email)")
+      .select("user_id, role, joined_at, subjects, profiles(full_name, avatar_url, email)")
       .eq("org_id", orgId)
       .order("role"),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

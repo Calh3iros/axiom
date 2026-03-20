@@ -1,6 +1,9 @@
 "use client";
 
-import { ArrowLeft, Plus, Users, BookOpen, Building2, Trophy, BarChart3 } from "lucide-react";
+import {
+  ArrowLeft, Plus, Users, BookOpen, Building2, Trophy, BarChart3,
+  GraduationCap, Copy, Check, RefreshCw, ExternalLink, Trash2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
@@ -11,6 +14,9 @@ import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { Link, useRouter } from "@/i18n/routing";
 import { getDirectorDashboard, getSecretaryDashboard } from "@/lib/actions/dashboard";
+import {
+  generateInviteCode, getOrgInviteCodes, regenerateInviteCodeByType,
+} from "@/lib/actions/invite-codes";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
 
@@ -33,6 +39,13 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
   const [expiresWarning, setExpiresWarning] = useState(false);
   const [expiresFormatted, setExpiresFormatted] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Teachers section state
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [teacherCode, setTeacherCode] = useState<any>(null);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [codeLoading, setCodeLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -57,6 +70,14 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
       setExpiresFormatted(null);
     }
 
+    // Fetch invite codes for teachers section
+    if (res && ["admin", "director", "secretary"].includes(res.myRole)) {
+      const codes = await getOrgInviteCodes(orgId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
+      setTeacherCode(prf || null);
+    }
+
     setLoading(false);
   }, [orgId]);
 
@@ -78,6 +99,30 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
     setSecLoading(false);
   };
 
+  const handleGenerateTeacherCode = async () => {
+    setCodeLoading(true);
+    const result = await generateInviteCode({ type: "teacher", orgId });
+    if ("code" in result) {
+      const codes = await getOrgInviteCodes(orgId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
+      setTeacherCode(prf || null);
+    }
+    setCodeLoading(false);
+  };
+
+  const handleRegenerateCode = async () => {
+    if (!teacherCode?.id) return;
+    if (!confirm(t("regenerateConfirm"))) return;
+    setCodeLoading(true);
+    await regenerateInviteCodeByType(teacherCode.id);
+    const codes = await getOrgInviteCodes(orgId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
+    setTeacherCode(prf || null);
+    setCodeLoading(false);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -96,6 +141,9 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
 
   const canManage = ["teacher", "admin", "director"].includes(data.myRole);
   const isElevated = ["admin", "director", "secretary"].includes(data.myRole);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const teachers = data.members.filter((m: any) => m.role === "teacher");
 
   return (
     <div className="space-y-8">
@@ -180,6 +228,146 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           </div>
         )}
       </div>
+
+      {/* ── Teachers Section (elevated roles) ─────────────────────────── */}
+      {isElevated && (
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <GraduationCap className="h-5 w-5 text-green-400" />
+            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+              {t("teachersTitle")} ({teachers.length})
+            </h2>
+          </div>
+
+          {/* Teacher Code Card */}
+          <div className="mb-4 rounded-xl border border-green-500/20 bg-green-500/5 p-5">
+            {teacherCode ? (
+              <div>
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-green-400/70">
+                  {t("teacherCode")}
+                </p>
+                <div className="flex items-center gap-3">
+                  <code className="rounded-lg bg-[var(--color-bg2)] px-4 py-2 font-mono text-xl font-bold tracking-widest text-[var(--color-ax-yellow)]">
+                    {teacherCode.code}
+                  </code>
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(teacherCode.code);
+                      setCopiedCode(true);
+                      setTimeout(() => setCopiedCode(false), 2000);
+                    }}
+                    className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white"
+                    title={t("copyCode")}
+                  >
+                    {copiedCode ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                  </button>
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(`https://axiom-solver.com/join?code=${teacherCode.code}`);
+                      setCopiedLink(true);
+                      setTimeout(() => setCopiedLink(false), 2000);
+                    }}
+                    className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white"
+                    title={t("copyLink")}
+                  >
+                    {copiedLink ? <Check className="h-4 w-4 text-green-400" /> : <ExternalLink className="h-4 w-4" />}
+                  </button>
+                  <button
+                    onClick={handleRegenerateCode}
+                    disabled={codeLoading}
+                    className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white disabled:opacity-50"
+                    title={t("regenerateCode")}
+                  >
+                    <RefreshCw className={`h-4 w-4 ${codeLoading ? "animate-spin" : ""}`} />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <button
+                  onClick={handleGenerateTeacherCode}
+                  disabled={codeLoading}
+                  className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                >
+                  <Plus className="h-4 w-4" />
+                  {t("generateTeacherCode")}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Teacher List */}
+          {teachers.length === 0 ? (
+            <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] py-8 text-center">
+              <GraduationCap className="mx-auto h-8 w-8 text-[var(--color-dim)]" />
+              <p className="mt-2 text-sm text-[var(--color-dim)]">{t("noTeachers")}</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {teachers.map((m: any) => {
+                const name = m.profiles?.full_name || m.profiles?.email?.split("@")[0] || "User";
+                const subjects: string[] = m.subjects || [];
+                return (
+                  <div
+                    key={m.user_id}
+                    className="flex items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg2)] px-4 py-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      {m.profiles?.avatar_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={m.profiles.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/15 text-xs font-bold text-green-400">
+                          {name.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-sm font-medium text-[var(--color-text-primary)]">{name}</span>
+                        {m.profiles?.email && (
+                          <p className="text-xs text-[var(--color-dim)]">{m.profiles.email}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {subjects.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {subjects.slice(0, 3).map((s: string) => (
+                            <span key={s} className="rounded-full border border-green-500/20 bg-green-500/10 px-2 py-0.5 text-xs text-green-400">
+                              {s}
+                            </span>
+                          ))}
+                          {subjects.length > 3 && (
+                            <span className="rounded-full border border-[var(--color-border)] px-2 py-0.5 text-xs text-[var(--color-dim)]">
+                              +{subjects.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      <button
+                        onClick={async () => {
+                          if (!confirm(t("removeConfirm"))) return;
+                          const { supabaseAdmin } = await import("@/lib/supabase/admin");
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          await (supabaseAdmin.from("org_memberships") as any)
+                            .delete()
+                            .eq("user_id", m.user_id)
+                            .eq("org_id", orgId);
+                          fetchData();
+                        }}
+                        className="rounded p-1 text-[var(--color-dim)] hover:text-red-400"
+                        title={t("removeTeacher")}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Dashboard (directors/admins/secretaries) */}
       {isElevated && (dashData || secData) && (

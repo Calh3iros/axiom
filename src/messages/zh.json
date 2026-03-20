@@ -728,7 +728,17 @@
     "students": "学生",
     "limitReached": "已达上限",
     "nearLimit": "接近上限",
-    "expiresAt": "到期日"
+    "expiresAt": "到期日",
+    "teachersTitle": "教师",
+    "teacherCode": "教师代码",
+    "generateTeacherCode": "生成教师代码",
+    "regenerateCode": "重新生成代码",
+    "regenerateConfirm": "这将使当前代码失效。已关联的教师不受影响。继续？",
+    "noTeachers": "尚无教师关联。请分享上面的代码。",
+    "removeTeacher": "移除",
+    "removeConfirm": "从组织中移除该教师？",
+    "copyCode": "复制代码",
+    "copyLink": "复制链接"
   },
   "Class": {
     "title": "班级",
@@ -741,7 +751,8 @@
     "codeCopied": "已复制！",
     "noStudents": "该班级暂无学生。",
     "teacher": "教师",
-    "classes": "班级"
+    "classes": "班级",
+    "copyLink": "复制邀请链接"
   },
   "Join": {
     "title": "输入您的代码",
@@ -868,7 +879,24 @@
         "humanizes": "Humanize",
         "learns": "Learn"
       },
-      "viewDemoDashboard": "查看演示仪表盘"
+      "viewDemoDashboard": "查看演示仪表盘",
+      "createOrg": "创建组织",
+      "orgCreated": "组织已创建！",
+      "orgName": "名称",
+      "orgTypeSel": "类型",
+      "maxStudents": "最大学生数",
+      "notes": "备注",
+      "notesPlaceholder": "合同备注，内部...",
+      "createAndCode": "创建并生成代码",
+      "copyCode": "复制代码",
+      "copyLink": "复制链接",
+      "close": "关闭",
+      "code": "代码",
+      "typeSchool": "学校",
+      "typeNetwork": "网络",
+      "typeState": "秘书处",
+      "organizations": "组织",
+      "noOrgs": "暂无活跃组织。"
     },
     "users": {
       "title": "个人用户",

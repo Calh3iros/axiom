@@ -728,7 +728,17 @@
     "students": "Élèves",
     "limitReached": "Limite atteinte",
     "nearLimit": "Proche de la limite",
-    "expiresAt": "Expire le"
+    "expiresAt": "Expire le",
+    "teachersTitle": "Professeurs",
+    "teacherCode": "CODE PROFESSEUR",
+    "generateTeacherCode": "Générer Code Professeur",
+    "regenerateCode": "Régénérer le Code",
+    "regenerateConfirm": "Cela invalidera le code actuel. Les professeurs déjà liés ne sont pas affectés. Continuer ?",
+    "noTeachers": "Aucun professeur lié. Partagez le code ci-dessus.",
+    "removeTeacher": "Supprimer",
+    "removeConfirm": "Supprimer ce professeur de l'organisation ?",
+    "copyCode": "Copier le Code",
+    "copyLink": "Copier le Lien"
   },
   "Class": {
     "title": "Classe",
@@ -741,7 +751,8 @@
     "codeCopied": "Code copié !",
     "noStudents": "Aucun élève dans cette classe.",
     "teacher": "Professeur",
-    "classes": "Classes"
+    "classes": "Classes",
+    "copyLink": "Copier le lien d'invitation"
   },
   "Join": {
     "title": "Entrez votre code",
@@ -868,7 +879,24 @@
         "humanizes": "Humanize",
         "learns": "Learn"
       },
-      "viewDemoDashboard": "Voir le tableau de bord démo"
+      "viewDemoDashboard": "Voir le tableau de bord démo",
+      "createOrg": "Créer une Organisation",
+      "orgCreated": "Organisation Créée !",
+      "orgName": "Nom",
+      "orgTypeSel": "Type",
+      "maxStudents": "Max. Élèves",
+      "notes": "Notes",
+      "notesPlaceholder": "Notes de contrat, internes...",
+      "createAndCode": "Créer et Générer le Code",
+      "copyCode": "Copier le Code",
+      "copyLink": "Copier le Lien",
+      "close": "Fermer",
+      "code": "Code",
+      "typeSchool": "École",
+      "typeNetwork": "Réseau",
+      "typeState": "Secrétariat",
+      "organizations": "Organisations",
+      "noOrgs": "Aucune organisation active."
     },
     "users": {
       "title": "Utilisateurs Individuels",

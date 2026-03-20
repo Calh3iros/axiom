@@ -544,3 +544,115 @@ export async function getDemoOrgId(): Promise<string | null> {
     .single();
   return data?.id || null;
 }
+
+// ─── Direct Org Creation ─────────────────────────────────────────────────
+
+/**
+ * Create an org directly (B2B active sales) and auto-generate invite code.
+ * Only super_admin. Returns { orgId, code }.
+ */
+export async function createOrganizationDirect(input: {
+  name: string;
+  type: "school" | "network" | "state";
+  maxStudents?: number;
+  expiresAt?: string;
+  contractNotes?: string;
+}): Promise<{ orgId: string; code: string } | { error: string }> {
+  const user = await requireSuperAdmin();
+
+  if (!input.name?.trim()) return { error: "Name is required" };
+
+  const expiresAt =
+    input.expiresAt ||
+    new Date(Date.now() + 365 * 86400000).toISOString().split("T")[0];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: org, error: orgErr } = await (supabaseAdmin.from("organizations") as any)
+    .insert({
+      name: input.name.trim(),
+      type: input.type,
+      status: "active",
+      created_by: user.id,
+      max_students: input.maxStudents || 500,
+      access_expires_at: expiresAt,
+      contract_notes: input.contractNotes || null,
+    })
+    .select("id")
+    .single();
+
+  if (orgErr) return { error: orgErr.message };
+
+  // Auto-add creator as admin
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabaseAdmin.from("org_memberships") as any).insert({
+    user_id: user.id,
+    org_id: org.id,
+    role: "admin",
+  });
+
+  // Generate invite code (DIR for school, SEC for network/state)
+  const codeType = input.type === "school" ? "director" : "secretary";
+  const PREFIX_MAP: Record<string, string> = {
+    secretary: "SEC", gre: "GRE", director: "DIR", teacher: "PRF",
+  };
+  const CHARSET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "";
+  for (let attempt = 0; attempt < 5; attempt++) {
+    let body = "";
+    for (let i = 0; i < 6; i++) body += CHARSET[Math.floor(Math.random() * CHARSET.length)];
+    const candidate = `${PREFIX_MAP[codeType]}-${body}`;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: dup } = await (supabaseAdmin.from("invite_codes") as any)
+      .select("id").eq("code", candidate).limit(1);
+    if (!dup || dup.length === 0) { code = candidate; break; }
+  }
+
+  if (!code) return { error: "Failed to generate unique code" };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabaseAdmin.from("invite_codes") as any).insert({
+    code,
+    type: codeType,
+    org_id: org.id,
+    created_by: user.id,
+    max_uses: 1,
+  });
+
+  return { orgId: org.id, code };
+}
+
+/**
+ * Get all active orgs with their active invite codes.
+ */
+export async function getAdminOrgList() {
+  await requireSuperAdmin();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: orgs } = await (supabaseAdmin.from("organizations") as any)
+    .select("id, name, type, status, created_at, max_students, access_expires_at")
+    .eq("status", "active")
+    .order("created_at", { ascending: false });
+
+  if (!orgs || orgs.length === 0) return [];
+
+  const orgIds = orgs.map((o: { id: string }) => o.id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: codes } = await (supabaseAdmin.from("invite_codes") as any)
+    .select("code, type, org_id")
+    .in("org_id", orgIds)
+    .eq("is_active", true);
+
+  const codeMap = new Map<string, { code: string; type: string }>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (codes || []).forEach((c: any) => {
+    // Keep the first active code per org (usually DIR or SEC)
+    if (!codeMap.has(c.org_id)) codeMap.set(c.org_id, { code: c.code, type: c.type });
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return orgs.map((o: any) => ({
+    ...o,
+    inviteCode: codeMap.get(o.id)?.code || null,
+    codeType: codeMap.get(o.id)?.type || null,
+  }));
+}
+
