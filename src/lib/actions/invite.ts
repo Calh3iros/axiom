@@ -20,9 +20,9 @@ export async function joinByInviteCode(code: string) {
     return { error: "Invalid code" };
   }
 
-  // Find class by invite code
+  // Find class by invite code — use supabaseAdmin to bypass RLS
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: cls } = await (supabase.from("classes") as any)
+  const { data: cls } = await (supabaseAdmin.from("classes") as any)
     .select("id, org_id, name")
     .eq("invite_code", trimmedCode)
     .single();
@@ -31,7 +31,7 @@ export async function joinByInviteCode(code: string) {
 
   // Check if already in class
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: existing } = await (supabase.from("class_memberships") as any)
+  const { data: existing } = await (supabaseAdmin.from("class_memberships") as any)
     .select("id")
     .eq("user_id", user.id)
     .eq("class_id", cls.id)
@@ -82,7 +82,7 @@ export async function joinByInviteCode(code: string) {
 
   // ─── Auto-join org as student (if not already member) ───────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: orgMember } = await (supabase.from("org_memberships") as any)
+  const { data: orgMember } = await (supabaseAdmin.from("org_memberships") as any)
     .select("id")
     .eq("user_id", user.id)
     .eq("org_id", cls.org_id)
@@ -90,7 +90,7 @@ export async function joinByInviteCode(code: string) {
 
   if (!orgMember) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabase.from("org_memberships") as any).insert({
+    await (supabaseAdmin.from("org_memberships") as any).insert({
       user_id: user.id,
       org_id: cls.org_id,
       role: "student",
@@ -99,7 +99,7 @@ export async function joinByInviteCode(code: string) {
 
   // Join class
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("class_memberships") as any).insert({
+  const { error } = await (supabaseAdmin.from("class_memberships") as any).insert({
     user_id: user.id,
     class_id: cls.id,
   });
