@@ -992,7 +992,11 @@
       "title": "将Axiom带到您的学校",
       "responseTime": "24小时内回复",
       "ctaWhatsApp": "WhatsApp咨询",
-      "ctaEmail": "发送邮件"
+      "ctaEmail": "发送邮件",
+      "register": "注册我的学校",
+      "registerSub": "免费注册，24小时内审批",
+      "requestAccess": "申请机构访问 →",
+      "orRegister": "或者现在注册您的学校 — 免费且快速"
     },
     "footer": {
       "copy": "© 2026 Axiom。更聪明地学习。",

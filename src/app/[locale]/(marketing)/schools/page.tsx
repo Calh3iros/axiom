@@ -75,13 +75,14 @@ function SchoolsContent() {
         <h1>{t("hero.title")}</h1>
         <p className="sch-hero-sub">{t("hero.subtitle")}</p>
         <div className="sch-hero-ctas">
-          <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary sch-btn-wa">
+          <Link href="/request-org" className="btn-primary sch-btn-register">
+            <span>🏫</span> {t("cta.register")}
+          </Link>
+          <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="btn-ghost sch-btn-wa">
             <span>💬</span> {t("hero.ctaWhatsApp")}
           </a>
-          <a href={EMAIL_LINK} className="btn-ghost sch-btn-email">
-            <span>✉️</span> {t("hero.ctaEmail")}
-          </a>
         </div>
+        <p className="sch-hero-register-sub">{t("cta.registerSub")}</p>
       </section>
 
       {/* SECTION 2 — THE PROBLEM */}
@@ -292,9 +293,12 @@ function SchoolsContent() {
             <li><span className="sch-check-p">✓</span> {t("pricing.bullet5")}</li>
           </ul>
           <div className="sch-pricing-label">{t("pricing.priceLabel")}</div>
-          <a href={EMAIL_LINK} className="btn-primary sch-pricing-cta">
+          <a href={EMAIL_LINK} className="btn-ghost sch-pricing-cta">
             {t("pricing.ctaQuote")}
           </a>
+          <Link href="/request-org" className="btn-primary sch-pricing-register">
+            🏫 {t("cta.requestAccess")}
+          </Link>
         </div>
       </section>
 
@@ -303,14 +307,14 @@ function SchoolsContent() {
         <div className="sch-cta-glow" />
         <h2>{t("cta.title")}</h2>
         <div className="sch-cta-buttons">
-          <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary sch-btn-wa-lg">
+          <Link href="/request-org" className="btn-primary sch-btn-register-lg">
+            🏫 {t("cta.register")}
+          </Link>
+          <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="btn-ghost sch-btn-wa-lg">
             💬 {t("cta.ctaWhatsApp")}
           </a>
-          <a href={EMAIL_LINK} className="btn-ghost sch-btn-email-lg">
-            ✉️ {t("cta.ctaEmail")}
-          </a>
         </div>
-        <p className="sch-cta-note">{t("cta.responseTime")}</p>
+        <p className="sch-cta-note">{t("cta.orRegister")}</p>
       </section>
 
       {/* SECTION 8 — FOOTER */}

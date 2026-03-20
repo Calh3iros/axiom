@@ -992,7 +992,11 @@
       "title": "Bring Axiom to your school",
       "responseTime": "Response within 24h",
       "ctaWhatsApp": "Chat on WhatsApp",
-      "ctaEmail": "Send Email"
+      "ctaEmail": "Send Email",
+      "register": "Register My School",
+      "registerSub": "Free to register, approval within 24 hours",
+      "requestAccess": "Request institutional access →",
+      "orRegister": "Or register your school now — it's free and fast"
     },
     "footer": {
       "copy": "© 2026 Axiom. Study smarter.",

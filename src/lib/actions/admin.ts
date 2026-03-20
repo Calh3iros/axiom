@@ -86,6 +86,60 @@ export async function approveOrg(
 
   if (error) throw new Error(error.message);
 
+  // ── Auto-add requester as org member ────────────────────────────────
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: orgInfo } = await (supabaseAdmin.from("organizations") as any)
+      .select("requested_by_email, requested_by_role")
+      .eq("id", orgId)
+      .single();
+
+    if (orgInfo?.requested_by_email) {
+      // Look up user by email in profiles
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: userProfile } = await (supabaseAdmin.from("profiles") as any)
+        .select("id")
+        .eq("email", orgInfo.requested_by_email.toLowerCase())
+        .single();
+
+      if (userProfile) {
+        const roleMap: Record<string, string> = {
+          director: "director",
+          coordinator: "teacher",
+          secretary: "secretary",
+          other: "teacher",
+        };
+        const memberRole = roleMap[orgInfo.requested_by_role] || "teacher";
+
+        // Check if already a member (idempotent)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: existing } = await (supabaseAdmin.from("org_memberships") as any)
+          .select("id")
+          .eq("org_id", orgId)
+          .eq("user_id", userProfile.id)
+          .single();
+
+        if (!existing) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (supabaseAdmin.from("org_memberships") as any).insert({
+            org_id: orgId,
+            user_id: userProfile.id,
+            role: memberRole,
+          });
+          console.warn(`[APPROVE] Auto-added ${orgInfo.requested_by_email} as ${memberRole}`);
+        }
+      } else {
+        console.warn(
+          `[APPROVE] User ${orgInfo.requested_by_email} not found in profiles — manual add needed`
+        );
+      }
+    }
+  } catch (memberErr) {
+    // Non-fatal: org is approved even if membership creation fails
+    console.error("[APPROVE] Auto-membership error (non-fatal):", memberErr);
+  }
+  // ────────────────────────────────────────────────────────────────────
+
   // ── Org approved email (fire-and-forget) ────────────────────────────
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
