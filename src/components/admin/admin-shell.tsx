@@ -1,8 +1,9 @@
 "use client";
 
-import { ClipboardCheck, BarChart3, Users, Shield, FlaskConical } from "lucide-react";
+import { ClipboardCheck, BarChart3, Users, FlaskConical, Menu, X, Shield } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
 
@@ -16,6 +17,7 @@ const navItems = [
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const t = useTranslations("Admin");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (href: string) => {
     const clean = pathname.replace(/^\/[a-z]{2}/, "");
@@ -25,7 +27,24 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="admin-root">
-      <aside className="admin-sidebar">
+      {/* Mobile header — visible only on small screens */}
+      <div className="admin-mobile-header">
+        <div className="admin-mobile-header-inner">
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Shield style={{ width: 20, height: 20, color: "#818cf8" }} />
+            <span className="admin-logo-text">Axiom Admin</span>
+          </div>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="admin-hamburger"
+          >
+            {mobileMenuOpen ? <X style={{ width: 24, height: 24 }} /> : <Menu style={{ width: 24, height: 24 }} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Sidebar */}
+      <aside className={`admin-sidebar ${mobileMenuOpen ? "open" : ""}`}>
         <div className="admin-sidebar-header">
           <Shield className="admin-logo-icon" />
           <span className="admin-logo-text">Axiom Admin</span>
@@ -35,6 +54,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <Link
               key={item.key}
               href={item.href}
+              onClick={() => setMobileMenuOpen(false)}
               className={`admin-nav-item ${isActive(item.href) ? "active" : ""}`}
             >
               <item.icon className="admin-nav-icon" />
@@ -43,11 +63,20 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
         <div className="admin-sidebar-footer">
-          <Link href="/map" className="admin-back-link">
+          <Link href="/map" className="admin-back-link" onClick={() => setMobileMenuOpen(false)}>
             ← {t("backToApp")}
           </Link>
         </div>
       </aside>
+
+      {/* Backdrop overlay for mobile */}
+      {mobileMenuOpen && (
+        <div
+          className="admin-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       <main className="admin-main">{children}</main>
 
       <style>{`
@@ -57,6 +86,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           background: #0a0a0f;
           color: #e2e8f0;
           font-family: 'Inter', system-ui, sans-serif;
+        }
+        .admin-mobile-header {
+          display: none;
         }
         .admin-sidebar {
           width: 240px;
@@ -140,6 +172,63 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           margin-left: 240px;
           padding: 32px;
           min-height: 100vh;
+        }
+        .admin-hamburger {
+          background: none;
+          border: none;
+          color: #94a3b8;
+          cursor: pointer;
+          padding: 8px;
+          border-radius: 8px;
+          transition: all 0.15s;
+        }
+        .admin-hamburger:hover {
+          color: #e2e8f0;
+          background: #1e1e2e;
+        }
+        .admin-backdrop {
+          display: none;
+        }
+
+        /* ── MOBILE: sidebar collapses ── */
+        @media (max-width: 768px) {
+          .admin-mobile-header {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: #12121a;
+            border-bottom: 1px solid #1e1e2e;
+          }
+          .admin-mobile-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+          }
+          .admin-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.2s ease-in-out;
+            z-index: 60;
+          }
+          .admin-sidebar.open {
+            transform: translateX(0);
+          }
+          .admin-main {
+            margin-left: 0;
+            padding: 16px;
+            padding-top: 72px;
+          }
+          .admin-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 55;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+          }
         }
       `}</style>
     </div>
