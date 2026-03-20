@@ -179,7 +179,7 @@ export function TeacherDashboard({
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={data.accuracyDist}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
-                  <XAxis dataKey="range" stroke="#64748b" tick={{ fontSize: 11 }} />
+                  <XAxis dataKey="range" stroke="#64748b" tick={{ fontSize: 10 }} interval={0} />
                   <YAxis stroke="#64748b" tick={{ fontSize: 11 }} allowDecimals={false} />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
                   <Bar dataKey="count" name={t("students")} radius={[6, 6, 0, 0]}>
@@ -284,7 +284,7 @@ export function TeacherDashboard({
         .dash-alert-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 13px; }
         .dash-alert-name { color: var(--color-text-primary, #e2e8f0); }
         .dash-alert-days { color: ${RED}; font-weight: 600; font-size: 12px; }
-        .dash-alert-rate { font-size: 12px; font-weight: 500; }
+        .dash-alert-rate { font-size: 12px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; text-align: right; flex-shrink: 0; }
         .pdf-capture-mode .dash-chart-card, .pdf-capture-mode .dash-alert-card { background: #f8fafc !important; border-color: #e2e8f0 !important; }
         .pdf-capture-mode .dash-alert-item { background: #f1f5f9 !important; }
         .pdf-capture-mode .dash-chart-title, .pdf-capture-mode .dash-alert-title { color: #475569 !important; }
