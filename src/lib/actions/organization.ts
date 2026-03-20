@@ -185,9 +185,11 @@ export async function getOrgDashboard(orgId: string) {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // Verify membership
+  // Verify membership — use supabaseAdmin because memberships may have been
+  // created via supabaseAdmin (e.g. redeemInviteCode) and RLS on org_memberships
+  // may block the user client from reading its own row.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
+  const { data: membership } = await (supabaseAdmin.from("org_memberships") as any)
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
@@ -198,10 +200,9 @@ export async function getOrgDashboard(orgId: string) {
   const effectiveRole = membership?.role || (isSuperAdminUser ? "director" : null);
   if (!effectiveRole) return null;
 
-  // Super_admin has no membership → RLS blocks data queries.
-  // Use supabaseAdmin to bypass RLS for read-only access.
+  // Use supabaseAdmin for all data queries — membership is verified above.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
+  const db: any = supabaseAdmin;
 
   // Check org status — only super_admin can view non-active orgs
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
