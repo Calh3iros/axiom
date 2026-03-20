@@ -744,12 +744,27 @@
     "classes": "班级"
   },
   "Join": {
-    "title": "加入班级",
-    "placeholder": "输入邀请码",
+    "title": "输入您的代码",
+    "subtitle": "收到协调员、校长或老师的代码了吗？",
+    "placeholder": "输入代码",
     "submit": "加入",
-    "success": "加入成功！",
-    "error": "无效的邀请码",
-    "joining": "加入中..."
+    "joining": "加入中...",
+    "typeEmpty": "输入收到的代码",
+    "typeSecretary": "秘书处/网络代码",
+    "typeGre": "区域管理代码",
+    "typeDirector": "校长代码",
+    "typeTeacher": "教师代码",
+    "typeStudent": "班级代码",
+    "successTitle": "关联成功！",
+    "studentSuccess": "您已加入班级",
+    "roleLinked": "您已关联到",
+    "linkedAs": "已作为教师关联到",
+    "accessPanel": "访问面板",
+    "startStudying": "开始学习",
+    "selectSubjects": "选择您的科目",
+    "subjectsSubtitle": "您教哪些科目？",
+    "confirmSubjects": "确认",
+    "error": "发生错误"
   },
   "Rankings": {
     "classRanking": "班级排名",

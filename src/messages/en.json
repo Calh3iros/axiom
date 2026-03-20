@@ -744,12 +744,27 @@
     "classes": "Classes"
   },
   "Join": {
-    "title": "Join a Class",
-    "placeholder": "Enter invite code",
-    "submit": "Join",
-    "success": "Successfully joined!",
-    "error": "Invalid invite code",
-    "joining": "Joining..."
+    "title": "Enter your code",
+    "subtitle": "Received a code from your coordinator, director, or teacher?",
+    "placeholder": "Enter code",
+    "submit": "Enter",
+    "joining": "Joining...",
+    "typeEmpty": "Enter the code you received",
+    "typeSecretary": "Secretariat / Network code",
+    "typeGre": "Regional Management code",
+    "typeDirector": "Director code",
+    "typeTeacher": "Teacher code",
+    "typeStudent": "Class code",
+    "successTitle": "Successfully linked!",
+    "studentSuccess": "You joined the class",
+    "roleLinked": "You were linked to",
+    "linkedAs": "Linked as teacher at",
+    "accessPanel": "Access Panel",
+    "startStudying": "Start studying",
+    "selectSubjects": "Select your subjects",
+    "subjectsSubtitle": "Which subjects do you teach?",
+    "confirmSubjects": "Confirm",
+    "error": "An error occurred"
   },
   "Rankings": {
     "classRanking": "Class Ranking",

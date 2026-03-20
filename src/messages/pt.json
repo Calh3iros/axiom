@@ -744,12 +744,27 @@
     "classes": "Turmas"
   },
   "Join": {
-    "title": "Entrar em uma Turma",
-    "placeholder": "Digite o código de convite",
+    "title": "Informe seu código",
+    "subtitle": "Recebeu um código do seu coordenador, diretor ou professor?",
+    "placeholder": "Digite o código",
     "submit": "Entrar",
-    "success": "Entrada realizada com sucesso!",
-    "error": "Código de convite inválido",
-    "joining": "Entrando..."
+    "joining": "Entrando...",
+    "typeEmpty": "Informe o código recebido",
+    "typeSecretary": "Código de Secretaria/Rede",
+    "typeGre": "Código de Gerência Regional",
+    "typeDirector": "Código de Diretor",
+    "typeTeacher": "Código de Professor",
+    "typeStudent": "Código de Turma",
+    "successTitle": "Vinculado com sucesso!",
+    "studentSuccess": "Você entrou na turma",
+    "roleLinked": "Você foi vinculado ao",
+    "linkedAs": "Vinculado como professor no",
+    "accessPanel": "Acessar Painel",
+    "startStudying": "Começar a estudar",
+    "selectSubjects": "Selecione suas disciplinas",
+    "subjectsSubtitle": "Quais disciplinas você ensina?",
+    "confirmSubjects": "Confirmar",
+    "error": "Ocorreu um erro"
   },
   "Rankings": {
     "classRanking": "Ranking da Turma",

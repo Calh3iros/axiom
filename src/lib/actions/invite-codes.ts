@@ -330,3 +330,33 @@ export async function regenerateInviteCodeByType(
   // Generate new code with same type and org
   return generateInviteCode({ type: oldCode.type, orgId: oldCode.org_id });
 }
+
+// ─── 3F: Update Member Subjects ─────────────────────────────────────────
+
+export async function updateMemberSubjects(
+  orgId: string,
+  subjects: string[]
+): Promise<{ success: boolean } | { error: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  // Sanitize subjects
+  const sanitized = subjects
+    .map((s) => s.trim().slice(0, 20))
+    .filter((s) => s.length > 0)
+    .slice(0, 15);
+
+  if (sanitized.length === 0) return { error: "Select at least one subject" };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseAdmin.from("org_memberships") as any)
+    .update({ subjects: sanitized })
+    .eq("user_id", user.id)
+    .eq("org_id", orgId);
+
+  if (error) return { error: error.message };
+  return { success: true };
+}

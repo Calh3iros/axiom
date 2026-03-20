@@ -744,12 +744,27 @@
     "classes": "Classes"
   },
   "Join": {
-    "title": "Rejoindre une Classe",
-    "placeholder": "Entrez le code d'invitation",
-    "submit": "Rejoindre",
-    "success": "Inscription réussie !",
-    "error": "Code d'invitation invalide",
-    "joining": "En cours..."
+    "title": "Entrez votre code",
+    "subtitle": "Avez-vous reçu un code de votre coordinateur, directeur ou professeur ?",
+    "placeholder": "Entrez le code",
+    "submit": "Entrer",
+    "joining": "En cours...",
+    "typeEmpty": "Entrez le code reçu",
+    "typeSecretary": "Code Secrétariat/Réseau",
+    "typeGre": "Code Gestion Régionale",
+    "typeDirector": "Code Directeur",
+    "typeTeacher": "Code Professeur",
+    "typeStudent": "Code de Classe",
+    "successTitle": "Lié avec succès !",
+    "studentSuccess": "Vous avez rejoint la classe",
+    "roleLinked": "Vous avez été lié à",
+    "linkedAs": "Lié en tant que professeur à",
+    "accessPanel": "Accéder au Panneau",
+    "startStudying": "Commencer à étudier",
+    "selectSubjects": "Sélectionnez vos matières",
+    "subjectsSubtitle": "Quelles matières enseignez-vous ?",
+    "confirmSubjects": "Confirmer",
+    "error": "Une erreur est survenue"
   },
   "Rankings": {
     "classRanking": "Classement de la Classe",

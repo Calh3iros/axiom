@@ -85,7 +85,10 @@ export async function middleware(request: NextRequest) {
     const localeMatch = pathname.match(/^\/([a-zA-Z]{2})(\/|$)/);
     const currentLocale = localeMatch ? localeMatch[1] : "en";
     url.pathname = `/${currentLocale}/auth/login`;
-    url.searchParams.set("next", pathname);
+    const redirectTarget = request.nextUrl.search
+      ? `${pathname}${request.nextUrl.search}`
+      : pathname;
+    url.searchParams.set("next", redirectTarget);
     return NextResponse.redirect(url);
   }
 

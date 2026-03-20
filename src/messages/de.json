@@ -744,12 +744,27 @@
     "classes": "Klassen"
   },
   "Join": {
-    "title": "Einer Klasse beitreten",
-    "placeholder": "Einladungscode eingeben",
+    "title": "Code eingeben",
+    "subtitle": "Haben Sie einen Code von Ihrem Koordinator, Direktor oder Lehrer erhalten?",
+    "placeholder": "Code eingeben",
     "submit": "Beitreten",
-    "success": "Erfolgreich beigetreten!",
-    "error": "Ungültiger Einladungscode",
-    "joining": "Beitritt..."
+    "joining": "Beitritt...",
+    "typeEmpty": "Geben Sie den erhaltenen Code ein",
+    "typeSecretary": "Sekretariat/Netzwerk-Code",
+    "typeGre": "Regionalverwaltungs-Code",
+    "typeDirector": "Direktor-Code",
+    "typeTeacher": "Lehrer-Code",
+    "typeStudent": "Klassen-Code",
+    "successTitle": "Erfolgreich verknüpft!",
+    "studentSuccess": "Sie sind der Klasse beigetreten",
+    "roleLinked": "Sie wurden verknüpft mit",
+    "linkedAs": "Verknüpft als Lehrer bei",
+    "accessPanel": "Panel öffnen",
+    "startStudying": "Lernen beginnen",
+    "selectSubjects": "Fächer auswählen",
+    "subjectsSubtitle": "Welche Fächer unterrichten Sie?",
+    "confirmSubjects": "Bestätigen",
+    "error": "Ein Fehler ist aufgetreten"
   },
   "Rankings": {
     "classRanking": "Klassenranking",
