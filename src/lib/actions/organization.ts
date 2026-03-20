@@ -142,9 +142,10 @@ export async function getMyOrganizations() {
   } = await supabase.auth.getUser();
   if (!user) return [];
 
-  // Get direct memberships
+  // Use supabaseAdmin — memberships created via redeemInviteCode (supabaseAdmin)
+  // are invisible to user client due to RLS on org_memberships.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: directMemberships } = await (supabase.from("org_memberships") as any)
+  const { data: directMemberships } = await (supabaseAdmin.from("org_memberships") as any)
     .select("role, org_id, organizations(id, name, type, parent_id, created_at)")
     .eq("user_id", user.id)
     .order("joined_at", { ascending: false });
@@ -155,7 +156,7 @@ export async function getMyOrganizations() {
   const childOrgIds = new Set<string>();
   for (const m of memberships) {
     if (ELEVATED_ROLES.includes(m.role)) {
-      const subtree = await getOrgSubtreeIds(supabase, m.org_id);
+      const subtree = await getOrgSubtreeIds(supabaseAdmin as any, m.org_id);
       for (const node of subtree) {
         if (node.depth > 0) childOrgIds.add(node.org_id);
       }
@@ -166,7 +167,7 @@ export async function getMyOrganizations() {
   let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
   if (childOrgIds.size > 0) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (supabase.from("organizations") as any)
+    const { data } = await (supabaseAdmin.from("organizations") as any)
       .select("id, name, type, parent_id, created_at")
       .in("id", Array.from(childOrgIds));
     childOrgs = data || [];
@@ -289,9 +290,10 @@ export async function createClass(orgId: string, name: string) {
   } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
-  // Verify role
+  // Verify role — use supabaseAdmin because RLS blocks user client
+  // from seeing memberships created via redeemInviteCode.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
+  const { data: membership } = await (supabaseAdmin.from("org_memberships") as any)
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
@@ -302,7 +304,7 @@ export async function createClass(orgId: string, name: string) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from("classes") as any)
+  const { data, error } = await (supabaseAdmin.from("classes") as any)
     .insert({ org_id: orgId, name, teacher_id: user.id })
     .select("id, invite_code")
     .single();
@@ -321,17 +323,10 @@ export async function getClassDashboard(classId: string) {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // Check if super_admin for RLS bypass
-   
-  let isSuperAdminUser = false;
-  {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: profile } = await (supabase.from("profiles") as any)
-      .select("is_super_admin").eq("id", user.id).single();
-    isSuperAdminUser = profile?.is_super_admin === true;
-  }
+  // Use supabaseAdmin for all data queries — RLS blocks user client
+  // from seeing data in orgs where membership was created server-side.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
+  const db: any = supabaseAdmin;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: cls } = await (db.from("classes") as any)
@@ -350,7 +345,7 @@ export async function getClassDashboard(classId: string) {
   return {
     classInfo: cls,
     students: students || [],
-    isTeacher: cls.teacher_id === user.id || isSuperAdminUser,
+    isTeacher: cls.teacher_id === user.id,
   };
 }
 
