@@ -315,17 +315,13 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
           mastery_pct: Math.min(100, masteryLevel * 20),
           queries_count: cc + ic,
         });
-        // knowledge_map entry (lowercase normalized topic)
+        // knowledge_map entry (lowercase normalized topic — base columns only)
         const lastDaysAgo = rand(0, 30);
         allKnowledgeMapRows.push({
           user_id: userId,
           subject: subj.toLowerCase(),
           topic: topic.toLowerCase(),
-          level: masteryLevel,
           mastery_score: Math.round(masteryScore * 100) / 100,
-          correct_count: cc,
-          incorrect_count: ic,
-          current_streak: masteryScore > 0.6 ? rand(1, 5) : 0,
           interactions_count: cc + ic,
           last_interaction_at: new Date(now.getTime() - lastDaysAgo * 24 * 60 * 60 * 1000).toISOString(),
         });

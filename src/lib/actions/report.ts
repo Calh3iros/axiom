@@ -159,10 +159,10 @@ export async function getStudentReport(
       .select("name")
       .eq("id", cls.org_id)
       .single(),
-    // Knowledge map — all entries
+    // Knowledge map — all entries (use select * to handle optional MBLID columns)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("knowledge_map") as any)
-      .select("subject, topic, level, mastery_score, correct_count, incorrect_count, interactions_count, last_interaction_at")
+      .select("*")
       .eq("user_id", studentId)
       .order("subject")
       .order("mastery_score", { ascending: false }),
