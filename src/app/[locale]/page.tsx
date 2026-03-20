@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useCallback } from "react";
 
+import { Menu, X } from "lucide-react";
+
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/client";
@@ -21,6 +23,7 @@ export default function LandingPage() {
   const [demoSteps, setDemoSteps] = useState<Record<string, boolean>>({});
   const [isYearly, setIsYearly] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   // Scroll reveal
   useEffect(() => {
@@ -148,7 +151,33 @@ export default function LandingPage() {
             {t("nav.startFree")}
           </Link>
         </div>
+        <button
+          className="nav-hamburger"
+          onClick={() => setMobileNavOpen(!mobileNavOpen)}
+        >
+          {mobileNavOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </nav>
+
+      {/* Mobile nav dropdown */}
+      {mobileNavOpen && (
+        <div className="mobile-nav-overlay" onClick={() => setMobileNavOpen(false)}>
+          <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
+            <a href="#features" onClick={() => setMobileNavOpen(false)}>{t("nav.features")}</a>
+            <a href="#compare" onClick={() => setMobileNavOpen(false)}>{t("nav.compare")}</a>
+            <a href="#pricing" onClick={() => setMobileNavOpen(false)}>{t("nav.pricing")}</a>
+            <Link href="/schools" onClick={() => setMobileNavOpen(false)}>{t("nav.forSchools")}</Link>
+            <div className="mobile-nav-divider" />
+            <div className="mobile-nav-lang"><LanguageSwitcher /></div>
+            <Link href="/auth/login" className="mobile-nav-login" onClick={() => setMobileNavOpen(false)}>
+              {t("nav.login")}
+            </Link>
+            <Link href="/auth/signup" className="mobile-nav-cta" onClick={() => setMobileNavOpen(false)}>
+              {t("nav.startFree")}
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* ══ HERO ══ */}
       <section className="hero">
