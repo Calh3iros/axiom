@@ -22,8 +22,12 @@ async function getManagerRole(
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
+  // Use supabaseAdmin — memberships created server-side (invite codes,
+  // admin scripts) may not be readable via user client due to RLS.
+
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
@@ -36,7 +40,7 @@ async function getManagerRole(
 
   // Super_admin bypass: read-only director-level access without membership
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from("profiles") as any)
+  const { data: profile } = await (supabaseAdmin.from("profiles") as any)
     .select("is_super_admin")
     .eq("id", user.id)
     .single();
@@ -221,7 +225,7 @@ export async function getTeacherDashboard(
   const spData = spRes.data || [];
 
   // Active within period
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const activeInPeriod = profiles.filter(
     (p: any) => p.last_active_date && p.last_active_date >= startDate
   ).length;
@@ -240,7 +244,7 @@ export async function getTeacherDashboard(
     (s: number, sp: any) => s + (sp.total_problems_solved || 0),
     0
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const totalCorrectFromSP = spData.reduce(
     (s: number, sp: any) => s + (sp.total_correct || 0),
     0
@@ -263,7 +267,7 @@ export async function getTeacherDashboard(
     totalSolvedFromSP > 0
       ? Math.round((totalCorrectFromSP / totalSolvedFromSP) * 100)
       : 0;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const avgStreak = Math.round(
     profiles.reduce((s: number, p: any) => s + (p.current_streak || 0), 0) /
       studentIds.length
@@ -317,7 +321,7 @@ export async function getTeacherDashboard(
     .slice(0, 5);
 
   // Inactive students (relative to period)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const inactiveStudents = profiles
     .filter((p: any) => {
       if (!p.last_active_date) return true;
@@ -452,23 +456,22 @@ export async function getDirectorDashboard(
     const chals = challengeRes.data || [];
     const spRows = spRes.data || [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const classActive = profs.filter(
       (p: any) => p.last_active_date && p.last_active_date >= startDate
     ).length;
     const classSolved = chals.length;
     // Accuracy from student_profiles (all-time)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const classTotalSolved = spRows.reduce(
       (s: number, sp: any) => s + (sp.total_problems_solved || 0),
       0
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const classTotalCorrect = spRows.reduce(
       (s: number, sp: any) => s + (sp.total_correct || 0),
       0
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const classStreak = profs.reduce(
       (s: number, p: any) => s + (p.current_streak || 0),
       0
@@ -503,7 +506,6 @@ export async function getDirectorDashboard(
     )
   ).flat();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: challengeData } = await (
     supabaseAdmin.from("challenge_log") as any
   )
@@ -610,7 +612,6 @@ export async function getSecretaryDashboard(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const schoolComparison: any[] = [];
   for (const org of childOrgs || []) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: members } = await (
       supabaseAdmin.from("org_memberships") as any
     )
@@ -659,17 +660,16 @@ export async function getSecretaryDashboard(
     const chals = challengeRes.data || [];
     const spRows = spRes.data || [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const active = profs.filter(
       (p: any) => p.last_active_date && p.last_active_date >= startDate
     ).length;
     const solved = chals.length;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const spTotalSolved = spRows.reduce(
       (s: number, sp: any) => s + (sp.total_problems_solved || 0),
       0
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const spTotalCorrect = spRows.reduce(
       (s: number, sp: any) => s + (sp.total_correct || 0),
       0
