@@ -442,31 +442,11 @@
       "headerTask": "Tâche",
       "headerWithout": "Sans",
       "headerAxiom": "Avec Axiom",
-      "row1": [
-        "Résoudre 1 problème",
-        "30 – 60 min",
-        "5 secondes"
-      ],
-      "row2": [
-        "Écrire un essai de 1 000 mots",
-        "3 – 5 heures",
-        "15 minutes"
-      ],
-      "row3": [
-        "Créer un plan d'étude",
-        "1 – 2 heures",
-        "1 clic"
-      ],
-      "row4": [
-        "Humaniser 2 000 mots",
-        "45 min",
-        "10 secondes"
-      ],
-      "row5": [
-        "Préparation complète exam",
-        "6 – 10 heures",
-        "2 heures"
-      ],
+      "row1": ["Résoudre 1 problème", "30 – 60 min", "5 secondes"],
+      "row2": ["Écrire un essai de 1 000 mots", "3 – 5 heures", "15 minutes"],
+      "row3": ["Créer un plan d'étude", "1 – 2 heures", "1 clic"],
+      "row4": ["Humaniser 2 000 mots", "45 min", "10 secondes"],
+      "row5": ["Préparation complète exam", "6 – 10 heures", "2 heures"],
       "footer": "L'étudiant moyen économise ~200 heures par semestre"
     },
     "pricing": {
@@ -738,7 +718,22 @@
     "removeTeacher": "Supprimer",
     "removeConfirm": "Supprimer ce professeur de l'organisation ?",
     "copyCode": "Copier le Code",
-    "copyLink": "Copier le Lien"
+    "copyLink": "Copier le Lien",
+    "roleCoordinator": "Coordinateur/Coordinatrice",
+    "roleOwner": "Propriétaire",
+    "typePrivateSchool": "École Privée",
+    "typePrivateNetwork": "Réseau Privé",
+    "typePublicMunicipal": "Publique (Municipale)",
+    "typePublicState": "Publique (Départementale)",
+    "removeStudent": "Retirer l'élève",
+    "removeStudentConfirm": "Retirer cet élève de la classe ? Il restera dans l'établissement mais quittera cette classe.",
+    "reassignClass": "Réaffecter l'enseignant",
+    "reassignConfirm": "Réaffecter cette classe à un autre enseignant ?",
+    "reassignSelectTeacher": "Sélectionner le nouveau enseignant",
+    "noTeachersAvailable": "Aucun enseignant disponible pour la réaffectation",
+    "schoolPdf": "Rapport PDF de l'école",
+    "schoolCsv": "Exporter CSV",
+    "exportSchool": "Exporter École"
   },
   "Class": {
     "title": "Classe",

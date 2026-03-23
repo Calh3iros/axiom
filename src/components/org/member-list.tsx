@@ -22,8 +22,10 @@ interface MemberListProps {
 const roleColors: Record<string, string> = {
   student: "bg-blue-500/15 text-blue-400 border-blue-500/20",
   teacher: "bg-green-500/15 text-green-400 border-green-500/20",
+  coordinator: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
   admin: "bg-orange-500/15 text-orange-400 border-orange-500/20",
   director: "bg-purple-500/15 text-purple-400 border-purple-500/20",
+  owner: "bg-amber-500/15 text-amber-400 border-amber-500/20",
   secretary: "bg-red-500/15 text-red-400 border-red-500/20",
 };
 
@@ -45,12 +47,15 @@ export function MemberList({ members }: MemberListProps) {
   return (
     <div className="space-y-2">
       {members.map((m) => {
-        const roleKey = `role${m.role.charAt(0).toUpperCase() + m.role.slice(1)}` as
-          | "roleStudent"
-          | "roleTeacher"
-          | "roleAdmin"
-          | "roleDirector"
-          | "roleSecretary";
+        const roleKey =
+          `role${m.role.charAt(0).toUpperCase() + m.role.slice(1)}` as
+            | "roleStudent"
+            | "roleTeacher"
+            | "roleCoordinator"
+            | "roleAdmin"
+            | "roleDirector"
+            | "roleOwner"
+            | "roleSecretary";
 
         const name = getDisplayName(m);
         const avatarUrl = m.profiles?.avatar_url;

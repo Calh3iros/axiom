@@ -30,10 +30,22 @@ export const ELEVATED_ROLES: readonly string[] = [
 ];
 
 /**
- * Roles that can manage org members, classes, and invite codes.
- * (admin/director/owner/secretary — not teacher/coordinator)
+ * Roles that can access dashboards, manage classes, and invite codes.
+ * Includes coordinator for pedagogical dashboard access.
  */
 export const MANAGER_ROLES: readonly string[] = [
+  "coordinator",
+  "admin",
+  "director",
+  "owner",
+  "secretary",
+];
+
+/**
+ * Roles that can add/remove org members (professors, coordinators).
+ * Coordinator is excluded — pedagogical focus, not HR.
+ */
+export const MEMBER_MANAGER_ROLES: readonly string[] = [
   "admin",
   "director",
   "owner",
@@ -59,9 +71,19 @@ export function isElevated(role: string): boolean {
   return ELEVATED_ROLES.includes(role);
 }
 
-/** True if role can manage org members and codes. */
+/** True if role can access dashboards and manage classes/codes. */
 export function isManager(role: string): boolean {
   return MANAGER_ROLES.includes(role);
+}
+
+/** True if role can add/remove org members (professors, coordinators). */
+export function canManageMembers(role: string): boolean {
+  return MEMBER_MANAGER_ROLES.includes(role);
+}
+
+/** True if role can manage org settings (create schools, contracts). */
+export function canManageOrg(role: string): boolean {
+  return ["admin", "owner", "secretary"].includes(role);
 }
 
 /** True if role can create classes. */

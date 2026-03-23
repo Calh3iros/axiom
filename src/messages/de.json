@@ -442,31 +442,11 @@
       "headerTask": "Aufgabe",
       "headerWithout": "Ohne",
       "headerAxiom": "Mit Axiom",
-      "row1": [
-        "1 Problem lösen",
-        "30 – 60 Min",
-        "5 Sekunden"
-      ],
-      "row2": [
-        "1.000-Wort-Aufsatz schreiben",
-        "3 – 5 Stunden",
-        "15 Minuten"
-      ],
-      "row3": [
-        "Lernplan erstellen",
-        "1 – 2 Stunden",
-        "1 Klick"
-      ],
-      "row4": [
-        "2.000 Wörter humanisieren",
-        "45 Min",
-        "10 Sekunden"
-      ],
-      "row5": [
-        "Volle Prüfungsvorbereitung",
-        "6 – 10 Stunden",
-        "2 Stunden"
-      ],
+      "row1": ["1 Problem lösen", "30 – 60 Min", "5 Sekunden"],
+      "row2": ["1.000-Wort-Aufsatz schreiben", "3 – 5 Stunden", "15 Minuten"],
+      "row3": ["Lernplan erstellen", "1 – 2 Stunden", "1 Klick"],
+      "row4": ["2.000 Wörter humanisieren", "45 Min", "10 Sekunden"],
+      "row5": ["Volle Prüfungsvorbereitung", "6 – 10 Stunden", "2 Stunden"],
       "footer": "Durchschnittlicher Student spart ~200 Stunden pro Semester"
     },
     "pricing": {
@@ -738,7 +718,22 @@
     "removeTeacher": "Entfernen",
     "removeConfirm": "Diesen Lehrer aus der Organisation entfernen?",
     "copyCode": "Code kopieren",
-    "copyLink": "Link kopieren"
+    "copyLink": "Link kopieren",
+    "roleCoordinator": "Koordinator/in",
+    "roleOwner": "Eigentümer/in",
+    "typePrivateSchool": "Privatschule",
+    "typePrivateNetwork": "Privates Netzwerk",
+    "typePublicMunicipal": "Öffentlich (Kommunal)",
+    "typePublicState": "Öffentlich (Staatlich)",
+    "removeStudent": "Schüler entfernen",
+    "removeStudentConfirm": "Diesen Schüler aus der Klasse entfernen? Der Schüler bleibt in der Schule, verlässt aber diese Klasse.",
+    "reassignClass": "Lehrer zuweisen",
+    "reassignConfirm": "Diese Klasse einem anderen Lehrer zuweisen?",
+    "reassignSelectTeacher": "Neuen Lehrer auswählen",
+    "noTeachersAvailable": "Keine Lehrer für die Neuzuweisung verfügbar",
+    "schoolPdf": "Schul-PDF-Bericht",
+    "schoolCsv": "CSV exportieren",
+    "exportSchool": "Schule exportieren"
   },
   "Class": {
     "title": "Klasse",

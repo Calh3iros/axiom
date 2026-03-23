@@ -14,6 +14,7 @@ import {
   RefreshCw,
   ExternalLink,
   Trash2,
+  FileDown,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
@@ -39,9 +40,13 @@ import {
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
 import {
+  exportSchoolPdf,
+  type SchoolReportData,
+} from "@/lib/export-school-pdf";
+import {
   canCreateClass as canCreateClassFromRole,
   isElevated as isElevatedRole,
-  isManager as isManagerRole,
+  canManageMembers as canManageMembersRole,
 } from "@/types/roles";
 
 export default function OrgDetailPage({
@@ -101,7 +106,7 @@ export default function OrgDetailPage({
     }
 
     // Fetch invite codes for teachers section
-    if (res && isManagerRole(res.myRole)) {
+    if (res && canManageMembersRole(res.myRole)) {
       const codes = await getOrgInviteCodes(orgId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
@@ -177,6 +182,7 @@ export default function OrgDetailPage({
 
   const canManage = canCreateClassFromRole(data.myRole);
   const isElevated = isElevatedRole(data.myRole);
+  const canMembers = canManageMembersRole(data.myRole);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const teachers = data.members.filter((m: any) => m.role === "teacher");
@@ -207,8 +213,10 @@ export default function OrgDetailPage({
             `role${data.myRole.charAt(0).toUpperCase() + data.myRole.slice(1)}` as
               | "roleStudent"
               | "roleTeacher"
+              | "roleCoordinator"
               | "roleAdmin"
               | "roleDirector"
+              | "roleOwner"
               | "roleSecretary"
           )}
         </p>
@@ -318,8 +326,8 @@ export default function OrgDetailPage({
         )}
       </div>
 
-      {/* ── Teachers Section (elevated roles) ─────────────────────────── */}
-      {isElevated && (
+      {/* ── Teachers Section (member managers only — not coordinator) ── */}
+      {canMembers && (
         <div>
           <div className="mb-4 flex items-center gap-2">
             <GraduationCap className="h-5 w-5 text-green-400" />
@@ -487,7 +495,7 @@ export default function OrgDetailPage({
         </div>
       )}
 
-      {/* Dashboard (directors/admins/secretaries) */}
+      {/* Dashboard (directors/admins/secretaries/coordinators) */}
       {isElevated && (dashData || secData) && (
         <div>
           <div className="mb-4 flex items-center justify-between">
@@ -497,12 +505,68 @@ export default function OrgDetailPage({
                 Dashboard
               </h2>
             </div>
-            <button
-              onClick={() => setShowDashboard(!showDashboard)}
-              className="text-xs text-[var(--color-dim)] transition-colors hover:text-[var(--color-text-primary)]"
-            >
-              {showDashboard ? tr("hide") : tr("show")}
-            </button>
+            <div className="flex items-center gap-2">
+              {/* School PDF export */}
+              {dashData && !dashData.empty && (
+                <button
+                  onClick={() => {
+                    const reportData: SchoolReportData = {
+                      schoolName: data?.org?.name || "",
+                      period: "Ultimos 30 dias",
+                      generatedBy: "Axiom",
+                      totalStudents: dashData.totalStudents || 0,
+                      activeStudents: dashData.active7d || 0,
+                      totalSolved: dashData.totalSolved || 0,
+                      overallAccuracy: dashData.overallAccuracy || 0,
+                      avgStreak: dashData.avgStreak || 0,
+                      adoption: dashData.adoption || 0,
+                      classComparison: dashData.classComparison || [],
+                      weeklyEvolution: dashData.weeklyEvolution || [],
+                      engagementAlerts: dashData.engagementAlerts || [],
+                      managers:
+                        data?.members
+                          ?.filter((m: { role: string }) =>
+                            [
+                              "teacher",
+                              "coordinator",
+                              "admin",
+                              "director",
+                              "owner",
+                              "secretary",
+                            ].includes(m.role)
+                          )
+                          .map(
+                            (m: {
+                              role: string;
+                              profiles?: {
+                                full_name?: string;
+                                email?: string;
+                              };
+                            }) => ({
+                              name:
+                                m.profiles?.full_name ||
+                                m.profiles?.email?.split("@")[0] ||
+                                "User",
+                              role: m.role,
+                              email: m.profiles?.email || "",
+                            })
+                          ) || [],
+                    };
+                    exportSchoolPdf(reportData);
+                  }}
+                  className="flex items-center gap-1.5 rounded-lg border border-orange-500/30 bg-orange-500/10 px-3 py-1.5 text-xs font-medium text-orange-400 transition-colors hover:bg-orange-500/20"
+                >
+                  <FileDown className="h-3.5 w-3.5" />
+                  {t("schoolPdf")}
+                </button>
+              )}
+              <button
+                onClick={() => setShowDashboard(!showDashboard)}
+                className="text-xs text-[var(--color-dim)] transition-colors hover:text-[var(--color-text-primary)]"
+              >
+                {showDashboard ? tr("hide") : tr("show")}
+              </button>
+            </div>
           </div>
           {showDashboard && (
             <>

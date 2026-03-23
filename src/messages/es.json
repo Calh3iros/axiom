@@ -442,31 +442,15 @@
       "headerTask": "Tarea",
       "headerWithout": "Sin",
       "headerAxiom": "Con Axiom",
-      "row1": [
-        "Resolver 1 problema",
-        "30 – 60 min",
-        "5 segundos"
-      ],
+      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
       "row2": [
         "Escribir ensayo de 1.000 palabras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": [
-        "Crear plan de estudio",
-        "1 – 2 horas",
-        "1 clic"
-      ],
-      "row4": [
-        "Humanizar 2.000 palabras",
-        "45 min",
-        "10 segundos"
-      ],
-      "row5": [
-        "Preparación completa para examen",
-        "6 – 10 horas",
-        "2 horas"
-      ],
+      "row3": ["Crear plan de estudio", "1 – 2 horas", "1 clic"],
+      "row4": ["Humanizar 2.000 palabras", "45 min", "10 segundos"],
+      "row5": ["Preparación completa para examen", "6 – 10 horas", "2 horas"],
       "footer": "El estudiante promedio ahorra ~200 horas por semestre"
     },
     "pricing": {
@@ -738,7 +722,22 @@
     "removeTeacher": "Eliminar",
     "removeConfirm": "¿Eliminar este profesor de la organización?",
     "copyCode": "Copiar Código",
-    "copyLink": "Copiar Enlace"
+    "copyLink": "Copiar Enlace",
+    "roleCoordinator": "Coordinador(a)",
+    "roleOwner": "Propietario(a)",
+    "typePrivateSchool": "Escuela Privada",
+    "typePrivateNetwork": "Red Privada",
+    "typePublicMunicipal": "Pública (Municipal)",
+    "typePublicState": "Pública (Estatal)",
+    "removeStudent": "Remover Alumno",
+    "removeStudentConfirm": "¿Remover este alumno de la clase? Seguirá en la escuela pero saldrá de esta clase.",
+    "reassignClass": "Reasignar Profesor",
+    "reassignConfirm": "¿Reasignar esta clase a otro profesor?",
+    "reassignSelectTeacher": "Seleccionar nuevo profesor",
+    "noTeachersAvailable": "No hay profesores disponibles para reasignación",
+    "schoolPdf": "Informe PDF de la Escuela",
+    "schoolCsv": "Exportar CSV",
+    "exportSchool": "Exportar Escuela"
   },
   "Class": {
     "title": "Clase",

@@ -442,31 +442,15 @@
       "headerTask": "Tarefa",
       "headerWithout": "Sem",
       "headerAxiom": "Com Axiom",
-      "row1": [
-        "Resolver 1 problema",
-        "30 – 60 min",
-        "5 segundos"
-      ],
+      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
       "row2": [
         "Escrever redação de 1.000 palavras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": [
-        "Montar plano de estudo",
-        "1 – 2 horas",
-        "1 clique"
-      ],
-      "row4": [
-        "Humanizar 2.000 palavras",
-        "45 min",
-        "10 segundos"
-      ],
-      "row5": [
-        "Preparação completa para prova",
-        "6 – 10 horas",
-        "2 horas"
-      ],
+      "row3": ["Montar plano de estudo", "1 – 2 horas", "1 clique"],
+      "row4": ["Humanizar 2.000 palavras", "45 min", "10 segundos"],
+      "row5": ["Preparação completa para prova", "6 – 10 horas", "2 horas"],
       "footer": "Estudante médio economiza ~200 horas por semestre"
     },
     "pricing": {
@@ -738,7 +722,22 @@
     "removeTeacher": "Remover",
     "removeConfirm": "Remover este professor da organização?",
     "copyCode": "Copiar Código",
-    "copyLink": "Copiar Link"
+    "copyLink": "Copiar Link",
+    "roleCoordinator": "Coordenador(a)",
+    "roleOwner": "Proprietário(a)",
+    "typePrivateSchool": "Escola Particular",
+    "typePrivateNetwork": "Rede Particular",
+    "typePublicMunicipal": "Pública (Municipal)",
+    "typePublicState": "Pública (Estadual)",
+    "removeStudent": "Remover Aluno",
+    "removeStudentConfirm": "Remover este aluno da turma? Ele continuará na escola mas sairá desta turma.",
+    "reassignClass": "Reatribuir Professor",
+    "reassignConfirm": "Reatribuir esta turma para outro professor?",
+    "reassignSelectTeacher": "Selecionar novo professor",
+    "noTeachersAvailable": "Nenhum professor disponível para reatribuição",
+    "schoolPdf": "Relatório PDF da Escola",
+    "schoolCsv": "Exportar CSV",
+    "exportSchool": "Exportar Escola"
   },
   "Class": {
     "title": "Turma",

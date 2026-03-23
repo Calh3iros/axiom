@@ -10,6 +10,8 @@ import {
   BarChart3,
   FileText,
   ChevronDown,
+  Trash2,
+  UserCog,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use, useRef } from "react";
@@ -18,6 +20,11 @@ import { TeacherDashboard } from "@/components/dashboard/dashboard-views";
 import { ClassRankingTable } from "@/components/rankings/class-ranking-table";
 import { StudentReportModal } from "@/components/report/student-report-modal";
 import { Link } from "@/i18n/routing";
+import {
+  removeStudentFromClass,
+  reassignClass,
+  getOrgTeachers,
+} from "@/lib/actions/coordinator";
 import { getTeacherDashboard } from "@/lib/actions/dashboard";
 import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
@@ -78,6 +85,18 @@ export default function ClassDetailPage({
   const [generatingBulk, setGeneratingBulk] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const tReport = useTranslations("Report");
+  const tOrg = useTranslations("Org");
+
+  // Coordinator features state
+  const [reassignModal, setReassignModal] = useState(false);
+  const [orgTeachers, setOrgTeachers] = useState<
+    { userId: string; name: string; email: string; role: string }[]
+  >([]);
+  const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [reassigning, setReassigning] = useState(false);
+  const [removingStudentId, setRemovingStudentId] = useState<string | null>(
+    null
+  );
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -171,7 +190,47 @@ export default function ClassDetailPage({
     );
   }
 
-  const isManager = ranking?.role ? isElevated(ranking.role) : data.isTeacher;
+  const canCoordinate = ranking?.role
+    ? isElevated(ranking.role)
+    : data.isTeacher;
+
+  const handleReassignOpen = async () => {
+    const teachers = await getOrgTeachers(orgId);
+    setOrgTeachers(teachers || []);
+    setSelectedTeacher("");
+    setReassignModal(true);
+  };
+
+  const handleReassignSubmit = async () => {
+    if (!selectedTeacher) return;
+    setReassigning(true);
+    const result = await reassignClass({
+      classId,
+      newTeacherUserId: selectedTeacher,
+    });
+    setReassigning(false);
+    if ("success" in result) {
+      setReassignModal(false);
+      fetchData();
+    } else {
+      alert(result.error);
+    }
+  };
+
+  const handleRemoveStudent = async (studentUserId: string) => {
+    if (!confirm(tOrg("removeStudentConfirm"))) return;
+    setRemovingStudentId(studentUserId);
+    const result = await removeStudentFromClass({
+      classId,
+      studentUserId,
+    });
+    setRemovingStudentId(null);
+    if ("success" in result) {
+      fetchData();
+    } else {
+      alert(result.error);
+    }
+  };
 
   return (
     <>
@@ -190,7 +249,7 @@ export default function ClassDetailPage({
               📚 {data.classInfo.name}
             </h1>
             {/* Report generate dropdown */}
-            {isManager && (
+            {canCoordinate && (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setReportDropdown(!reportDropdown)}
@@ -217,6 +276,16 @@ export default function ClassDetailPage({
                   </div>
                 )}
               </div>
+            )}
+            {/* Reassign Teacher button (coordinator+) */}
+            {canCoordinate && (
+              <button
+                onClick={handleReassignOpen}
+                className="flex items-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-400 transition-colors hover:bg-cyan-500/20"
+              >
+                <UserCog className="h-4 w-4" />
+                {tOrg("reassignClass")}
+              </button>
             )}
           </div>
         </div>
@@ -259,8 +328,8 @@ export default function ClassDetailPage({
           </div>
         )}
 
-        {/* Dashboard (managers only) */}
-        {isManager && dashData && (
+        {/* Dashboard (coordinator+ only) */}
+        {canCoordinate && dashData && (
           <div>
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -308,7 +377,7 @@ export default function ClassDetailPage({
               <ClassRankingTable
                 rows={ranking.rows}
                 currentUserId={currentUserId}
-                isManager={isManager}
+                isManager={canCoordinate}
                 onStudentClick={handleStudentClick}
               />
             )}
@@ -358,9 +427,26 @@ export default function ClassDetailPage({
                         {name}
                       </span>
                     </div>
-                    <span className="text-xs text-[var(--color-dim)]">
-                      {new Date(s.joined_at).toLocaleDateString()}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-[var(--color-dim)]">
+                        {new Date(s.joined_at).toLocaleDateString()}
+                      </span>
+                      {canCoordinate && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveStudent(s.user_id);
+                          }}
+                          disabled={removingStudentId === s.user_id}
+                          className="rounded p-1 text-[var(--color-dim)] hover:text-red-400 disabled:opacity-50"
+                          title={tOrg("removeStudent")}
+                        >
+                          <Trash2
+                            className={`h-3.5 w-3.5 ${removingStudentId === s.user_id ? "animate-spin" : ""}`}
+                          />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -388,6 +474,50 @@ export default function ClassDetailPage({
           onClose={() => setReportModal(null)}
           onExportPdf={handleExportPdf}
         />
+      )}
+
+      {/* Reassign Teacher Modal */}
+      {reassignModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="w-full max-w-md rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-6">
+            <h3 className="mb-4 text-lg font-bold text-[var(--color-text-primary)]">
+              {tOrg("reassignClass")}
+            </h3>
+            {orgTeachers.length === 0 ? (
+              <p className="text-sm text-[var(--color-dim)]">
+                {tOrg("noTeachersAvailable")}
+              </p>
+            ) : (
+              <select
+                value={selectedTeacher}
+                onChange={(e) => setSelectedTeacher(e.target.value)}
+                className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg2)] px-3 py-2 text-sm text-[var(--color-text-primary)]"
+              >
+                <option value="">{tOrg("reassignSelectTeacher")}</option>
+                {orgTeachers.map((teacher) => (
+                  <option key={teacher.userId} value={teacher.userId}>
+                    {teacher.name} ({teacher.email}) — {teacher.role}
+                  </option>
+                ))}
+              </select>
+            )}
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => setReassignModal(false)}
+                className="rounded-lg border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-dim)] hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReassignSubmit}
+                disabled={!selectedTeacher || reassigning}
+                className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+              >
+                {reassigning ? "..." : tOrg("reassignClass")}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

@@ -442,31 +442,11 @@
       "headerTask": "Task",
       "headerWithout": "Without",
       "headerAxiom": "With Axiom",
-      "row1": [
-        "Solve 1 problem",
-        "30 – 60 min",
-        "5 seconds"
-      ],
-      "row2": [
-        "Write 1,000-word essay",
-        "3 – 5 hours",
-        "15 minutes"
-      ],
-      "row3": [
-        "Build study plan",
-        "1 – 2 hours",
-        "1 click"
-      ],
-      "row4": [
-        "Humanize 2,000 words",
-        "45 min",
-        "10 seconds"
-      ],
-      "row5": [
-        "Full exam prep",
-        "6 – 10 hours",
-        "2 hours"
-      ],
+      "row1": ["Solve 1 problem", "30 – 60 min", "5 seconds"],
+      "row2": ["Write 1,000-word essay", "3 – 5 hours", "15 minutes"],
+      "row3": ["Build study plan", "1 – 2 hours", "1 click"],
+      "row4": ["Humanize 2,000 words", "45 min", "10 seconds"],
+      "row5": ["Full exam prep", "6 – 10 hours", "2 hours"],
       "footer": "Average student saves ~200 hours per semester"
     },
     "pricing": {
@@ -738,7 +718,22 @@
     "removeTeacher": "Remove",
     "removeConfirm": "Remove this teacher from the organization?",
     "copyCode": "Copy Code",
-    "copyLink": "Copy Link"
+    "copyLink": "Copy Link",
+    "roleCoordinator": "Coordinator",
+    "roleOwner": "Owner",
+    "typePrivateSchool": "Private School",
+    "typePrivateNetwork": "Private Network",
+    "typePublicMunicipal": "Public (Municipal)",
+    "typePublicState": "Public (State)",
+    "removeStudent": "Remove Student",
+    "removeStudentConfirm": "Remove this student from the class? They will stay in the school but leave this class.",
+    "reassignClass": "Reassign Teacher",
+    "reassignConfirm": "Reassign this class to another teacher?",
+    "reassignSelectTeacher": "Select new teacher",
+    "noTeachersAvailable": "No teachers available for reassignment",
+    "schoolPdf": "School PDF Report",
+    "schoolCsv": "Export CSV",
+    "exportSchool": "Export School"
   },
   "Class": {
     "title": "Class",
