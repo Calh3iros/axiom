@@ -1,5 +1,6 @@
 "use server";
 
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 // ─── Types ───────────────────────────────────────────────────────────────
@@ -70,16 +71,20 @@ export async function getClassRanking(
   if (!user) return null;
 
   // Check super_admin for RLS bypass
-   
+
   let isSuperAdminUser = false;
   {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: prof } = await (supabase.from("profiles") as any)
-      .select("is_super_admin").eq("id", user.id).single();
+      .select("is_super_admin")
+      .eq("id", user.id)
+      .single();
     isSuperAdminUser = prof?.is_super_admin === true;
   }
-   
-  const { supabaseAdmin: sbAdmin } = isSuperAdminUser ? await import("@/lib/supabase/admin") : { supabaseAdmin: null };
+
+  const { supabaseAdmin: sbAdmin } = isSuperAdminUser
+    ? await import("@/lib/supabase/admin")
+    : { supabaseAdmin: null };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db: any = isSuperAdminUser ? sbAdmin : supabase;
 
@@ -97,8 +102,12 @@ export async function getClassRanking(
     if (cls.teacher_id === user.id) {
       role = "teacher";
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: membership } = await (supabase.from("org_memberships") as any)
+      // Use supabaseAdmin — memberships created server-side may not be
+      // readable via user client due to RLS.
+
+      const { data: membership } = await (
+        supabaseAdmin.from("org_memberships") as any
+      )
         .select("role")
         .eq("user_id", user.id)
         .eq("org_id", cls.org_id)
@@ -151,14 +160,22 @@ export async function getClassRanking(
   // Index profiles
   const profileMap = new Map<
     string,
-    { full_name: string; avatar_url: string | null; email: string; current_streak: number }
+    {
+      full_name: string;
+      avatar_url: string | null;
+      email: string;
+      current_streak: number;
+    }
   >();
   for (const p of profilesRes?.data || []) {
     profileMap.set(p.id, p);
   }
 
   // Index student profiles
-  const spMap = new Map<string, { total_problems_solved: number; total_correct: number }>();
+  const spMap = new Map<
+    string,
+    { total_problems_solved: number; total_correct: number }
+  >();
   for (const sp of studentProfilesRes?.data || []) {
     spMap.set(sp.id, sp);
   }
@@ -167,7 +184,10 @@ export async function getClassRanking(
   const usageMap = new Map<string, number>();
   for (const u of usageRes?.data || []) {
     const current = usageMap.get(u.user_id) || 0;
-    usageMap.set(u.user_id, current + (u.solves || 0) + (u.writes || 0) + (u.learns || 0));
+    usageMap.set(
+      u.user_id,
+      current + (u.solves || 0) + (u.writes || 0) + (u.learns || 0)
+    );
   }
 
   // Performance: topics mastered per user
@@ -203,7 +223,8 @@ export async function getClassRanking(
     };
 
     if (isElevatedRole(role)) {
-      row.accuracy = totalSolved > 0 ? Math.round((totalCorrect / totalSolved) * 100) : 0;
+      row.accuracy =
+        totalSolved > 0 ? Math.round((totalCorrect / totalSolved) * 100) : 0;
       row.topics_mastered = masteryMap.get(uid) || 0;
       row.badges_count = badgesMap.get(uid) || 0;
     }
@@ -214,7 +235,8 @@ export async function getClassRanking(
   // Sort
   const elevatedSort = isElevatedRole(role);
   const safeSortBy =
-    !elevatedSort && ["accuracy", "topics_mastered", "badges_count"].includes(sortBy)
+    !elevatedSort &&
+    ["accuracy", "topics_mastered", "badges_count"].includes(sortBy)
       ? "problems_solved"
       : sortBy;
 
@@ -235,16 +257,21 @@ export async function getClassRanking(
  */
 export async function getOrgClassRanking(
   orgId: string
-): Promise<{ rows: ClassAggregateRow[]; childOrgRows?: OrgAggregateRow[] } | null> {
+): Promise<{
+  rows: ClassAggregateRow[];
+  childOrgRows?: OrgAggregateRow[];
+} | null> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // Verify elevated role
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
+  // Verify elevated role — use supabaseAdmin for RLS bypass
+
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
@@ -255,8 +282,10 @@ export async function getOrgClassRanking(
   let isSuperAdminUser = false;
   if (!effectiveRole) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: profile } = await (supabase.from("profiles") as any)
-      .select("is_super_admin").eq("id", user.id).single();
+    const { data: profile } = await (supabaseAdmin.from("profiles") as any)
+      .select("is_super_admin")
+      .eq("id", user.id)
+      .single();
     if (profile?.is_super_admin) {
       effectiveRole = "director";
       isSuperAdminUser = true;
@@ -266,10 +295,12 @@ export async function getOrgClassRanking(
   if (!effectiveRole || !isElevatedRole(effectiveRole)) return null;
 
   // Super_admin uses supabaseAdmin to bypass RLS
-   
-  const { supabaseAdmin } = isSuperAdminUser ? await import("@/lib/supabase/admin") : { supabaseAdmin: null };
+
+  const { supabaseAdmin: sbAdmin2 } = isSuperAdminUser
+    ? await import("@/lib/supabase/admin")
+    : { supabaseAdmin: null };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db: any = isSuperAdminUser ? supabaseAdmin : supabase;
+  const db: any = isSuperAdminUser ? sbAdmin2 : supabase;
 
   // Get classes in this org
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -322,7 +353,8 @@ export async function getOrgClassRanking(
       0
     );
     const totalCorrect = spRows.reduce(
-      (sum: number, r: { total_correct: number }) => sum + (r.total_correct || 0),
+      (sum: number, r: { total_correct: number }) =>
+        sum + (r.total_correct || 0),
       0
     );
 
@@ -341,7 +373,8 @@ export async function getOrgClassRanking(
       student_count: n,
       avg_problems_solved: Math.round(totalSolved / n),
       avg_active_usage: 0, // TODO: aggregate usage
-      avg_accuracy: totalSolved > 0 ? Math.round((totalCorrect / totalSolved) * 100) : 0,
+      avg_accuracy:
+        totalSolved > 0 ? Math.round((totalCorrect / totalSolved) * 100) : 0,
       active_last_7d: activeLast7d,
     });
   }
@@ -374,7 +407,9 @@ export async function getOrgClassRanking(
           .eq("org_id", org.id)
           .eq("role", "student");
 
-        const stuIds = (orgMembers || []).map((m: { user_id: string }) => m.user_id);
+        const stuIds = (orgMembers || []).map(
+          (m: { user_id: string }) => m.user_id
+        );
         if (stuIds.length === 0) {
           childOrgRows.push({
             org_id: org.id,
@@ -399,16 +434,21 @@ export async function getOrgClassRanking(
           .in("id", stuIds);
 
         const solved = (spData || []).reduce(
-          (s: number, r: { total_problems_solved: number }) => s + (r.total_problems_solved || 0), 0
+          (s: number, r: { total_problems_solved: number }) =>
+            s + (r.total_problems_solved || 0),
+          0
         );
         const correct = (spData || []).reduce(
-          (s: number, r: { total_correct: number }) => s + (r.total_correct || 0), 0
+          (s: number, r: { total_correct: number }) =>
+            s + (r.total_correct || 0),
+          0
         );
         const sda = new Date();
         sda.setDate(sda.getDate() - 7);
         const sdaStr = sda.toISOString().split("T")[0];
         const active7d = (pData || []).filter(
-          (p: { last_active_date: string | null }) => p.last_active_date && p.last_active_date >= sdaStr
+          (p: { last_active_date: string | null }) =>
+            p.last_active_date && p.last_active_date >= sdaStr
         ).length;
 
         childOrgRows.push({
@@ -422,7 +462,9 @@ export async function getOrgClassRanking(
         });
       }
 
-      childOrgRows.sort((a, b) => b.avg_problems_solved - a.avg_problems_solved);
+      childOrgRows.sort(
+        (a, b) => b.avg_problems_solved - a.avg_problems_solved
+      );
     }
   }
 

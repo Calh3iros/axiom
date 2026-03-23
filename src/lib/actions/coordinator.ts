@@ -15,8 +15,12 @@ async function getElevatedRole(
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
+  // Use supabaseAdmin — memberships created server-side may not be
+  // readable via user client due to RLS.
+
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
