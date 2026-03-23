@@ -85,7 +85,7 @@ export async function getStudentReport(
   let isSuperAdminUser = false;
   {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: prof } = await (supabase.from("profiles") as any)
+    const { data: prof } = await (supabaseAdmin.from("profiles") as any)
       .select("is_super_admin")
       .eq("id", user.id)
       .single();

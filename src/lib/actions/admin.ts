@@ -15,7 +15,7 @@ async function requireSuperAdmin() {
   if (!user) throw new Error("Not authenticated");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from("profiles") as any)
+  const { data: profile } = await (supabaseAdmin.from("profiles") as any)
     .select("is_super_admin")
     .eq("id", user.id)
     .single();

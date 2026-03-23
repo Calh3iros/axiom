@@ -31,7 +31,9 @@ export async function joinByInviteCode(code: string) {
 
   // Check if already in class
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: existing } = await (supabaseAdmin.from("class_memberships") as any)
+  const { data: existing } = await (
+    supabaseAdmin.from("class_memberships") as any
+  )
     .select("id")
     .eq("user_id", user.id)
     .eq("class_id", cls.id)
@@ -51,7 +53,9 @@ export async function joinByInviteCode(code: string) {
 
   // Check if org is active
   if (org.status !== "active") {
-    return { error: "This organization is not active. Contact the administrator." };
+    return {
+      error: "This organization is not active. Contact the administrator.",
+    };
   }
 
   // Check expiry — auto-suspend if expired
@@ -63,7 +67,10 @@ export async function joinByInviteCode(code: string) {
       await (supabaseAdmin.from("organizations") as any)
         .update({ status: "suspended" })
         .eq("id", org.id);
-      return { error: "This organization's access has expired. Contact the administrator." };
+      return {
+        error:
+          "This organization's access has expired. Contact the administrator.",
+      };
     }
   }
 
@@ -76,13 +83,18 @@ export async function joinByInviteCode(code: string) {
       .eq("role", "student");
 
     if ((count || 0) >= org.max_students) {
-      return { error: "This organization has reached its student limit. Contact the administrator." };
+      return {
+        error:
+          "This organization has reached its student limit. Contact the administrator.",
+      };
     }
   }
 
   // ─── Auto-join org as student (if not already member) ───────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: orgMember } = await (supabaseAdmin.from("org_memberships") as any)
+  const { data: orgMember } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("id")
     .eq("user_id", user.id)
     .eq("org_id", cls.org_id)
@@ -99,7 +111,9 @@ export async function joinByInviteCode(code: string) {
 
   // Join class
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabaseAdmin.from("class_memberships") as any).insert({
+  const { error } = await (
+    supabaseAdmin.from("class_memberships") as any
+  ).insert({
     user_id: user.id,
     class_id: cls.id,
   });
@@ -118,9 +132,9 @@ export async function regenerateInviteCode(classId: string) {
   } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
-  // Verify teacher
+  // Verify teacher — use supabaseAdmin for RLS bypass
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: cls } = await (supabase.from("classes") as any)
+  const { data: cls } = await (supabaseAdmin.from("classes") as any)
     .select("teacher_id")
     .eq("id", classId)
     .single();
@@ -133,7 +147,7 @@ export async function regenerateInviteCode(classId: string) {
   const newCode = Math.random().toString(36).substring(2, 10);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("classes") as any)
+  const { error } = await (supabaseAdmin.from("classes") as any)
     .update({ invite_code: newCode })
     .eq("id", classId);
 
@@ -152,7 +166,7 @@ export async function leaveClass(classId: string) {
   if (!user) return { error: "Not authenticated" };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("class_memberships") as any)
+  const { error } = await (supabaseAdmin.from("class_memberships") as any)
     .delete()
     .eq("user_id", user.id)
     .eq("class_id", classId);

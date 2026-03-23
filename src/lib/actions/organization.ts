@@ -17,7 +17,7 @@ async function isSuperAdmin(
   userId: string
 ): Promise<boolean> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase.from("profiles") as any)
+  const { data } = await (supabaseAdmin.from("profiles") as any)
     .select("is_super_admin")
     .eq("id", userId)
     .single();
@@ -59,7 +59,9 @@ export async function createOrganization(name: string, type: string) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: org, error } = await (supabase.from("organizations") as any)
+  const { data: org, error } = await (
+    supabaseAdmin.from("organizations") as any
+  )
     .insert({ name, type, created_by: user.id, status: "active" })
     .select("id")
     .single();
@@ -68,7 +70,7 @@ export async function createOrganization(name: string, type: string) {
 
   // Auto-add creator as admin
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase.from("org_memberships") as any).insert({
+  await (supabaseAdmin.from("org_memberships") as any).insert({
     user_id: user.id,
     org_id: org.id,
     role: "admin",
@@ -417,9 +419,11 @@ export async function addOrgMember(
   } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
-  // Verify admin role
+  // Verify admin role — use supabaseAdmin for RLS bypass
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabase.from("org_memberships") as any)
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
@@ -430,11 +434,13 @@ export async function addOrgMember(
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("org_memberships") as any).insert({
-    user_id: targetUserId,
-    org_id: orgId,
-    role,
-  });
+  const { error } = await (supabaseAdmin.from("org_memberships") as any).insert(
+    {
+      user_id: targetUserId,
+      org_id: orgId,
+      role,
+    }
+  );
 
   if (error) return { error: error.message };
   return { success: true };
@@ -451,7 +457,7 @@ export async function removeOrgMember(orgId: string, targetUserId: string) {
   if (!user) return { error: "Not authenticated" };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("org_memberships") as any)
+  const { error } = await (supabaseAdmin.from("org_memberships") as any)
     .delete()
     .eq("user_id", targetUserId)
     .eq("org_id", orgId);

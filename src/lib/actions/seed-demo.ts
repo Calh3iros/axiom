@@ -11,11 +11,15 @@ const DEMO_EMAIL_DOMAIN = "axiom-demo.com";
 
 async function requireSuperAdmin() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from("profiles") as any)
-    .select("is_super_admin").eq("id", user.id).single();
+  const { data: profile } = await (supabaseAdmin.from("profiles") as any)
+    .select("is_super_admin")
+    .eq("id", user.id)
+    .single();
   if (!profile?.is_super_admin) throw new Error("Forbidden");
   return user;
 }
@@ -23,33 +27,146 @@ async function requireSuperAdmin() {
 // ─── Demo Names ──────────────────────────────────────────────────────────
 
 const FIRST_NAMES = [
-  "João", "Maria", "Pedro", "Ana", "Lucas", "Julia", "Gabriel", "Beatriz",
-  "Rafael", "Larissa", "Matheus", "Camila", "Bruno", "Fernanda", "Gustavo",
-  "Amanda", "Leonardo", "Mariana", "Felipe", "Carolina", "Thiago", "Isabela",
-  "Daniel", "Letícia", "Vinicius", "Bruna", "Arthur", "Gabriela", "Diego",
-  "Natalia", "Cauã", "Sophia", "Henrique", "Valentina", "Enzo", "Laura",
-  "Nicolas", "Heloísa", "Davi", "Alice", "Luan", "Manuela", "Igor",
-  "Helena", "Ryan", "Lívia", "Kaique", "Rafaela", "Caio", "Vitória",
-  "Samuel", "Bianca", "Yuri", "Giovanna", "Murilo", "Melissa", "Lorenzo",
-  "Júlia", "Bernardo", "Cecília", "Miguel", "Yasmin", "Guilherme", "Nicole",
-  "Eduardo", "Luiza", "André", "Clara", "Rodrigo", "Marina", "Alessandro",
-  "Raquel", "Otávio", "Luna", "Francisco",
+  "João",
+  "Maria",
+  "Pedro",
+  "Ana",
+  "Lucas",
+  "Julia",
+  "Gabriel",
+  "Beatriz",
+  "Rafael",
+  "Larissa",
+  "Matheus",
+  "Camila",
+  "Bruno",
+  "Fernanda",
+  "Gustavo",
+  "Amanda",
+  "Leonardo",
+  "Mariana",
+  "Felipe",
+  "Carolina",
+  "Thiago",
+  "Isabela",
+  "Daniel",
+  "Letícia",
+  "Vinicius",
+  "Bruna",
+  "Arthur",
+  "Gabriela",
+  "Diego",
+  "Natalia",
+  "Cauã",
+  "Sophia",
+  "Henrique",
+  "Valentina",
+  "Enzo",
+  "Laura",
+  "Nicolas",
+  "Heloísa",
+  "Davi",
+  "Alice",
+  "Luan",
+  "Manuela",
+  "Igor",
+  "Helena",
+  "Ryan",
+  "Lívia",
+  "Kaique",
+  "Rafaela",
+  "Caio",
+  "Vitória",
+  "Samuel",
+  "Bianca",
+  "Yuri",
+  "Giovanna",
+  "Murilo",
+  "Melissa",
+  "Lorenzo",
+  "Júlia",
+  "Bernardo",
+  "Cecília",
+  "Miguel",
+  "Yasmin",
+  "Guilherme",
+  "Nicole",
+  "Eduardo",
+  "Luiza",
+  "André",
+  "Clara",
+  "Rodrigo",
+  "Marina",
+  "Alessandro",
+  "Raquel",
+  "Otávio",
+  "Luna",
+  "Francisco",
 ];
 
 const LAST_NAMES = [
-  "Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves",
-  "Pereira", "Lima", "Gomes", "Costa", "Ribeiro", "Martins", "Carvalho",
-  "Araujo", "Melo", "Barbosa", "Nascimento", "Moreira", "Cardoso",
-  "Monteiro", "Correia", "Vieira", "Pinto", "Teixeira",
+  "Silva",
+  "Santos",
+  "Oliveira",
+  "Souza",
+  "Rodrigues",
+  "Ferreira",
+  "Alves",
+  "Pereira",
+  "Lima",
+  "Gomes",
+  "Costa",
+  "Ribeiro",
+  "Martins",
+  "Carvalho",
+  "Araujo",
+  "Melo",
+  "Barbosa",
+  "Nascimento",
+  "Moreira",
+  "Cardoso",
+  "Monteiro",
+  "Correia",
+  "Vieira",
+  "Pinto",
+  "Teixeira",
 ];
 
 const SUBJECTS = ["Matemática", "Física", "Química", "Biologia", "História"];
 const TOPICS: Record<string, string[]> = {
-  "Matemática": ["Equações 1° grau", "Equações 2° grau", "Frações", "Geometria Plana", "Probabilidade", "Trigonometria", "Funções", "Porcentagem"],
-  "Física": ["Cinemática", "Dinâmica", "Termodinâmica", "Óptica", "Eletricidade", "Ondas"],
-  "Química": ["Estequiometria", "Tabela Periódica", "Ligações Químicas", "Soluções", "pH e Ácidos"],
-  "Biologia": ["Genética", "Ecologia", "Citologia", "Evolução", "Fisiologia"],
-  "História": ["Brasil Colônia", "Revolução Industrial", "Guerras Mundiais", "Era Vargas", "República"],
+  Matemática: [
+    "Equações 1° grau",
+    "Equações 2° grau",
+    "Frações",
+    "Geometria Plana",
+    "Probabilidade",
+    "Trigonometria",
+    "Funções",
+    "Porcentagem",
+  ],
+  Física: [
+    "Cinemática",
+    "Dinâmica",
+    "Termodinâmica",
+    "Óptica",
+    "Eletricidade",
+    "Ondas",
+  ],
+  Química: [
+    "Estequiometria",
+    "Tabela Periódica",
+    "Ligações Químicas",
+    "Soluções",
+    "pH e Ácidos",
+  ],
+  Biologia: ["Genética", "Ecologia", "Citologia", "Evolução", "Fisiologia"],
+  História: [
+    "Brasil Colônia",
+    "Revolução Industrial",
+    "Guerras Mundiais",
+    "Era Vargas",
+    "República",
+  ],
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
@@ -71,19 +188,26 @@ function gaussianRand(mean: number, std: number): number {
 
 function generateStudentArchetype() {
   const r = Math.random();
-  if (r < 0.15) return { type: "excellent", accuracy: 0.85, activity: 0.9, streak: 35 };
-  if (r < 0.35) return { type: "good", accuracy: 0.75, activity: 0.7, streak: 20 };
-  if (r < 0.65) return { type: "average", accuracy: 0.65, activity: 0.5, streak: 10 };
-  if (r < 0.85) return { type: "struggling", accuracy: 0.50, activity: 0.35, streak: 5 };
-  return { type: "disengaged", accuracy: 0.40, activity: 0.15, streak: 2 };
+  if (r < 0.15)
+    return { type: "excellent", accuracy: 0.85, activity: 0.9, streak: 35 };
+  if (r < 0.35)
+    return { type: "good", accuracy: 0.75, activity: 0.7, streak: 20 };
+  if (r < 0.65)
+    return { type: "average", accuracy: 0.65, activity: 0.5, streak: 10 };
+  if (r < 0.85)
+    return { type: "struggling", accuracy: 0.5, activity: 0.35, streak: 5 };
+  return { type: "disengaged", accuracy: 0.4, activity: 0.15, streak: 2 };
 }
 
 // Run promises in chunks to avoid overwhelming Supabase Auth API
-async function runInChunks<T>(items: (() => Promise<T>)[], chunkSize: number): Promise<T[]> {
+async function runInChunks<T>(
+  items: (() => Promise<T>)[],
+  chunkSize: number
+): Promise<T[]> {
   const results: T[] = [];
   for (let i = 0; i < items.length; i += chunkSize) {
     const chunk = items.slice(i, i + chunkSize);
-    const chunkResults = await Promise.all(chunk.map(fn => fn()));
+    const chunkResults = await Promise.all(chunk.map((fn) => fn()));
     results.push(...chunkResults);
   }
   return results;
@@ -110,12 +234,16 @@ async function getOrCreateDemoUser(
   if (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: profile } = await (supabaseAdmin.from("profiles") as any)
-      .select("id").eq("email", email).single();
+      .select("id")
+      .eq("email", email)
+      .single();
     if (profile?.id) return profile.id;
 
     // Attempt 3: user exists in auth but profile missing (cascade-deleted).
     // Delete the orphan auth user and recreate.
-    const { data: { users } } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
+    const {
+      data: { users },
+    } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
     const orphan = users?.find((u: { email?: string }) => u.email === email);
     if (orphan) {
       await supabaseAdmin.auth.admin.deleteUser(orphan.id);
@@ -134,13 +262,22 @@ async function getOrCreateDemoUser(
 
 // ─── Seed Action (Optimized: batched inserts, parallel auth) ─────────────
 
-export async function seedDemoData(): Promise<{ success: boolean; message: string }> {
+export async function seedDemoData(): Promise<{
+  success: boolean;
+  message: string;
+}> {
   const adminUser = await requireSuperAdmin();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existing } = await (supabaseAdmin.from("organizations") as any)
-    .select("id").eq("name", DEMO_ORG_NAME).single();
-  if (existing) return { success: false, message: "Demo data already exists. Remove first." };
+    .select("id")
+    .eq("name", DEMO_ORG_NAME)
+    .single();
+  if (existing)
+    return {
+      success: false,
+      message: "Demo data already exists. Remove first.",
+    };
 
   try {
     const now = new Date();
@@ -148,7 +285,9 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     // 1. Create org (1 insert)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: org, error: orgErr } = await (supabaseAdmin.from("organizations") as any)
+    const { data: org, error: orgErr } = await (
+      supabaseAdmin.from("organizations") as any
+    )
       .insert({
         name: DEMO_ORG_NAME,
         type: "school",
@@ -166,32 +305,46 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     // 2. Create director (1 auth call)
     const directorEmail = `${DEMO_PREFIX}director@${DEMO_EMAIL_DOMAIN}`;
-    const directorId = await getOrCreateDemoUser(directorEmail, "Dr. Roberto Mendes");
+    const directorId = await getOrCreateDemoUser(
+      directorEmail,
+      "Dr. Roberto Mendes"
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabaseAdmin.from("profiles") as any)
       .update({ full_name: "Dr. Roberto Mendes", email: directorEmail })
       .eq("id", directorId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseAdmin.from("org_memberships") as any)
-      .upsert({ user_id: directorId, org_id: orgId, role: "director" }, { onConflict: "user_id,org_id" });
+    await (supabaseAdmin.from("org_memberships") as any).upsert(
+      { user_id: directorId, org_id: orgId, role: "director" },
+      { onConflict: "user_id,org_id" }
+    );
 
     // 3. Create 3 teachers (3 auth calls — sequential is fine, only 3)
     const classNames = ["9º Ano A", "9º Ano B", "8º Ano A"];
-    const teacherNames = ["Prof. Ana Costa", "Prof. Carlos Lima", "Prof. Patrícia Santos"];
+    const teacherNames = [
+      "Prof. Ana Costa",
+      "Prof. Carlos Lima",
+      "Prof. Patrícia Santos",
+    ];
     const classIds: string[] = [];
     const teacherIds: string[] = [];
 
     for (let c = 0; c < 3; c++) {
       const teacherEmail = `${DEMO_PREFIX}teacher${c + 1}@${DEMO_EMAIL_DOMAIN}`;
-      const teacherId = await getOrCreateDemoUser(teacherEmail, teacherNames[c]);
+      const teacherId = await getOrCreateDemoUser(
+        teacherEmail,
+        teacherNames[c]
+      );
       teacherIds.push(teacherId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabaseAdmin.from("profiles") as any)
         .update({ full_name: teacherNames[c], email: teacherEmail })
         .eq("id", teacherId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("org_memberships") as any)
-        .upsert({ user_id: teacherId, org_id: orgId, role: "teacher" }, { onConflict: "user_id,org_id" });
+      await (supabaseAdmin.from("org_memberships") as any).upsert(
+        { user_id: teacherId, org_id: orgId, role: "teacher" },
+        { onConflict: "user_id,org_id" }
+      );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: cls } = await (supabaseAdmin.from("classes") as any)
         .insert({ name: classNames[c], org_id: orgId, teacher_id: teacherId })
@@ -204,14 +357,26 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
     // 4. Create 75 students in parallel chunks of 5
     // Each auth.admin.createUser takes ~200-400ms, so 5 in parallel ≈ 3 seconds per chunk
     // 15 chunks × 3s = ~45s total for auth (within Vercel Pro 60s limit)
-    const studentData: { userId: string; classIdx: number; archetype: ReturnType<typeof generateStudentArchetype>; fullName: string; email: string }[] = [];
+    const studentData: {
+      userId: string;
+      classIdx: number;
+      archetype: ReturnType<typeof generateStudentArchetype>;
+      fullName: string;
+      email: string;
+    }[] = [];
 
     const authTasks = Array.from({ length: 75 }, (_, idx) => {
       const classIdx = Math.floor(idx / 25);
       const firstName = FIRST_NAMES[idx % FIRST_NAMES.length];
       const lastName = LAST_NAMES[idx % LAST_NAMES.length];
       const fullName = `${firstName} ${lastName}`;
-      const email = `${DEMO_PREFIX}${firstName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}.${lastName.toLowerCase()}.${idx}@${DEMO_EMAIL_DOMAIN}`;
+      const email = `${DEMO_PREFIX}${firstName
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )}.${lastName.toLowerCase()}.${idx}@${DEMO_EMAIL_DOMAIN}`;
       const archetype = generateStudentArchetype();
 
       return async () => {
@@ -230,7 +395,11 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const profileUpdates: Promise<any>[] = [];
-    const orgMembershipRows: { user_id: string; org_id: string; role: string }[] = [];
+    const orgMembershipRows: {
+      user_id: string;
+      org_id: string;
+      role: string;
+    }[] = [];
     const classMembershipRows: { user_id: string; class_id: string }[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const allChallengeRows: any[] = [];
@@ -247,8 +416,18 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     for (const student of studentData) {
       const { userId, classIdx, archetype, fullName, email } = student;
-      const streakDays = Math.max(0, Math.round(archetype.streak * gaussianRand(1, 0.3)));
-      const lastActive = new Date(now.getTime() - rand(0, archetype.type === "disengaged" ? 30 : 5) * 24 * 60 * 60 * 1000);
+      const streakDays = Math.max(
+        0,
+        Math.round(archetype.streak * gaussianRand(1, 0.3))
+      );
+      const lastActive = new Date(
+        now.getTime() -
+          rand(0, archetype.type === "disengaged" ? 30 : 5) *
+            24 *
+            60 *
+            60 *
+            1000
+      );
 
       // Profile update must be individual (update by id)
       profileUpdates.push(
@@ -264,8 +443,15 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
           .eq("id", userId)
       );
 
-      orgMembershipRows.push({ user_id: userId, org_id: orgId, role: "student" });
-      classMembershipRows.push({ user_id: userId, class_id: classIds[classIdx] });
+      orgMembershipRows.push({
+        user_id: userId,
+        org_id: orgId,
+        role: "student",
+      });
+      classMembershipRows.push({
+        user_id: userId,
+        class_id: classIds[classIdx],
+      });
 
       // Challenge log
       const numChallenges = rand(20, 80);
@@ -279,7 +465,10 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
         const topic = pick(TOPICS[subject]);
         const isCorrect = Math.random() < gaussianRand(archetype.accuracy, 0.1);
         allChallengeRows.push({
-          user_id: userId, subject, topic, success: isCorrect,
+          user_id: userId,
+          subject,
+          topic,
+          success: isCorrect,
           created_at: date.toISOString(),
         });
         totalSolved++;
@@ -305,10 +494,19 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
       }
       for (const t of pickedTopics) {
         const [subj, topic] = t.split("::");
-        const masteryLevel = Math.min(4, Math.max(1, Math.round(gaussianRand(archetype.accuracy * 4, 1.0))));
+        const masteryLevel = Math.min(
+          4,
+          Math.max(1, Math.round(gaussianRand(archetype.accuracy * 4, 1.0)))
+        );
         const cc = rand(3, 20);
-        const ic = rand(1, Math.max(1, Math.round(cc * (1 - archetype.accuracy))));
-        const masteryScore = Math.min(1, Math.max(0, gaussianRand(archetype.accuracy, 0.2)));
+        const ic = rand(
+          1,
+          Math.max(1, Math.round(cc * (1 - archetype.accuracy)))
+        );
+        const masteryScore = Math.min(
+          1,
+          Math.max(0, gaussianRand(archetype.accuracy, 0.2))
+        );
         allSubjectRows.push({
           user_id: userId,
           name: `${subj} - ${topic}`,
@@ -323,7 +521,9 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
           topic: topic.toLowerCase(),
           mastery_score: Math.round(masteryScore * 100) / 100,
           interactions_count: cc + ic,
-          last_interaction_at: new Date(now.getTime() - lastDaysAgo * 24 * 60 * 60 * 1000).toISOString(),
+          last_interaction_at: new Date(
+            now.getTime() - lastDaysAgo * 24 * 60 * 60 * 1000
+          ).toISOString(),
         });
       }
 
@@ -349,9 +549,14 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
       if (totalSolved >= 50) badgeIds.push("50_solves");
       if (streakDays >= 3) badgeIds.push("3_day_streak");
       if (streakDays >= 7) badgeIds.push("7_day_streak");
-      if (archetype.type === "excellent") badgeIds.push("first_mastery", "first_correct");
+      if (archetype.type === "excellent")
+        badgeIds.push("first_mastery", "first_correct");
       for (const bid of badgeIds) {
-        allBadgeRows.push({ user_id: userId, badge_id: bid, unlocked_at: now.toISOString() });
+        allBadgeRows.push({
+          user_id: userId,
+          badge_id: bid,
+          unlocked_at: now.toISOString(),
+        });
       }
     }
 
@@ -367,91 +572,138 @@ export async function seedDemoData(): Promise<{ success: boolean; message: strin
 
     // Batch inserts: memberships (1 insert each)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseAdmin.from("org_memberships") as any).insert(orgMembershipRows);
+    await (supabaseAdmin.from("org_memberships") as any).insert(
+      orgMembershipRows
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseAdmin.from("class_memberships") as any).insert(classMembershipRows);
+    await (supabaseAdmin.from("class_memberships") as any).insert(
+      classMembershipRows
+    );
 
     // Batch insert: student_profiles (1 upsert)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseAdmin.from("student_profiles") as any).upsert(allStudentProfiles);
+    await (supabaseAdmin.from("student_profiles") as any).upsert(
+      allStudentProfiles
+    );
 
     // Batch insert: challenge_log in chunks of 500
     for (let i = 0; i < allChallengeRows.length; i += 500) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("challenge_log") as any).insert(allChallengeRows.slice(i, i + 500));
+      await (supabaseAdmin.from("challenge_log") as any).insert(
+        allChallengeRows.slice(i, i + 500)
+      );
     }
 
     // Batch insert: subjects in chunks of 200
     for (let i = 0; i < allSubjectRows.length; i += 200) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("subjects") as any).upsert(allSubjectRows.slice(i, i + 200), { onConflict: "user_id,name" });
+      await (supabaseAdmin.from("subjects") as any).upsert(
+        allSubjectRows.slice(i, i + 200),
+        { onConflict: "user_id,name" }
+      );
     }
 
     // Batch insert: usage in chunks of 500
     for (let i = 0; i < allUsageRows.length; i += 500) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("usage") as any).insert(allUsageRows.slice(i, i + 500));
+      await (supabaseAdmin.from("usage") as any).insert(
+        allUsageRows.slice(i, i + 500)
+      );
     }
 
     // Batch insert: badges in chunks of 200
     for (let i = 0; i < allBadgeRows.length; i += 200) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("user_badges") as any).upsert(allBadgeRows.slice(i, i + 200), { onConflict: "user_id,badge_id" });
+      await (supabaseAdmin.from("user_badges") as any).upsert(
+        allBadgeRows.slice(i, i + 200),
+        { onConflict: "user_id,badge_id" }
+      );
     }
 
     // Batch insert: knowledge_map in chunks of 200
     for (let i = 0; i < allKnowledgeMapRows.length; i += 200) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("knowledge_map") as any).upsert(allKnowledgeMapRows.slice(i, i + 200), { onConflict: "user_id,subject,topic" });
+      await (supabaseAdmin.from("knowledge_map") as any).upsert(
+        allKnowledgeMapRows.slice(i, i + 200),
+        { onConflict: "user_id,subject,topic" }
+      );
     }
 
-    return { success: true, message: `Demo created: ${DEMO_ORG_NAME} with 3 classes × ${studentData.length} students` };
+    return {
+      success: true,
+      message: `Demo created: ${DEMO_ORG_NAME} with 3 classes × ${studentData.length} students`,
+    };
   } catch (err) {
-    return { success: false, message: `Error: ${err instanceof Error ? err.message : String(err)}` };
+    return {
+      success: false,
+      message: `Error: ${err instanceof Error ? err.message : String(err)}`,
+    };
   }
 }
 
 // ─── Remove Demo ─────────────────────────────────────────────────────────
 
-export async function removeDemoData(): Promise<{ success: boolean; message: string }> {
+export async function removeDemoData(): Promise<{
+  success: boolean;
+  message: string;
+}> {
   await requireSuperAdmin();
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: org } = await (supabaseAdmin.from("organizations") as any)
-      .select("id").eq("name", DEMO_ORG_NAME).single();
+      .select("id")
+      .eq("name", DEMO_ORG_NAME)
+      .single();
     if (!org) return { success: false, message: "No demo data found." };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: members } = await (supabaseAdmin.from("org_memberships") as any)
-      .select("user_id").eq("org_id", org.id);
+    const { data: members } = await (
+      supabaseAdmin.from("org_memberships") as any
+    )
+      .select("user_id")
+      .eq("org_id", org.id);
     const userIds = (members || []).map((m: { user_id: string }) => m.user_id);
 
     if (userIds.length > 0) {
       // Batch deletes (all at once via .in())
       await Promise.all([
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (supabaseAdmin.from("challenge_log") as any).delete().in("user_id", userIds),
+        (supabaseAdmin.from("challenge_log") as any)
+          .delete()
+          .in("user_id", userIds),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (supabaseAdmin.from("usage") as any).delete().in("user_id", userIds),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (supabaseAdmin.from("student_profiles") as any).delete().in("id", userIds),
+        (supabaseAdmin.from("student_profiles") as any)
+          .delete()
+          .in("id", userIds),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (supabaseAdmin.from("user_badges") as any).delete().in("user_id", userIds),
+        (supabaseAdmin.from("user_badges") as any)
+          .delete()
+          .in("user_id", userIds),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (supabaseAdmin.from("subjects") as any).delete().in("user_id", userIds),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (supabaseAdmin.from("knowledge_map") as any).delete().in("user_id", userIds),
+        (supabaseAdmin.from("knowledge_map") as any)
+          .delete()
+          .in("user_id", userIds),
       ]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("class_memberships") as any).delete().in("user_id", userIds);
+      await (supabaseAdmin.from("class_memberships") as any)
+        .delete()
+        .in("user_id", userIds);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseAdmin.from("org_memberships") as any).delete().in("user_id", userIds);
+      await (supabaseAdmin.from("org_memberships") as any)
+        .delete()
+        .in("user_id", userIds);
 
       // Delete auth users in parallel chunks of 5
       await runInChunks(
-        userIds.map((uid: string) => () => supabaseAdmin.auth.admin.deleteUser(uid)),
+        userIds.map(
+          (uid: string) => () => supabaseAdmin.auth.admin.deleteUser(uid)
+        ),
         5
       );
     }
@@ -459,11 +711,19 @@ export async function removeDemoData(): Promise<{ success: boolean; message: str
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabaseAdmin.from("classes") as any).delete().eq("org_id", org.id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseAdmin.from("organizations") as any).delete().eq("id", org.id);
+    await (supabaseAdmin.from("organizations") as any)
+      .delete()
+      .eq("id", org.id);
 
-    return { success: true, message: `Removed: ${userIds.length} users, classes, org` };
+    return {
+      success: true,
+      message: `Removed: ${userIds.length} users, classes, org`,
+    };
   } catch (err) {
-    return { success: false, message: `Error: ${err instanceof Error ? err.message : String(err)}` };
+    return {
+      success: false,
+      message: `Error: ${err instanceof Error ? err.message : String(err)}`,
+    };
   }
 }
 
@@ -473,6 +733,8 @@ export async function checkDemoStatus(): Promise<{ exists: boolean }> {
   await requireSuperAdmin();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabaseAdmin.from("organizations") as any)
-    .select("id").eq("name", DEMO_ORG_NAME).single();
+    .select("id")
+    .eq("name", DEMO_ORG_NAME)
+    .single();
   return { exists: !!data };
 }

@@ -75,7 +75,7 @@ export async function getClassRanking(
   let isSuperAdminUser = false;
   {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: prof } = await (supabase.from("profiles") as any)
+    const { data: prof } = await (supabaseAdmin.from("profiles") as any)
       .select("is_super_admin")
       .eq("id", user.id)
       .single();
@@ -255,9 +255,7 @@ export async function getClassRanking(
  * Get aggregated ranking by class for an org.
  * Only for director/admin/secretary.
  */
-export async function getOrgClassRanking(
-  orgId: string
-): Promise<{
+export async function getOrgClassRanking(orgId: string): Promise<{
   rows: ClassAggregateRow[];
   childOrgRows?: OrgAggregateRow[];
 } | null> {
