@@ -79,7 +79,6 @@ export async function POST(req: Request) {
 
           // ── Upgrade email (fire-and-forget) ───────────────────────
           try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const { data: profile } = await (
               supabaseAdmin.from("profiles") as any
             )

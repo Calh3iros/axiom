@@ -97,7 +97,9 @@ export async function approveOrg(
     if (orgInfo?.requested_by_email) {
       // Look up user by email in profiles
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: userProfile } = await (supabaseAdmin.from("profiles") as any)
+      const { data: userProfile } = await (
+        supabaseAdmin.from("profiles") as any
+      )
         .select("id")
         .eq("email", orgInfo.requested_by_email.toLowerCase())
         .single();
@@ -113,7 +115,9 @@ export async function approveOrg(
 
         // Check if already a member (idempotent)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: existing } = await (supabaseAdmin.from("org_memberships") as any)
+        const { data: existing } = await (
+          supabaseAdmin.from("org_memberships") as any
+        )
           .select("id")
           .eq("org_id", orgId)
           .eq("user_id", userProfile.id)
@@ -126,7 +130,9 @@ export async function approveOrg(
             user_id: userProfile.id,
             role: memberRole,
           });
-          console.warn(`[APPROVE] Auto-added ${orgInfo.requested_by_email} as ${memberRole}`);
+          console.warn(
+            `[APPROVE] Auto-added ${orgInfo.requested_by_email} as ${memberRole}`
+          );
         }
       } else {
         console.warn(
@@ -233,7 +239,7 @@ export async function getRenewalAlerts() {
   const in30d = new Date(now.getTime() + 30 * 86400000).toISOString();
 
   // Orgs expiring in next 30 days
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: expiringSoon } = await (
     supabaseAdmin.from("organizations") as any
   )
@@ -254,7 +260,7 @@ export async function getRenewalAlerts() {
     .order("access_expires_at");
 
   // Orgs with max_students — check capacity
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: withLimits } = await (
     supabaseAdmin.from("organizations") as any
   )
@@ -302,13 +308,13 @@ export async function getAdminPlatformStats() {
   await requireSuperAdmin();
 
   // Total users
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { count: totalUsers } = await (
     supabaseAdmin.from("profiles") as any
   ).select("id", { count: "exact", head: true });
 
   // Active orgs
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { count: activeOrgs } = await (
     supabaseAdmin.from("organizations") as any
   )
@@ -316,7 +322,7 @@ export async function getAdminPlatformStats() {
     .eq("status", "active");
 
   // Plan distribution
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: planData } = await (
     supabaseAdmin.from("profiles") as any
   ).select("plan");
@@ -437,7 +443,7 @@ export async function getAdminUsers(filters: {
   const offset = (page - 1) * pageSize;
 
   // Get all user IDs that ARE in an org
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: orgMembers } = await (
     supabaseAdmin.from("org_memberships") as any
   ).select("user_id");
@@ -489,7 +495,7 @@ export async function getAdminUsers(filters: {
   if (error) throw new Error(error.message);
 
   // Filter out org users client-side
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const individualUsers = (data || []).filter(
     (u: any) => !orgUserIds.has(u.id)
   );
@@ -499,7 +505,7 @@ export async function getAdminUsers(filters: {
 
   // Get total problems solved for these users from student_profiles
   const userIds = paged.map((u: { id: string }) => u.id);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: studentData } = await (
     supabaseAdmin.from("student_profiles") as any
   )
@@ -567,7 +573,9 @@ export async function createOrganizationDirect(input: {
     new Date(Date.now() + 365 * 86400000).toISOString().split("T")[0];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: org, error: orgErr } = await (supabaseAdmin.from("organizations") as any)
+  const { data: org, error: orgErr } = await (
+    supabaseAdmin.from("organizations") as any
+  )
     .insert({
       name: input.name.trim(),
       type: input.type,
@@ -593,18 +601,27 @@ export async function createOrganizationDirect(input: {
   // Generate invite code (DIR for school, SEC for network/state)
   const codeType = input.type === "school" ? "director" : "secretary";
   const PREFIX_MAP: Record<string, string> = {
-    secretary: "SEC", gre: "GRE", director: "DIR", teacher: "PRF",
+    secretary: "SEC",
+    gre: "GRE",
+    director: "DIR",
+    teacher: "PRF",
   };
   const CHARSET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = "";
   for (let attempt = 0; attempt < 5; attempt++) {
     let body = "";
-    for (let i = 0; i < 6; i++) body += CHARSET[Math.floor(Math.random() * CHARSET.length)];
+    for (let i = 0; i < 6; i++)
+      body += CHARSET[Math.floor(Math.random() * CHARSET.length)];
     const candidate = `${PREFIX_MAP[codeType]}-${body}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: dup } = await (supabaseAdmin.from("invite_codes") as any)
-      .select("id").eq("code", candidate).limit(1);
-    if (!dup || dup.length === 0) { code = candidate; break; }
+      .select("id")
+      .eq("code", candidate)
+      .limit(1);
+    if (!dup || dup.length === 0) {
+      code = candidate;
+      break;
+    }
   }
 
   if (!code) return { error: "Failed to generate unique code" };
@@ -628,7 +645,9 @@ export async function getAdminOrgList() {
   await requireSuperAdmin();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: orgs } = await (supabaseAdmin.from("organizations") as any)
-    .select("id, name, type, status, created_at, max_students, access_expires_at")
+    .select(
+      "id, name, type, status, created_at, max_students, access_expires_at"
+    )
     .eq("status", "active")
     .order("created_at", { ascending: false });
 
@@ -645,7 +664,8 @@ export async function getAdminOrgList() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (codes || []).forEach((c: any) => {
     // Keep the first active code per org (usually DIR or SEC)
-    if (!codeMap.has(c.org_id)) codeMap.set(c.org_id, { code: c.code, type: c.type });
+    if (!codeMap.has(c.org_id))
+      codeMap.set(c.org_id, { code: c.code, type: c.type });
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -655,4 +675,3 @@ export async function getAdminOrgList() {
     codeType: codeMap.get(o.id)?.type || null,
   }));
 }
-

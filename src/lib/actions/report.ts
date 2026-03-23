@@ -86,7 +86,9 @@ export async function getStudentReport(
   {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: prof } = await (supabase.from("profiles") as any)
-      .select("is_super_admin").eq("id", user.id).single();
+      .select("is_super_admin")
+      .eq("id", user.id)
+      .single();
     isSuperAdminUser = prof?.is_super_admin === true;
   }
 
@@ -150,7 +152,9 @@ export async function getStudentReport(
     // Student profile
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("student_profiles") as any)
-      .select("total_problems_solved, total_correct, school_year, learning_goal")
+      .select(
+        "total_problems_solved, total_correct, school_year, learning_goal"
+      )
       .eq("id", studentId)
       .single(),
     // Organization name
@@ -222,7 +226,9 @@ export async function getStudentReport(
   for (const [name, topics] of subjectMap.entries()) {
     const avgMastery =
       topics.length > 0
-        ? Math.round(topics.reduce((s, t) => s + t.mastery_percent, 0) / topics.length)
+        ? Math.round(
+            topics.reduce((s, t) => s + t.mastery_percent, 0) / topics.length
+          )
         : 0;
     subjects.push({
       name,
@@ -275,9 +281,13 @@ export async function getStudentReport(
   }
 
   // 9. Badges
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const catalogMap = new Map<string, { icon: string; name_key: string }>();
-  for (const c of (catalogRes.data || []) as { id: string; icon: string; name_key: string }[]) {
+  for (const c of (catalogRes.data || []) as {
+    id: string;
+    icon: string;
+    name_key: string;
+  }[]) {
     catalogMap.set(c.id, { icon: c.icon, name_key: c.name_key });
   }
 
@@ -354,7 +364,8 @@ export async function getStudentReport(
     stats: {
       total_solved: totalSolved,
       total_correct: totalCorrect,
-      accuracy_percent: totalSolved > 0 ? Math.round((totalCorrect / totalSolved) * 100) : 0,
+      accuracy_percent:
+        totalSolved > 0 ? Math.round((totalCorrect / totalSolved) * 100) : 0,
       current_streak: profile.current_streak || 0,
       badges_count: badges.length,
       days_active: uniqueDays.size,

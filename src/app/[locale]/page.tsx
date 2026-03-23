@@ -1,11 +1,10 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useCallback } from "react";
-
-import { Menu, X } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { Link } from "@/i18n/routing";
@@ -161,18 +160,39 @@ export default function LandingPage() {
 
       {/* Mobile nav dropdown */}
       {mobileNavOpen && (
-        <div className="mobile-nav-overlay" onClick={() => setMobileNavOpen(false)}>
+        <div
+          className="mobile-nav-overlay"
+          onClick={() => setMobileNavOpen(false)}
+        >
           <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
-            <a href="#features" onClick={() => setMobileNavOpen(false)}>{t("nav.features")}</a>
-            <a href="#compare" onClick={() => setMobileNavOpen(false)}>{t("nav.compare")}</a>
-            <a href="#pricing" onClick={() => setMobileNavOpen(false)}>{t("nav.pricing")}</a>
-            <Link href="/schools" onClick={() => setMobileNavOpen(false)}>{t("nav.forSchools")}</Link>
+            <a href="#features" onClick={() => setMobileNavOpen(false)}>
+              {t("nav.features")}
+            </a>
+            <a href="#compare" onClick={() => setMobileNavOpen(false)}>
+              {t("nav.compare")}
+            </a>
+            <a href="#pricing" onClick={() => setMobileNavOpen(false)}>
+              {t("nav.pricing")}
+            </a>
+            <Link href="/schools" onClick={() => setMobileNavOpen(false)}>
+              {t("nav.forSchools")}
+            </Link>
             <div className="mobile-nav-divider" />
-            <div className="mobile-nav-lang"><LanguageSwitcher /></div>
-            <Link href="/auth/login" className="mobile-nav-login" onClick={() => setMobileNavOpen(false)}>
+            <div className="mobile-nav-lang">
+              <LanguageSwitcher />
+            </div>
+            <Link
+              href="/auth/login"
+              className="mobile-nav-login"
+              onClick={() => setMobileNavOpen(false)}
+            >
               {t("nav.login")}
             </Link>
-            <Link href="/auth/signup" className="mobile-nav-cta" onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/auth/signup"
+              className="mobile-nav-cta"
+              onClick={() => setMobileNavOpen(false)}
+            >
               {t("nav.startFree")}
             </Link>
           </div>

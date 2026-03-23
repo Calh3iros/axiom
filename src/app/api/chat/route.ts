@@ -2,7 +2,12 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText, convertToModelMessages } from "ai";
 import { NextResponse } from "next/server";
 
-import { buildSolveMblidPrompt, buildLearnMblidPrompt, buildSocraticPrompt, buildVerifyPrompt } from "@/lib/ai/prompts";
+import {
+  buildSolveMblidPrompt,
+  buildLearnMblidPrompt,
+  buildSocraticPrompt,
+  buildVerifyPrompt,
+} from "@/lib/ai/prompts";
 import { getAiRatelimit } from "@/lib/ratelimit";
 import { createClient } from "@/lib/supabase/server";
 import { checkUsage, incrementUsage, getUserAndPlan } from "@/lib/usage";
@@ -150,10 +155,14 @@ export async function POST(req: Request) {
         await incrementUsage(userId, usageType);
 
         // --- Parse and strip [ASSESSMENT:xxx] tag ---
-        const assessmentRegex = /\[ASSESSMENT:\s*(UNDERSTOOD|PROCEDURAL|NOT_UNDERSTOOD)\s*\]/i;
+        const assessmentRegex =
+          /\[ASSESSMENT:\s*(UNDERSTOOD|PROCEDURAL|NOT_UNDERSTOOD)\s*\]/i;
         const assessmentMatch = text.match(assessmentRegex);
         const assessment = assessmentMatch
-          ? (assessmentMatch[1].toUpperCase() as "UNDERSTOOD" | "PROCEDURAL" | "NOT_UNDERSTOOD")
+          ? (assessmentMatch[1].toUpperCase() as
+              | "UNDERSTOOD"
+              | "PROCEDURAL"
+              | "NOT_UNDERSTOOD")
           : "PROCEDURAL"; // Default: benefit of the doubt but no streak
         const cleanText = text.replace(assessmentRegex, "").trimEnd();
 
@@ -221,32 +230,131 @@ ${text}
 
               // --- STEP 1: Normalize subject/topic to prevent duplicates ---
               const normalizeStr = (s: string) => s?.toLowerCase().trim() || "";
-              const normSubject = normalizeStr(analysisData.subject) || "general";
+              const normSubject =
+                normalizeStr(analysisData.subject) || "general";
               const normTopic = normalizeStr(analysisData.topic) || "general";
-              const understandingScore = analysisData.understanding_score ?? 0.5;
+              const understandingScore =
+                analysisData.understanding_score ?? 0.5;
 
               // --- STEP 1b: Semantic topic matching against existing user topics ---
               const stopWords = new Set([
                 // EN
-                "of","the","a","an","in","on","for","and","to","with","by","from","is","are","was","were","be",
-                "solving","finding","calculating","understanding","computing","evaluating","determining","analyzing",
+                "of",
+                "the",
+                "a",
+                "an",
+                "in",
+                "on",
+                "for",
+                "and",
+                "to",
+                "with",
+                "by",
+                "from",
+                "is",
+                "are",
+                "was",
+                "were",
+                "be",
+                "solving",
+                "finding",
+                "calculating",
+                "understanding",
+                "computing",
+                "evaluating",
+                "determining",
+                "analyzing",
                 // PT
-                "de","do","da","dos","das","no","na","nos","nas","em","o","os","um","uma","e","para","com","por",
-                "resolvendo","calculando","encontrando","entendendo","determinando","analisando","avaliando",
+                "de",
+                "do",
+                "da",
+                "dos",
+                "das",
+                "no",
+                "na",
+                "nos",
+                "nas",
+                "em",
+                "o",
+                "os",
+                "um",
+                "uma",
+                "e",
+                "para",
+                "com",
+                "por",
+                "resolvendo",
+                "calculando",
+                "encontrando",
+                "entendendo",
+                "determinando",
+                "analisando",
+                "avaliando",
                 // ES
-                "del","el","la","los","las","en","un","una","y","con",
-                "resolviendo","entendiendo","evaluando","analizando",
+                "del",
+                "el",
+                "la",
+                "los",
+                "las",
+                "en",
+                "un",
+                "una",
+                "y",
+                "con",
+                "resolviendo",
+                "entendiendo",
+                "evaluando",
+                "analizando",
                 // FR
-                "le","les","des","du","au","aux","et","en","dans","sur","avec",
-                "résoudre","calculer","trouver","comprendre","déterminer","analyser","évaluer",
+                "le",
+                "les",
+                "des",
+                "du",
+                "au",
+                "aux",
+                "et",
+                "en",
+                "dans",
+                "sur",
+                "avec",
+                "résoudre",
+                "calculer",
+                "trouver",
+                "comprendre",
+                "déterminer",
+                "analyser",
+                "évaluer",
                 // DE
-                "der","die","das","den","dem","ein","eine","und","in","mit","von","zu","für",
-                "lösen","berechnen","finden","verstehen","bestimmen","analysieren","bewerten",
+                "der",
+                "die",
+                "das",
+                "den",
+                "dem",
+                "ein",
+                "eine",
+                "und",
+                "in",
+                "mit",
+                "von",
+                "zu",
+                "für",
+                "lösen",
+                "berechnen",
+                "finden",
+                "verstehen",
+                "bestimmen",
+                "analysieren",
+                "bewerten",
               ]);
 
               const stemSimple = (s: string) =>
-                s.replace(/(ação|ções|ation|tion|ing|ment|ive|ives|ity|ous|al|es|ed|s)$/g, "")
-                  .replace(/\s+/g, " ").trim();
+                s
+                  .replace(
+                    /(ação|ções|ation|tion|ing|ment|ive|ives|ity|ous|al|es|ed|s)$/g,
+                    ""
+                  )
+                  .replace(/\s+/g, " ")
+                  .trim();
 
               const findMatchingTopic = (
                 newTopic: string,
@@ -281,7 +389,9 @@ ${text}
                   );
 
                   if (smaller.length === 0) continue;
-                  const overlap = smaller.filter((w) => largerSet.has(w)).length;
+                  const overlap = smaller.filter((w) =>
+                    largerSet.has(w)
+                  ).length;
                   if (overlap / smaller.length >= 0.6) return existing;
                 }
 
@@ -289,7 +399,7 @@ ${text}
               };
 
               // Fetch existing topics for this user+subject
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
               const { data: existingTopicRows } = await (supabaseAdmin
                 .from("knowledge_map")
                 .select("topic")
@@ -340,7 +450,8 @@ ${text}
                   countsAsCorrect = true;
                   successFlag = true;
                   // Only increment streak if assessment is UNDERSTOOD
-                  streakAction = assessment === "UNDERSTOOD" ? "increment" : "freeze";
+                  streakAction =
+                    assessment === "UNDERSTOOD" ? "increment" : "freeze";
                 } else if (understandingScore < 0.4) {
                   countsAsIncorrect = true;
                   streakAction = "reset";
@@ -352,7 +463,7 @@ ${text}
               }
 
               // --- STEP 3: Fetch or create KM entry ---
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
               const { data: existing } = await (supabaseAdmin
                 .from("knowledge_map")
                 .select(
@@ -401,8 +512,7 @@ ${text}
                     current_streak: finalStreak,
                     level: newLevel,
                     mastery_score: newMastery,
-                    interactions_count:
-                      (existing.interactions_count || 0) + 1,
+                    interactions_count: (existing.interactions_count || 0) + 1,
                     last_interaction_at: new Date().toISOString(),
                   })
                   .eq("id", existing.id);
@@ -410,7 +520,7 @@ ${text}
                 const leveledUp = newLevel > (existing.level || 1);
                 console.warn(
                   `MBLID ${isChallenge ? "Challenge" : "Normal"}: ${userId} — ${normSubject}/${finalTopic} — ` +
-                  `streak:${finalStreak} lvl:${newLevel}${leveledUp ? " ⬆️ LEVEL UP" : ""} mastery:${newMastery.toFixed(2)}`
+                    `streak:${finalStreak} lvl:${newLevel}${leveledUp ? " ⬆️ LEVEL UP" : ""} mastery:${newMastery.toFixed(2)}`
                 );
               } else {
                 // First interaction on this topic — create entry
@@ -418,15 +528,20 @@ ${text}
                 const initialIncorrect = countsAsIncorrect ? 1 : 0;
                 const initialStreak = streakAction === "increment" ? 1 : 0;
                 const initialAccuracy =
-                  initialCorrect / Math.max(1, initialCorrect + initialIncorrect);
+                  initialCorrect /
+                  Math.max(1, initialCorrect + initialIncorrect);
                 const initialMastery = initialAccuracy * 0.6 + (1 / 5) * 0.4;
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { error: kmErr } = await (supabaseAdmin.from("knowledge_map") as any).insert({
+                const { error: kmErr } = await (
+                  supabaseAdmin.from("knowledge_map") as any
+                ).insert({
                   user_id: userId,
                   subject: normSubject,
                   topic: finalTopic,
-                  mastery_score: isNeutral ? understandingScore * 0.6 + 0.08 : initialMastery,
+                  mastery_score: isNeutral
+                    ? understandingScore * 0.6 + 0.08
+                    : initialMastery,
                   interactions_count: 1,
                   level: 1,
                   correct_count: initialCorrect,
@@ -437,13 +552,15 @@ ${text}
 
                 console.warn(
                   `MBLID New Entry: ${userId} — ${normSubject}/${finalTopic} — ` +
-                  `correct:${initialCorrect} streak:${initialStreak}`
+                    `correct:${initialCorrect} streak:${initialStreak}`
                 );
               }
 
               // --- STEP 8: Log to challenge_log (for heatmap & stats) ---
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const { error: clErr } = await (supabaseAdmin.from("challenge_log") as any).insert({
+              const { error: clErr } = await (
+                supabaseAdmin.from("challenge_log") as any
+              ).insert({
                 user_id: userId,
                 subject: normSubject,
                 topic: finalTopic,
@@ -453,7 +570,9 @@ ${text}
 
               // --- STEP 9: Upsert student_profiles ---
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const { data: sp } = await (supabaseAdmin.from("student_profiles") as any)
+              const { data: sp } = await (
+                supabaseAdmin.from("student_profiles") as any
+              )
                 .select("total_problems_solved, total_correct")
                 .eq("id", userId)
                 .single();
@@ -463,7 +582,8 @@ ${text}
                 await (supabaseAdmin.from("student_profiles") as any)
                   .update({
                     total_problems_solved: (sp.total_problems_solved || 0) + 1,
-                    total_correct: (sp.total_correct || 0) + (successFlag ? 1 : 0),
+                    total_correct:
+                      (sp.total_correct || 0) + (successFlag ? 1 : 0),
                     updated_at: new Date().toISOString(),
                   })
                   .eq("id", userId);
@@ -478,9 +598,7 @@ ${text}
 
               // --- BADGE ENGINE: Check and unlock badges after data update ---
               try {
-                const { checkAndUnlockBadges } = await import(
-                  "@/lib/badges"
-                );
+                const { checkAndUnlockBadges } = await import("@/lib/badges");
                 const newBadges = await checkAndUnlockBadges(userId);
                 if (newBadges.length > 0) {
                   console.warn(
