@@ -374,6 +374,14 @@ export async function getClassDashboard(classId: string) {
 
   if (!cls) return null;
 
+  // Look up user's org role via supabaseAdmin
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: myMembership } = await (db.from("org_memberships") as any)
+    .select("role")
+    .eq("user_id", user.id)
+    .eq("org_id", cls.org_id)
+    .single();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: students } = await (db.from("class_memberships") as any)
     .select(
@@ -386,6 +394,9 @@ export async function getClassDashboard(classId: string) {
     classInfo: cls,
     students: students || [],
     isTeacher: cls.teacher_id === user.id,
+    myRole:
+      myMembership?.role ||
+      (cls.teacher_id === user.id ? "teacher" : "student"),
   };
 }
 

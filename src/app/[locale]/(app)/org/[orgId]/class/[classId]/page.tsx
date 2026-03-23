@@ -190,9 +190,11 @@ export default function ClassDetailPage({
     );
   }
 
-  const canCoordinate = ranking?.role
-    ? isElevated(ranking.role)
-    : data.isTeacher;
+  const canCoordinate = data.myRole
+    ? isElevated(data.myRole)
+    : ranking?.role
+      ? isElevated(ranking.role)
+      : data.isTeacher;
 
   const handleReassignOpen = async () => {
     const teachers = await getOrgTeachers(orgId);
