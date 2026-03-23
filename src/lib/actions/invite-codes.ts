@@ -2,7 +2,11 @@
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import type { InviteCode, InviteCodeType, RedeemResult } from "@/types/invite-codes";
+import type {
+  InviteCode,
+  InviteCodeType,
+  RedeemResult,
+} from "@/types/invite-codes";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
 
@@ -11,6 +15,7 @@ const PREFIX_MAP: Record<InviteCodeType, string> = {
   gre: "GRE",
   director: "DIR",
   teacher: "PRF",
+  owner: "OWN",
 };
 
 // Ambiguity-free charset (no O/0/I/1)
@@ -34,7 +39,10 @@ async function isSuperAdmin(userId: string): Promise<boolean> {
   return data?.is_super_admin === true;
 }
 
-async function getOrgRole(userId: string, orgId: string): Promise<string | null> {
+async function getOrgRole(
+  userId: string,
+  orgId: string
+): Promise<string | null> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabaseAdmin.from("org_memberships") as any)
     .select("role")
@@ -59,20 +67,34 @@ export async function generateInviteCode(input: {
   const isAdmin = await isSuperAdmin(user.id);
 
   // Permission check
-  if (input.type === "secretary" || input.type === "gre") {
-    if (!isAdmin) return { error: "Only administrators can generate this code type" };
+  if (
+    input.type === "secretary" ||
+    input.type === "gre" ||
+    input.type === "owner"
+  ) {
+    if (!isAdmin)
+      return { error: "Only administrators can generate this code type" };
   } else if (input.type === "director") {
     if (!isAdmin) {
       const role = await getOrgRole(user.id, input.orgId);
-      if (!role || !["secretary", "admin", "director"].includes(role)) {
-        return { error: "Not authorized to generate director codes for this organization" };
+      if (
+        !role ||
+        !["secretary", "admin", "director", "owner"].includes(role)
+      ) {
+        return {
+          error:
+            "Not authorized to generate director codes for this organization",
+        };
       }
     }
   } else if (input.type === "teacher") {
     if (!isAdmin) {
       const role = await getOrgRole(user.id, input.orgId);
-      if (!role || !["admin", "director"].includes(role)) {
-        return { error: "Not authorized to generate teacher codes for this organization" };
+      if (!role || !["admin", "director", "owner"].includes(role)) {
+        return {
+          error:
+            "Not authorized to generate teacher codes for this organization",
+        };
       }
     }
   }
@@ -97,7 +119,10 @@ export async function generateInviteCode(input: {
     .limit(1);
 
   if (existing && existing.length > 0) {
-    return { error: "Active code already exists for this type. Use regenerate or deactivate first." };
+    return {
+      error:
+        "Active code already exists for this type. Use regenerate or deactivate first.",
+    };
   }
 
   // Generate unique code (max 5 attempts)
@@ -124,7 +149,7 @@ export async function generateInviteCode(input: {
     type: input.type,
     org_id: input.orgId,
     created_by: user.id,
-    max_uses: input.type === "teacher" ? null : 1,
+    max_uses: input.type === "teacher" ? null : 1, // owner, director, secretary, gre: single-use
   });
 
   if (error) return { error: error.message };
@@ -155,12 +180,16 @@ export async function redeemInviteCode(input: {
     .eq("code", normalizedCode)
     .single();
 
-  if (!inviteCode) return { error: "Código não encontrado. Verifique e tente novamente." };
+  if (!inviteCode)
+    return { error: "Código não encontrado. Verifique e tente novamente." };
   if (!inviteCode.is_active) return { error: "Código desativado." };
   if (inviteCode.expires_at && new Date(inviteCode.expires_at) < new Date()) {
     return { error: "Código expirado. Solicite novo código." };
   }
-  if (inviteCode.max_uses !== null && inviteCode.used_count >= inviteCode.max_uses) {
+  if (
+    inviteCode.max_uses !== null &&
+    inviteCode.used_count >= inviteCode.max_uses
+  ) {
     return { error: "Código já utilizado." };
   }
 
@@ -171,11 +200,14 @@ export async function redeemInviteCode(input: {
     .eq("id", inviteCode.org_id)
     .single();
 
-  if (!org || org.status !== "active") return { error: "Organização suspensa." };
+  if (!org || org.status !== "active")
+    return { error: "Organização suspensa." };
 
   // Check if user already a member
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: existingMember } = await (supabaseAdmin.from("org_memberships") as any)
+  const { data: existingMember } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("id")
     .eq("user_id", user.id)
     .eq("org_id", inviteCode.org_id)
@@ -189,6 +221,7 @@ export async function redeemInviteCode(input: {
     gre: "director",
     director: "director",
     teacher: "teacher",
+    owner: "owner",
   };
   const role = roleMap[inviteCode.type] || "teacher";
 
@@ -203,7 +236,9 @@ export async function redeemInviteCode(input: {
 
   // Create membership
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: memberError } = await (supabaseAdmin.from("org_memberships") as any).insert({
+  const { error: memberError } = await (
+    supabaseAdmin.from("org_memberships") as any
+  ).insert({
     user_id: user.id,
     org_id: inviteCode.org_id,
     role,
@@ -211,7 +246,8 @@ export async function redeemInviteCode(input: {
   });
 
   if (memberError) {
-    if (memberError.code === "23505") return { error: "Você já faz parte desta organização." };
+    if (memberError.code === "23505")
+      return { error: "Você já faz parte desta organização." };
     return { error: memberError.message };
   }
 
@@ -242,7 +278,8 @@ export async function getOrgInviteCodes(orgId: string): Promise<InviteCode[]> {
   const isAdmin = await isSuperAdmin(user.id);
   if (!isAdmin) {
     const role = await getOrgRole(user.id, orgId);
-    if (!role || !["director", "secretary", "admin"].includes(role)) return [];
+    if (!role || !["director", "secretary", "admin", "owner"].includes(role))
+      return [];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -278,7 +315,7 @@ export async function deactivateInviteCode(
   const isAdmin = await isSuperAdmin(user.id);
   if (!isAdmin) {
     const role = await getOrgRole(user.id, code.org_id);
-    if (!role || !["director", "secretary", "admin"].includes(role)) {
+    if (!role || !["director", "secretary", "admin", "owner"].includes(role)) {
       return { error: "Not authorized" };
     }
   }
@@ -316,7 +353,7 @@ export async function regenerateInviteCodeByType(
   const isAdmin = await isSuperAdmin(user.id);
   if (!isAdmin) {
     const role = await getOrgRole(user.id, oldCode.org_id);
-    if (!role || !["director", "secretary", "admin"].includes(role)) {
+    if (!role || !["director", "secretary", "admin", "owner"].includes(role)) {
       return { error: "Not authorized" };
     }
   }

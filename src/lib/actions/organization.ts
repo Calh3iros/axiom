@@ -2,12 +2,16 @@
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import {
+  type OrgRole,
+  type OrgType,
+  ELEVATED_ROLES,
+  ALL_ORG_TYPES,
+  canCreateClass,
+  isManager,
+} from "@/types/roles";
 
-// ─── Types ───────────────────────────────────────────────────────────────
-export type OrgRole = "student" | "teacher" | "admin" | "director" | "secretary";
-export type OrgType = "school" | "network" | "state";
-
-const ELEVATED_ROLES: OrgRole[] = ["admin", "director", "secretary"];
+export type { OrgRole, OrgType };
 
 /**
  * Check if current user is super_admin.
@@ -30,9 +34,14 @@ async function isSuperAdmin(
  * Get all descendant org IDs from a root org via recursive CTE.
  * Uses the get_org_subtree() SQL function (LIMIT 500, max depth 10).
  */
-async function getOrgSubtreeIds(supabase: Awaited<ReturnType<typeof createClient>>, rootId: string) {
+async function getOrgSubtreeIds(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  rootId: string
+) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase as any).rpc("get_org_subtree", { root_id: rootId });
+  const { data } = await (supabase as any).rpc("get_org_subtree", {
+    root_id: rootId,
+  });
   return (data || []) as { org_id: string; depth: number }[];
 }
 
@@ -87,14 +96,17 @@ export async function requestOrganization(data: {
 }) {
   // Server-side validation
   if (!data.name?.trim()) return { error: "Institution name is required" };
-  if (!data.institution_id?.trim()) return { error: "Institution ID (CNPJ) is required" };
-  if (!data.requested_by_name?.trim()) return { error: "Your name is required" };
-  if (!data.requested_by_role?.trim()) return { error: "Your role is required" };
+  if (!data.institution_id?.trim())
+    return { error: "Institution ID (CNPJ) is required" };
+  if (!data.requested_by_name?.trim())
+    return { error: "Your name is required" };
+  if (!data.requested_by_role?.trim())
+    return { error: "Your role is required" };
   if (!data.requested_by_email?.trim()) return { error: "Email is required" };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.requested_by_email))
     return { error: "Invalid email format" };
   if (!data.requested_by_phone?.trim()) return { error: "Phone is required" };
-  if (!["school", "network", "state"].includes(data.type))
+  if (!ALL_ORG_TYPES.includes(data.type as OrgType))
     return { error: "Invalid org type" };
 
   // Use admin client for unauthenticated insert
@@ -106,26 +118,28 @@ export async function requestOrganization(data: {
     .select("id")
     .eq("requested_by_email", data.requested_by_email)
     .eq("status", "pending")
-    .gte("requested_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+    .gte(
+      "requested_at",
+      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    );
 
   if (recent && recent.length >= 3) {
     return { error: "Too many requests. Please try again in 24 hours." };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabaseAdmin.from("organizations") as any)
-    .insert({
-      name: data.name.trim(),
-      type: data.type,
-      status: "pending",
-      institution_id: data.institution_id.trim(),
-      requested_by_name: data.requested_by_name.trim(),
-      requested_by_role: data.requested_by_role.trim(),
-      requested_by_email: data.requested_by_email.trim().toLowerCase(),
-      requested_by_phone: data.requested_by_phone.trim(),
-      request_message: data.message?.trim() || null,
-      requested_at: new Date().toISOString(),
-    });
+  const { error } = await (supabaseAdmin.from("organizations") as any).insert({
+    name: data.name.trim(),
+    type: data.type,
+    status: "pending",
+    institution_id: data.institution_id.trim(),
+    requested_by_name: data.requested_by_name.trim(),
+    requested_by_role: data.requested_by_role.trim(),
+    requested_by_email: data.requested_by_email.trim().toLowerCase(),
+    requested_by_phone: data.requested_by_phone.trim(),
+    request_message: data.message?.trim() || null,
+    requested_at: new Date().toISOString(),
+  });
 
   if (error) return { error: error.message };
   return { success: true };
@@ -145,8 +159,12 @@ export async function getMyOrganizations() {
   // Use supabaseAdmin — memberships created via redeemInviteCode (supabaseAdmin)
   // are invisible to user client due to RLS on org_memberships.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: directMemberships } = await (supabaseAdmin.from("org_memberships") as any)
-    .select("role, org_id, organizations(id, name, type, parent_id, created_at)")
+  const { data: directMemberships } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
+    .select(
+      "role, org_id, organizations(id, name, type, parent_id, created_at)"
+    )
     .eq("user_id", user.id)
     .order("joined_at", { ascending: false });
 
@@ -164,7 +182,13 @@ export async function getMyOrganizations() {
   }
 
   // Fetch child orgs data if any
-  let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
+  let childOrgs: {
+    id: string;
+    name: string;
+    type: string;
+    parent_id: string;
+    created_at: string;
+  }[] = [];
   if (childOrgIds.size > 0) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabaseAdmin.from("organizations") as any)
@@ -190,15 +214,19 @@ export async function getOrgDashboard(orgId: string) {
   // created via supabaseAdmin (e.g. redeemInviteCode) and RLS on org_memberships
   // may block the user client from reading its own row.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabaseAdmin.from("org_memberships") as any)
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
     .single();
 
   // Super_admin bypass: read-only director-level access without membership
-  const isSuperAdminUser = !membership && (await isSuperAdmin(supabase, user.id));
-  const effectiveRole = membership?.role || (isSuperAdminUser ? "director" : null);
+  const isSuperAdminUser =
+    !membership && (await isSuperAdmin(supabase, user.id));
+  const effectiveRole =
+    membership?.role || (isSuperAdminUser ? "director" : null);
   if (!effectiveRole) return null;
 
   // Use supabaseAdmin for all data queries — membership is verified above.
@@ -219,12 +247,16 @@ export async function getOrgDashboard(orgId: string) {
   const [orgRes, membersRes, classesRes] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("organizations") as any)
-      .select("id, name, type, created_at, max_students, access_expires_at, contract_notes")
+      .select(
+        "id, name, type, created_at, max_students, access_expires_at, contract_notes"
+      )
       .eq("id", orgId)
       .single(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("org_memberships") as any)
-      .select("user_id, role, joined_at, subjects, profiles(full_name, avatar_url, email)")
+      .select(
+        "user_id, role, joined_at, subjects, profiles(full_name, avatar_url, email)"
+      )
       .eq("org_id", orgId)
       .order("role"),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -252,11 +284,20 @@ export async function getOrgDashboard(orgId: string) {
   const studentCount = members.filter((m: any) => m.role === "student").length;
 
   // For elevated roles, also fetch child orgs
-  let childOrgs: { id: string; name: string; type: string; parent_id: string; created_at: string }[] = [];
+  let childOrgs: {
+    id: string;
+    name: string;
+    type: string;
+    parent_id: string;
+    created_at: string;
+  }[] = [];
   if (ELEVATED_ROLES.includes(effectiveRole as OrgRole)) {
     // get_org_subtree RPC needs the user client for auth context
-    const subtree = await getOrgSubtreeIds(isSuperAdminUser ? supabaseAdmin as any : supabase, orgId);
-    const childIds = subtree.filter(n => n.depth > 0).map(n => n.org_id);
+    const subtree = await getOrgSubtreeIds(
+      isSuperAdminUser ? (supabaseAdmin as any) : supabase,
+      orgId
+    );
+    const childIds = subtree.filter((n) => n.depth > 0).map((n) => n.org_id);
     if (childIds.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data } = await (db.from("organizations") as any)
@@ -293,13 +334,15 @@ export async function createClass(orgId: string, name: string) {
   // Verify role — use supabaseAdmin because RLS blocks user client
   // from seeing memberships created via redeemInviteCode.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: membership } = await (supabaseAdmin.from("org_memberships") as any)
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
     .select("role")
     .eq("user_id", user.id)
     .eq("org_id", orgId)
     .single();
 
-  if (!membership || !["teacher", "admin", "director"].includes(membership.role)) {
+  if (!membership || !canCreateClass(membership.role)) {
     return { error: "Not authorized" };
   }
 
@@ -338,7 +381,9 @@ export async function getClassDashboard(classId: string) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: students } = await (db.from("class_memberships") as any)
-    .select("user_id, joined_at, profiles:user_id(full_name, avatar_url, email)")
+    .select(
+      "user_id, joined_at, profiles:user_id(full_name, avatar_url, email)"
+    )
     .eq("class_id", classId)
     .order("joined_at");
 
@@ -374,10 +419,7 @@ export async function addOrgMember(
     .eq("org_id", orgId)
     .single();
 
-  if (
-    !membership ||
-    !["admin", "director", "secretary"].includes(membership.role)
-  ) {
+  if (!membership || !isManager(membership.role)) {
     return { error: "Not authorized" };
   }
 

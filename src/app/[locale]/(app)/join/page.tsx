@@ -1,6 +1,12 @@
 "use client";
 
-import { Building2, CheckCircle, AlertCircle, GraduationCap, BookOpen } from "lucide-react";
+import {
+  Building2,
+  CheckCircle,
+  AlertCircle,
+  GraduationCap,
+  BookOpen,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import posthog from "posthog-js";
@@ -8,9 +14,18 @@ import { useState, useCallback } from "react";
 
 import { useRouter } from "@/i18n/routing";
 import { joinByInviteCode } from "@/lib/actions/invite";
-import { redeemInviteCode, updateMemberSubjects } from "@/lib/actions/invite-codes";
+import {
+  redeemInviteCode,
+  updateMemberSubjects,
+} from "@/lib/actions/invite-codes";
 
-type CodeType = "secretary" | "gre" | "director" | "teacher" | "student";
+type CodeType =
+  | "secretary"
+  | "gre"
+  | "director"
+  | "teacher"
+  | "owner"
+  | "student";
 
 function detectCodeType(code: string): CodeType | null {
   const upper = code.toUpperCase().trim();
@@ -18,16 +33,30 @@ function detectCodeType(code: string): CodeType | null {
   if (upper.startsWith("GRE-")) return "gre";
   if (upper.startsWith("DIR-")) return "director";
   if (upper.startsWith("PRF-")) return "teacher";
+  if (upper.startsWith("OWN-")) return "owner";
   if (upper.length >= 4) return "student";
   return null;
 }
 
 const SUBJECTS = [
-  "Português", "Matemática", "História", "Geografia",
-  "Ciências", "Física", "Química", "Biologia",
-  "Inglês", "Espanhol", "Ed. Física", "Artes",
-  "Filosofia", "Sociologia", "Redação", "Literatura",
-  "Ensino Religioso", "Ed. Musical",
+  "Português",
+  "Matemática",
+  "História",
+  "Geografia",
+  "Ciências",
+  "Física",
+  "Química",
+  "Biologia",
+  "Inglês",
+  "Espanhol",
+  "Ed. Física",
+  "Artes",
+  "Filosofia",
+  "Sociologia",
+  "Redação",
+  "Literatura",
+  "Ensino Religioso",
+  "Ed. Musical",
 ];
 
 type Step = "input" | "subjects" | "done";
@@ -63,6 +92,7 @@ export default function JoinPage() {
         gre: t("typeGre"),
         director: t("typeDirector"),
         teacher: t("typeTeacher"),
+        owner: t("typeOwner" as "typeSecretary"),
         student: t("typeStudent"),
       };
       return labels[type];
@@ -84,7 +114,10 @@ export default function JoinPage() {
       if (result.error) {
         setError(result.error);
       } else {
-        posthog.capture("org_joined", { method: "invite_code", type: "student" });
+        posthog.capture("org_joined", {
+          method: "invite_code",
+          type: "student",
+        });
         setResultClassName(result.className || "");
         setStep("done");
         setTimeout(() => router.push("/solve"), 2000);

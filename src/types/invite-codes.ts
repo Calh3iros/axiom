@@ -1,4 +1,9 @@
-export type InviteCodeType = "secretary" | "gre" | "director" | "teacher";
+export type InviteCodeType =
+  | "secretary"
+  | "gre"
+  | "director"
+  | "teacher"
+  | "owner";
 
 export interface InviteCode {
   id: string;

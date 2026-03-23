@@ -1,33 +1,63 @@
 "use client";
 
 import {
-  ArrowLeft, Plus, Users, BookOpen, Building2, Trophy, BarChart3,
-  GraduationCap, Copy, Check, RefreshCw, ExternalLink, Trash2,
+  ArrowLeft,
+  Plus,
+  Users,
+  BookOpen,
+  Building2,
+  Trophy,
+  BarChart3,
+  GraduationCap,
+  Copy,
+  Check,
+  RefreshCw,
+  ExternalLink,
+  Trash2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
-import { DirectorDashboard, SecretaryDashboard } from "@/components/dashboard/dashboard-views";
+import {
+  DirectorDashboard,
+  SecretaryDashboard,
+} from "@/components/dashboard/dashboard-views";
 import { ClassCard } from "@/components/org/class-card";
 import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { Link, useRouter } from "@/i18n/routing";
-import { getDirectorDashboard, getSecretaryDashboard } from "@/lib/actions/dashboard";
 import {
-  generateInviteCode, getOrgInviteCodes, regenerateInviteCodeByType,
+  getDirectorDashboard,
+  getSecretaryDashboard,
+} from "@/lib/actions/dashboard";
+import {
+  generateInviteCode,
+  getOrgInviteCodes,
+  regenerateInviteCodeByType,
 } from "@/lib/actions/invite-codes";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
+import {
+  canCreateClass as canCreateClassFromRole,
+  isElevated as isElevatedRole,
+  isManager as isManagerRole,
+} from "@/types/roles";
 
-export default function OrgDetailPage({ params }: { params: Promise<{ orgId: string }> }) {
+export default function OrgDetailPage({
+  params,
+}: {
+  params: Promise<{ orgId: string }>;
+}) {
   const { orgId } = use(params);
   const t = useTranslations("Org");
   const tc = useTranslations("Class");
   const tr = useTranslations("Rankings");
   const router = useRouter();
-  const [data, setData] = useState<Awaited<ReturnType<typeof getOrgDashboard>>>(null);
-  const [orgRanking, setOrgRanking] = useState<Awaited<ReturnType<typeof getOrgClassRanking>>>(null);
+  const [data, setData] =
+    useState<Awaited<ReturnType<typeof getOrgDashboard>>>(null);
+  const [orgRanking, setOrgRanking] =
+    useState<Awaited<ReturnType<typeof getOrgClassRanking>>>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dashData, setDashData] = useState<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,7 +101,7 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
     }
 
     // Fetch invite codes for teachers section
-    if (res && ["admin", "director", "secretary"].includes(res.myRole)) {
+    if (res && isManagerRole(res.myRole)) {
       const codes = await getOrgInviteCodes(orgId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
@@ -85,14 +115,20 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
     fetchData();
   }, [fetchData]);
 
-  const handleDirPeriodChange = async (range: { startDate: string; endDate: string }) => {
+  const handleDirPeriodChange = async (range: {
+    startDate: string;
+    endDate: string;
+  }) => {
     setDashLoading(true);
     const res = await getDirectorDashboard(orgId, range);
     setDashData(res);
     setDashLoading(false);
   };
 
-  const handleSecPeriodChange = async (range: { startDate: string; endDate: string }) => {
+  const handleSecPeriodChange = async (range: {
+    startDate: string;
+    endDate: string;
+  }) => {
     setSecLoading(true);
     const res = await getSecretaryDashboard(orgId, range);
     setSecData(res);
@@ -139,8 +175,8 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
     );
   }
 
-  const canManage = ["teacher", "admin", "director"].includes(data.myRole);
-  const isElevated = ["admin", "director", "secretary"].includes(data.myRole);
+  const canManage = canCreateClassFromRole(data.myRole);
+  const isElevated = isElevatedRole(data.myRole);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const teachers = data.members.filter((m: any) => m.role === "teacher");
@@ -160,33 +196,77 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           {data.org.name}
         </h1>
         <p className="mt-1 text-sm text-[var(--color-dim)]">
-          {t(`type${data.org.type.charAt(0).toUpperCase() + data.org.type.slice(1)}` as "typeSchool" | "typeNetwork" | "typeState")}
+          {t(
+            `type${data.org.type.charAt(0).toUpperCase() + data.org.type.slice(1)}` as
+              | "typeSchool"
+              | "typeNetwork"
+              | "typeState"
+          )}
           {" · "}
-          {t(`role${data.myRole.charAt(0).toUpperCase() + data.myRole.slice(1)}` as "roleStudent" | "roleTeacher" | "roleAdmin" | "roleDirector" | "roleSecretary")}
+          {t(
+            `role${data.myRole.charAt(0).toUpperCase() + data.myRole.slice(1)}` as
+              | "roleStudent"
+              | "roleTeacher"
+              | "roleAdmin"
+              | "roleDirector"
+              | "roleSecretary"
+          )}
         </p>
 
         {/* Capacity + Expiry indicators (elevated roles only) */}
         {isElevated && data.org.max_students != null && (
           <div className="mt-2 flex items-center gap-2">
-            <Users className="h-4 w-4" style={{ color: data.studentCount >= data.org.max_students ? "#ef4444" : data.studentCount >= data.org.max_students * 0.8 ? "#f59e0b" : "#22c55e" }} />
-            <span className="text-sm font-medium" style={{ color: data.studentCount >= data.org.max_students ? "#ef4444" : data.studentCount >= data.org.max_students * 0.8 ? "#f59e0b" : "#94a3b8" }}>
+            <Users
+              className="h-4 w-4"
+              style={{
+                color:
+                  data.studentCount >= data.org.max_students
+                    ? "#ef4444"
+                    : data.studentCount >= data.org.max_students * 0.8
+                      ? "#f59e0b"
+                      : "#22c55e",
+              }}
+            />
+            <span
+              className="text-sm font-medium"
+              style={{
+                color:
+                  data.studentCount >= data.org.max_students
+                    ? "#ef4444"
+                    : data.studentCount >= data.org.max_students * 0.8
+                      ? "#f59e0b"
+                      : "#94a3b8",
+              }}
+            >
               {t("students")}: {data.studentCount}/{data.org.max_students}
             </span>
             {data.studentCount >= data.org.max_students && (
-              <span className="rounded-full px-2 py-0.5 text-xs font-semibold" style={{ background: "#450a0a", color: "#f87171" }}>
+              <span
+                className="rounded-full px-2 py-0.5 text-xs font-semibold"
+                style={{ background: "#450a0a", color: "#f87171" }}
+              >
                 {t("limitReached")}
               </span>
             )}
-            {data.studentCount >= data.org.max_students * 0.8 && data.studentCount < data.org.max_students && (
-              <span className="rounded-full px-2 py-0.5 text-xs font-semibold" style={{ background: "#422006", color: "#fbbf24" }}>
-                {t("nearLimit")}
-              </span>
-            )}
+            {data.studentCount >= data.org.max_students * 0.8 &&
+              data.studentCount < data.org.max_students && (
+                <span
+                  className="rounded-full px-2 py-0.5 text-xs font-semibold"
+                  style={{ background: "#422006", color: "#fbbf24" }}
+                >
+                  {t("nearLimit")}
+                </span>
+              )}
           </div>
         )}
         {isElevated && expiresFormatted && (
-          <div className="mt-1 flex items-center gap-2 text-sm" style={{ color: expiresWarning ? "#f59e0b" : "#64748b" }}>
-            <span>⏱ {t("expiresAt")}: {expiresFormatted}</span>
+          <div
+            className="mt-1 flex items-center gap-2 text-sm"
+            style={{ color: expiresWarning ? "#f59e0b" : "#64748b" }}
+          >
+            <span>
+              ⏱ {t("expiresAt")}: {expiresFormatted}
+            </span>
           </div>
         )}
       </div>
@@ -213,18 +293,27 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
         {data.classes.length === 0 ? (
           <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] py-10 text-center">
             <BookOpen className="mx-auto h-8 w-8 text-[var(--color-dim)]" />
-            <p className="mt-2 text-sm text-[var(--color-dim)]">No classes yet.</p>
+            <p className="mt-2 text-sm text-[var(--color-dim)]">
+              No classes yet.
+            </p>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
-            {data.classes.map((cls: { id: string; name: string; invite_code: string; teacher_id: string }) => (
-              <ClassCard
-                key={cls.id}
-                cls={cls}
-                orgId={orgId}
-                showCode={canManage}
-              />
-            ))}
+            {data.classes.map(
+              (cls: {
+                id: string;
+                name: string;
+                invite_code: string;
+                teacher_id: string;
+              }) => (
+                <ClassCard
+                  key={cls.id}
+                  cls={cls}
+                  orgId={orgId}
+                  showCode={canManage}
+                />
+              )
+            )}
           </div>
         )}
       </div>
@@ -243,7 +332,7 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           <div className="mb-4 rounded-xl border border-green-500/20 bg-green-500/5 p-5">
             {teacherCode ? (
               <div>
-                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-green-400/70">
+                <p className="mb-2 text-xs font-medium tracking-wider text-green-400/70 uppercase">
                   {t("teacherCode")}
                 </p>
                 <div className="flex items-center gap-3">
@@ -259,18 +348,28 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
                     className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white"
                     title={t("copyCode")}
                   >
-                    {copiedCode ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                    {copiedCode ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
                   </button>
                   <button
                     onClick={async () => {
-                      await navigator.clipboard.writeText(`https://axiom-solver.com/join?code=${teacherCode.code}`);
+                      await navigator.clipboard.writeText(
+                        `https://axiom-solver.com/join?code=${teacherCode.code}`
+                      );
                       setCopiedLink(true);
                       setTimeout(() => setCopiedLink(false), 2000);
                     }}
                     className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white"
                     title={t("copyLink")}
                   >
-                    {copiedLink ? <Check className="h-4 w-4 text-green-400" /> : <ExternalLink className="h-4 w-4" />}
+                    {copiedLink ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <ExternalLink className="h-4 w-4" />
+                    )}
                   </button>
                   <button
                     onClick={handleRegenerateCode}
@@ -278,7 +377,9 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
                     className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white disabled:opacity-50"
                     title={t("regenerateCode")}
                   >
-                    <RefreshCw className={`h-4 w-4 ${codeLoading ? "animate-spin" : ""}`} />
+                    <RefreshCw
+                      className={`h-4 w-4 ${codeLoading ? "animate-spin" : ""}`}
+                    />
                   </button>
                 </div>
               </div>
@@ -300,13 +401,18 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
           {teachers.length === 0 ? (
             <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] py-8 text-center">
               <GraduationCap className="mx-auto h-8 w-8 text-[var(--color-dim)]" />
-              <p className="mt-2 text-sm text-[var(--color-dim)]">{t("noTeachers")}</p>
+              <p className="mt-2 text-sm text-[var(--color-dim)]">
+                {t("noTeachers")}
+              </p>
             </div>
           ) : (
             <div className="space-y-2">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {teachers.map((m: any) => {
-                const name = m.profiles?.full_name || m.profiles?.email?.split("@")[0] || "User";
+                const name =
+                  m.profiles?.full_name ||
+                  m.profiles?.email?.split("@")[0] ||
+                  "User";
                 const subjects: string[] = m.subjects || [];
                 return (
                   <div
@@ -316,16 +422,24 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
                     <div className="flex items-center gap-3">
                       {m.profiles?.avatar_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={m.profiles.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
+                        <img
+                          src={m.profiles.avatar_url}
+                          alt=""
+                          className="h-8 w-8 rounded-full object-cover"
+                        />
                       ) : (
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/15 text-xs font-bold text-green-400">
                           {name.slice(0, 2).toUpperCase()}
                         </div>
                       )}
                       <div>
-                        <span className="text-sm font-medium text-[var(--color-text-primary)]">{name}</span>
+                        <span className="text-sm font-medium text-[var(--color-text-primary)]">
+                          {name}
+                        </span>
                         {m.profiles?.email && (
-                          <p className="text-xs text-[var(--color-dim)]">{m.profiles.email}</p>
+                          <p className="text-xs text-[var(--color-dim)]">
+                            {m.profiles.email}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -333,7 +447,10 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
                       {subjects.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {subjects.slice(0, 3).map((s: string) => (
-                            <span key={s} className="rounded-full border border-green-500/20 bg-green-500/10 px-2 py-0.5 text-xs text-green-400">
+                            <span
+                              key={s}
+                              className="rounded-full border border-green-500/20 bg-green-500/10 px-2 py-0.5 text-xs text-green-400"
+                            >
                               {s}
                             </span>
                           ))}
@@ -347,7 +464,8 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
                       <button
                         onClick={async () => {
                           if (!confirm(t("removeConfirm"))) return;
-                          const { supabaseAdmin } = await import("@/lib/supabase/admin");
+                          const { supabaseAdmin } =
+                            await import("@/lib/supabase/admin");
                           // eslint-disable-next-line @typescript-eslint/no-explicit-any
                           await (supabaseAdmin.from("org_memberships") as any)
                             .delete()
@@ -381,15 +499,33 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
             </div>
             <button
               onClick={() => setShowDashboard(!showDashboard)}
-              className="text-xs text-[var(--color-dim)] hover:text-[var(--color-text-primary)] transition-colors"
+              className="text-xs text-[var(--color-dim)] transition-colors hover:text-[var(--color-text-primary)]"
             >
               {showDashboard ? tr("hide") : tr("show")}
             </button>
           </div>
           {showDashboard && (
             <>
-              {dashData && <DirectorDashboard data={dashData} onDrillDown={(classId) => router.push(`/org/${orgId}/class/${classId}`)} onPeriodChange={handleDirPeriodChange} loading={dashLoading} title={data?.org?.name} />}
-              {secData && <SecretaryDashboard data={secData} onDrillDown={(id) => router.push(`/org/${id}`)} onPeriodChange={handleSecPeriodChange} loading={secLoading} title={data?.org?.name} />}
+              {dashData && (
+                <DirectorDashboard
+                  data={dashData}
+                  onDrillDown={(classId) =>
+                    router.push(`/org/${orgId}/class/${classId}`)
+                  }
+                  onPeriodChange={handleDirPeriodChange}
+                  loading={dashLoading}
+                  title={data?.org?.name}
+                />
+              )}
+              {secData && (
+                <SecretaryDashboard
+                  data={secData}
+                  onDrillDown={(id) => router.push(`/org/${id}`)}
+                  onPeriodChange={handleSecPeriodChange}
+                  loading={secLoading}
+                  title={data?.org?.name}
+                />
+              )}
             </>
           )}
         </div>
@@ -421,21 +557,30 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
             </h2>
           </div>
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {data.childOrgs.map((child: { id: string; name: string; type: string }) => (
-              <Link key={child.id} href={`/org/${child.id}`}>
-                <div className="group cursor-pointer rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-4 transition-all hover:border-[var(--color-ax-blue)]/30">
-                  <div className="flex items-center gap-2">
-                    <Building2 className={`h-4 w-4 ${child.type === 'school' ? 'text-blue-400' : child.type === 'network' ? 'text-purple-400' : 'text-orange-400'}`} />
-                    <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-ax-blue)]">
-                      {child.name}
-                    </span>
+            {data.childOrgs.map(
+              (child: { id: string; name: string; type: string }) => (
+                <Link key={child.id} href={`/org/${child.id}`}>
+                  <div className="group cursor-pointer rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-4 transition-all hover:border-[var(--color-ax-blue)]/30">
+                    <div className="flex items-center gap-2">
+                      <Building2
+                        className={`h-4 w-4 ${child.type === "school" ? "text-blue-400" : child.type === "network" ? "text-purple-400" : "text-orange-400"}`}
+                      />
+                      <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-ax-blue)]">
+                        {child.name}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-[var(--color-dim)]">
+                      {t(
+                        `type${child.type.charAt(0).toUpperCase() + child.type.slice(1)}` as
+                          | "typeSchool"
+                          | "typeNetwork"
+                          | "typeState"
+                      )}
+                    </p>
                   </div>
-                  <p className="mt-1 text-xs text-[var(--color-dim)]">
-                    {t(`type${child.type.charAt(0).toUpperCase() + child.type.slice(1)}` as "typeSchool" | "typeNetwork" | "typeState")}
-                  </p>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              )
+            )}
           </div>
         </div>
       )}
