@@ -4,6 +4,7 @@ import { sendEmail } from "@/lib/email";
 import { orgApprovedEmailHtml } from "@/lib/email-templates";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { type OrgType } from "@/types/roles";
 
 // ─── Auth Guard ──────────────────────────────────────────────────────────
 
@@ -96,7 +97,7 @@ export async function approveOrg(
 
     if (orgInfo?.requested_by_email) {
       // Look up user by email in profiles
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const { data: userProfile } = await (
         supabaseAdmin.from("profiles") as any
       )
@@ -114,7 +115,7 @@ export async function approveOrg(
         const memberRole = roleMap[orgInfo.requested_by_role] || "teacher";
 
         // Check if already a member (idempotent)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         const { data: existing } = await (
           supabaseAdmin.from("org_memberships") as any
         )
@@ -559,7 +560,7 @@ export async function getDemoOrgId(): Promise<string | null> {
  */
 export async function createOrganizationDirect(input: {
   name: string;
-  type: "school" | "network" | "state";
+  type: OrgType;
   maxStudents?: number;
   expiresAt?: string;
   contractNotes?: string;
@@ -572,7 +573,6 @@ export async function createOrganizationDirect(input: {
     input.expiresAt ||
     new Date(Date.now() + 365 * 86400000).toISOString().split("T")[0];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: org, error: orgErr } = await (
     supabaseAdmin.from("organizations") as any
   )
@@ -598,13 +598,24 @@ export async function createOrganizationDirect(input: {
     role: "admin",
   });
 
-  // Generate invite code (DIR for school, SEC for network/state)
-  const codeType = input.type === "school" ? "director" : "secretary";
+  // Generate invite code based on org type
+  // school/private_school => director, network/state => secretary, private_network/public_* => owner
+  const codeTypeMap: Record<string, string> = {
+    school: "director",
+    private_school: "director",
+    network: "secretary",
+    state: "secretary",
+    private_network: "owner",
+    public_municipal: "secretary",
+    public_state: "secretary",
+  };
+  const codeType = codeTypeMap[input.type] || "director";
   const PREFIX_MAP: Record<string, string> = {
     secretary: "SEC",
     gre: "GRE",
     director: "DIR",
     teacher: "PRF",
+    owner: "OWN",
   };
   const CHARSET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = "";

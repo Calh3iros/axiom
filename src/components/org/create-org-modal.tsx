@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { createOrganization } from "@/lib/actions/organization";
+import { type OrgType } from "@/types/roles";
 
 interface CreateOrgModalProps {
   open: boolean;
@@ -12,10 +13,14 @@ interface CreateOrgModalProps {
   onCreated: () => void;
 }
 
-export function CreateOrgModal({ open, onClose, onCreated }: CreateOrgModalProps) {
+export function CreateOrgModal({
+  open,
+  onClose,
+  onCreated,
+}: CreateOrgModalProps) {
   const t = useTranslations("Org");
   const [name, setName] = useState("");
-  const [type, setType] = useState<"school" | "network" | "state">("school");
+  const [type, setType] = useState<OrgType>("school");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,7 +48,10 @@ export function CreateOrgModal({ open, onClose, onCreated }: CreateOrgModalProps
           <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
             {t("createOrg")}
           </h2>
-          <button onClick={onClose} className="text-[var(--color-dim)] hover:text-white">
+          <button
+            onClick={onClose}
+            className="text-[var(--color-dim)] hover:text-white"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -68,18 +76,28 @@ export function CreateOrgModal({ open, onClose, onCreated }: CreateOrgModalProps
             </label>
             <select
               value={type}
-              onChange={(e) => setType(e.target.value as "school" | "network" | "state")}
+              onChange={(e) => setType(e.target.value as OrgType)}
               className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg2)] px-4 py-2.5 text-[var(--color-text-primary)] outline-none focus:border-[var(--color-ax-blue)]"
             >
               <option value="school">{t("typeSchool")}</option>
               <option value="network">{t("typeNetwork")}</option>
               <option value="state">{t("typeState")}</option>
+              <option value="private_school">
+                {t("typePrivateSchool" as "typeSchool")}
+              </option>
+              <option value="private_network">
+                {t("typePrivateNetwork" as "typeNetwork")}
+              </option>
+              <option value="public_municipal">
+                {t("typePublicMunicipal" as "typeState")}
+              </option>
+              <option value="public_state">
+                {t("typePublicState" as "typeState")}
+              </option>
             </select>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-400">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-400">{error}</p>}
 
           <div className="flex gap-3 pt-2">
             <button

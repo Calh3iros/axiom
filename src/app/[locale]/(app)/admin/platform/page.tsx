@@ -1,21 +1,45 @@
 "use client";
 
 import {
-  Activity, Building2, Crown, FlaskConical, TrendingUp, Users,
-  Plus, Copy, Check, X, ExternalLink,
+  Activity,
+  Building2,
+  Crown,
+  FlaskConical,
+  TrendingUp,
+  Users,
+  Plus,
+  Copy,
+  Check,
+  X,
+  ExternalLink,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import {
-  LineChart, Line, AreaChart, Area, PieChart, Pie, Cell,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 
 import { Link } from "@/i18n/routing";
 import {
-  getAdminPlatformStats, getDemoOrgId,
-  createOrganizationDirect, getAdminOrgList,
+  getAdminPlatformStats,
+  getDemoOrgId,
+  createOrganizationDirect,
+  getAdminOrgList,
 } from "@/lib/actions/admin";
+import { type OrgType } from "@/types/roles";
 
 type Stats = Awaited<ReturnType<typeof getAdminPlatformStats>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,7 +50,10 @@ const MODULE_COLORS = ["#818cf8", "#22c55e", "#f59e0b", "#ec4899"];
 
 // ── Create Org Modal ──────────────────────────────────────────────────
 function CreateOrgModal({
-  open, onClose, onCreated, t,
+  open,
+  onClose,
+  onCreated,
+  t,
 }: {
   open: boolean;
   onClose: () => void;
@@ -34,7 +61,7 @@ function CreateOrgModal({
   t: ReturnType<typeof useTranslations>;
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState<"school" | "network" | "state">("school");
+  const [type, setType] = useState<OrgType>("school");
   const [maxStudents, setMaxStudents] = useState("500");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
@@ -75,7 +102,9 @@ function CreateOrgModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-6 shadow-2xl">
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white">{t("platform.createOrg")}</h2>
+          <h2 className="text-lg font-bold text-white">
+            {t("platform.createOrg")}
+          </h2>
           <button onClick={onClose} className="text-[#64748b] hover:text-white">
             <X className="h-5 w-5" />
           </button>
@@ -100,12 +129,24 @@ function CreateOrgModal({
             </label>
             <select
               value={type}
-              onChange={(e) => setType(e.target.value as "school" | "network" | "state")}
+              onChange={(e) => setType(e.target.value as OrgType)}
               className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
             >
               <option value="school">{t("platform.typeSchool")}</option>
               <option value="network">{t("platform.typeNetwork")}</option>
               <option value="state">{t("platform.typeState")}</option>
+              <option value="private_school">
+                {t("platform.typePrivateSchool" as "platform.typeSchool")}
+              </option>
+              <option value="private_network">
+                {t("platform.typePrivateNetwork" as "platform.typeNetwork")}
+              </option>
+              <option value="public_municipal">
+                {t("platform.typePublicMunicipal" as "platform.typeState")}
+              </option>
+              <option value="public_state">
+                {t("platform.typePublicState" as "platform.typeState")}
+              </option>
             </select>
           </div>
           <div>
@@ -153,7 +194,10 @@ function CreateOrgModal({
 
 // ── Success Modal ─────────────────────────────────────────────────────
 function SuccessModal({
-  open, code, onClose, t,
+  open,
+  code,
+  onClose,
+  t,
 }: {
   open: boolean;
   code: string;
@@ -171,9 +215,13 @@ function SuccessModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="w-full max-w-sm rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-6 text-center shadow-2xl">
         <Check className="mx-auto h-10 w-10 text-green-400" />
-        <h2 className="mt-3 text-lg font-bold text-white">{t("platform.orgCreated")}</h2>
-        <div className="mt-4 rounded-lg bg-[#0a0a12] border border-[#2a2a3e] px-4 py-3">
-          <p className="font-mono text-2xl font-bold tracking-wider text-[#f59e0b]">{code}</p>
+        <h2 className="mt-3 text-lg font-bold text-white">
+          {t("platform.orgCreated")}
+        </h2>
+        <div className="mt-4 rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-4 py-3">
+          <p className="font-mono text-2xl font-bold tracking-wider text-[#f59e0b]">
+            {code}
+          </p>
         </div>
         <div className="mt-4 flex gap-2">
           <button
@@ -184,7 +232,11 @@ function SuccessModal({
             }}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1e1e2e] px-3 py-2 text-xs font-medium text-white hover:bg-[#2a2a3e]"
           >
-            {copiedCode ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
+            {copiedCode ? (
+              <Check className="h-3.5 w-3.5 text-green-400" />
+            ) : (
+              <Copy className="h-3.5 w-3.5" />
+            )}
             {t("platform.copyCode")}
           </button>
           <button
@@ -195,7 +247,11 @@ function SuccessModal({
             }}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1e1e2e] px-3 py-2 text-xs font-medium text-white hover:bg-[#2a2a3e]"
           >
-            {copiedLink ? <Check className="h-3.5 w-3.5 text-green-400" /> : <ExternalLink className="h-3.5 w-3.5" />}
+            {copiedLink ? (
+              <Check className="h-3.5 w-3.5 text-green-400" />
+            ) : (
+              <ExternalLink className="h-3.5 w-3.5" />
+            )}
             {t("platform.copyLink")}
           </button>
         </div>
@@ -211,20 +267,30 @@ function SuccessModal({
 }
 
 // ── Org Table ─────────────────────────────────────────────────────────
-function OrgTable({ orgs, t }: { orgs: OrgRow[]; t: ReturnType<typeof useTranslations> }) {
+function OrgTable({
+  orgs,
+  t,
+}: {
+  orgs: OrgRow[];
+  t: ReturnType<typeof useTranslations>;
+}) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const typeLabels: Record<string, string> = {
     school: t("platform.typeSchool"),
     network: t("platform.typeNetwork"),
     state: t("platform.typeState"),
+    private_school: "Escola Particular",
+    private_network: "Rede Particular",
+    public_municipal: "Rede Municipal",
+    public_state: "Rede Estadual",
   };
 
   return (
-    <div className="rounded-xl border border-[#1e1e2e] bg-[#12121a] overflow-hidden">
+    <div className="overflow-hidden rounded-xl border border-[#1e1e2e] bg-[#12121a]">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-[#1e1e2e] text-left text-xs uppercase text-[#64748b]">
+          <tr className="border-b border-[#1e1e2e] text-left text-xs text-[#64748b] uppercase">
             <th className="px-4 py-3">{t("platform.orgName")}</th>
             <th className="px-4 py-3">{t("platform.orgTypeSel")}</th>
             <th className="px-4 py-3">{t("platform.code")}</th>
@@ -233,13 +299,21 @@ function OrgTable({ orgs, t }: { orgs: OrgRow[]; t: ReturnType<typeof useTransla
         </thead>
         <tbody>
           {orgs.map((org: OrgRow) => (
-            <tr key={org.id} className="border-b border-[#1e1e2e]/50 hover:bg-[#1a1a2e]">
+            <tr
+              key={org.id}
+              className="border-b border-[#1e1e2e]/50 hover:bg-[#1a1a2e]"
+            >
               <td className="px-4 py-3">
-                <Link href={`/org/${org.id}`} className="font-medium text-white hover:text-[#818cf8]">
+                <Link
+                  href={`/org/${org.id}`}
+                  className="font-medium text-white hover:text-[#818cf8]"
+                >
                   {org.name}
                 </Link>
               </td>
-              <td className="px-4 py-3 text-[#94a3b8]">{typeLabels[org.type] || org.type}</td>
+              <td className="px-4 py-3 text-[#94a3b8]">
+                {typeLabels[org.type] || org.type}
+              </td>
               <td className="px-4 py-3">
                 {org.inviteCode ? (
                   <div className="flex items-center gap-1.5">
@@ -265,7 +339,9 @@ function OrgTable({ orgs, t }: { orgs: OrgRow[]; t: ReturnType<typeof useTransla
                   <span className="text-xs text-[#64748b]">—</span>
                 )}
               </td>
-              <td className="px-4 py-3 text-[#94a3b8]">{org.max_students || "—"}</td>
+              <td className="px-4 py-3 text-[#94a3b8]">
+                {org.max_students || "—"}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -285,16 +361,14 @@ export default function AdminPlatformPage() {
   const [successCode, setSuccessCode] = useState("");
 
   useEffect(() => {
-    Promise.all([
-      getAdminPlatformStats(),
-      getDemoOrgId(),
-      getAdminOrgList(),
-    ]).then(([d, dId, orgList]) => {
-      setStats(d);
-      setDemoOrgId(dId);
-      setOrgs(orgList);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+    Promise.all([getAdminPlatformStats(), getDemoOrgId(), getAdminOrgList()])
+      .then(([d, dId, orgList]) => {
+        setStats(d);
+        setDemoOrgId(dId);
+        setOrgs(orgList);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const handleCreated = async (orgId: string, code: string) => {
@@ -310,7 +384,10 @@ export default function AdminPlatformPage() {
   if (loading) return <div className="admin-loading">{t("loading")}</div>;
   if (!stats) return <div className="admin-loading">Error loading stats</div>;
 
-  const planData = Object.entries(stats.plans).map(([name, value]) => ({ name, value }));
+  const planData = Object.entries(stats.plans).map(([name, value]) => ({
+    name,
+    value,
+  }));
   const totalPlanUsers = Object.values(stats.plans).reduce((a, b) => a + b, 0);
   const moduleData = Object.entries(stats.modules).map(([name, value]) => ({
     name: t(`platform.module.${name}`),
@@ -318,10 +395,30 @@ export default function AdminPlatformPage() {
   }));
 
   const kpiCards = [
-    { icon: Users, label: t("platform.totalUsers"), value: stats.totalUsers, color: "#818cf8" },
-    { icon: Activity, label: t("platform.active7d"), value: stats.active7d, color: "#22c55e" },
-    { icon: TrendingUp, label: t("platform.active30d"), value: stats.active30d, color: "#3b82f6" },
-    { icon: Building2, label: t("platform.activeOrgs"), value: stats.activeOrgs, color: "#a855f7" },
+    {
+      icon: Users,
+      label: t("platform.totalUsers"),
+      value: stats.totalUsers,
+      color: "#818cf8",
+    },
+    {
+      icon: Activity,
+      label: t("platform.active7d"),
+      value: stats.active7d,
+      color: "#22c55e",
+    },
+    {
+      icon: TrendingUp,
+      label: t("platform.active30d"),
+      value: stats.active30d,
+      color: "#3b82f6",
+    },
+    {
+      icon: Building2,
+      label: t("platform.activeOrgs"),
+      value: stats.activeOrgs,
+      color: "#a855f7",
+    },
   ];
 
   return (
@@ -348,7 +445,10 @@ export default function AdminPlatformPage() {
       <div className="kpi-grid">
         {kpiCards.map((kpi) => (
           <div key={kpi.label} className="kpi-card">
-            <div className="kpi-icon-wrap" style={{ background: `${kpi.color}15` }}>
+            <div
+              className="kpi-icon-wrap"
+              style={{ background: `${kpi.color}15` }}
+            >
               <kpi.icon style={{ color: kpi.color, width: 20, height: 20 }} />
             </div>
             <div className="kpi-value">{kpi.value.toLocaleString()}</div>
@@ -358,21 +458,55 @@ export default function AdminPlatformPage() {
         {/* Plan distribution cards */}
         {Object.entries(stats.plans).map(([plan, count]) => (
           <div key={plan} className="kpi-card">
-            <div className="kpi-icon-wrap" style={{ background: `${PLAN_COLORS[plan as keyof typeof PLAN_COLORS]}15` }}>
-              <Crown style={{ color: PLAN_COLORS[plan as keyof typeof PLAN_COLORS], width: 20, height: 20 }} />
+            <div
+              className="kpi-icon-wrap"
+              style={{
+                background: `${PLAN_COLORS[plan as keyof typeof PLAN_COLORS]}15`,
+              }}
+            >
+              <Crown
+                style={{
+                  color: PLAN_COLORS[plan as keyof typeof PLAN_COLORS],
+                  width: 20,
+                  height: 20,
+                }}
+              />
             </div>
             <div className="kpi-value">
-              {count} <span className="kpi-pct">({totalPlanUsers ? Math.round((count / totalPlanUsers) * 100) : 0}%)</span>
+              {count}{" "}
+              <span className="kpi-pct">
+                (
+                {totalPlanUsers
+                  ? Math.round((count / totalPlanUsers) * 100)
+                  : 0}
+                %)
+              </span>
             </div>
-            <div className="kpi-label">{plan.charAt(0).toUpperCase() + plan.slice(1)}</div>
+            <div className="kpi-label">
+              {plan.charAt(0).toUpperCase() + plan.slice(1)}
+            </div>
           </div>
         ))}
       </div>
 
       {/* Organizations */}
       <div style={{ marginBottom: 28 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f1f5f9", margin: 0 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 16,
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+              color: "#f1f5f9",
+              margin: 0,
+            }}
+          >
             {t("platform.organizations")} ({orgs.length})
           </h2>
           <button
@@ -387,7 +521,9 @@ export default function AdminPlatformPage() {
         {orgs.length > 0 ? (
           <OrgTable orgs={orgs} t={t} />
         ) : (
-          <div style={{ textAlign: "center", padding: "40px 0", color: "#64748b" }}>
+          <div
+            style={{ textAlign: "center", padding: "40px 0", color: "#64748b" }}
+          >
             {t("platform.noOrgs")}
           </div>
         )}
@@ -403,8 +539,21 @@ export default function AdminPlatformPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
               <XAxis dataKey="week" stroke="#64748b" tick={{ fontSize: 11 }} />
               <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "#1a1a2e", border: "1px solid #2a2a3e", borderRadius: 8, color: "#e2e8f0" }} />
-              <Line type="monotone" dataKey="count" stroke="#818cf8" strokeWidth={2} dot={{ r: 3 }} />
+              <Tooltip
+                contentStyle={{
+                  background: "#1a1a2e",
+                  border: "1px solid #2a2a3e",
+                  borderRadius: 8,
+                  color: "#e2e8f0",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="count"
+                stroke="#818cf8"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -417,8 +566,22 @@ export default function AdminPlatformPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
               <XAxis dataKey="date" stroke="#64748b" tick={{ fontSize: 11 }} />
               <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "#1a1a2e", border: "1px solid #2a2a3e", borderRadius: 8, color: "#e2e8f0" }} />
-              <Area type="monotone" dataKey="users" stroke="#22c55e" fill="#22c55e" fillOpacity={0.1} strokeWidth={2} />
+              <Tooltip
+                contentStyle={{
+                  background: "#1a1a2e",
+                  border: "1px solid #2a2a3e",
+                  borderRadius: 8,
+                  color: "#e2e8f0",
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="users"
+                stroke="#22c55e"
+                fill="#22c55e"
+                fillOpacity={0.1}
+                strokeWidth={2}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -429,12 +592,32 @@ export default function AdminPlatformPage() {
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              <Pie data={planData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" label={(props: any) => `${props.name} ${(props.percent * 100).toFixed(0)}%`}>
+              <Pie
+                data={planData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={80}
+                dataKey="value"
+                label={(props: any) =>
+                  `${props.name} ${(props.percent * 100).toFixed(0)}%`
+                }
+              >
                 {planData.map((entry) => (
-                  <Cell key={entry.name} fill={PLAN_COLORS[entry.name as keyof typeof PLAN_COLORS]} />
+                  <Cell
+                    key={entry.name}
+                    fill={PLAN_COLORS[entry.name as keyof typeof PLAN_COLORS]}
+                  />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ background: "#1a1a2e", border: "1px solid #2a2a3e", borderRadius: 8, color: "#e2e8f0" }} />
+              <Tooltip
+                contentStyle={{
+                  background: "#1a1a2e",
+                  border: "1px solid #2a2a3e",
+                  borderRadius: 8,
+                  color: "#e2e8f0",
+                }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -447,10 +630,20 @@ export default function AdminPlatformPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
               <XAxis dataKey="name" stroke="#64748b" tick={{ fontSize: 11 }} />
               <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "#1a1a2e", border: "1px solid #2a2a3e", borderRadius: 8, color: "#e2e8f0" }} />
+              <Tooltip
+                contentStyle={{
+                  background: "#1a1a2e",
+                  border: "1px solid #2a2a3e",
+                  borderRadius: 8,
+                  color: "#e2e8f0",
+                }}
+              />
               <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                 {moduleData.map((_, i) => (
-                  <Cell key={i} fill={MODULE_COLORS[i % MODULE_COLORS.length]} />
+                  <Cell
+                    key={i}
+                    fill={MODULE_COLORS[i % MODULE_COLORS.length]}
+                  />
                 ))}
               </Bar>
             </BarChart>

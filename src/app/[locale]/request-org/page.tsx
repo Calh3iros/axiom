@@ -6,13 +6,14 @@ import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
 import { requestOrganization } from "@/lib/actions/organization";
+import { type OrgType } from "@/types/roles";
 
 export default function RequestOrgPage() {
   const t = useTranslations("RequestOrg");
 
   const [form, setForm] = useState({
     name: "",
-    type: "school" as "school" | "network" | "state",
+    type: "school" as OrgType,
     institution_id: "",
     requested_by_name: "",
     requested_by_role: "",
@@ -84,7 +85,7 @@ export default function RequestOrgPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6 space-y-5"
+          className="space-y-5 rounded-2xl border border-[var(--color-border2)] bg-[var(--color-bg1)] p-6"
         >
           {/* Institution Info */}
           <div className="grid gap-4 sm:grid-cols-2">
@@ -97,7 +98,7 @@ export default function RequestOrgPage() {
                 required
                 value={form.name}
                 onChange={(e) => update("name", e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] outline-none transition-all focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all outline-none focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
                 placeholder={t("institutionNamePlaceholder")}
               />
             </div>
@@ -115,6 +116,18 @@ export default function RequestOrgPage() {
                 <option value="school">{t("typeSchool")}</option>
                 <option value="network">{t("typeNetwork")}</option>
                 <option value="state">{t("typeState")}</option>
+                <option value="private_school">
+                  {t("typePrivateSchool" as "typeSchool")}
+                </option>
+                <option value="private_network">
+                  {t("typePrivateNetwork" as "typeNetwork")}
+                </option>
+                <option value="public_municipal">
+                  {t("typePublicMunicipal" as "typeState")}
+                </option>
+                <option value="public_state">
+                  {t("typePublicState" as "typeState")}
+                </option>
               </select>
             </div>
 
@@ -127,7 +140,7 @@ export default function RequestOrgPage() {
                 required
                 value={form.institution_id}
                 onChange={(e) => update("institution_id", e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] outline-none transition-all focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all outline-none focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
                 placeholder={t("institutionIdPlaceholder")}
               />
             </div>
@@ -146,7 +159,7 @@ export default function RequestOrgPage() {
                 required
                 value={form.requested_by_name}
                 onChange={(e) => update("requested_by_name", e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] outline-none transition-all focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all outline-none focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
               />
             </div>
 
@@ -177,7 +190,7 @@ export default function RequestOrgPage() {
                 required
                 value={form.requested_by_email}
                 onChange={(e) => update("requested_by_email", e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] outline-none transition-all focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all outline-none focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
                 placeholder="email@institution.com"
               />
             </div>
@@ -191,7 +204,7 @@ export default function RequestOrgPage() {
                 required
                 value={form.requested_by_phone}
                 onChange={(e) => update("requested_by_phone", e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] outline-none transition-all focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all outline-none focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
                 placeholder="+55 (11) 99999-9999"
               />
             </div>
@@ -206,7 +219,7 @@ export default function RequestOrgPage() {
               value={form.message}
               onChange={(e) => update("message", e.target.value)}
               rows={3}
-              className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] outline-none transition-all focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40 resize-none"
+              className="w-full resize-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] px-4 py-3 text-[var(--color-text-primary)] transition-all outline-none focus:border-[var(--color-ax-blue)]/50 focus:ring-2 focus:ring-[var(--color-ax-blue)]/40"
               placeholder={t("messagePlaceholder")}
             />
           </div>
