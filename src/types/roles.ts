@@ -5,15 +5,6 @@
 
 // ─── Org Roles ───────────────────────────────────────────────────────────────
 
-export type OrgRole =
-  | "student"
-  | "teacher"
-  | "coordinator"
-  | "admin"
-  | "director"
-  | "owner"
-  | "secretary";
-
 /** Numeric hierarchy — higher = more authority. */
 export const ROLE_HIERARCHY: Record<string, number> = {
   student: 0,
@@ -79,7 +70,7 @@ export function canCreateClass(role: string): boolean {
 }
 
 /** True if `actor` has at least `minRole` authority. */
-export function hasMinRole(actor: string, minRole: OrgRole): boolean {
+export function hasMinRole(actor: string, minRole: string): boolean {
   const actorLevel = ROLE_HIERARCHY[actor];
   const minLevel = ROLE_HIERARCHY[minRole];
   if (actorLevel === undefined || minLevel === undefined) return false;
@@ -87,15 +78,6 @@ export function hasMinRole(actor: string, minRole: OrgRole): boolean {
 }
 
 // ─── Org Types ───────────────────────────────────────────────────────────────
-
-export type OrgType =
-  | "school"
-  | "network"
-  | "state"
-  | "private_school"
-  | "private_network"
-  | "public_municipal"
-  | "public_state";
 
 /** All valid org types for validation. */
 export const ALL_ORG_TYPES: readonly string[] = [
@@ -108,6 +90,6 @@ export const ALL_ORG_TYPES: readonly string[] = [
   "public_state",
 ];
 
-export function isValidOrgType(type: string): type is OrgType {
+export function isValidOrgType(type: string): boolean {
   return ALL_ORG_TYPES.includes(type);
 }

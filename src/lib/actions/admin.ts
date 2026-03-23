@@ -4,7 +4,6 @@ import { sendEmail } from "@/lib/email";
 import { orgApprovedEmailHtml } from "@/lib/email-templates";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { type OrgType } from "@/types/roles";
 
 // ─── Auth Guard ──────────────────────────────────────────────────────────
 
@@ -560,7 +559,7 @@ export async function getDemoOrgId(): Promise<string | null> {
  */
 export async function createOrganizationDirect(input: {
   name: string;
-  type: OrgType;
+  type: string;
   maxStudents?: number;
   expiresAt?: string;
   contractNotes?: string;

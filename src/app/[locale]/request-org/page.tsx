@@ -6,14 +6,13 @@ import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
 import { requestOrganization } from "@/lib/actions/organization";
-import { type OrgType } from "@/types/roles";
 
 export default function RequestOrgPage() {
   const t = useTranslations("RequestOrg");
 
   const [form, setForm] = useState({
     name: "",
-    type: "school" as OrgType,
+    type: "school" as string,
     institution_id: "",
     requested_by_name: "",
     requested_by_role: "",

@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { createOrganization } from "@/lib/actions/organization";
-import { type OrgType } from "@/types/roles";
 
 interface CreateOrgModalProps {
   open: boolean;
@@ -20,7 +19,7 @@ export function CreateOrgModal({
 }: CreateOrgModalProps) {
   const t = useTranslations("Org");
   const [name, setName] = useState("");
-  const [type, setType] = useState<OrgType>("school");
+  const [type, setType] = useState("school");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -76,7 +75,7 @@ export function CreateOrgModal({
             </label>
             <select
               value={type}
-              onChange={(e) => setType(e.target.value as OrgType)}
+              onChange={(e) => setType(e.target.value)}
               className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg2)] px-4 py-2.5 text-[var(--color-text-primary)] outline-none focus:border-[var(--color-ax-blue)]"
             >
               <option value="school">{t("typeSchool")}</option>

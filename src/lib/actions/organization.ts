@@ -3,15 +3,11 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
-  type OrgRole,
-  type OrgType,
   ELEVATED_ROLES,
   ALL_ORG_TYPES,
   canCreateClass,
   isManager,
 } from "@/types/roles";
-
-export type { OrgRole, OrgType };
 
 /**
  * Check if current user is super_admin.
@@ -50,7 +46,7 @@ async function getOrgSubtreeIds(
 /**
  * Create a new organization. ONLY super_admin can create directly.
  */
-export async function createOrganization(name: string, type: OrgType) {
+export async function createOrganization(name: string, type: string) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -106,8 +102,7 @@ export async function requestOrganization(data: {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.requested_by_email))
     return { error: "Invalid email format" };
   if (!data.requested_by_phone?.trim()) return { error: "Phone is required" };
-  if (!ALL_ORG_TYPES.includes(data.type as OrgType))
-    return { error: "Invalid org type" };
+  if (!ALL_ORG_TYPES.includes(data.type)) return { error: "Invalid org type" };
 
   // Use admin client for unauthenticated insert
   const { supabaseAdmin } = await import("@/lib/supabase/admin");
@@ -403,7 +398,7 @@ export async function getClassDashboard(classId: string) {
 export async function addOrgMember(
   orgId: string,
   targetUserId: string,
-  role: OrgRole
+  role: string
 ) {
   const supabase = await createClient();
   const {

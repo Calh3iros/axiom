@@ -39,7 +39,6 @@ import {
   createOrganizationDirect,
   getAdminOrgList,
 } from "@/lib/actions/admin";
-import { type OrgType } from "@/types/roles";
 
 type Stats = Awaited<ReturnType<typeof getAdminPlatformStats>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +60,7 @@ function CreateOrgModal({
   t: ReturnType<typeof useTranslations>;
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState<OrgType>("school");
+  const [type, setType] = useState("school");
   const [maxStudents, setMaxStudents] = useState("500");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
@@ -129,7 +128,7 @@ function CreateOrgModal({
             </label>
             <select
               value={type}
-              onChange={(e) => setType(e.target.value as OrgType)}
+              onChange={(e) => setType(e.target.value)}
               className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
             >
               <option value="school">{t("platform.typeSchool")}</option>
@@ -591,7 +590,7 @@ export default function AdminPlatformPage() {
           <h3 className="chart-title">{t("platform.planDist")}</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {}
               <Pie
                 data={planData}
                 cx="50%"
