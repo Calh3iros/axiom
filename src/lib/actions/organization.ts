@@ -158,7 +158,7 @@ export async function getMyOrganizations() {
 
   // Use supabaseAdmin — memberships created via redeemInviteCode (supabaseAdmin)
   // are invisible to user client due to RLS on org_memberships.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: directMemberships } = await (
     supabaseAdmin.from("org_memberships") as any
   )
@@ -213,7 +213,7 @@ export async function getOrgDashboard(orgId: string) {
   // Verify membership — use supabaseAdmin because memberships may have been
   // created via supabaseAdmin (e.g. redeemInviteCode) and RLS on org_memberships
   // may block the user client from reading its own row.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: membership } = await (
     supabaseAdmin.from("org_memberships") as any
   )
@@ -291,7 +291,7 @@ export async function getOrgDashboard(orgId: string) {
     parent_id: string;
     created_at: string;
   }[] = [];
-  if (ELEVATED_ROLES.includes(effectiveRole as OrgRole)) {
+  if (ELEVATED_ROLES.includes(effectiveRole)) {
     // get_org_subtree RPC needs the user client for auth context
     const subtree = await getOrgSubtreeIds(
       isSuperAdminUser ? (supabaseAdmin as any) : supabase,
@@ -311,7 +311,7 @@ export async function getOrgDashboard(orgId: string) {
 
   return {
     org: orgRes?.data,
-    myRole: effectiveRole as OrgRole,
+    myRole: effectiveRole,
     members: membersRes?.data || [],
     classes: classesRes?.data || [],
     childOrgs,
@@ -333,7 +333,7 @@ export async function createClass(orgId: string, name: string) {
 
   // Verify role — use supabaseAdmin because RLS blocks user client
   // from seeing memberships created via redeemInviteCode.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: membership } = await (
     supabaseAdmin.from("org_memberships") as any
   )

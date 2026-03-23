@@ -15,7 +15,7 @@ export type OrgRole =
   | "secretary";
 
 /** Numeric hierarchy — higher = more authority. */
-export const ROLE_HIERARCHY: Record<OrgRole, number> = {
+export const ROLE_HIERARCHY: Record<string, number> = {
   student: 0,
   teacher: 1,
   coordinator: 2,
@@ -29,7 +29,7 @@ export const ROLE_HIERARCHY: Record<OrgRole, number> = {
  * All roles above student that can see performance metrics
  * and access management features.
  */
-export const ELEVATED_ROLES: OrgRole[] = [
+export const ELEVATED_ROLES: readonly string[] = [
   "teacher",
   "coordinator",
   "admin",
@@ -42,7 +42,7 @@ export const ELEVATED_ROLES: OrgRole[] = [
  * Roles that can manage org members, classes, and invite codes.
  * (admin/director/owner/secretary — not teacher/coordinator)
  */
-export const MANAGER_ROLES: OrgRole[] = [
+export const MANAGER_ROLES: readonly string[] = [
   "admin",
   "director",
   "owner",
@@ -53,7 +53,7 @@ export const MANAGER_ROLES: OrgRole[] = [
  * Roles that can create classes within an org.
  * (teacher + all managers + coordinator)
  */
-export const CLASS_CREATOR_ROLES: OrgRole[] = [
+export const CLASS_CREATOR_ROLES: readonly string[] = [
   "teacher",
   "coordinator",
   "admin",
@@ -65,22 +65,22 @@ export const CLASS_CREATOR_ROLES: OrgRole[] = [
 
 /** True if role is elevated (teacher or above). */
 export function isElevated(role: string): boolean {
-  return ELEVATED_ROLES.includes(role as OrgRole);
+  return ELEVATED_ROLES.includes(role);
 }
 
 /** True if role can manage org members and codes. */
 export function isManager(role: string): boolean {
-  return MANAGER_ROLES.includes(role as OrgRole);
+  return MANAGER_ROLES.includes(role);
 }
 
 /** True if role can create classes. */
 export function canCreateClass(role: string): boolean {
-  return CLASS_CREATOR_ROLES.includes(role as OrgRole);
+  return CLASS_CREATOR_ROLES.includes(role);
 }
 
 /** True if `actor` has at least `minRole` authority. */
 export function hasMinRole(actor: string, minRole: OrgRole): boolean {
-  const actorLevel = ROLE_HIERARCHY[actor as OrgRole];
+  const actorLevel = ROLE_HIERARCHY[actor];
   const minLevel = ROLE_HIERARCHY[minRole];
   if (actorLevel === undefined || minLevel === undefined) return false;
   return actorLevel >= minLevel;
@@ -98,7 +98,7 @@ export type OrgType =
   | "public_state";
 
 /** All valid org types for validation. */
-export const ALL_ORG_TYPES: OrgType[] = [
+export const ALL_ORG_TYPES: readonly string[] = [
   "school",
   "network",
   "state",
@@ -109,5 +109,5 @@ export const ALL_ORG_TYPES: OrgType[] = [
 ];
 
 export function isValidOrgType(type: string): type is OrgType {
-  return ALL_ORG_TYPES.includes(type as OrgType);
+  return ALL_ORG_TYPES.includes(type);
 }
