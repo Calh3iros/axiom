@@ -442,31 +442,11 @@
       "headerTask": "Aufgabe",
       "headerWithout": "Ohne",
       "headerAxiom": "Mit Axiom",
-      "row1": [
-        "1 Problem lösen",
-        "30 – 60 Min",
-        "5 Sekunden"
-      ],
-      "row2": [
-        "1.000-Wort-Aufsatz schreiben",
-        "3 – 5 Stunden",
-        "15 Minuten"
-      ],
-      "row3": [
-        "Lernplan erstellen",
-        "1 – 2 Stunden",
-        "1 Klick"
-      ],
-      "row4": [
-        "2.000 Wörter humanisieren",
-        "45 Min",
-        "10 Sekunden"
-      ],
-      "row5": [
-        "Volle Prüfungsvorbereitung",
-        "6 – 10 Stunden",
-        "2 Stunden"
-      ],
+      "row1": ["1 Problem lösen", "30 – 60 Min", "5 Sekunden"],
+      "row2": ["1.000-Wort-Aufsatz schreiben", "3 – 5 Stunden", "15 Minuten"],
+      "row3": ["Lernplan erstellen", "1 – 2 Stunden", "1 Klick"],
+      "row4": ["2.000 Wörter humanisieren", "45 Min", "10 Sekunden"],
+      "row5": ["Volle Prüfungsvorbereitung", "6 – 10 Stunden", "2 Stunden"],
       "footer": "Durchschnittlicher Student spart ~200 Stunden pro Semester"
     },
     "pricing": {
@@ -773,7 +753,14 @@
     "tableActive": "Aktive",
     "tableClasses": "Klassen",
     "tableScore": "Punktzahl",
-    "tableStatus": "Status"
+    "tableStatus": "Status",
+    "batch": {
+      "title": "Criar Turmas em Lote",
+      "errorEmpty": "Selecione séries e turmas para criar.",
+      "create": "Criar Turmas",
+      "createdSuccess": "{count} turmas criadas com sucesso!",
+      "printCodes": "Copiar Lista de Códigos"
+    }
   },
   "Class": {
     "title": "Klasse",

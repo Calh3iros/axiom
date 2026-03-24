@@ -24,6 +24,7 @@ import {
   SecretaryDashboard,
 } from "@/components/dashboard/dashboard-views";
 import { ClassCard } from "@/components/org/class-card";
+import { CreateClassesBatchModal } from "@/components/org/create-class-batch-modal";
 import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
@@ -69,6 +70,7 @@ export default function OrgDetailPage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [secData, setSecData] = useState<any>(null);
   const [showClassModal, setShowClassModal] = useState(false);
+  const [showBatchModal, setShowBatchModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(true);
   const [dashLoading, setDashLoading] = useState(false);
   const [secLoading, setSecLoading] = useState(false);
@@ -305,13 +307,24 @@ export default function OrgDetailPage({
             </h2>
           </div>
           {canManage && (
-            <button
-              onClick={() => setShowClassModal(true)}
-              className="flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
-            >
-              <Plus className="h-4 w-4" />
-              {tc("createClass")}
-            </button>
+            <div className="flex items-center gap-2">
+              {isElevated && (
+                <button
+                  onClick={() => setShowBatchModal(true)}
+                  className="flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg2)] px-3 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg1)]"
+                >
+                  <Plus className="h-4 w-4" />
+                  {t("batch.title", { fallback: "Criar em Lote" })}
+                </button>
+              )}
+              <button
+                onClick={() => setShowClassModal(true)}
+                className="flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              >
+                <Plus className="h-4 w-4" />
+                {tc("createClass")}
+              </button>
+            </div>
           )}
         </div>
         {data.classes.length === 0 ? (
@@ -841,6 +854,14 @@ export default function OrgDetailPage({
         orgId={orgId}
         onClose={() => setShowClassModal(false)}
         onCreated={fetchData}
+      />
+
+      <CreateClassesBatchModal
+        orgId={orgId}
+        open={showBatchModal}
+        onClose={() => setShowBatchModal(false)}
+        onCreated={fetchData}
+        t={t}
       />
     </div>
   );

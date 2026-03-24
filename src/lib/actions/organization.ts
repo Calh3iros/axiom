@@ -373,6 +373,108 @@ export async function createClass(orgId: string, name: string) {
 }
 
 /**
+ * Create multiple classes in batch. Only director/admin.
+ */
+export async function createClassesBatch(input: {
+  orgId: string;
+  grades: string[];
+  sections: string[];
+  shifts: Record<string, string>;
+}): Promise<
+  | { created: number; classes: Array<{ name: string; code: string }> }
+  | { error: string }
+> {
+  if (
+    !input.orgId ||
+    input.grades.length === 0 ||
+    input.sections.length === 0
+  ) {
+    return { error: "Invalid input" };
+  }
+
+  // Hard limit for safety
+  if (input.grades.length * input.sections.length > 100) {
+    return { error: "Too many classes requested (maximum 100 per batch)" };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  const { data: membership } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
+    .select("role")
+    .eq("user_id", user.id)
+    .eq("org_id", input.orgId)
+    .single();
+
+  if (!membership || !canCreateClass(membership.role)) {
+    return { error: "Not authorized" };
+  }
+
+  // Get existing class names to avoid duplicates
+  const { data: existingClasses } = await (supabaseAdmin.from("classes") as any)
+    .select("name")
+    .eq("org_id", input.orgId);
+
+  const existingNames = new Set(
+    (existingClasses || []).map((c: any) => c.name)
+  );
+
+  const toInsert = [];
+  const generatedCodes = new Set<string>();
+
+  const charset = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const genCode = () => {
+    let code = "CLS-";
+    for (let i = 0; i < 6; i++) {
+      code += charset[Math.floor(Math.random() * charset.length)];
+    }
+    return code;
+  };
+
+  for (const grade of input.grades) {
+    for (const section of input.sections) {
+      const className = `${grade} ${section}`;
+      if (existingNames.has(className)) continue;
+
+      let code = genCode();
+      while (generatedCodes.has(code)) {
+        code = genCode();
+      }
+      generatedCodes.add(code);
+
+      toInsert.push({
+        org_id: input.orgId,
+        name: className,
+        grade,
+        shift: input.shifts[section] || null,
+        invite_code: code,
+        teacher_id: user.id,
+      });
+    }
+  }
+
+  if (toInsert.length === 0) {
+    return { created: 0, classes: [] };
+  }
+
+  const { data, error } = await (supabaseAdmin.from("classes") as any)
+    .insert(toInsert)
+    .select("name, invite_code");
+
+  if (error) return { error: error.message };
+
+  return {
+    created: data.length,
+    classes: data.map((d: any) => ({ name: d.name, code: d.invite_code })),
+  };
+}
+
+/**
  * Get class details with student list.
  */
 export async function getClassDashboard(classId: string) {
