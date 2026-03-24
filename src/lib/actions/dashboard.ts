@@ -582,7 +582,7 @@ export async function getDirectorDashboard(
   };
 }
 
-// ─── Secretary Dashboard ─────────────────────────────────────────────────
+// ─── Secretary / Network Dashboard ──────────────────────────────────────
 
 export async function getSecretaryDashboard(
   orgId: string,
@@ -591,13 +591,19 @@ export async function getSecretaryDashboard(
   const mgr = await getManagerRole(orgId);
   if (!mgr || !isManager(mgr.role)) return null;
 
-  const { startDate } = dateRange || getDefaultRange();
-  const supabase = await createClient();
+  const { startDate, endDate } = dateRange || getDefaultRange();
+  const startISO = new Date(startDate).toISOString();
+  const endISO = new Date(endDate + "T23:59:59Z").toISOString();
 
+  // Use supabaseAdmin for RPC — SECURITY DEFINER handles permissions,
+  // but supabaseAdmin avoids any RLS edge cases with the user client.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: subtree } = await (supabase as any).rpc("get_org_subtree", {
-    root_id: orgId,
-  });
+  const { data: subtree } = await (supabaseAdmin as any).rpc(
+    "get_org_subtree",
+    {
+      root_id: orgId,
+    }
+  );
   const childIds = (subtree || [])
     .filter((n: { depth: number }) => n.depth > 0)
     .map((n: { org_id: string }) => n.org_id);
@@ -609,71 +615,157 @@ export async function getSecretaryDashboard(
     .select("id, name, type")
     .in("id", childIds);
 
+  if (!childOrgs || childOrgs.length === 0)
+    return { empty: true, schoolCount: 0 };
+
+  // ─── Batch: memberships for ALL child orgs ───────────────────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: allMemberships } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
+    .select("user_id, org_id, role")
+    .in("org_id", childIds);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: allClasses } = await (supabaseAdmin.from("classes") as any)
+    .select("id, org_id")
+    .in("org_id", childIds);
+
+  // Index by org_id
+  const membersByOrg = new Map<string, { user_id: string; role: string }[]>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (allMemberships || []).forEach((m: any) => {
+    if (!membersByOrg.has(m.org_id)) membersByOrg.set(m.org_id, []);
+    membersByOrg.get(m.org_id)!.push(m);
+  });
+
+  const classesByOrg = new Map<string, string[]>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (allClasses || []).forEach((c: any) => {
+    if (!classesByOrg.has(c.org_id)) classesByOrg.set(c.org_id, []);
+    classesByOrg.get(c.org_id)!.push(c.id);
+  });
+
+  // Collect ALL student IDs across all child orgs
+  const allStudentIds: string[] = [];
+  const studentsByOrg = new Map<string, string[]>();
+  for (const org of childOrgs) {
+    const members = membersByOrg.get(org.id) || [];
+    const sids = members
+      .filter((m) => m.role === "student")
+      .map((m) => m.user_id);
+    studentsByOrg.set(org.id, sids);
+    allStudentIds.push(...sids);
+  }
+
+  const uniqueStudentIds = [...new Set(allStudentIds)];
+
+  // ─── Batch: profiles, challenge_log, student_profiles ────────────
+  const [profilesRes, challengeRes, spRes] = await Promise.all([
+    uniqueStudentIds.length > 0
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (supabaseAdmin.from("profiles") as any)
+          .select("id, last_active_date, current_streak")
+          .in("id", uniqueStudentIds)
+      : { data: [] },
+    uniqueStudentIds.length > 0
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (supabaseAdmin.from("challenge_log") as any)
+          .select("user_id, created_at")
+          .in("user_id", uniqueStudentIds)
+          .gte("created_at", startISO)
+          .lte("created_at", endISO)
+          .order("created_at")
+      : { data: [] },
+    uniqueStudentIds.length > 0
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (supabaseAdmin.from("student_profiles") as any)
+          .select("id, total_problems_solved, total_correct")
+          .in("id", uniqueStudentIds)
+      : { data: [] },
+  ]);
+
+  // Index profile data
+  const profileMap = new Map<
+    string,
+    { last_active_date: string | null; current_streak: number }
+  >();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (profilesRes.data || []).forEach((p: any) => {
+    profileMap.set(p.id, {
+      last_active_date: p.last_active_date,
+      current_streak: p.current_streak || 0,
+    });
+  });
+
+  const spMap = new Map<string, { solved: number; correct: number }>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (spRes.data || []).forEach((sp: any) => {
+    spMap.set(sp.id, {
+      solved: sp.total_problems_solved || 0,
+      correct: sp.total_correct || 0,
+    });
+  });
+
+  // Index challenge_log by user
+  const challengesByUser = new Map<string, number>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (challengeRes.data || []).forEach((c: any) => {
+    challengesByUser.set(c.user_id, (challengesByUser.get(c.user_id) || 0) + 1);
+  });
+
+  // ─── Per-school metrics ──────────────────────────────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const schoolComparison: any[] = [];
-  for (const org of childOrgs || []) {
-    const { data: members } = await (
-      supabaseAdmin.from("org_memberships") as any
-    )
-      .select("user_id")
-      .eq("org_id", org.id)
-      .eq("role", "student");
-    const sids = (members || []).map((m: { user_id: string }) => m.user_id);
+  let kpiTotalStudents = 0;
+  let kpiActiveStudents = 0;
+  let kpiTotalTeachers = 0;
+  let kpiTotalClasses = 0;
+  let kpiTotalExercises = 0;
+  let kpiTotalSolvedSP = 0;
+  let kpiTotalCorrectSP = 0;
+  let kpiTotalStreak = 0;
 
-    if (sids.length === 0) {
-      schoolComparison.push({
-        orgId: org.id,
-        orgName: org.name,
-        orgType: org.type,
-        students: 0,
-        active7d: 0,
-        avgSolved: 0,
-        avgAccuracy: 0,
-        adoption: 0,
-      });
-      continue;
+  for (const org of childOrgs) {
+    const sids = studentsByOrg.get(org.id) || [];
+    const members = membersByOrg.get(org.id) || [];
+    const teacherCount = members.filter(
+      (m) => m.role === "teacher" || m.role === "coordinator"
+    ).length;
+    const classCount = (classesByOrg.get(org.id) || []).length;
+
+    // Per-school metrics
+    let active = 0;
+    let solved = 0;
+    let totalSolvedSP = 0;
+    let totalCorrectSP = 0;
+    let totalStreak = 0;
+
+    for (const sid of sids) {
+      const prof = profileMap.get(sid);
+      if (prof?.last_active_date && prof.last_active_date >= startDate)
+        active++;
+      totalStreak += prof?.current_streak || 0;
+      solved += challengesByUser.get(sid) || 0;
+      const sp = spMap.get(sid);
+      totalSolvedSP += sp?.solved || 0;
+      totalCorrectSP += sp?.correct || 0;
     }
 
-    const [pRes, challengeRes, spRes] = await Promise.all([
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabaseAdmin.from("profiles") as any)
-        .select("id, last_active_date")
-        .in("id", sids),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabaseAdmin.from("challenge_log") as any)
-        .select("user_id")
-        .in("user_id", sids)
-        .gte("created_at", new Date(startDate).toISOString())
-        .lte(
-          "created_at",
-          new Date(
-            (dateRange || getDefaultRange()).endDate + "T23:59:59Z"
-          ).toISOString()
-        ),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabaseAdmin.from("student_profiles") as any)
-        .select("id, total_problems_solved, total_correct")
-        .in("id", sids),
-    ]);
-
-    const profs = pRes.data || [];
-    const chals = challengeRes.data || [];
-    const spRows = spRes.data || [];
-
-    const active = profs.filter(
-      (p: any) => p.last_active_date && p.last_active_date >= startDate
-    ).length;
-    const solved = chals.length;
-
-    const spTotalSolved = spRows.reduce(
-      (s: number, sp: any) => s + (sp.total_problems_solved || 0),
-      0
+    const accuracy =
+      totalSolvedSP > 0
+        ? Math.round((totalCorrectSP / totalSolvedSP) * 100)
+        : 0;
+    const adoption =
+      sids.length > 0 ? Math.round((active / sids.length) * 100) : 0;
+    const avgStreak =
+      sids.length > 0 ? Math.round(totalStreak / sids.length) : 0;
+    // Score: accuracy*0.4 + adoption*0.3 + (streak normalized to 100)*0.3
+    const streakNorm = Math.min(100, avgStreak * 10); // 10-day streak = 100%
+    const score = Math.round(
+      accuracy * 0.4 + adoption * 0.3 + streakNorm * 0.3
     );
-
-    const spTotalCorrect = spRows.reduce(
-      (s: number, sp: any) => s + (sp.total_correct || 0),
-      0
-    );
+    const status = score >= 70 ? "green" : score >= 50 ? "yellow" : "red";
 
     schoolComparison.push({
       orgId: org.id,
@@ -681,20 +773,101 @@ export async function getSecretaryDashboard(
       orgType: org.type,
       students: sids.length,
       active7d: active,
-      avgSolved: Math.round(solved / sids.length),
-      avgAccuracy:
-        spTotalSolved > 0
-          ? Math.round((spTotalCorrect / spTotalSolved) * 100)
-          : 0,
-      adoption: Math.round((active / sids.length) * 100),
+      teachers: teacherCount,
+      classes: classCount,
+      avgSolved: sids.length > 0 ? Math.round(solved / sids.length) : 0,
+      avgAccuracy: accuracy,
+      adoption,
+      avgStreak,
+      score,
+      status,
     });
+
+    kpiTotalStudents += sids.length;
+    kpiActiveStudents += active;
+    kpiTotalTeachers += teacherCount;
+    kpiTotalClasses += classCount;
+    kpiTotalExercises += solved;
+    kpiTotalSolvedSP += totalSolvedSP;
+    kpiTotalCorrectSP += totalCorrectSP;
+    kpiTotalStreak += totalStreak;
   }
 
-  schoolComparison.sort((a, b) => b.avgSolved - a.avgSolved);
+  schoolComparison.sort((a, b) => b.score - a.score);
+
+  // ─── Network KPIs ────────────────────────────────────────────────
+  const kpis = {
+    totalStudents: kpiTotalStudents,
+    activeStudents: kpiActiveStudents,
+    totalTeachers: kpiTotalTeachers,
+    totalClasses: kpiTotalClasses,
+    avgAccuracy:
+      kpiTotalSolvedSP > 0
+        ? Math.round((kpiTotalCorrectSP / kpiTotalSolvedSP) * 100)
+        : 0,
+    totalExercises: kpiTotalExercises,
+    avgStreak:
+      kpiTotalStudents > 0 ? Math.round(kpiTotalStreak / kpiTotalStudents) : 0,
+    adoption:
+      kpiTotalStudents > 0
+        ? Math.round((kpiActiveStudents / kpiTotalStudents) * 100)
+        : 0,
+  };
+
+  // ─── Weekly Evolution (network-wide) ─────────────────────────────
+  const buckets = computeTimeBuckets(startDate, endDate);
+  const allChallenges = challengeRes.data || [];
+  const weeklyEvolution = buckets.map((b) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const count = allChallenges.filter((c: any) => {
+      const d = new Date(c.created_at);
+      return d >= b.start && d < b.end;
+    }).length;
+    return { week: b.label, exercises: count };
+  });
+
+  // ─── Alerts ──────────────────────────────────────────────────────
+
+  const alerts: {
+    type: string;
+    message: string;
+    orgName: string;
+    severity: string;
+  }[] = [];
+
+  for (const school of schoolComparison) {
+    if (school.status === "red") {
+      alerts.push({
+        type: "low_score",
+        message: `Score ${school.score}% — abaixo do esperado`,
+        orgName: school.orgName,
+        severity: "error",
+      });
+    }
+    if (school.adoption < 30 && school.students > 0) {
+      alerts.push({
+        type: "low_adoption",
+        message: `Adoção ${school.adoption}% — ${school.active7d}/${school.students} alunos ativos`,
+        orgName: school.orgName,
+        severity: "warning",
+      });
+    }
+    if (school.students === 0) {
+      alerts.push({
+        type: "empty_school",
+        message: "Sem alunos cadastrados",
+        orgName: school.orgName,
+        severity: "info",
+      });
+    }
+  }
 
   return {
     empty: false,
-    schoolCount: childOrgs?.length || 0,
+    schoolCount: childOrgs.length,
     schoolComparison,
+    kpis,
+    weeklyEvolution,
+    alerts,
   };
 }
