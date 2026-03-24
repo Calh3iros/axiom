@@ -58,7 +58,6 @@ export async function createOrganization(name: string, type: string) {
     return { error: "Only administrators can create organizations" };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: org, error } = await (
     supabaseAdmin.from("organizations") as any
   )
@@ -240,8 +239,8 @@ export async function getOrgDashboard(orgId: string) {
     if (!isSuperAdminUser) return null;
   }
 
-  // Fetch org, members, classes in parallel
-  const [orgRes, membersRes, classesRes] = await Promise.all([
+  // Fetch org and classes in parallel first
+  const [orgRes, classesRes] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("organizations") as any)
       .select(
@@ -250,18 +249,39 @@ export async function getOrgDashboard(orgId: string) {
       .eq("id", orgId)
       .single(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (db.from("org_memberships") as any)
-      .select(
-        "user_id, role, joined_at, subjects, profiles(full_name, avatar_url, email)"
-      )
-      .eq("org_id", orgId)
-      .order("role"),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("classes") as any)
       .select("id, name, invite_code, teacher_id, created_at")
       .eq("org_id", orgId)
       .order("created_at", { ascending: false }),
   ]);
+
+  // Fetch org memberships separately since profiles join lacks explicit FK in DB
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const membersRes = await (db.from("org_memberships") as any)
+    .select("user_id, role, joined_at, subjects")
+    .eq("org_id", orgId)
+    .order("role");
+
+  const membersRaw = membersRes?.data || [];
+  let members = membersRaw;
+
+  if (membersRaw.length > 0) {
+    const userIds = membersRaw.map((m: any) => m.user_id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: profiles } = await (db.from("profiles") as any)
+      .select("id, full_name, avatar_url, email")
+      .in("id", userIds);
+
+    const profileMap = new Map();
+    if (profiles) {
+      profiles.forEach((p: any) => profileMap.set(p.id, p));
+    }
+
+    members = membersRaw.map((m: any) => ({
+      ...m,
+      profiles: profileMap.get(m.user_id) || null,
+    }));
+  }
 
   // Auto-suspend if expired
   const orgData = orgRes.data;
@@ -276,7 +296,6 @@ export async function getOrgDashboard(orgId: string) {
   }
 
   // Count students for capacity display
-  const members = membersRes.data || [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const studentCount = members.filter((m: any) => m.role === "student").length;
 
@@ -309,7 +328,7 @@ export async function getOrgDashboard(orgId: string) {
   return {
     org: orgRes?.data,
     myRole: effectiveRole,
-    members: membersRes?.data || [],
+    members: members,
     classes: classesRes?.data || [],
     childOrgs,
     studentCount,
@@ -385,12 +404,30 @@ export async function getClassDashboard(classId: string) {
     .single();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: students } = await (db.from("class_memberships") as any)
-    .select(
-      "user_id, joined_at, profiles:user_id(full_name, avatar_url, email)"
-    )
+  const { data: mRows } = await (db.from("class_memberships") as any)
+    .select("user_id, joined_at")
     .eq("class_id", classId)
     .order("joined_at");
+
+  let students = [];
+  if (mRows && mRows.length > 0) {
+    const userIds = mRows.map((m: any) => m.user_id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: profiles } = await (db.from("profiles") as any)
+      .select("id, full_name, avatar_url, email")
+      .in("id", userIds);
+
+    const profileMap = new Map();
+    if (profiles) {
+      profiles.forEach((p: any) => profileMap.set(p.id, p));
+    }
+
+    students = mRows.map((m: any) => ({
+      user_id: m.user_id,
+      joined_at: m.joined_at,
+      profiles: profileMap.get(m.user_id) || null,
+    }));
+  }
 
   return {
     classInfo: cls,
@@ -420,7 +457,7 @@ export async function addOrgMember(
   if (!user) return { error: "Not authenticated" };
 
   // Verify admin role — use supabaseAdmin for RLS bypass
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: membership } = await (
     supabaseAdmin.from("org_memberships") as any
   )

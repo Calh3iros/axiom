@@ -159,17 +159,31 @@ export async function getOrgTeachers(
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabaseAdmin.from("org_memberships") as any)
-    .select("user_id, role, profiles:user_id(full_name, email)")
+    .select("user_id, role")
     .eq("org_id", orgId)
     .in("role", ["teacher", "coordinator"]);
 
-  if (!data) return [];
+  if (!data || data.length === 0) return [];
+
+  const userIds = data.map((m: any) => m.user_id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profiles } = await (supabaseAdmin.from("profiles") as any)
+    .select("id, full_name, email")
+    .in("id", userIds);
+
+  const profileMap = new Map();
+  if (profiles) {
+    profiles.forEach((p: any) => profileMap.set(p.id, p));
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return data.map((m: any) => ({
-    userId: m.user_id,
-    name: m.profiles?.full_name || m.profiles?.email?.split("@")[0] || "User",
-    email: m.profiles?.email || "",
-    role: m.role,
-  }));
+  return data.map((m: any) => {
+    const prof = profileMap.get(m.user_id);
+    return {
+      userId: m.user_id,
+      name: prof?.full_name || prof?.email?.split("@")[0] || "User",
+      email: prof?.email || "",
+      role: m.role,
+    };
+  });
 }
