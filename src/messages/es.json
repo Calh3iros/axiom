@@ -442,15 +442,31 @@
       "headerTask": "Tarea",
       "headerWithout": "Sin",
       "headerAxiom": "Con Axiom",
-      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
+      "row1": [
+        "Resolver 1 problema",
+        "30 – 60 min",
+        "5 segundos"
+      ],
       "row2": [
         "Escribir ensayo de 1.000 palabras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": ["Crear plan de estudio", "1 – 2 horas", "1 clic"],
-      "row4": ["Humanizar 2.000 palabras", "45 min", "10 segundos"],
-      "row5": ["Preparación completa para examen", "6 – 10 horas", "2 horas"],
+      "row3": [
+        "Crear plan de estudio",
+        "1 – 2 horas",
+        "1 clic"
+      ],
+      "row4": [
+        "Humanizar 2.000 palabras",
+        "45 min",
+        "10 segundos"
+      ],
+      "row5": [
+        "Preparación completa para examen",
+        "6 – 10 horas",
+        "2 horas"
+      ],
       "footer": "El estudiante promedio ahorra ~200 horas por semestre"
     },
     "pricing": {
@@ -1173,5 +1189,72 @@
     "adminDemo": {
       "title": "Demo | Axiom"
     }
+  },
+  "Help": {
+    "director": {
+      "title": "Como configurar sua escola",
+      "step1": "Criar turmas",
+      "step1Desc": "Vá ao dashboard da escola e crie as turmas manualmente ou clique em 'Criar em Lote' para adicionar várias.",
+      "step2": "Gerar código de professores (PRF)",
+      "step2Desc": "Acesso a aba 'Professores' para pegar o código.",
+      "step3": "Compartilhe com a equipe",
+      "msgPrf": "\"Olá professores! Este é o código da nossa escola no Axiom. Cadastrem-se e entrem na nossa equipe: [SEU-CÓDIGO-AQUI]\"",
+      "step4": "Acompanhe o painel",
+      "step4Desc": "Acompanhe KPIs, classificação (ranking) e engajamento da sua escola na página inicial.",
+      "banner": "Bem-vindo! Veja como configurar sua escola em 15 minutos →"
+    },
+    "teacher": {
+      "title": "Guia Rápido — 3 minutos",
+      "step1": "Obter código da Turma",
+      "step1Desc": "Entre na sua turma em 'Minhas Turmas' e veja o código no topo.",
+      "step2": "Enviar aos alunos",
+      "msgClass": "\"Turma, acessem axiom-solver.com e fiquem na vanguarda do aprendizado com IA! Entrem na turma com o código: [CÓDIGO-DA-TURMA]\"",
+      "step3": "Seu Painel",
+      "step3Desc": "Acompanhe evolução, notas, alertas de engajamento e o ranking da turma em cliques de distância.",
+      "step4": "PDFs",
+      "step4Desc": "Imprima rapidamente boletins com diagnóstico do uso de IA da turma inteira ou individual.",
+      "banner": "Pronto! Agora compartilhe o código da turma com seus alunos →"
+    },
+    "coordinator": {
+      "title": "Visão pedagógica da escola",
+      "step1": "Painel Comparativo",
+      "step1Desc": "Analise dados cross-turma na barra do dashboard.",
+      "step2": "Alertas Pedagógicos",
+      "step2Desc": "Localize turmas onde a adesão está caindo e aja!",
+      "step3": "Reatribuir turmas e CSVs",
+      "step3Desc": "Ative ou delegue novas turmas acessando a lista de turmas vazias.",
+      "banner": "Você é coordenador! Veja o que pode fazer →"
+    },
+    "owner": {
+      "title": "Gerenciando sua rede",
+      "step1": "Criar escolas",
+      "step1Desc": "Clique em '+ Nova Escola'.",
+      "step2": "Distribuir aos diretores (DIR)",
+      "step2Desc": "Cada escola gera um código automático. Distribua aos gestores de cada pólo.",
+      "step3": "Dashboard Geral e Drill-Down",
+      "step3Desc": "Semáforo visualizando a adesão de todas as escolas; cliques levam a dados granulares.",
+      "banner": "Comece criando as escolas da sua rede →"
+    },
+    "student": {
+      "title": "Como usar o Axiom",
+      "step1": "Treinar",
+      "step1Desc": "A IA resolve o exercício passo a passo",
+      "step2": "Socrático",
+      "step2Desc": "A IA te guia sem dar a resposta direta",
+      "step3": "Mapa de Conhecimento",
+      "step3Desc": "Acompanhe e reforce áreas fracas",
+      "welcomeTitle": "Bem-vindo ao Axiom!",
+      "welcomeDesc": "Escolha como quer estudar:",
+      "modeTrain": "Treinar",
+      "modeTrainDesc": "A IA resolve o exercício passo a passo e te explica",
+      "modeSocratic": "Socrático",
+      "modeSocraticDesc": "A IA te guia com perguntas, sem dar a resposta",
+      "modeVerify": "Verificar",
+      "modeVerifyDesc": "Cole sua resposta e a IA confere se está certa",
+      "letsGo": "Vamos lá!"
+    },
+    "downloadPdf": "Baixar Guia Completo (PDF)",
+    "seeGuide": "Ver Guia",
+    "seeHow": "Ver como"
   }
 }

@@ -1,21 +1,29 @@
 "use client";
 
 import {
+  AlertTriangle,
   ArrowLeft,
-  Plus,
-  Users,
-  BookOpen,
-  Building2,
-  Trophy,
+  ArrowRight,
   BarChart3,
-  GraduationCap,
-  Copy,
+  BookOpen,
+  Building,
+  Building2,
   Check,
-  RefreshCw,
+  ChevronRight,
+  Copy,
   ExternalLink,
-  Trash2,
   FileDown,
+  GraduationCap,
+  Link2,
+  MoreHorizontal,
+  Plus,
+  RefreshCw,
+  School,
+  Trash2,
+  Trophy,
+  Users,
 } from "lucide-react";
+import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
@@ -223,6 +231,7 @@ export default function OrgDetailPage({
 
   return (
     <div className="space-y-8">
+      <WelcomeBanner orgId={orgId} role={data.myRole} />
       {/* Header */}
       <div>
         <Link

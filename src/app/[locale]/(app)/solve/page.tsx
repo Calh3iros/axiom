@@ -7,6 +7,7 @@ import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 
 import { SolveChat } from "@/components/solve/chat";
+import { SolveWelcomeModal } from "@/components/solve/solve-welcome-modal";
 import { getChats, getChatMessages, deleteChat } from "@/lib/actions/chat";
 
 // Track feature_used with sessionStorage dedup
@@ -74,6 +75,7 @@ export default function SolvePage() {
 
   return (
     <div className="relative flex h-full gap-6">
+      <SolveWelcomeModal />
       {/* History Sidebar */}
       <div
         className={`fixed inset-y-0 right-0 z-30 flex w-72 transform flex-col border-l border-[var(--color-border2)] bg-[var(--color-bg1)] transition-transform duration-300 md:relative md:z-auto md:w-64 md:translate-x-0 md:border-r md:border-l-0 md:bg-transparent ${isSidebarOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"} `}
