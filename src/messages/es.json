@@ -442,15 +442,31 @@
       "headerTask": "Tarea",
       "headerWithout": "Sin",
       "headerAxiom": "Con Axiom",
-      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
+      "row1": [
+        "Resolver 1 problema",
+        "30 – 60 min",
+        "5 segundos"
+      ],
       "row2": [
         "Escribir ensayo de 1.000 palabras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": ["Crear plan de estudio", "1 – 2 horas", "1 clic"],
-      "row4": ["Humanizar 2.000 palabras", "45 min", "10 segundos"],
-      "row5": ["Preparación completa para examen", "6 – 10 horas", "2 horas"],
+      "row3": [
+        "Crear plan de estudio",
+        "1 – 2 horas",
+        "1 clic"
+      ],
+      "row4": [
+        "Humanizar 2.000 palabras",
+        "45 min",
+        "10 segundos"
+      ],
+      "row5": [
+        "Preparación completa para examen",
+        "6 – 10 horas",
+        "2 horas"
+      ],
       "footer": "El estudiante promedio ahorra ~200 horas por semestre"
     },
     "pricing": {
@@ -974,6 +990,39 @@
       "removing": "Eliminando...",
       "remove": "Eliminar Demo",
       "confirmRemove": "¿Seguro que deseas eliminar todos los datos de demostración? Esta acción no se puede deshacer."
+    },
+    "createOrg": {
+      "step1Title": "Tipo de institución",
+      "particular": "Particular",
+      "particularDesc": "Escuela privada o red",
+      "publica": "Pública",
+      "publicaDesc": "Red municipal o estatal",
+      "step2Title": "Detalles",
+      "singleSchool": "1 Escuela",
+      "singleSchoolDesc": "Escuela de una unidad",
+      "network": "Red de Escuelas",
+      "networkDesc": "Múltiples unidades",
+      "municipal": "Municipal",
+      "municipalDesc": "Secretaría municipal",
+      "state": "Estatal",
+      "stateDesc": "Secretaría estatal",
+      "step3Title": "Datos de organización",
+      "name": "Nombre",
+      "maxStudents": "Máximo de alumnos",
+      "expiresAt": "Expira en",
+      "notes": "Notas (opcional)",
+      "summary": "Resumen",
+      "create": "Crear y Generar Código",
+      "back": "Volver",
+      "successTitle": "¡Organización creada!",
+      "sendTo": {
+        "privateSchool": "Envíe este código al director de la escuela.",
+        "privateNetwork": "Envíe este código al dueño de la red.",
+        "publicMunicipal": "Envíe este código al secretario municipal.",
+        "publicState": "Envíe este código al secretario estatal."
+      },
+      "copyCode": "Copiar Código",
+      "copyLink": "Copiar Enlace"
     }
   },
   "Schools": {

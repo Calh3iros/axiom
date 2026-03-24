@@ -664,24 +664,64 @@ export async function getAdminOrgList() {
   if (!orgs || orgs.length === 0) return [];
 
   const orgIds = orgs.map((o: { id: string }) => o.id);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: codes } = await (supabaseAdmin.from("invite_codes") as any)
-    .select("code, type, org_id")
-    .in("org_id", orgIds)
-    .eq("is_active", true);
+  
+  // Parallel fetch: invite codes, children organizations, and org_memberships
+  const [codesRes, childrenRes, membersRes] = await Promise.all([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabaseAdmin.from("invite_codes") as any)
+      .select("code, type, org_id")
+      .in("org_id", orgIds)
+      .eq("is_active", true),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabaseAdmin.from("organizations") as any)
+      .select("parent_id")
+      .in("parent_id", orgIds),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabaseAdmin.from("org_memberships") as any)
+      .select("org_id")
+  ]);
+
+  const codes = codesRes?.data || [];
+  const childrenData = childrenRes?.data || [];
+  const membersData = membersRes?.data || [];
 
   const codeMap = new Map<string, { code: string; type: string }>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (codes || []).forEach((c: any) => {
-    // Keep the first active code per org (usually DIR or SEC)
+  codes.forEach((c: any) => {
+    // Keep the first active code per org
     if (!codeMap.has(c.org_id))
       codeMap.set(c.org_id, { code: c.code, type: c.type });
   });
 
+  // Basic direct counts
+  const childCountMap = new Map<string, number>();
+  childrenData.forEach((c: any) => {
+    childCountMap.set(c.parent_id, (childCountMap.get(c.parent_id) || 0) + 1);
+  });
+
+  const memberCountMap = new Map<string, number>();
+  membersData.forEach((m: any) => {
+    memberCountMap.set(m.org_id, (memberCountMap.get(m.org_id) || 0) + 1);
+  });
+
+  // Calculate aggregated members (direct + direct children's members)
+  // (Assuming depth 1 child for networks mostly)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return orgs.map((o: any) => ({
-    ...o,
-    inviteCode: codeMap.get(o.id)?.code || null,
-    codeType: codeMap.get(o.id)?.type || null,
-  }));
+  return orgs.map((o: any) => {
+    let members = memberCountMap.get(o.id) || 0;
+    // Add members from direct children
+    childrenData.forEach((c: any) => {
+      if (c.parent_id === o.id && c.id) {
+         members += (memberCountMap.get(c.id) || 0);
+      }
+    });
+
+    return {
+      ...o,
+      inviteCode: codeMap.get(o.id)?.code || null,
+      codeType: codeMap.get(o.id)?.type || null,
+      schoolsCount: childCountMap.get(o.id) || 0,
+      membersCount: members,
+    };
+  });
 }

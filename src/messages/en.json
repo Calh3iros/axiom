@@ -442,11 +442,31 @@
       "headerTask": "Task",
       "headerWithout": "Without",
       "headerAxiom": "With Axiom",
-      "row1": ["Solve 1 problem", "30 – 60 min", "5 seconds"],
-      "row2": ["Write 1,000-word essay", "3 – 5 hours", "15 minutes"],
-      "row3": ["Build study plan", "1 – 2 hours", "1 click"],
-      "row4": ["Humanize 2,000 words", "45 min", "10 seconds"],
-      "row5": ["Full exam prep", "6 – 10 hours", "2 hours"],
+      "row1": [
+        "Solve 1 problem",
+        "30 – 60 min",
+        "5 seconds"
+      ],
+      "row2": [
+        "Write 1,000-word essay",
+        "3 – 5 hours",
+        "15 minutes"
+      ],
+      "row3": [
+        "Build study plan",
+        "1 – 2 hours",
+        "1 click"
+      ],
+      "row4": [
+        "Humanize 2,000 words",
+        "45 min",
+        "10 seconds"
+      ],
+      "row5": [
+        "Full exam prep",
+        "6 – 10 hours",
+        "2 hours"
+      ],
       "footer": "Average student saves ~200 hours per semester"
     },
     "pricing": {
@@ -970,6 +990,39 @@
       "removing": "Removing...",
       "remove": "Remove Demo",
       "confirmRemove": "Are you sure you want to remove all demo data? This action cannot be undone."
+    },
+    "createOrg": {
+      "step1Title": "Institution Type",
+      "particular": "Private",
+      "particularDesc": "Private school or network",
+      "publica": "Public",
+      "publicaDesc": "Municipal or state network",
+      "step2Title": "Details",
+      "singleSchool": "1 School",
+      "singleSchoolDesc": "Single unit school",
+      "network": "School Network",
+      "networkDesc": "Multiple units",
+      "municipal": "Municipal",
+      "municipalDesc": "Municipal department",
+      "state": "State",
+      "stateDesc": "State department",
+      "step3Title": "Organization Data",
+      "name": "Name",
+      "maxStudents": "Max students",
+      "expiresAt": "Expires at",
+      "notes": "Notes (optional)",
+      "summary": "Summary",
+      "create": "Create & Generate Code",
+      "back": "Back",
+      "successTitle": "Organization created!",
+      "sendTo": {
+        "privateSchool": "Send this code to the school director.",
+        "privateNetwork": "Send this code to the network owner.",
+        "publicMunicipal": "Send this code to the municipal secretary.",
+        "publicState": "Send this code to the state secretary."
+      },
+      "copyCode": "Copy Code",
+      "copyLink": "Copy Link"
     }
   },
   "Schools": {

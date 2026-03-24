@@ -442,11 +442,31 @@
       "headerTask": "Aufgabe",
       "headerWithout": "Ohne",
       "headerAxiom": "Mit Axiom",
-      "row1": ["1 Problem lösen", "30 – 60 Min", "5 Sekunden"],
-      "row2": ["1.000-Wort-Aufsatz schreiben", "3 – 5 Stunden", "15 Minuten"],
-      "row3": ["Lernplan erstellen", "1 – 2 Stunden", "1 Klick"],
-      "row4": ["2.000 Wörter humanisieren", "45 Min", "10 Sekunden"],
-      "row5": ["Volle Prüfungsvorbereitung", "6 – 10 Stunden", "2 Stunden"],
+      "row1": [
+        "1 Problem lösen",
+        "30 – 60 Min",
+        "5 Sekunden"
+      ],
+      "row2": [
+        "1.000-Wort-Aufsatz schreiben",
+        "3 – 5 Stunden",
+        "15 Minuten"
+      ],
+      "row3": [
+        "Lernplan erstellen",
+        "1 – 2 Stunden",
+        "1 Klick"
+      ],
+      "row4": [
+        "2.000 Wörter humanisieren",
+        "45 Min",
+        "10 Sekunden"
+      ],
+      "row5": [
+        "Volle Prüfungsvorbereitung",
+        "6 – 10 Stunden",
+        "2 Stunden"
+      ],
       "footer": "Durchschnittlicher Student spart ~200 Stunden pro Semester"
     },
     "pricing": {
@@ -970,6 +990,39 @@
       "removing": "Wird entfernt...",
       "remove": "Demo Entfernen",
       "confirmRemove": "Sind Sie sicher, dass Sie alle Demodaten entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "createOrg": {
+      "step1Title": "Art der Einrichtung",
+      "particular": "Privat",
+      "particularDesc": "Privatschule oder Netzwerk",
+      "publica": "Öffentlich",
+      "publicaDesc": "Kommunales oder staatliches Netzwerk",
+      "step2Title": "Details",
+      "singleSchool": "1 Schule",
+      "singleSchoolDesc": "Einzelschule",
+      "network": "Schulnetzwerk",
+      "networkDesc": "Mehrere Standorte",
+      "municipal": "Kommunal",
+      "municipalDesc": "Kommunales Sekretariat",
+      "state": "Staatlich",
+      "stateDesc": "Staatliches Sekretariat",
+      "step3Title": "Organisationsdaten",
+      "name": "Name",
+      "maxStudents": "Maximale Schülerzahl",
+      "expiresAt": "Läuft ab am",
+      "notes": "Notizen (optional)",
+      "summary": "Zusammenfassung",
+      "create": "Erstellen und Code generieren",
+      "back": "Zurück",
+      "successTitle": "Organisation erstellt!",
+      "sendTo": {
+        "privateSchool": "Senden Sie diesen Code an den Schuldirektor.",
+        "privateNetwork": "Senden Sie diesen Code an den Eigentümer.",
+        "publicMunicipal": "Senden Sie diesen Code an den Kommunalsekretär.",
+        "publicState": "Senden Sie diesen Code an den Staatssekretär."
+      },
+      "copyCode": "Code kopieren",
+      "copyLink": "Link kopieren"
     }
   },
   "Schools": {

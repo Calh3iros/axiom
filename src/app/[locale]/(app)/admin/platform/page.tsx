@@ -33,6 +33,7 @@ import {
 } from "recharts";
 
 import { Link } from "@/i18n/routing";
+import { CreateOrgModal } from "./create-org-modal";
 import {
   getAdminPlatformStats,
   getDemoOrgId,
@@ -47,224 +48,6 @@ type OrgRow = any;
 const PLAN_COLORS = { free: "#64748b", pro: "#818cf8", elite: "#f59e0b" };
 const MODULE_COLORS = ["#818cf8", "#22c55e", "#f59e0b", "#ec4899"];
 
-// ── Create Org Modal ──────────────────────────────────────────────────
-function CreateOrgModal({
-  open,
-  onClose,
-  onCreated,
-  t,
-}: {
-  open: boolean;
-  onClose: () => void;
-  onCreated: (orgId: string, code: string) => void;
-  t: ReturnType<typeof useTranslations>;
-}) {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("school");
-  const [maxStudents, setMaxStudents] = useState("500");
-  const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  if (!open) return null;
-
-  const handleCreate = async () => {
-    if (!name.trim()) return;
-    setLoading(true);
-    setError("");
-
-    const expiresAt = new Date(Date.now() + 365 * 86400000)
-      .toISOString()
-      .split("T")[0];
-
-    const result = await createOrganizationDirect({
-      name: name.trim(),
-      type,
-      maxStudents: parseInt(maxStudents) || 500,
-      expiresAt,
-      contractNotes: notes || undefined,
-    });
-
-    setLoading(false);
-    if ("error" in result) {
-      setError(result.error);
-    } else {
-      onCreated(result.orgId, result.code);
-      setName("");
-      setType("school");
-      setMaxStudents("500");
-      setNotes("");
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-6 shadow-2xl">
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white">
-            {t("platform.createOrg")}
-          </h2>
-          <button onClick={onClose} className="text-[#64748b] hover:text-white">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
-              {t("platform.orgName")}
-            </label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
-              placeholder="CTC, Marista, GGE..."
-              autoFocus
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
-              {t("platform.orgTypeSel")}
-            </label>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
-            >
-              <option value="school">{t("platform.typeSchool")}</option>
-              <option value="network">{t("platform.typeNetwork")}</option>
-              <option value="state">{t("platform.typeState")}</option>
-              <option value="private_school">
-                {t("platform.typePrivateSchool" as "platform.typeSchool")}
-              </option>
-              <option value="private_network">
-                {t("platform.typePrivateNetwork" as "platform.typeNetwork")}
-              </option>
-              <option value="public_municipal">
-                {t("platform.typePublicMunicipal" as "platform.typeState")}
-              </option>
-              <option value="public_state">
-                {t("platform.typePublicState" as "platform.typeState")}
-              </option>
-            </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
-              {t("platform.maxStudents")}
-            </label>
-            <input
-              type="number"
-              value={maxStudents}
-              onChange={(e) => setMaxStudents(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
-              {t("platform.notes")}
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={2}
-              className="w-full rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
-              placeholder={t("platform.notesPlaceholder")}
-            />
-          </div>
-
-          {error && (
-            <div className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">
-              {error}
-            </div>
-          )}
-
-          <button
-            onClick={handleCreate}
-            disabled={loading || !name.trim()}
-            className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-          >
-            {loading ? "..." : t("platform.createAndCode")}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Success Modal ─────────────────────────────────────────────────────
-function SuccessModal({
-  open,
-  code,
-  onClose,
-  t,
-}: {
-  open: boolean;
-  code: string;
-  onClose: () => void;
-  t: ReturnType<typeof useTranslations>;
-}) {
-  const [copiedCode, setCopiedCode] = useState(false);
-  const [copiedLink, setCopiedLink] = useState(false);
-
-  if (!open) return null;
-
-  const link = `https://axiom-solver.com/join?code=${code}`;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-6 text-center shadow-2xl">
-        <Check className="mx-auto h-10 w-10 text-green-400" />
-        <h2 className="mt-3 text-lg font-bold text-white">
-          {t("platform.orgCreated")}
-        </h2>
-        <div className="mt-4 rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-4 py-3">
-          <p className="font-mono text-2xl font-bold tracking-wider text-[#f59e0b]">
-            {code}
-          </p>
-        </div>
-        <div className="mt-4 flex gap-2">
-          <button
-            onClick={async () => {
-              await navigator.clipboard.writeText(code);
-              setCopiedCode(true);
-              setTimeout(() => setCopiedCode(false), 2000);
-            }}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1e1e2e] px-3 py-2 text-xs font-medium text-white hover:bg-[#2a2a3e]"
-          >
-            {copiedCode ? (
-              <Check className="h-3.5 w-3.5 text-green-400" />
-            ) : (
-              <Copy className="h-3.5 w-3.5" />
-            )}
-            {t("platform.copyCode")}
-          </button>
-          <button
-            onClick={async () => {
-              await navigator.clipboard.writeText(link);
-              setCopiedLink(true);
-              setTimeout(() => setCopiedLink(false), 2000);
-            }}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1e1e2e] px-3 py-2 text-xs font-medium text-white hover:bg-[#2a2a3e]"
-          >
-            {copiedLink ? (
-              <Check className="h-3.5 w-3.5 text-green-400" />
-            ) : (
-              <ExternalLink className="h-3.5 w-3.5" />
-            )}
-            {t("platform.copyLink")}
-          </button>
-        </div>
-        <button
-          onClick={onClose}
-          className="mt-4 w-full rounded-lg border border-[#2a2a3e] py-2 text-sm text-[#94a3b8] hover:text-white"
-        >
-          {t("platform.close")}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // ── Org Table ─────────────────────────────────────────────────────────
 function OrgTable({
   orgs,
@@ -275,14 +58,14 @@ function OrgTable({
 }) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const typeLabels: Record<string, string> = {
-    school: t("platform.typeSchool"),
-    network: t("platform.typeNetwork"),
-    state: t("platform.typeState"),
-    private_school: "Escola Particular",
-    private_network: "Rede Particular",
-    public_municipal: "Rede Municipal",
-    public_state: "Rede Estadual",
+  const getTypeBadge = (type: string) => {
+    switch(type) {
+      case 'private_school': return <span className="inline-flex items-center px-2 py-1 rounded bg-[#64748b]/20 text-[#cbd5e1] text-xs font-medium">Particular</span>;
+      case 'private_network': return <span className="inline-flex items-center px-2 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-medium">Rede Particular</span>;
+      case 'public_municipal': return <span className="inline-flex items-center px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-medium">Municipal</span>;
+      case 'public_state': return <span className="inline-flex items-center px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-medium">Estadual</span>;
+      default: return <span className="inline-flex items-center px-2 py-1 rounded bg-[#64748b]/20 text-[#cbd5e1] text-xs font-medium uppercase">{type}</span>;
+    }
   };
 
   return (
@@ -291,9 +74,12 @@ function OrgTable({
         <thead>
           <tr className="border-b border-[#1e1e2e] text-left text-xs text-[#64748b] uppercase">
             <th className="px-4 py-3">{t("platform.orgName")}</th>
-            <th className="px-4 py-3">{t("platform.orgTypeSel")}</th>
+            <th className="px-4 py-3">Tipo</th>
+            <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">{t("platform.code")}</th>
-            <th className="px-4 py-3">{t("platform.maxStudents")}</th>
+            <th className="px-4 py-3 text-center">Membros</th>
+            <th className="px-4 py-3 text-center">Escolas</th>
+            <th className="px-4 py-3 text-right">Criada</th>
           </tr>
         </thead>
         <tbody>
@@ -310,8 +96,13 @@ function OrgTable({
                   {org.name}
                 </Link>
               </td>
-              <td className="px-4 py-3 text-[#94a3b8]">
-                {typeLabels[org.type] || org.type}
+              <td className="px-4 py-3">
+                {getTypeBadge(org.type)}
+              </td>
+              <td className="px-4 py-3">
+                <span className={`inline-flex items-center px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${org.status === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                  {org.status}
+                </span>
               </td>
               <td className="px-4 py-3">
                 {org.inviteCode ? (
@@ -338,8 +129,14 @@ function OrgTable({
                   <span className="text-xs text-[#64748b]">—</span>
                 )}
               </td>
-              <td className="px-4 py-3 text-[#94a3b8]">
-                {org.max_students || "—"}
+              <td className="px-4 py-3 text-center text-[#94a3b8]">
+                {org.membersCount || 0}
+              </td>
+              <td className="px-4 py-3 text-center text-[#94a3b8]">
+                {['private_network', 'public_municipal', 'public_state', 'network', 'state'].includes(org.type) ? (org.schoolsCount || 0) : '—'}
+              </td>
+              <td className="px-4 py-3 text-right text-xs text-[#64748b]">
+                {new Date(org.created_at).toLocaleDateString()}
               </td>
             </tr>
           ))}
@@ -357,7 +154,7 @@ export default function AdminPlatformPage() {
   const [orgs, setOrgs] = useState<OrgRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [successCode, setSuccessCode] = useState("");
+  
 
   useEffect(() => {
     Promise.all([getAdminPlatformStats(), getDemoOrgId(), getAdminOrgList()])
@@ -370,14 +167,10 @@ export default function AdminPlatformPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  const handleCreated = async (orgId: string, code: string) => {
-    setShowCreateModal(false);
-    setSuccessCode(code);
-    // Refresh org list
+  const handleCreated = async () => {
+    // Refresh org list silently while modal shows step 4
     const fresh = await getAdminOrgList();
     setOrgs(fresh);
-    // Suppress unused variable warning
-    void orgId;
   };
 
   if (loading) return <div className="admin-loading">{t("loading")}</div>;
@@ -657,12 +450,7 @@ export default function AdminPlatformPage() {
         t={t}
       />
 
-      <SuccessModal
-        open={!!successCode}
-        code={successCode}
-        onClose={() => setSuccessCode("")}
-        t={t}
-      />
+      
 
       <style>{`
         .admin-page-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: #f1f5f9; }
