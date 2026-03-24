@@ -37,6 +37,7 @@ import {
   getOrgInviteCodes,
   regenerateInviteCodeByType,
 } from "@/lib/actions/invite-codes";
+import { createChildOrg } from "@/lib/actions/network";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
 import {
@@ -81,6 +82,14 @@ export default function OrgDetailPage({
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [codeLoading, setCodeLoading] = useState(false);
+  // Create child org modal state
+  const [showCreateSchool, setShowCreateSchool] = useState(false);
+  const [newSchoolName, setNewSchoolName] = useState("");
+  const [newSchoolMax, setNewSchoolMax] = useState("");
+  const [createSchoolLoading, setCreateSchoolLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [createSchoolResult, setCreateSchoolResult] = useState<any>(null);
+  const [copiedDirCode, setCopiedDirCode] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -612,38 +621,190 @@ export default function OrgDetailPage({
         </div>
       )}
       {/* Child Orgs (hierarchy) */}
-      {data.childOrgs && data.childOrgs.length > 0 && (
+      {(data.childOrgs?.length > 0 ||
+        (canMembers &&
+          [
+            "network",
+            "private_network",
+            "public_municipal",
+            "public_state",
+            "state",
+          ].includes(data.org?.type))) && (
         <div>
-          <div className="mb-4 flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-orange-400" />
-            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-              {t("childOrgs")} ({data.childOrgs.length})
-            </h2>
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-orange-400" />
+              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+                {t("childOrgs")} ({data.childOrgs?.length || 0})
+              </h2>
+            </div>
+            {canMembers && (
+              <button
+                onClick={() => {
+                  setShowCreateSchool(true);
+                  setCreateSchoolResult(null);
+                  setNewSchoolName("");
+                  setNewSchoolMax("");
+                }}
+                className="flex items-center gap-2 rounded-lg bg-orange-600 px-3 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              >
+                <Plus className="h-4 w-4" />+ Nova Escola
+              </button>
+            )}
           </div>
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {data.childOrgs.map(
-              (child: { id: string; name: string; type: string }) => (
-                <Link key={child.id} href={`/org/${child.id}`}>
-                  <div className="group cursor-pointer rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-4 transition-all hover:border-[var(--color-ax-blue)]/30">
-                    <div className="flex items-center gap-2">
-                      <Building2
-                        className={`h-4 w-4 ${child.type === "school" ? "text-blue-400" : child.type === "network" ? "text-purple-400" : "text-orange-400"}`}
-                      />
-                      <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-ax-blue)]">
-                        {child.name}
-                      </span>
+          {data.childOrgs && data.childOrgs.length > 0 && (
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {data.childOrgs.map(
+                (child: { id: string; name: string; type: string }) => (
+                  <Link key={child.id} href={`/org/${child.id}`}>
+                    <div className="group cursor-pointer rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-4 transition-all hover:border-[var(--color-ax-blue)]/30">
+                      <div className="flex items-center gap-2">
+                        <Building2
+                          className={`h-4 w-4 ${child.type === "school" || child.type === "private_school" ? "text-blue-400" : child.type === "network" || child.type === "private_network" ? "text-purple-400" : "text-orange-400"}`}
+                        />
+                        <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-ax-blue)]">
+                          {child.name}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-[var(--color-dim)]">
+                        {t(
+                          `type${child.type.charAt(0).toUpperCase() + child.type.slice(1)}` as
+                            | "typeSchool"
+                            | "typeNetwork"
+                            | "typeState"
+                            | "typePrivateSchool"
+                            | "typePrivateNetwork"
+                        )}
+                      </p>
                     </div>
-                    <p className="mt-1 text-xs text-[var(--color-dim)]">
-                      {t(
-                        `type${child.type.charAt(0).toUpperCase() + child.type.slice(1)}` as
-                          | "typeSchool"
-                          | "typeNetwork"
-                          | "typeState"
-                      )}
-                    </p>
-                  </div>
-                </Link>
-              )
+                  </Link>
+                )
+              )}
+            </div>
+          )}
+          {(!data.childOrgs || data.childOrgs.length === 0) && (
+            <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] py-10 text-center">
+              <Building2 className="mx-auto h-8 w-8 text-[var(--color-dim)]" />
+              <p className="mt-2 text-sm text-[var(--color-dim)]">
+                Nenhuma escola vinculada. Clique &ldquo;+ Nova Escola&rdquo;
+                para criar.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Create School Modal */}
+      {showCreateSchool && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+          onClick={() => setShowCreateSchool(false)}
+        >
+          <div
+            className="mx-4 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg2)] p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {createSchoolResult && "orgId" in createSchoolResult ? (
+              <div className="text-center">
+                <Check className="mx-auto h-12 w-12 text-green-400" />
+                <h3 className="mt-3 text-lg font-bold text-[var(--color-text-primary)]">
+                  Escola criada!
+                </h3>
+                <p className="mt-2 text-sm text-[var(--color-dim)]">
+                  Código do Diretor:
+                </p>
+                <div className="mt-2 flex items-center justify-center gap-2">
+                  <code className="rounded-lg bg-[var(--color-bg1)] px-4 py-2 font-mono text-xl font-bold tracking-widest text-[var(--color-ax-yellow)]">
+                    {createSchoolResult.directorCode}
+                  </code>
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(
+                        createSchoolResult.directorCode
+                      );
+                      setCopiedDirCode(true);
+                      setTimeout(() => setCopiedDirCode(false), 2000);
+                    }}
+                    className="rounded-lg bg-[var(--color-bg1)] p-2 text-[var(--color-dim)] hover:text-white"
+                  >
+                    {copiedDirCode ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <p className="mt-3 text-xs text-[var(--color-dim)]">
+                  Envie este código para o diretor da escola se vincular.
+                </p>
+                <button
+                  onClick={() => {
+                    setShowCreateSchool(false);
+                    fetchData();
+                  }}
+                  className="mt-4 rounded-lg bg-green-600 px-6 py-2 text-sm font-medium text-white hover:opacity-90"
+                >
+                  Fechar
+                </button>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-lg font-bold text-[var(--color-text-primary)]">
+                  Criar Nova Escola
+                </h3>
+                <p className="mt-1 text-sm text-[var(--color-dim)]">
+                  A escola será vinculada à rede {data.org?.name}.
+                </p>
+                {createSchoolResult && "error" in createSchoolResult && (
+                  <p className="mt-2 text-sm text-red-400">
+                    {createSchoolResult.error}
+                  </p>
+                )}
+                <div className="mt-4 space-y-3">
+                  <input
+                    type="text"
+                    value={newSchoolName}
+                    onChange={(e) => setNewSchoolName(e.target.value)}
+                    placeholder="Nome da escola"
+                    className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] px-4 py-2.5 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-dim)] focus:border-orange-500 focus:outline-none"
+                    autoFocus
+                  />
+                  <input
+                    type="number"
+                    value={newSchoolMax}
+                    onChange={(e) => setNewSchoolMax(e.target.value)}
+                    placeholder="Limite de alunos (opcional)"
+                    className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] px-4 py-2.5 text-sm text-[var(--color-text-primary)] placeholder-[var(--color-dim)] focus:border-orange-500 focus:outline-none"
+                  />
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <button
+                    onClick={() => setShowCreateSchool(false)}
+                    className="flex-1 rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm text-[var(--color-dim)] hover:text-white"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={async () => {
+                      if (!newSchoolName.trim()) return;
+                      setCreateSchoolLoading(true);
+                      const result = await createChildOrg({
+                        parentOrgId: orgId,
+                        name: newSchoolName.trim(),
+                        maxStudents: newSchoolMax
+                          ? parseInt(newSchoolMax)
+                          : undefined,
+                      });
+                      setCreateSchoolResult(result);
+                      setCreateSchoolLoading(false);
+                    }}
+                    disabled={createSchoolLoading || !newSchoolName.trim()}
+                    className="flex-1 rounded-lg bg-orange-600 px-4 py-2.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+                  >
+                    {createSchoolLoading ? "Criando..." : "Criar Escola"}
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
