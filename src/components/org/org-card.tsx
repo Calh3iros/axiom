@@ -38,14 +38,21 @@ export function OrgCard({ org, role }: OrgCardProps) {
     | "roleAdmin"
     | "roleDirector"
     | "roleSecretary";
-  const typeKey = `type${org.type.charAt(0).toUpperCase() + org.type.slice(1)}` as
+  const typeKey = `type${org.type
+    .split("_")
+    .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join("")}` as
     | "typeSchool"
     | "typeNetwork"
-    | "typeState";
+    | "typeState"
+    | "typePrivateSchool"
+    | "typePrivateNetwork"
+    | "typePublicMunicipal"
+    | "typePublicState";
 
   return (
     <Link href={`/org/${org.id}`}>
-      <div className="group cursor-pointer rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-5 transition-all hover:border-[var(--color-ax-blue)]/30 hover:shadow-lg hover:shadow-[var(--color-ax-blue)]/5">
+      <div className="group cursor-pointer rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-5 transition-all hover:border-[var(--color-ax-blue)]/30 hover:shadow-[var(--color-ax-blue)]/5 hover:shadow-lg">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             {typeIcons[org.type] || typeIcons.school}

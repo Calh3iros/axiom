@@ -212,10 +212,17 @@ export default function OrgDetailPage({
         </h1>
         <p className="mt-1 text-sm text-[var(--color-dim)]">
           {t(
-            `type${data.org.type.charAt(0).toUpperCase() + data.org.type.slice(1)}` as
+            `type${data.org.type
+              .split("_")
+              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join("")}` as
               | "typeSchool"
               | "typeNetwork"
               | "typeState"
+              | "typePrivateSchool"
+              | "typePrivateNetwork"
+              | "typePublicMunicipal"
+              | "typePublicState"
           )}
           {" · "}
           {t(
@@ -668,12 +675,20 @@ export default function OrgDetailPage({
                       </div>
                       <p className="mt-1 text-xs text-[var(--color-dim)]">
                         {t(
-                          `type${child.type.charAt(0).toUpperCase() + child.type.slice(1)}` as
+                          `type${child.type
+                            .split("_")
+                            .map(
+                              (w: string) =>
+                                w.charAt(0).toUpperCase() + w.slice(1)
+                            )
+                            .join("")}` as
                             | "typeSchool"
                             | "typeNetwork"
                             | "typeState"
                             | "typePrivateSchool"
                             | "typePrivateNetwork"
+                            | "typePublicMunicipal"
+                            | "typePublicState"
                         )}
                       </p>
                     </div>

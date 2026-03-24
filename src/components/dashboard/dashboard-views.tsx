@@ -1064,7 +1064,7 @@ export function SecretaryDashboard({
                 color={BLUE}
                 label={t("schools")}
                 value={data.schoolCount}
-                sub={`${kpis.totalClasses} turmas`}
+                sub={`${kpis.totalClasses} ${t("classes")}`}
               />
             </div>
           )}

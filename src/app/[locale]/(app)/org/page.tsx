@@ -45,7 +45,7 @@ export default function OrgListPage() {
     fetchOrgs();
   }, [fetchOrgs]);
 
-  const directOrgIds = new Set(memberships.map(m => m.org_id));
+  const directOrgIds = new Set(memberships.map((m) => m.org_id));
 
   return (
     <div className="space-y-6">
@@ -72,18 +72,18 @@ export default function OrgListPage() {
       ) : memberships.length === 0 ? (
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] py-16 text-center">
           <Building2 className="mx-auto h-12 w-12 text-[var(--color-dim)]" />
-          <p className="mt-4 text-[var(--color-text-secondary)]">{t("noOrgs")}</p>
-          <p className="mt-1 text-sm text-[var(--color-dim)]">{t("joinHint")}</p>
+          <p className="mt-4 text-[var(--color-text-secondary)]">
+            {t("noOrgs")}
+          </p>
+          <p className="mt-1 text-sm text-[var(--color-dim)]">
+            {t("joinHint")}
+          </p>
         </div>
       ) : (
         <div className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2">
             {memberships.map((o) => (
-              <OrgCard
-                key={o.org_id}
-                org={o.organizations}
-                role={o.role}
-              />
+              <OrgCard key={o.org_id} org={o.organizations} role={o.role} />
             ))}
           </div>
 
@@ -98,14 +98,33 @@ export default function OrgListPage() {
                   <Link key={org.id} href={`/org/${org.id}`}>
                     <div className="group cursor-pointer rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-4 transition-all hover:border-[var(--color-ax-blue)]/30">
                       <div className="flex items-center gap-2">
-                        <Building2 className={`h-4 w-4 ${org.type === 'school' ? 'text-blue-400' : org.type === 'network' ? 'text-purple-400' : 'text-orange-400'}`} />
+                        <Building2
+                          className={`h-4 w-4 ${org.type === "school" ? "text-blue-400" : org.type === "network" ? "text-purple-400" : "text-orange-400"}`}
+                        />
                         <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-ax-blue)]">
                           {org.name}
                         </span>
                       </div>
                       <p className="mt-1 text-xs text-[var(--color-dim)]">
-                        {t(`type${org.type.charAt(0).toUpperCase() + org.type.slice(1)}` as "typeSchool" | "typeNetwork" | "typeState")}
-                        {directOrgIds.has(org.id) ? "" : ` · ${t("viaHierarchy")}`}
+                        {t(
+                          `type${org.type
+                            .split("_")
+                            .map(
+                              (w: string) =>
+                                w.charAt(0).toUpperCase() + w.slice(1)
+                            )
+                            .join("")}` as
+                            | "typeSchool"
+                            | "typeNetwork"
+                            | "typeState"
+                            | "typePrivateSchool"
+                            | "typePrivateNetwork"
+                            | "typePublicMunicipal"
+                            | "typePublicState"
+                        )}
+                        {directOrgIds.has(org.id)
+                          ? ""
+                          : ` · ${t("viaHierarchy")}`}
                       </p>
                     </div>
                   </Link>
