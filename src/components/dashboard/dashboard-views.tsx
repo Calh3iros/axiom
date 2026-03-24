@@ -29,6 +29,11 @@ import {
   Legend,
 } from "recharts";
 
+import { exportNetworkCsv, type NetworkCsvRow } from "@/lib/export-network-csv";
+import {
+  exportNetworkPdf,
+  type NetworkPdfData,
+} from "@/lib/export-network-pdf";
 import { exportDashboardPdf } from "@/lib/export-pdf";
 
 import type { DateRange, PeriodPreset } from "./period-selector";
@@ -381,7 +386,7 @@ export function TeacherDashboard({
               <h3 className="dash-chart-title">{t("masteryDist")}</h3>
               <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {}
                   <Pie
                     data={data.masteryDist}
                     cx="50%"
@@ -917,15 +922,49 @@ export function SecretaryDashboard({
   const handleExport = async () => {
     setExporting(true);
     try {
-      await exportDashboardPdf(dashId, {
-        title: title || "Relatório da Rede",
-        subtitle: `${data?.schoolCount || 0} escolas`,
-        period: `${range.startDate} → ${range.endDate}`,
-        filename: `axiom-relatorio-rede-${range.startDate}-${range.endDate}.pdf`,
-      });
+      if (kpis) {
+        // Use the full network PDF when kpi data is available
+        const pdfData: NetworkPdfData = {
+          networkName: title || "Rede",
+          schoolCount: data.schoolCount,
+          kpis,
+          schoolComparison: data.schoolComparison,
+          alerts,
+          weeklyEvolution: data.weeklyEvolution || [],
+          period: `${range.startDate} a ${range.endDate}`,
+        };
+        exportNetworkPdf(pdfData);
+      } else {
+        // Fallback to generic dashboard PDF
+        await exportDashboardPdf(dashId, {
+          title: title || "Relatório da Rede",
+          subtitle: `${data?.schoolCount || 0} escolas`,
+          period: `${range.startDate} → ${range.endDate}`,
+          filename: `axiom-relatorio-rede-${range.startDate}-${range.endDate}.pdf`,
+        });
+      }
     } finally {
       setExporting(false);
     }
+  };
+
+  const handleExportCsv = () => {
+    const rows: NetworkCsvRow[] = data.schoolComparison.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (s: any) => ({
+        schoolName: s.orgName,
+        students: s.students,
+        active7d: s.active7d,
+        teachers: s.teachers || 0,
+        classes: s.classes || 0,
+        avgAccuracy: s.avgAccuracy,
+        adoption: s.adoption,
+        avgStreak: s.avgStreak || 0,
+        score: s.score || 0,
+        status: s.status || "unknown",
+      })
+    );
+    exportNetworkCsv(rows, title || "Rede");
   };
 
   if (data?.empty) {
@@ -966,7 +1005,12 @@ export function SecretaryDashboard({
           onPresetChange={handlePresetChange}
           onCustomChange={handleCustomChange}
         />
-        <ExportButton onClick={handleExport} loading={exporting} />
+        <div style={{ display: "flex", gap: 8 }}>
+          <ExportButton onClick={handleExport} loading={exporting} />
+          <button onClick={handleExportCsv} className="export-pdf-btn">
+            <Download style={{ width: 14, height: 14 }} /> CSV
+          </button>
+        </div>
       </div>
 
       {loading && (
