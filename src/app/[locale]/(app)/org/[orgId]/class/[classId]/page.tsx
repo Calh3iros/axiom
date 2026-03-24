@@ -30,6 +30,11 @@ import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
 import { getClassRanking } from "@/lib/actions/rankings";
 import { getStudentReport, type StudentReport } from "@/lib/actions/report";
+import {
+  exportSchoolPdf,
+  type SchoolReportData,
+} from "@/lib/export-school-pdf";
+import { exportClassPdf2Pages } from "@/lib/export-class-pdf";
 import { exportStudentPdf, exportClassPdf } from "@/lib/export-student-pdf";
 import { createClient } from "@/lib/supabase/client";
 import { isElevated } from "@/types/roles";
@@ -174,6 +179,31 @@ export default function ClassDetailPage({
     setGeneratingBulk(false);
   };
 
+  const handleClassDashboardExport = async () => {
+    if (!dashData || dashData.empty) return;
+    
+    // Fallback names
+    const oName = data?.classInfo?.organizations?.name || "Escola";
+    const cName = data?.classInfo?.name || "Turma";
+
+    await exportClassPdf2Pages({
+      className: cName,
+      orgName: oName,
+      teacherName: "Professor da Turma",
+      period: "Ultimos 30 dias",
+      generatedBy: "Axiom",
+      totalStudents: dashData.studentCount,
+      totalSolved: dashData.avgSolved * dashData.studentCount,
+      overallAccuracy: dashData.avgAccuracy,
+      avgStreak: dashData.avgStreak,
+      topStudents: dashData.topStudents || [],
+      accuracyDist: dashData.accuracyDist || [],
+      weeklyEvolution: dashData.weeklyEvolution || [],
+      topErrors: dashData.topErrors || [],
+      inactiveStudents: dashData.inactiveStudents || [],
+    });
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -250,45 +280,53 @@ export default function ClassDetailPage({
             <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">
               📚 {data.classInfo.name}
             </h1>
-            {/* Report generate dropdown */}
-            {canCoordinate && (
-              <div className="relative" ref={dropdownRef}>
+            <div className="flex items-center gap-2">
+              {/* Report generate dropdown */}
+              {canCoordinate && (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setReportDropdown(!reportDropdown)}
+                    disabled={generatingBulk}
+                    className="flex items-center gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-sm font-medium text-orange-400 transition-colors hover:bg-orange-500/20 disabled:opacity-50"
+                  >
+                    <FileText className="h-4 w-4" />
+                    {generatingBulk
+                      ? tReport("generatingPdf")
+                      : tReport("generateReports")}
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
+                  {reportDropdown && (
+                    <div className="absolute top-full right-0 z-20 mt-1 w-56 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-1 shadow-xl">
+                      <button
+                        onClick={handleClassDashboardExport}
+                        className="w-full rounded px-3 py-2 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)]"
+                      >
+                        📄 PDF Turma (Dashboard)
+                      </button>
+                      <button
+                        onClick={handleBulkExport}
+                        className="w-full rounded px-3 py-2 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)] mt-1 border-t border-[var(--color-border)] pt-2"
+                      >
+                        📄 {tReport("fullClass")}
+                      </button>
+                      <p className="px-3 py-1.5 text-[10px] text-[var(--color-dim)]">
+                        {tReport("individualStudent")}: click name in ranking
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              {/* Reassign Teacher button (coordinator+) */}
+              {canCoordinate && (
                 <button
-                  onClick={() => setReportDropdown(!reportDropdown)}
-                  disabled={generatingBulk}
-                  className="flex items-center gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-sm font-medium text-orange-400 transition-colors hover:bg-orange-500/20 disabled:opacity-50"
+                  onClick={handleReassignOpen}
+                  className="flex items-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-400 transition-colors hover:bg-cyan-500/20"
                 >
-                  <FileText className="h-4 w-4" />
-                  {generatingBulk
-                    ? tReport("generatingPdf")
-                    : tReport("generateReports")}
-                  <ChevronDown className="h-3 w-3" />
+                  <UserCog className="h-4 w-4" />
+                  {tOrg("reassignClass")}
                 </button>
-                {reportDropdown && (
-                  <div className="absolute top-full right-0 z-20 mt-1 w-48 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] p-1 shadow-xl">
-                    <button
-                      onClick={handleBulkExport}
-                      className="w-full rounded px-3 py-2 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)]"
-                    >
-                      📄 {tReport("fullClass")}
-                    </button>
-                    <p className="px-3 py-1.5 text-[10px] text-[var(--color-dim)]">
-                      {tReport("individualStudent")}: click name in ranking
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-            {/* Reassign Teacher button (coordinator+) */}
-            {canCoordinate && (
-              <button
-                onClick={handleReassignOpen}
-                className="flex items-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-400 transition-colors hover:bg-cyan-500/20"
-              >
-                <UserCog className="h-4 w-4" />
-                {tOrg("reassignClass")}
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
 

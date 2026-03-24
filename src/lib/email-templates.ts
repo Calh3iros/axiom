@@ -165,3 +165,25 @@ export function orgApprovedEmailHtmlPt(orgName: string): string {
 ${ctaButton("Acessar painel →", "https://axiom-solver.com/org")}
 ${footer('Axiom — Companheiro de Estudos com IA<br>Precisa de ajuda? <a href="mailto:mysupport@axiom-solver.com" style="color:#9ca3af;">mysupport@axiom-solver.com</a>')}`);
 }
+
+// ─── TEMPLATE 4: Invite Email ────────────────────────────────────────────
+
+export function inviteEmailHtml(orgName: string, code: string, joinUrl: string, senderName: string): string {
+  return emailWrapper(`
+<h1 style="margin:0 0 16px;font-size:24px;font-weight:700;color:${COLORS.text};">Convite para o Axiom 🎓</h1>
+<p style="font-size:16px;color:${COLORS.text};line-height:1.6;margin:0 0 20px;">
+Olá! Você foi convidado(a) por <strong>${senderName}</strong> para participar da equipe de <strong>${orgName}</strong> no Axiom.
+</p>
+<p style="font-size:16px;color:${COLORS.text};line-height:1.6;margin:0 0 20px;">
+Seu código de acesso único é:
+</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+<tr><td align="center" style="padding:16px;background-color:${COLORS.lightBg};border:1px solid ${COLORS.border};border-radius:8px;">
+<div style="font-family:monospace;font-size:24px;font-weight:bold;letter-spacing:4px;color:${COLORS.orange};">
+${code}
+</div>
+</td></tr>
+</table>
+${ctaButton("Acessar Axiom →", joinUrl)}
+${footer('Axiom — Companheiro de Estudos com IA<br>Precisa de ajuda? <a href="mailto:mysupport@axiom-solver.com" style="color:#9ca3af;">mysupport@axiom-solver.com</a>')}`);
+}

@@ -327,7 +327,6 @@ export async function getTeacherDashboard(
       if (!p.last_active_date) return true;
       return p.last_active_date < inactiveDate;
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((p: any) => ({
       name: p.full_name || p.email?.split("@")[0] || "User",
       lastActive: p.last_active_date,
@@ -341,6 +340,25 @@ export async function getTeacherDashboard(
       (a: { daysInactive: number }, b: { daysInactive: number }) =>
         b.daysInactive - a.daysInactive
     )
+    .slice(0, 10);
+
+  // Top 10 Students for Class PDF
+  const topStudents = profiles
+    .map((p: any) => {
+      const sp = spMap.get(p.id) || { solved: 0, correct: 0 };
+      const km = kmData.find((k: any) => k.user_id === p.id);
+      const acc = sp.solved > 0 ? Math.round((sp.correct / sp.solved) * 100) : 0;
+      const pct = km?.mastery_pct || 0;
+      const level = Math.min(4, Math.floor(pct / 20));
+      return {
+        name: p.full_name || p.email?.split("@")[0] || "User",
+        solved: sp.solved,
+        accuracy: acc,
+        streak: p.current_streak || 0,
+        level: level
+      };
+    })
+    .sort((a: any, b: any) => b.solved - a.solved || b.accuracy - a.accuracy)
     .slice(0, 10);
 
   // Module usage
@@ -387,6 +405,7 @@ export async function getTeacherDashboard(
     accuracyDist,
     topErrors,
     inactiveStudents,
+    topStudents,
     moduleUsage,
     masteryDist,
   };

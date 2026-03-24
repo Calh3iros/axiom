@@ -491,7 +491,7 @@ export async function getClassDashboard(classId: string) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: cls } = await (db.from("classes") as any)
-    .select("id, name, invite_code, teacher_id, org_id, created_at")
+    .select("id, name, invite_code, teacher_id, org_id, created_at, organizations(name)")
     .eq("id", classId)
     .single();
 

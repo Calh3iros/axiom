@@ -8,7 +8,6 @@ import {
   Loader2,
   Target,
   TrendingUp,
-  UserX,
   Zap,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -36,6 +35,7 @@ import {
 } from "@/lib/export-network-pdf";
 import { exportDashboardPdf } from "@/lib/export-pdf";
 
+import { InactiveStudentsAlert, TopErrorsAlert, EngagementDropsAlert } from "./alert-card";
 import type { DateRange, PeriodPreset } from "./period-selector";
 import { PeriodSelector, usePeriod } from "./period-selector";
 
@@ -395,6 +395,7 @@ export function TeacherDashboard({
                     outerRadius={85}
                     dataKey="count"
                     nameKey="level"
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     label={(p: any) =>
                       p.count > 0 ? `${p.level}: ${p.count}` : ""
                     }
@@ -410,52 +411,14 @@ export function TeacherDashboard({
           </div>
 
           {/* Row 4: Alerts */}
-          <div className="dash-row">
-            <div className="dash-alert-card">
-              <h3 className="dash-alert-title">
-                <UserX style={{ width: 18, height: 18, color: RED }} />
-                {t("inactiveStudents")} ({data.inactiveStudents.length})
-              </h3>
-              {data.inactiveStudents.length === 0 ? (
-                <p className="dash-empty-alert">✅ {t("allActive")}</p>
-              ) : (
-                <div className="dash-alert-list">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {data.inactiveStudents.map((s: any, i: number) => (
-                    <div key={i} className="dash-alert-item">
-                      <span className="dash-alert-name">{s.name}</span>
-                      <span className="dash-alert-days">{s.daysInactive}d</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+          {data.alerts && (
+            <div className="dash-row" style={{ gridTemplateColumns: "1fr" }}>
+              <EngagementDropsAlert alerts={data.alerts} t={t} />
             </div>
-            <div className="dash-alert-card">
-              <h3 className="dash-alert-title">
-                <AlertTriangle
-                  style={{ width: 18, height: 18, color: YELLOW }}
-                />
-                {t("topErrors")}
-              </h3>
-              {data.topErrors.length === 0 ? (
-                <p className="dash-empty-alert">{t("noErrors")}</p>
-              ) : (
-                <div className="dash-alert-list">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {data.topErrors.map((e: any, i: number) => (
-                    <div key={i} className="dash-alert-item">
-                      <span className="dash-alert-name">{e.topic}</span>
-                      <span
-                        className="dash-alert-rate"
-                        style={{ color: e.errorRate > 60 ? RED : YELLOW }}
-                      >
-                        {e.errorRate}% erro ({e.errors}/{e.total})
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+          )}
+          <div className="dash-row" style={{ gridTemplateColumns: "1fr 1fr" }}>
+            <InactiveStudentsAlert students={data.inactiveStudents || []} t={t} />
+            <TopErrorsAlert errors={data.topErrors || []} t={t} />
           </div>
         </div>
       )}

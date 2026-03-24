@@ -68,3 +68,37 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-border3);
 }
+
+/* Print CSS */
+@media print {
+  /* Hide navigation, sidebars, modals, and unnecessary interactive elements */
+  nav, header, footer, [role="navigation"], .sidebar, .no-print, button, a[href^="http"]:not(.print-link) {
+    display: none !important;
+  }
+
+  /* Make background white and text black */
+  body, main, div {
+    background: transparent !important;
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* Adjust cards */
+  .rounded-xl, .rounded-lg, .rounded-2xl {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid;
+  }
+
+  /* Text colors */
+  p, h1, h2, h3, h4, h5, h6, span {
+    color: black !important;
+  }
+
+  /* Force background graphics to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

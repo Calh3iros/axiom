@@ -32,12 +32,14 @@ import { Link, useRouter } from "@/i18n/routing";
 import {
   getDirectorDashboard,
   getSecretaryDashboard,
+  getTeacherDashboard,
 } from "@/lib/actions/dashboard";
 import {
   generateInviteCode,
   getOrgInviteCodes,
   regenerateInviteCodeByType,
 } from "@/lib/actions/invite-codes";
+import { sendInviteEmail } from "@/lib/actions/invite-email";
 import { createChildOrg } from "@/lib/actions/network";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
@@ -84,6 +86,9 @@ export default function OrgDetailPage({
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [codeLoading, setCodeLoading] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [sendingEmail, setSendingEmail] = useState(false);
+  
   // Create child org modal state
   const [showCreateSchool, setShowCreateSchool] = useState(false);
   const [newSchoolName, setNewSchoolName] = useState("");
@@ -173,6 +178,24 @@ export default function OrgDetailPage({
     const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
     setTeacherCode(prf || null);
     setCodeLoading(false);
+  };
+
+  const handleSendInviteEmail = async () => {
+    if (!teacherCode?.code || !inviteEmail || !data) return;
+    setSendingEmail(true);
+    const result = await sendInviteEmail({
+      email: inviteEmail,
+      code: teacherCode.code,
+      orgName: data.org.name || "Axiom",
+      senderName: "Equipe" // Could be fetched but we use dummy or localized text
+    });
+    setSendingEmail(false);
+    if ("success" in result) {
+      alert(t("inviteSent", { fallback: "Convite enviado com sucesso!" }));
+      setInviteEmail("");
+    } else {
+      alert(t("inviteError", { fallback: "Erro ao enviar convite." }));
+    }
   };
 
   if (loading) {
@@ -417,6 +440,24 @@ export default function OrgDetailPage({
                     <RefreshCw
                       className={`h-4 w-4 ${codeLoading ? "animate-spin" : ""}`}
                     />
+                  </button>
+                </div>
+
+                {/* Send by email */}
+                <div className="mt-4 flex items-center gap-2 max-w-sm">
+                  <input
+                    type="email"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    placeholder={t("inviteEmailPlaceholder", { fallback: "Email do professor..." })}
+                    className="flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-green-500 focus:outline-none"
+                  />
+                  <button
+                    onClick={handleSendInviteEmail}
+                    disabled={sendingEmail || !inviteEmail}
+                    className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                  >
+                    {sendingEmail ? t("sendingEmail", { fallback: "Enviando..." }) : t("sendEmail", { fallback: "Enviar" })}
                   </button>
                 </div>
               </div>
