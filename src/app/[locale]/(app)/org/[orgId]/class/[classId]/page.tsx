@@ -30,10 +30,6 @@ import { regenerateInviteCode } from "@/lib/actions/invite";
 import { getClassDashboard } from "@/lib/actions/organization";
 import { getClassRanking } from "@/lib/actions/rankings";
 import { getStudentReport, type StudentReport } from "@/lib/actions/report";
-import {
-  exportSchoolPdf,
-  type SchoolReportData,
-} from "@/lib/export-school-pdf";
 import { exportClassPdf2Pages } from "@/lib/export-class-pdf";
 import { exportStudentPdf, exportClassPdf } from "@/lib/export-student-pdf";
 import { createClient } from "@/lib/supabase/client";
@@ -181,7 +177,7 @@ export default function ClassDetailPage({
 
   const handleClassDashboardExport = async () => {
     if (!dashData || dashData.empty) return;
-    
+
     // Fallback names
     const oName = data?.classInfo?.organizations?.name || "Escola";
     const cName = data?.classInfo?.name || "Turma";
@@ -305,7 +301,7 @@ export default function ClassDetailPage({
                       </button>
                       <button
                         onClick={handleBulkExport}
-                        className="w-full rounded px-3 py-2 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)] mt-1 border-t border-[var(--color-border)] pt-2"
+                        className="mt-1 w-full rounded border-t border-[var(--color-border)] px-3 py-2 pt-2 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-bg2)]"
                       >
                         📄 {tReport("fullClass")}
                       </button>

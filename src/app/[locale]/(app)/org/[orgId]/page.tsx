@@ -1,29 +1,21 @@
 "use client";
 
 import {
-  AlertTriangle,
   ArrowLeft,
-  ArrowRight,
   BarChart3,
   BookOpen,
-  Building,
   Building2,
   Check,
-  ChevronRight,
   Copy,
   ExternalLink,
   FileDown,
   GraduationCap,
-  Link2,
-  MoreHorizontal,
   Plus,
   RefreshCw,
-  School,
   Trash2,
   Trophy,
   Users,
 } from "lucide-react";
-import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, use } from "react";
 
@@ -36,11 +28,11 @@ import { CreateClassesBatchModal } from "@/components/org/create-class-batch-mod
 import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
+import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { Link, useRouter } from "@/i18n/routing";
 import {
   getDirectorDashboard,
   getSecretaryDashboard,
-  getTeacherDashboard,
 } from "@/lib/actions/dashboard";
 import {
   generateInviteCode,
@@ -96,7 +88,7 @@ export default function OrgDetailPage({
   const [codeLoading, setCodeLoading] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [sendingEmail, setSendingEmail] = useState(false);
-  
+
   // Create child org modal state
   const [showCreateSchool, setShowCreateSchool] = useState(false);
   const [newSchoolName, setNewSchoolName] = useState("");
@@ -195,7 +187,7 @@ export default function OrgDetailPage({
       email: inviteEmail,
       code: teacherCode.code,
       orgName: data.org.name || "Axiom",
-      senderName: "Equipe" // Could be fetched but we use dummy or localized text
+      senderName: "Equipe", // Could be fetched but we use dummy or localized text
     });
     setSendingEmail(false);
     if ("success" in result) {
@@ -453,12 +445,14 @@ export default function OrgDetailPage({
                 </div>
 
                 {/* Send by email */}
-                <div className="mt-4 flex items-center gap-2 max-w-sm">
+                <div className="mt-4 flex max-w-sm items-center gap-2">
                   <input
                     type="email"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder={t("inviteEmailPlaceholder", { fallback: "Email do professor..." })}
+                    placeholder={t("inviteEmailPlaceholder", {
+                      fallback: "Email do professor...",
+                    })}
                     className="flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg1)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-green-500 focus:outline-none"
                   />
                   <button
@@ -466,7 +460,9 @@ export default function OrgDetailPage({
                     disabled={sendingEmail || !inviteEmail}
                     className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                   >
-                    {sendingEmail ? t("sendingEmail", { fallback: "Enviando..." }) : t("sendEmail", { fallback: "Enviar" })}
+                    {sendingEmail
+                      ? t("sendingEmail", { fallback: "Enviando..." })
+                      : t("sendEmail", { fallback: "Enviar" })}
                   </button>
                 </div>
               </div>

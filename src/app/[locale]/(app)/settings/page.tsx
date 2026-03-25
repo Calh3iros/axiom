@@ -24,8 +24,8 @@ import { useState, useEffect } from "react";
 
 import { BadgeGrid } from "@/components/shared/badge-grid";
 import { Link } from "@/i18n/routing";
-import { toggleProfilePublic } from "@/lib/actions/profile";
 import { getUserActivePlan } from "@/lib/actions/plan";
+import { toggleProfilePublic } from "@/lib/actions/profile";
 import { createClient } from "@/lib/supabase/client";
 
 type Profile = {
@@ -158,7 +158,10 @@ export default function SettingsPage() {
 
   const isEmailProvider = user?.app_metadata?.provider === "email";
   const displayName =
-    profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+    profile?.full_name ||
+    user?.user_metadata?.full_name ||
+    user?.email?.split("@")[0] ||
+    "User";
   const avatarUrl = user?.user_metadata?.avatar_url;
 
   const handleSaveName = async () => {
@@ -170,7 +173,7 @@ export default function SettingsPage() {
     await (supabase.from("profiles") as any)
       .update({ full_name: trimmed })
       .eq("id", user?.id);
-    setProfile((prev) => prev ? { ...prev, full_name: trimmed } : prev);
+    setProfile((prev) => (prev ? { ...prev, full_name: trimmed } : prev));
     setNameEditing(false);
     setNameSaving(false);
     setNameSuccess(true);
@@ -284,11 +287,18 @@ export default function SettingsPage() {
                 disabled={nameSaving || editName.trim().length < 2}
                 className="flex items-center gap-2 rounded-xl bg-[var(--color-ax-blue)] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-orange-500 disabled:opacity-50"
               >
-                {nameSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                {nameSaving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Check className="h-4 w-4" />
+                )}
                 {t("save")}
               </button>
               <button
-                onClick={() => { setNameEditing(false); setEditName(profile?.full_name || displayName); }}
+                onClick={() => {
+                  setNameEditing(false);
+                  setEditName(profile?.full_name || displayName);
+                }}
                 className="rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg2)]"
               >
                 {t("cancelEdit")}
@@ -353,7 +363,7 @@ export default function SettingsPage() {
             className={`relative h-6 w-11 rounded-full transition-colors ${
               profile?.is_profile_public
                 ? "bg-[var(--color-ax-blue)]"
-                : "bg-[var(--color-bg2)] border border-[var(--color-border)]"
+                : "border border-[var(--color-border)] bg-[var(--color-bg2)]"
             }`}
           >
             <span

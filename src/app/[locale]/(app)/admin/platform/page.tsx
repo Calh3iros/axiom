@@ -10,8 +10,6 @@ import {
   Plus,
   Copy,
   Check,
-  X,
-  ExternalLink,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
@@ -33,13 +31,13 @@ import {
 } from "recharts";
 
 import { Link } from "@/i18n/routing";
-import { CreateOrgModal } from "./create-org-modal";
 import {
   getAdminPlatformStats,
   getDemoOrgId,
-  createOrganizationDirect,
   getAdminOrgList,
 } from "@/lib/actions/admin";
+
+import { CreateOrgModal } from "./create-org-modal";
 
 type Stats = Awaited<ReturnType<typeof getAdminPlatformStats>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,12 +57,37 @@ function OrgTable({
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const getTypeBadge = (type: string) => {
-    switch(type) {
-      case 'private_school': return <span className="inline-flex items-center px-2 py-1 rounded bg-[#64748b]/20 text-[#cbd5e1] text-xs font-medium">Particular</span>;
-      case 'private_network': return <span className="inline-flex items-center px-2 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-medium">Rede Particular</span>;
-      case 'public_municipal': return <span className="inline-flex items-center px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-medium">Municipal</span>;
-      case 'public_state': return <span className="inline-flex items-center px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-medium">Estadual</span>;
-      default: return <span className="inline-flex items-center px-2 py-1 rounded bg-[#64748b]/20 text-[#cbd5e1] text-xs font-medium uppercase">{type}</span>;
+    switch (type) {
+      case "private_school":
+        return (
+          <span className="inline-flex items-center rounded bg-[#64748b]/20 px-2 py-1 text-xs font-medium text-[#cbd5e1]">
+            Particular
+          </span>
+        );
+      case "private_network":
+        return (
+          <span className="inline-flex items-center rounded bg-orange-500/20 px-2 py-1 text-xs font-medium text-orange-400">
+            Rede Particular
+          </span>
+        );
+      case "public_municipal":
+        return (
+          <span className="inline-flex items-center rounded bg-blue-500/20 px-2 py-1 text-xs font-medium text-blue-400">
+            Municipal
+          </span>
+        );
+      case "public_state":
+        return (
+          <span className="inline-flex items-center rounded bg-purple-500/20 px-2 py-1 text-xs font-medium text-purple-400">
+            Estadual
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center rounded bg-[#64748b]/20 px-2 py-1 text-xs font-medium text-[#cbd5e1] uppercase">
+            {type}
+          </span>
+        );
     }
   };
 
@@ -96,11 +119,11 @@ function OrgTable({
                   {org.name}
                 </Link>
               </td>
+              <td className="px-4 py-3">{getTypeBadge(org.type)}</td>
               <td className="px-4 py-3">
-                {getTypeBadge(org.type)}
-              </td>
-              <td className="px-4 py-3">
-                <span className={`inline-flex items-center px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${org.status === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                <span
+                  className={`inline-flex items-center rounded px-2 py-1 text-[10px] font-bold tracking-wider uppercase ${org.status === "active" ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}`}
+                >
                   {org.status}
                 </span>
               </td>
@@ -133,7 +156,15 @@ function OrgTable({
                 {org.membersCount || 0}
               </td>
               <td className="px-4 py-3 text-center text-[#94a3b8]">
-                {['private_network', 'public_municipal', 'public_state', 'network', 'state'].includes(org.type) ? (org.schoolsCount || 0) : '—'}
+                {[
+                  "private_network",
+                  "public_municipal",
+                  "public_state",
+                  "network",
+                  "state",
+                ].includes(org.type)
+                  ? org.schoolsCount || 0
+                  : "—"}
               </td>
               <td className="px-4 py-3 text-right text-xs text-[#64748b]">
                 {new Date(org.created_at).toLocaleDateString()}
@@ -154,7 +185,6 @@ export default function AdminPlatformPage() {
   const [orgs, setOrgs] = useState<OrgRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  
 
   useEffect(() => {
     Promise.all([getAdminPlatformStats(), getDemoOrgId(), getAdminOrgList()])
@@ -449,8 +479,6 @@ export default function AdminPlatformPage() {
         onCreated={handleCreated}
         t={t}
       />
-
-      
 
       <style>{`
         .admin-page-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: #f1f5f9; }

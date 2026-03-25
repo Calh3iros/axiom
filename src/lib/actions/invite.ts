@@ -30,7 +30,7 @@ export async function joinByInviteCode(code: string) {
   if (!cls) return { error: "Invalid invite code" };
 
   // Check if already in class
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: existing } = await (
     supabaseAdmin.from("class_memberships") as any
   )
@@ -91,7 +91,7 @@ export async function joinByInviteCode(code: string) {
   }
 
   // ─── Auto-join org as student (if not already member) ───────────
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: orgMember } = await (
     supabaseAdmin.from("org_memberships") as any
   )
@@ -110,7 +110,7 @@ export async function joinByInviteCode(code: string) {
   }
 
   // Join class
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { error } = await (
     supabaseAdmin.from("class_memberships") as any
   ).insert({

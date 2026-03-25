@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { HelpCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { createClient } from "@/lib/supabase/client";
-import { HelpGuide } from "./help-guide";
 import { ROLE_HIERARCHY } from "@/types/roles";
+
+import { HelpGuide } from "./help-guide";
 
 export function HelpFab() {
   const [open, setOpen] = useState(false);
@@ -14,7 +16,9 @@ export function HelpFab() {
   useEffect(() => {
     async function loadRole() {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         setLoaded(true);
         return;
@@ -25,7 +29,7 @@ export function HelpFab() {
         .eq("user_id", user.id);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const memberships = membershipsData as any[] | null;
-      
+
       let highestRole = "student";
       if (memberships && memberships.length > 0) {
         let highest = -1;
@@ -49,10 +53,14 @@ export function HelpFab() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-[9900] flex h-12 w-12 items-center justify-center rounded-full bg-orange-500 text-white shadow-xl transition-transform hover:scale-105 active:scale-95 border border-white/20 print:hidden"
+        className="fixed right-6 bottom-6 z-[9900] flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-orange-500 text-white shadow-xl transition-transform hover:scale-105 active:scale-95 print:hidden"
         aria-label="Abrir guia de ajuda"
       >
-        <HelpCircle className="h-6 w-6 text-white" fill="currentColor" stroke="none" />
+        <HelpCircle
+          className="h-6 w-6 text-white"
+          fill="currentColor"
+          stroke="none"
+        />
       </button>
 
       {open && (

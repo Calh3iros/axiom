@@ -532,7 +532,6 @@ ${text}
                   Math.max(1, initialCorrect + initialIncorrect);
                 const initialMastery = initialAccuracy * 0.6 + (1 / 5) * 0.4;
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const { error: kmErr } = await (
                   supabaseAdmin.from("knowledge_map") as any
                 ).insert({
@@ -557,7 +556,7 @@ ${text}
               }
 
               // --- STEP 8: Log to challenge_log (for heatmap & stats) ---
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
               const { error: clErr } = await (
                 supabaseAdmin.from("challenge_log") as any
               ).insert({
@@ -569,7 +568,7 @@ ${text}
               if (clErr) console.error("challenge_log insert error:", clErr);
 
               // --- STEP 9: Upsert student_profiles ---
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
               const { data: sp } = await (
                 supabaseAdmin.from("student_profiles") as any
               )

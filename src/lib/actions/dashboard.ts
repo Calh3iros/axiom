@@ -347,7 +347,8 @@ export async function getTeacherDashboard(
     .map((p: any) => {
       const sp = spMap.get(p.id) || { solved: 0, correct: 0 };
       const km = kmData.find((k: any) => k.user_id === p.id);
-      const acc = sp.solved > 0 ? Math.round((sp.correct / sp.solved) * 100) : 0;
+      const acc =
+        sp.solved > 0 ? Math.round((sp.correct / sp.solved) * 100) : 0;
       const pct = km?.mastery_pct || 0;
       const level = Math.min(4, Math.floor(pct / 20));
       return {
@@ -355,7 +356,7 @@ export async function getTeacherDashboard(
         solved: sp.solved,
         accuracy: acc,
         streak: p.current_streak || 0,
-        level: level
+        level: level,
       };
     })
     .sort((a: any, b: any) => b.solved - a.solved || b.accuracy - a.accuracy)
@@ -638,7 +639,7 @@ export async function getSecretaryDashboard(
     return { empty: true, schoolCount: 0 };
 
   // ─── Batch: memberships for ALL child orgs ───────────────────────
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: allMemberships } = await (
     supabaseAdmin.from("org_memberships") as any
   )

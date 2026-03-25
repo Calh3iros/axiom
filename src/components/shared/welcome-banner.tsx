@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+
 import { HelpGuide } from "./help-guide";
 
-export function WelcomeBanner({ orgId, role }: { orgId: string; role: string }) {
+export function WelcomeBanner({
+  orgId,
+  role,
+}: {
+  orgId: string;
+  role: string;
+}) {
   const t = useTranslations("Help");
   const [show, setShow] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
@@ -25,12 +32,43 @@ export function WelcomeBanner({ orgId, role }: { orgId: string; role: string }) 
   if (!show) return null;
 
   const content: Record<string, { msg: string; btn: string }> = {
-    owner: { msg: t("owner.banner", { fallback: "Comece criando as escolas da sua rede →" }), btn: t("seeGuide", { fallback: "Ver Guia" }) },
-    secretary: { msg: t("owner.banner", { fallback: "Comece criando as escolas da sua rede →" }), btn: t("seeGuide", { fallback: "Ver Guia" }) },
-    director: { msg: t("director.banner", { fallback: "Bem-vindo! Veja como configurar sua escola em 15 minutos →" }), btn: t("seeGuide", { fallback: "Ver Guia" }) },
-    admin: { msg: t("director.banner", { fallback: "Bem-vindo! Veja como configurar sua escola em 15 minutos →" }), btn: t("seeGuide", { fallback: "Ver Guia" }) },
-    coordinator: { msg: t("coordinator.banner", { fallback: "Você é coordenador! Veja o que pode fazer →" }), btn: t("seeGuide", { fallback: "Ver Guia" }) },
-    teacher: { msg: t("teacher.banner", { fallback: "Pronto! Agora compartilhe o código da turma com seus alunos →" }), btn: t("seeHow", { fallback: "Ver como" }) }
+    owner: {
+      msg: t("owner.banner", {
+        fallback: "Comece criando as escolas da sua rede →",
+      }),
+      btn: t("seeGuide", { fallback: "Ver Guia" }),
+    },
+    secretary: {
+      msg: t("owner.banner", {
+        fallback: "Comece criando as escolas da sua rede →",
+      }),
+      btn: t("seeGuide", { fallback: "Ver Guia" }),
+    },
+    director: {
+      msg: t("director.banner", {
+        fallback: "Bem-vindo! Veja como configurar sua escola em 15 minutos →",
+      }),
+      btn: t("seeGuide", { fallback: "Ver Guia" }),
+    },
+    admin: {
+      msg: t("director.banner", {
+        fallback: "Bem-vindo! Veja como configurar sua escola em 15 minutos →",
+      }),
+      btn: t("seeGuide", { fallback: "Ver Guia" }),
+    },
+    coordinator: {
+      msg: t("coordinator.banner", {
+        fallback: "Você é coordenador! Veja o que pode fazer →",
+      }),
+      btn: t("seeGuide", { fallback: "Ver Guia" }),
+    },
+    teacher: {
+      msg: t("teacher.banner", {
+        fallback:
+          "Pronto! Agora compartilhe o código da turma com seus alunos →",
+      }),
+      btn: t("seeHow", { fallback: "Ver como" }),
+    },
   };
 
   const text = content[role];
@@ -39,9 +77,7 @@ export function WelcomeBanner({ orgId, role }: { orgId: string; role: string }) 
   return (
     <>
       <div className="mb-6 flex w-full items-center justify-between rounded-xl bg-orange-500 p-4 text-white shadow-lg print:hidden">
-        <p className="font-semibold text-sm sm:text-base">
-          ✨ {text.msg}
-        </p>
+        <p className="text-sm font-semibold sm:text-base">✨ {text.msg}</p>
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowGuide(true)}
@@ -49,7 +85,10 @@ export function WelcomeBanner({ orgId, role }: { orgId: string; role: string }) 
           >
             {text.btn}
           </button>
-          <button onClick={handleDismiss} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+          <button
+            onClick={handleDismiss}
+            className="rounded-full p-1 transition-colors hover:bg-white/20"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>

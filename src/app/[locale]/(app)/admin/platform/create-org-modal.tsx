@@ -1,9 +1,9 @@
 "use client";
 
+import { Building2, Check, Copy, ExternalLink, Users, X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Building2, Users, Copy, Check, X, ExternalLink } from "lucide-react";
+
 import { createOrganizationDirect } from "@/lib/actions/admin";
-import type { useTranslations } from "next-intl";
 
 export function CreateOrgModal({
   open,
@@ -18,7 +18,9 @@ export function CreateOrgModal({
   t: any;
 }) {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [category, setCategory] = useState<"particular" | "publica" | null>(null);
+  const [category, setCategory] = useState<"particular" | "publica" | null>(
+    null
+  );
   const [type, setType] = useState<string | null>(null);
 
   const [name, setName] = useState("");
@@ -29,7 +31,9 @@ export function CreateOrgModal({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<{ orgId: string; code: string } | null>(null);
+  const [result, setResult] = useState<{ orgId: string; code: string } | null>(
+    null
+  );
 
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -96,7 +100,9 @@ export function CreateOrgModal({
         >
           <Building2 className="mb-3 h-8 w-8 text-indigo-400 transition-transform group-hover:scale-110" />
           <h3 className="font-bold text-white">{t("createOrg.particular")}</h3>
-          <p className="mt-1 text-center text-xs text-[#94a3b8]">{t("createOrg.particularDesc")}</p>
+          <p className="mt-1 text-center text-xs text-[#94a3b8]">
+            {t("createOrg.particularDesc")}
+          </p>
         </button>
         <button
           onClick={() => handleCategorySelect("publica")}
@@ -104,7 +110,9 @@ export function CreateOrgModal({
         >
           <Users className="mb-3 h-8 w-8 text-emerald-400 transition-transform group-hover:scale-110" />
           <h3 className="font-bold text-white">{t("createOrg.publica")}</h3>
-          <p className="mt-1 text-center text-xs text-[#94a3b8]">{t("createOrg.publicaDesc")}</p>
+          <p className="mt-1 text-center text-xs text-[#94a3b8]">
+            {t("createOrg.publicaDesc")}
+          </p>
         </button>
       </div>
     </div>
@@ -119,9 +127,13 @@ export function CreateOrgModal({
               onClick={() => handleTypeSelect("private_school", 500)}
               className="group flex h-32 flex-col items-center justify-center rounded-xl border border-[#2a2a3e] bg-[#0a0a12] p-5 transition-all hover:border-indigo-500 hover:bg-[#12121e]"
             >
-              <h3 className="text-sm font-bold tracking-wide text-white">{t("createOrg.singleSchool")}</h3>
-              <p className="mt-1 text-center text-xs text-[#94a3b8]">{t("createOrg.singleSchoolDesc")}</p>
-              <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] py-1 px-3 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
+              <h3 className="text-sm font-bold tracking-wide text-white">
+                {t("createOrg.singleSchool")}
+              </h3>
+              <p className="mt-1 text-center text-xs text-[#94a3b8]">
+                {t("createOrg.singleSchoolDesc")}
+              </p>
+              <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
                 GERA: DIR
               </div>
             </button>
@@ -129,9 +141,13 @@ export function CreateOrgModal({
               onClick={() => handleTypeSelect("private_network", 5000)}
               className="group flex h-32 flex-col items-center justify-center rounded-xl border border-[#2a2a3e] bg-[#0a0a12] p-5 transition-all hover:border-indigo-500 hover:bg-[#12121e]"
             >
-              <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("createOrg.network")}</h3>
-              <p className="mt-1 text-center text-xs text-[#94a3b8]">{t("createOrg.networkDesc")}</p>
-              <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] py-1 px-3 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
+              <h3 className="text-sm font-bold tracking-wide text-white uppercase">
+                {t("createOrg.network")}
+              </h3>
+              <p className="mt-1 text-center text-xs text-[#94a3b8]">
+                {t("createOrg.networkDesc")}
+              </p>
+              <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
                 GERA: OWN
               </div>
             </button>
@@ -146,9 +162,13 @@ export function CreateOrgModal({
             onClick={() => handleTypeSelect("public_municipal", 20000)}
             className="group flex h-32 flex-col items-center justify-center rounded-xl border border-[#2a2a3e] bg-[#0a0a12] p-5 transition-all hover:border-emerald-500 hover:bg-[#12121e]"
           >
-            <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("createOrg.municipal")}</h3>
-            <p className="mt-1 text-center text-xs text-[#94a3b8]">{t("createOrg.municipalDesc")}</p>
-            <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] py-1 px-3 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
+            <h3 className="text-sm font-bold tracking-wide text-white uppercase">
+              {t("createOrg.municipal")}
+            </h3>
+            <p className="mt-1 text-center text-xs text-[#94a3b8]">
+              {t("createOrg.municipalDesc")}
+            </p>
+            <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
               GERA: SEC
             </div>
           </button>
@@ -156,9 +176,13 @@ export function CreateOrgModal({
             onClick={() => handleTypeSelect("public_state", 500000)}
             className="group flex h-32 flex-col items-center justify-center rounded-xl border border-[#2a2a3e] bg-[#0a0a12] p-5 transition-all hover:border-purple-500 hover:bg-[#12121e]"
           >
-            <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("createOrg.state")}</h3>
-            <p className="mt-1 text-center text-xs text-[#94a3b8]">{t("createOrg.stateDesc")}</p>
-            <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] py-1 px-3 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
+            <h3 className="text-sm font-bold tracking-wide text-white uppercase">
+              {t("createOrg.state")}
+            </h3>
+            <p className="mt-1 text-center text-xs text-[#94a3b8]">
+              {t("createOrg.stateDesc")}
+            </p>
+            <div className="mt-3 rounded-full border border-[#2a2a3e] bg-[#1e1e2e] px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-[#f59e0b]">
               GERA: SEC
             </div>
           </button>
@@ -177,7 +201,9 @@ export function CreateOrgModal({
     return (
       <div className="space-y-4">
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#94a3b8]">{t("createOrg.name")}</label>
+          <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+            {t("createOrg.name")}
+          </label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -188,7 +214,9 @@ export function CreateOrgModal({
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">{t("createOrg.maxStudents")}</label>
+            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+              {t("createOrg.maxStudents")}
+            </label>
             <input
               type="number"
               value={maxStudents}
@@ -197,7 +225,9 @@ export function CreateOrgModal({
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">{t("createOrg.expiresAt")}</label>
+            <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+              {t("createOrg.expiresAt")}
+            </label>
             <input
               type="date"
               value={expiresAt}
@@ -207,7 +237,9 @@ export function CreateOrgModal({
           </div>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#94a3b8]">{t("createOrg.notes")}</label>
+          <label className="mb-1 block text-xs font-medium text-[#94a3b8]">
+            {t("createOrg.notes")}
+          </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -219,17 +251,30 @@ export function CreateOrgModal({
 
         <div className="mt-4 space-y-1 rounded-xl border border-[#2a2a3e] bg-[#1e1e2e]/50 p-4 text-xs text-[#cbd5e1]">
           <p>
-            <span className="mr-1 font-medium text-[#94a3b8]">{t("createOrg.summary")} Tipo:</span> {typeName}
+            <span className="mr-1 font-medium text-[#94a3b8]">
+              {t("createOrg.summary")} Tipo:
+            </span>{" "}
+            {typeName}
           </p>
           <p>
-            <span className="mr-1 font-medium text-[#94a3b8]">{t("createOrg.summary")} Nome:</span> {name || "..."}
+            <span className="mr-1 font-medium text-[#94a3b8]">
+              {t("createOrg.summary")} Nome:
+            </span>{" "}
+            {name || "..."}
           </p>
           <p>
-            <span className="mr-1 font-medium text-[#94a3b8]">{t("createOrg.maxStudents")}:</span> {maxStudents.toLocaleString()}
+            <span className="mr-1 font-medium text-[#94a3b8]">
+              {t("createOrg.maxStudents")}:
+            </span>{" "}
+            {maxStudents.toLocaleString()}
           </p>
         </div>
 
-        {error && <div className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">{error}</div>}
+        {error && (
+          <div className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">
+            {error}
+          </div>
+        )}
 
         <button
           onClick={handleCreate}
@@ -245,9 +290,12 @@ export function CreateOrgModal({
   const renderStep4 = () => {
     if (!result) return null;
     let helpText = "";
-    if (type === "private_school") helpText = t("createOrg.sendTo.privateSchool");
-    if (type === "private_network") helpText = t("createOrg.sendTo.privateNetwork");
-    if (type === "public_municipal") helpText = t("createOrg.sendTo.publicMunicipal");
+    if (type === "private_school")
+      helpText = t("createOrg.sendTo.privateSchool");
+    if (type === "private_network")
+      helpText = t("createOrg.sendTo.privateNetwork");
+    if (type === "public_municipal")
+      helpText = t("createOrg.sendTo.publicMunicipal");
     if (type === "public_state") helpText = t("createOrg.sendTo.publicState");
 
     const link = `https://axiom-solver.com/pt/join?code=${result.code}`;
@@ -255,10 +303,14 @@ export function CreateOrgModal({
     return (
       <div className="py-4 text-center">
         <Check className="mx-auto mb-4 h-12 w-12 text-green-400" />
-        <h2 className="mb-2 text-xl font-bold text-white">{t("createOrg.successTitle")}</h2>
+        <h2 className="mb-2 text-xl font-bold text-white">
+          {t("createOrg.successTitle")}
+        </h2>
 
         <div className="my-6 rounded-xl border border-[#2a2a3e] bg-[#0a0a12] p-5 shadow-inner">
-          <p className="font-mono text-3xl font-black tracking-[0.2em] text-[#f59e0b]">{result.code}</p>
+          <p className="font-mono text-3xl font-black tracking-[0.2em] text-[#f59e0b]">
+            {result.code}
+          </p>
         </div>
 
         <p className="mb-6 text-sm text-[#94a3b8]">{helpText}</p>
@@ -272,7 +324,11 @@ export function CreateOrgModal({
             }}
             className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#1e1e2e] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#2a2a3e]"
           >
-            {copiedCode ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+            {copiedCode ? (
+              <Check className="h-4 w-4 text-green-400" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
             {t("createOrg.copyCode")}
           </button>
           <button
@@ -283,7 +339,11 @@ export function CreateOrgModal({
             }}
             className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#1e1e2e] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#2a2a3e]"
           >
-            {copiedLink ? <Check className="h-4 w-4 text-green-400" /> : <ExternalLink className="h-4 w-4" />}
+            {copiedLink ? (
+              <Check className="h-4 w-4 text-green-400" />
+            ) : (
+              <ExternalLink className="h-4 w-4" />
+            )}
             {t("createOrg.copyLink")}
           </button>
         </div>
@@ -309,7 +369,10 @@ export function CreateOrgModal({
         {step < 4 && (
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-lg font-bold text-white">{title}</h2>
-            <button onClick={onClose} className="transition-colors text-[#64748b] hover:text-white">
+            <button
+              onClick={onClose}
+              className="text-[#64748b] transition-colors hover:text-white"
+            >
               <X className="h-5 w-5" />
             </button>
           </div>

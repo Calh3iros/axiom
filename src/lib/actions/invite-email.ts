@@ -1,8 +1,8 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
 import { inviteEmailHtml } from "@/lib/email-templates";
+import { createClient } from "@/lib/supabase/server";
 
 export async function sendInviteEmail(input: {
   email: string;
@@ -31,7 +31,12 @@ export async function sendInviteEmail(input: {
     await sendEmail({
       to: input.email,
       subject: `Convite para o Axiom — ${input.orgName}`,
-      html: inviteEmailHtml(input.orgName, input.code, inviteLink, input.senderName),
+      html: inviteEmailHtml(
+        input.orgName,
+        input.code,
+        inviteLink,
+        input.senderName
+      ),
     });
 
     return { success: true };

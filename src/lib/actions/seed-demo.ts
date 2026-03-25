@@ -284,7 +284,7 @@ export async function seedDemoData(): Promise<{
     const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
 
     // 1. Create org (1 insert)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const { data: org, error: orgErr } = await (
       supabaseAdmin.from("organizations") as any
     )
@@ -657,7 +657,6 @@ export async function removeDemoData(): Promise<{
       .single();
     if (!org) return { success: false, message: "No demo data found." };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: members } = await (
       supabaseAdmin.from("org_memberships") as any
     )

@@ -204,7 +204,7 @@ export async function redeemInviteCode(input: {
     return { error: "Organização suspensa." };
 
   // Check if user already a member
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: existingMember } = await (
     supabaseAdmin.from("org_memberships") as any
   )
@@ -235,7 +235,7 @@ export async function redeemInviteCode(input: {
   }
 
   // Create membership
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { error: memberError } = await (
     supabaseAdmin.from("org_memberships") as any
   ).insert({
