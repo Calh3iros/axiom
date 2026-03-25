@@ -98,8 +98,18 @@ export async function POST(req: Request) {
     // Build adaptive MBLID prompt with student context
     const mblidCtx = { studentProfile, topicHistory };
     let systemInstruction: string;
+
+    const isEnemTrainer = messages.some((m: any) =>
+      m.content?.toLowerCase().includes("redação enem") || m.content?.toLowerCase().includes("enem essay")
+    );
+
     if (type === "learn") {
-      systemInstruction = buildLearnMblidPrompt(mblidCtx);
+      if (isEnemTrainer) {
+        const { buildEnemTutorPrompt } = await import("@/lib/ai/prompts/enem");
+        systemInstruction = buildEnemTutorPrompt(mblidCtx);
+      } else {
+        systemInstruction = buildLearnMblidPrompt(mblidCtx);
+      }
     } else if (mode === "socratic") {
       systemInstruction = buildSocraticPrompt(mblidCtx);
     } else if (mode === "verify") {
