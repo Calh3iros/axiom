@@ -70,7 +70,7 @@ export default function SettingsPage() {
           )
           .eq("id", user.id)
           .single()) as { data: Profile | null };
-        const activePlan = await getUserActivePlan();
+        const activePlan = await getUserActivePlan(user.id);
         if (data) {
           data.plan = activePlan as "free" | "pro" | "elite";
         }

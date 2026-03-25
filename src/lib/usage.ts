@@ -123,18 +123,23 @@ const MONTHLY_KEY: Record<UsageType, keyof MonthlyCap | null> = {
  * Get the authenticated user and their plan from Supabase.
  * Enforces dynamic 'elite' status for users belonging to active organizations.
  */
-export async function getUserAndPlan(req?: Request): Promise<UserInfo> {
+export async function getUserAndPlan(req?: Request, explicitUserId?: string): Promise<UserInfo> {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    let resolvedUserId = explicitUserId;
 
-    if (user) {
-      const { data: profile } = (await supabase
+    if (!resolvedUserId) {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      resolvedUserId = user?.id;
+    }
+
+    if (resolvedUserId) {
+      const { data: profile } = (await supabaseAdmin
         .from('profiles')
         .select('plan')
-        .eq('id', user.id)
+        .eq('id', resolvedUserId)
         .single()) as { data: { plan: string } | null };
 
       let plan = normalisePlan(profile?.plan);
@@ -144,7 +149,7 @@ export async function getUserAndPlan(req?: Request): Promise<UserInfo> {
         const { data: memberships } = await supabaseAdmin
           .from('org_memberships')
           .select('org_id')
-          .eq('user_id', user.id);
+          .eq('user_id', resolvedUserId);
 
         if (memberships && memberships.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -170,9 +175,10 @@ export async function getUserAndPlan(req?: Request): Promise<UserInfo> {
         }
       }
 
-      return { userId: user.id, plan };
+      return { userId: resolvedUserId, plan };
     }
-  } catch {
+  } catch (error) {
+    console.error('getUserAndPlan error:', error);
     // Fall through to anonymous
   }
 
