@@ -121,9 +121,9 @@ const MONTHLY_KEY: Record<UsageType, keyof MonthlyCap | null> = {
 
 /**
  * Get the authenticated user and their plan from Supabase.
- * Falls back to anonymous IP-based tracking for non-logged-in users.
+ * Enforces dynamic 'elite' status for users belonging to active organizations.
  */
-export async function getUserAndPlan(req: Request): Promise<UserInfo> {
+export async function getUserAndPlan(req?: Request): Promise<UserInfo> {
   try {
     const supabase = await createClient();
     const {
@@ -137,7 +137,38 @@ export async function getUserAndPlan(req: Request): Promise<UserInfo> {
         .eq('id', user.id)
         .single()) as { data: { plan: string } | null };
 
-      const plan = normalisePlan(profile?.plan);
+      let plan = normalisePlan(profile?.plan);
+
+      // --- Elite Institutional By-pass ---
+      if (plan !== 'elite') {
+        const { data: memberships } = await supabaseAdmin
+          .from('org_memberships')
+          .select('org_id')
+          .eq('user_id', user.id);
+
+        if (memberships && memberships.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const orgIds = (memberships as any[]).map((m) => m.org_id);
+          const { data: orgs } = await supabaseAdmin
+            .from('organizations')
+            .select('status, access_expires_at')
+            .in('id', orgIds)
+            .eq('status', 'active');
+
+          if (
+            orgs &&
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (orgs as any[]).some((org) => {
+              if (org.access_expires_at) {
+                return new Date(org.access_expires_at) > new Date();
+              }
+              return true; // no expiration date
+            })
+          ) {
+            plan = 'elite';
+          }
+        }
+      }
 
       return { userId: user.id, plan };
     }
@@ -145,8 +176,10 @@ export async function getUserAndPlan(req: Request): Promise<UserInfo> {
     // Fall through to anonymous
   }
 
+  const ip = req ? getUserIdFromRequest(req) : 'anon:unknown';
+
   return {
-    userId: getUserIdFromRequest(req),
+    userId: ip,
     plan: 'free',
   };
 }

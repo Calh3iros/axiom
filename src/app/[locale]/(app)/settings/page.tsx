@@ -25,6 +25,7 @@ import { useState, useEffect } from "react";
 import { BadgeGrid } from "@/components/shared/badge-grid";
 import { Link } from "@/i18n/routing";
 import { toggleProfilePublic } from "@/lib/actions/profile";
+import { getUserActivePlan } from "@/lib/actions/plan";
 import { createClient } from "@/lib/supabase/client";
 
 type Profile = {
@@ -69,6 +70,10 @@ export default function SettingsPage() {
           )
           .eq("id", user.id)
           .single()) as { data: Profile | null };
+        const activePlan = await getUserActivePlan();
+        if (data) {
+          data.plan = activePlan as "free" | "pro" | "elite";
+        }
         setProfile(data);
         if (data?.full_name) setEditName(data.full_name);
       }
