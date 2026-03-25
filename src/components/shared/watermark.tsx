@@ -4,6 +4,7 @@ import { Crown } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Link } from "@/i18n/routing";
+import { getUserActivePlan } from "@/lib/actions/plan";
 import { createClient } from "@/lib/supabase/client";
 
 /**
@@ -36,7 +37,8 @@ export function Watermark() {
           .eq("id", user.id)
           .single()) as { data: { plan: string } | null };
 
-        const plan = (profile as { plan?: string } | null)?.plan ?? "free";
+        const dynamicPlan = await getUserActivePlan(user.id);
+        const plan = dynamicPlan ?? (profile as { plan?: string } | null)?.plan ?? "free";
         if (!cancelled && (plan === "free" || !plan)) {
           setShow(true);
         }

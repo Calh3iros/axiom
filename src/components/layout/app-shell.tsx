@@ -23,6 +23,7 @@ import { useState, useEffect, useCallback } from "react";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { OnboardingModal } from "@/components/shared/onboarding-modal";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { getUserActivePlan } from "@/lib/actions/plan";
 import { createClient } from "@/lib/supabase/client";
 // PlanType mirrors usage.ts but we can't import PLANS (it pulls in supabaseAdmin)
 type PlanType = "free" | "pro" | "elite";
@@ -67,10 +68,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       .single()) as {
       data: { plan: string; current_streak: number | null } | null;
     };
-    if (profile?.plan) {
+    if (profile) {
+      // Allow the server to calculate the B2B Elite bypass dynamically
+      const activePlanRaw = await getUserActivePlan(userId);
       const p = (
-        ["free", "pro", "elite"].includes(profile.plan) ? profile.plan : "free"
+        ["free", "pro", "elite"].includes(activePlanRaw) ? activePlanRaw : "free"
       ) as PlanType;
+      
       setPlan(p);
       const dailySolves = DAILY_SOLVES[p];
       setSolvesRemaining(dailySolves === Infinity ? Infinity : dailySolves);
