@@ -71,10 +71,16 @@ export default function SettingsPage() {
           .eq("id", user.id)
           .single()) as { data: Profile | null };
         const activePlan = await getUserActivePlan(user.id);
-        if (data) {
-          data.plan = activePlan as "free" | "pro" | "elite";
-        }
-        setProfile(data);
+        console.log("[SettingsClient] activePlan received:", activePlan);
+        
+        setProfile((current) => {
+          const base = data || current;
+          if (!base) return null;
+          return {
+            ...base,
+            plan: activePlan as "free" | "pro" | "elite"
+          };
+        });
         if (data?.full_name) setEditName(data.full_name);
       }
       setLoading(false);

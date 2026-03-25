@@ -146,30 +146,39 @@ export async function getUserAndPlan(req?: Request, explicitUserId?: string): Pr
 
       // --- Elite Institutional By-pass ---
       if (plan !== 'elite') {
-        const { data: memberships } = await supabaseAdmin
+        const { data: memberships, error: memErr } = await supabaseAdmin
           .from('org_memberships')
           .select('org_id')
           .eq('user_id', resolvedUserId);
 
+        console.log(`[EliteLog] User: ${resolvedUserId} | Memberships: ${memberships?.length || 0} | Err: ${memErr?.message}`);
+
         if (memberships && memberships.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const orgIds = (memberships as any[]).map((m) => m.org_id);
-          const { data: orgs } = await supabaseAdmin
+          const { data: orgs, error: orgErr } = await supabaseAdmin
             .from('organizations')
             .select('status, access_expires_at')
             .in('id', orgIds)
             .eq('status', 'active');
+
+          console.log(`[EliteLog] User: ${resolvedUserId} | Active Orgs matched: ${orgs?.length || 0} | Err: ${orgErr?.message}`);
 
           if (
             orgs &&
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (orgs as any[]).some((org) => {
               if (org.access_expires_at) {
-                return new Date(org.access_expires_at) > new Date();
+                const expires = new Date(org.access_expires_at);
+                const isValid = expires > new Date();
+                console.log(`[EliteLog] Testing Org Date: ${expires.toISOString()} > now? ${isValid}`);
+                return isValid;
               }
+              console.log(`[EliteLog] Testing Org: NO EXPERATION Date, returning true.`);
               return true; // no expiration date
             })
           ) {
+            console.log(`[EliteLog] User: ${resolvedUserId} ➞ GRANTED ELITE!`);
             plan = 'elite';
           }
         }
