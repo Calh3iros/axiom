@@ -442,31 +442,11 @@
       "headerTask": "Task",
       "headerWithout": "Without",
       "headerAxiom": "With Axiom",
-      "row1": [
-        "Solve 1 problem",
-        "30 – 60 min",
-        "5 seconds"
-      ],
-      "row2": [
-        "Write 1,000-word essay",
-        "3 – 5 hours",
-        "15 minutes"
-      ],
-      "row3": [
-        "Build study plan",
-        "1 – 2 hours",
-        "1 click"
-      ],
-      "row4": [
-        "Humanize 2,000 words",
-        "45 min",
-        "10 seconds"
-      ],
-      "row5": [
-        "Full exam prep",
-        "6 – 10 hours",
-        "2 hours"
-      ],
+      "row1": ["Solve 1 problem", "30 – 60 min", "5 seconds"],
+      "row2": ["Write 1,000-word essay", "3 – 5 hours", "15 minutes"],
+      "row3": ["Build study plan", "1 – 2 hours", "1 click"],
+      "row4": ["Humanize 2,000 words", "45 min", "10 seconds"],
+      "row5": ["Full exam prep", "6 – 10 hours", "2 hours"],
       "footer": "Average student saves ~200 hours per semester"
     },
     "pricing": {
@@ -780,7 +760,12 @@
       "create": "Create Classes",
       "createdSuccess": "{count} classes created successfully!",
       "printCodes": "Copy Code List"
-    }
+    },
+    "inviteEmailPlaceholder": "Teacher email...",
+    "sendEmail": "Send Email",
+    "sendingEmail": "Sending...",
+    "inviteSent": "Invite sent successfully!",
+    "inviteError": "Error sending invite."
   },
   "Class": {
     "title": "Class",

@@ -442,31 +442,15 @@
       "headerTask": "Tarea",
       "headerWithout": "Sin",
       "headerAxiom": "Con Axiom",
-      "row1": [
-        "Resolver 1 problema",
-        "30 – 60 min",
-        "5 segundos"
-      ],
+      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
       "row2": [
         "Escribir ensayo de 1.000 palabras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": [
-        "Crear plan de estudio",
-        "1 – 2 horas",
-        "1 clic"
-      ],
-      "row4": [
-        "Humanizar 2.000 palabras",
-        "45 min",
-        "10 segundos"
-      ],
-      "row5": [
-        "Preparación completa para examen",
-        "6 – 10 horas",
-        "2 horas"
-      ],
+      "row3": ["Crear plan de estudio", "1 – 2 horas", "1 clic"],
+      "row4": ["Humanizar 2.000 palabras", "45 min", "10 segundos"],
+      "row5": ["Preparación completa para examen", "6 – 10 horas", "2 horas"],
       "footer": "El estudiante promedio ahorra ~200 horas por semestre"
     },
     "pricing": {
@@ -780,7 +764,12 @@
       "create": "Crear Clases",
       "createdSuccess": "¡{count} clases creadas con éxito!",
       "printCodes": "Copiar Lista de Códigos"
-    }
+    },
+    "inviteEmailPlaceholder": "Correo del profesor...",
+    "sendEmail": "Enviar",
+    "sendingEmail": "Enviando...",
+    "inviteSent": "¡Invitación enviada con éxito!",
+    "inviteError": "Error al enviar invitación."
   },
   "Class": {
     "title": "Clase",

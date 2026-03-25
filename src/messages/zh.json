@@ -442,31 +442,11 @@
       "headerTask": "任务",
       "headerWithout": "没有",
       "headerAxiom": "用Axiom",
-      "row1": [
-        "解1道题",
-        "30-60分钟",
-        "5秒"
-      ],
-      "row2": [
-        "写1000字论文",
-        "3-5小时",
-        "15分钟"
-      ],
-      "row3": [
-        "制定学习计划",
-        "1-2小时",
-        "1次点击"
-      ],
-      "row4": [
-        "人性化2000字",
-        "45分钟",
-        "10秒"
-      ],
-      "row5": [
-        "完整考试准备",
-        "6-10小时",
-        "2小时"
-      ],
+      "row1": ["解1道题", "30-60分钟", "5秒"],
+      "row2": ["写1000字论文", "3-5小时", "15分钟"],
+      "row3": ["制定学习计划", "1-2小时", "1次点击"],
+      "row4": ["人性化2000字", "45分钟", "10秒"],
+      "row5": ["完整考试准备", "6-10小时", "2小时"],
       "footer": "平均每个学生每学期节省约200小时"
     },
     "pricing": {
@@ -780,7 +760,12 @@
       "create": "Criar Turmas",
       "createdSuccess": "{count} turmas criadas com sucesso!",
       "printCodes": "Copiar Lista de Códigos"
-    }
+    },
+    "inviteEmailPlaceholder": "老师邮箱...",
+    "sendEmail": "发送",
+    "sendingEmail": "发送中...",
+    "inviteSent": "邀请发送成功！",
+    "inviteError": "发送邀请失败。"
   },
   "Class": {
     "title": "班级",

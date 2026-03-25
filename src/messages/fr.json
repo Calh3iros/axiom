@@ -442,31 +442,11 @@
       "headerTask": "Tâche",
       "headerWithout": "Sans",
       "headerAxiom": "Avec Axiom",
-      "row1": [
-        "Résoudre 1 problème",
-        "30 – 60 min",
-        "5 secondes"
-      ],
-      "row2": [
-        "Écrire un essai de 1 000 mots",
-        "3 – 5 heures",
-        "15 minutes"
-      ],
-      "row3": [
-        "Créer un plan d'étude",
-        "1 – 2 heures",
-        "1 clic"
-      ],
-      "row4": [
-        "Humaniser 2 000 mots",
-        "45 min",
-        "10 secondes"
-      ],
-      "row5": [
-        "Préparation complète exam",
-        "6 – 10 heures",
-        "2 heures"
-      ],
+      "row1": ["Résoudre 1 problème", "30 – 60 min", "5 secondes"],
+      "row2": ["Écrire un essai de 1 000 mots", "3 – 5 heures", "15 minutes"],
+      "row3": ["Créer un plan d'étude", "1 – 2 heures", "1 clic"],
+      "row4": ["Humaniser 2 000 mots", "45 min", "10 secondes"],
+      "row5": ["Préparation complète exam", "6 – 10 heures", "2 heures"],
       "footer": "L'étudiant moyen économise ~200 heures par semestre"
     },
     "pricing": {
@@ -780,7 +760,12 @@
       "create": "Criar Turmas",
       "createdSuccess": "{count} turmas criadas com sucesso!",
       "printCodes": "Copiar Lista de Códigos"
-    }
+    },
+    "inviteEmailPlaceholder": "E-mail du professeur...",
+    "sendEmail": "Envoyer",
+    "sendingEmail": "Envoi...",
+    "inviteSent": "Invitation envoyée avec succès !",
+    "inviteError": "Erreur lors de l’envoi."
   },
   "Class": {
     "title": "Classe",
