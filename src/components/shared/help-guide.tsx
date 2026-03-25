@@ -126,14 +126,6 @@ export function HelpGuide({
         </div>
       </div>
 
-      <a
-        href="/guides/axiom-guia-diretor.pdf"
-        target="_blank"
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg2)] p-3 text-sm font-semibold text-[var(--color-text-primary)] hover:bg-[var(--color-bg3)]"
-      >
-        <Download className="h-4 w-4" />
-        {t("downloadPdf", { fallback: "Baixar Guia Completo (PDF)" })}
-      </a>
     </div>
   );
 
@@ -421,6 +413,23 @@ export function HelpGuide({
               : role === "teacher"
                 ? renderTeacherGuide()
                 : renderGenericGuide()}
+                
+        {role !== "student" && role !== "generic" && (
+          <button
+            onClick={async () => {
+              try {
+                const { exportGuidePdf } = await import("@/lib/export-guide-pdf");
+                await exportGuidePdf(role);
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg2)] p-3 text-sm font-semibold text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg3)]"
+          >
+            <Download className="h-4 w-4" />
+            {t("downloadPdf", { fallback: "Baixar Guia Completo (PDF)" })}
+          </button>
+        )}
       </div>
 
       <style>{`
