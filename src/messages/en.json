@@ -810,7 +810,14 @@
     "selectSubjects": "Select your subjects",
     "subjectsSubtitle": "Which subjects do you teach?",
     "confirmSubjects": "Confirm",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "codeOnboardingWelcome": "Welcome to Axiom!",
+    "codeOnboardingQuestion": "Did you receive a code from your school, network or education office?",
+    "codeOnboardingPaste": "Paste your code here",
+    "codeOnboardingEnter": "Enter with code",
+    "codeOnboardingNoCode": "I don't have a code",
+    "codeOnboardingIndependent": "Use Axiom as an independent student",
+    "codeOnboardingOr": "or"
   },
   "Rankings": {
     "classRanking": "Class Ranking",

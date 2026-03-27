@@ -21,6 +21,7 @@ import { useTranslations } from "next-intl";
 import posthog from "posthog-js";
 import { useState, useEffect, useCallback } from "react";
 
+import { CodeOnboardingModal } from "@/components/shared/code-onboarding-modal";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { OnboardingModal } from "@/components/shared/onboarding-modal";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
@@ -378,6 +379,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Onboarding modal — shows once for new users */}
       <OnboardingModal />
+      {/* Code onboarding — shows for users without org memberships */}
+      <CodeOnboardingModal />
     </div>
   );
 }

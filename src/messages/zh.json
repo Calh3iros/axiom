@@ -810,7 +810,14 @@
     "selectSubjects": "选择您的科目",
     "subjectsSubtitle": "您教哪些科目？",
     "confirmSubjects": "确认",
-    "error": "发生错误"
+    "error": "发生错误",
+    "codeOnboardingWelcome": "欢迎来到 Axiom！",
+    "codeOnboardingQuestion": "您是否收到了学校、教育网络或教育局的代码？",
+    "codeOnboardingPaste": "在此粘贴代码",
+    "codeOnboardingEnter": "使用代码加入",
+    "codeOnboardingNoCode": "我没有代码",
+    "codeOnboardingIndependent": "作为独立学生使用 Axiom",
+    "codeOnboardingOr": "或"
   },
   "Rankings": {
     "classRanking": "班级排名",

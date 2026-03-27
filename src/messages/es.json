@@ -814,7 +814,14 @@
     "selectSubjects": "Seleccione sus materias",
     "subjectsSubtitle": "¿Qué materias enseña?",
     "confirmSubjects": "Confirmar",
-    "error": "Ocurrió un error"
+    "error": "Ocurrió un error",
+    "codeOnboardingWelcome": "¡Bienvenido a Axiom!",
+    "codeOnboardingQuestion": "¿Recibiste un código de tu escuela, red o secretaría?",
+    "codeOnboardingPaste": "Pega tu código aquí",
+    "codeOnboardingEnter": "Entrar con código",
+    "codeOnboardingNoCode": "No tengo código",
+    "codeOnboardingIndependent": "Usar Axiom como alumno independiente",
+    "codeOnboardingOr": "o"
   },
   "Rankings": {
     "classRanking": "Ranking de la Clase",

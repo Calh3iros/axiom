@@ -810,7 +810,14 @@
     "selectSubjects": "Fächer auswählen",
     "subjectsSubtitle": "Welche Fächer unterrichten Sie?",
     "confirmSubjects": "Bestätigen",
-    "error": "Ein Fehler ist aufgetreten"
+    "error": "Ein Fehler ist aufgetreten",
+    "codeOnboardingWelcome": "Willkommen bei Axiom!",
+    "codeOnboardingQuestion": "Haben Sie einen Code von Ihrer Schule, Ihrem Netzwerk oder Sekretariat erhalten?",
+    "codeOnboardingPaste": "Code hier einfügen",
+    "codeOnboardingEnter": "Mit Code beitreten",
+    "codeOnboardingNoCode": "Ich habe keinen Code",
+    "codeOnboardingIndependent": "Axiom als unabhängiger Schüler nutzen",
+    "codeOnboardingOr": "oder"
   },
   "Rankings": {
     "classRanking": "Klassenranking",
