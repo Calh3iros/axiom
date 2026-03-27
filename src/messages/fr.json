@@ -57,7 +57,8 @@
       "pro": "PRO ✨",
       "checkoutSuccess": "Mise à niveau réussie ! Votre plan a été mis à jour.",
       "checkoutCancelled": "Paiement annulé. Aucun frais n'a été appliqué.",
-      "org": "Organisation"
+      "org": "Organisation",
+      "admin": "Admin"
     },
     "Map": {
       "title": "Votre Carte de Connaissances",
@@ -142,7 +143,9 @@
       "save": "Enregistrer",
       "cancelEdit": "Annuler",
       "nameUpdated": "Nom mis à jour avec succès !",
-      "adminDashboard": "Panneau Admin"
+      "adminDashboard": "Panneau Admin",
+      "adminDesc": "Gérer les organisations, contrats et codes d'invitation",
+      "adminPlatformLink": "Ouvrir le Panneau Admin"
     },
     "Components": {
       "input": "Entrée",

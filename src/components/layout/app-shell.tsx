@@ -14,6 +14,7 @@ import {
   LogOut,
   Target,
   Building2,
+  ShieldCheck,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -52,6 +53,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState<PlanType>("free");
   const [solvesRemaining, setSolvesRemaining] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const [checkoutToast, setCheckoutToast] = useState<
     "success" | "cancelled" | null
@@ -63,18 +65,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     const supabase = createClient();
     const { data: profile } = (await supabase
       .from("profiles")
-      .select("plan, current_streak")
+      .select("plan, current_streak, is_super_admin")
       .eq("id", userId)
       .single()) as {
-      data: { plan: string; current_streak: number | null } | null;
+      data: {
+        plan: string;
+        current_streak: number | null;
+        is_super_admin?: boolean;
+      } | null;
     };
+    if (profile?.is_super_admin) setIsSuperAdmin(true);
     if (profile) {
       // Allow the server to calculate the B2B Elite bypass dynamically
       const activePlanRaw = await getUserActivePlan(userId);
       const p = (
-        ["free", "pro", "elite"].includes(activePlanRaw) ? activePlanRaw : "free"
+        ["free", "pro", "elite"].includes(activePlanRaw)
+          ? activePlanRaw
+          : "free"
       ) as PlanType;
-      
+
       setPlan(p);
       const dailySolves = DAILY_SOLVES[p];
       setSolvesRemaining(dailySolves === Infinity ? Infinity : dailySolves);
@@ -99,9 +108,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
-      if (event === "SIGNED_IN" && session?.user && !sessionStorage.getItem("axiom_signup_tracked")) {
+      if (
+        event === "SIGNED_IN" &&
+        session?.user &&
+        !sessionStorage.getItem("axiom_signup_tracked")
+      ) {
         sessionStorage.setItem("axiom_signup_tracked", "true");
-        posthog.capture("signup_completed", { method: session.user.app_metadata?.provider === "google" ? "google" : "email" });
+        posthog.capture("signup_completed", {
+          method:
+            session.user.app_metadata?.provider === "google"
+              ? "google"
+              : "email",
+        });
       }
     });
 
@@ -215,6 +233,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Bottom Actions / User */}
         <div className="space-y-2 border-t border-[var(--color-border)] p-4">
+          {isSuperAdmin && (
+            <Link
+              href="/admin/platform"
+              className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-orange-400 transition-colors hover:bg-orange-500/10"
+            >
+              <ShieldCheck className="h-4 w-4" /> {t("admin")}
+            </Link>
+          )}
           {plan === "free" && (
             <Link
               href="/pricing"

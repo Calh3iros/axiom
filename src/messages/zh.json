@@ -57,7 +57,8 @@
       "pro": "高级 ✨",
       "checkoutSuccess": "升级成功！您的计划已更新。",
       "checkoutCancelled": "付款已取消。未产生任何费用。",
-      "org": "组织"
+      "org": "组织",
+      "admin": "管理"
     },
     "Map": {
       "title": "你的知识地图",
@@ -142,7 +143,9 @@
       "save": "保存",
       "cancelEdit": "取消",
       "nameUpdated": "名称更新成功！",
-      "adminDashboard": "管理面板"
+      "adminDashboard": "管理面板",
+      "adminDesc": "管理组织、合同和邀请码",
+      "adminPlatformLink": "打开管理面板"
     },
     "Components": {
       "input": "输入",

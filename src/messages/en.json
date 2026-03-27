@@ -57,7 +57,8 @@
       "pro": "PRO ✨",
       "checkoutSuccess": "Upgrade successful! Your plan has been updated.",
       "checkoutCancelled": "Checkout cancelled. No charges were made.",
-      "org": "Organization"
+      "org": "Organization",
+      "admin": "Admin"
     },
     "Map": {
       "title": "Your Knowledge Map",
@@ -142,7 +143,9 @@
       "save": "Save",
       "cancelEdit": "Cancel",
       "nameUpdated": "Name updated successfully!",
-      "adminDashboard": "Admin Dashboard"
+      "adminDashboard": "Admin Dashboard",
+      "adminDesc": "Manage organizations, contracts and invite codes",
+      "adminPlatformLink": "Open Admin Panel"
     },
     "Components": {
       "input": "Input",

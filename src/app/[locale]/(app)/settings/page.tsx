@@ -72,13 +72,13 @@ export default function SettingsPage() {
           .single()) as { data: Profile | null };
         const activePlan = await getUserActivePlan(user.id);
         console.log("[SettingsClient] activePlan received:", activePlan);
-        
+
         setProfile((current) => {
           const base = data || current;
           if (!base) return null;
           return {
             ...base,
-            plan: activePlan as "free" | "pro" | "elite"
+            plan: activePlan as "free" | "pro" | "elite",
           };
         });
         if (data?.full_name) setEditName(data.full_name);
@@ -616,6 +616,33 @@ export default function SettingsPage() {
         </div>
       </div>
 
+      {/* ── Administration (super admins only) ── */}
+      {profile?.is_super_admin && (
+        <div className="rounded-2xl border border-orange-500/20 bg-[var(--color-bg1)] p-6">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-orange-500/20 bg-orange-500/10">
+              <Shield className="h-5 w-5 text-orange-400" />
+            </div>
+            <div>
+              <h3 className="font-bold text-[var(--color-text-primary)]">
+                {t("adminDashboard")}
+              </h3>
+              <p className="text-xs text-[var(--color-text-secondary)]">
+                {t("adminDesc")}
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/admin/platform"
+            className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg0)] p-3 text-sm text-[var(--color-text-secondary)] transition-all hover:border-orange-500/30 hover:bg-[var(--color-bg2)] hover:text-[var(--color-text-primary)]"
+          >
+            <Shield className="h-4 w-4 text-orange-400" />
+            <span className="flex-1">{t("adminPlatformLink")}</span>
+            <ExternalLink className="h-3.5 w-3.5 text-[var(--color-dim)]" />
+          </Link>
+        </div>
+      )}
+
       {/* ── Danger Zone ── */}
       <div className="rounded-2xl border border-red-500/20 bg-[var(--color-bg1)] p-8">
         <div className="mb-5 flex items-center gap-3">
@@ -677,18 +704,6 @@ export default function SettingsPage() {
                 Cancel
               </button>
             </div>
-          </div>
-        )}
-
-        {/* Admin Dashboard link — only for super admins */}
-        {profile?.is_super_admin && (
-          <div className="mt-8 border-t border-[var(--color-border)] pt-6">
-            <Link
-              href="/admin"
-              className="text-sm text-[var(--color-dim)] transition-colors hover:text-[var(--color-ax-blue)]"
-            >
-              {t("adminDashboard")} →
-            </Link>
           </div>
         )}
       </div>
