@@ -1,9 +1,18 @@
 "use client";
 
-import { Building2, Check, Copy, ExternalLink, Users, X } from "lucide-react";
+import {
+  Building2,
+  Check,
+  Copy,
+  ExternalLink,
+  Mail,
+  Users,
+  X,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 
 import { createOrganizationDirect } from "@/lib/actions/admin";
+import { sendInviteEmail } from "@/lib/actions/invite-email";
 
 export function CreateOrgModal({
   open,
@@ -37,6 +46,9 @@ export function CreateOrgModal({
 
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -345,6 +357,48 @@ export function CreateOrgModal({
               <ExternalLink className="h-4 w-4" />
             )}
             {t("createOrg.copyLink")}
+          </button>
+        </div>
+
+        {/* Send by email */}
+        <div className="mt-4 flex items-center gap-2">
+          <input
+            type="email"
+            value={inviteEmail}
+            onChange={(e) => {
+              setInviteEmail(e.target.value);
+              setEmailSent(false);
+            }}
+            placeholder="email@escola.com"
+            className="flex-1 rounded-lg border border-[#2a2a3e] bg-[#0a0a12] px-3 py-2.5 text-sm text-white outline-none focus:border-[#818cf8]"
+          />
+          <button
+            onClick={async () => {
+              if (!inviteEmail || !result) return;
+              setSendingEmail(true);
+              const res2 = await sendInviteEmail({
+                email: inviteEmail,
+                code: result.code,
+                orgName: name || "Axiom",
+                senderName: "Axiom",
+              });
+              setSendingEmail(false);
+              if ("success" in res2) {
+                setEmailSent(true);
+                setInviteEmail("");
+              }
+            }}
+            disabled={sendingEmail || !inviteEmail}
+            className="flex shrink-0 items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          >
+            {sendingEmail ? (
+              "..."
+            ) : emailSent ? (
+              <Check className="h-4 w-4 text-green-300" />
+            ) : (
+              <Mail className="h-4 w-4" />
+            )}
+            {sendingEmail ? "Enviando" : emailSent ? "Enviado!" : "Enviar"}
           </button>
         </div>
 

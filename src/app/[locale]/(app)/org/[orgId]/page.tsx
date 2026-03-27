@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Plus,
   RefreshCw,
+  FileSpreadsheet,
   Trash2,
   Trophy,
   Users,
@@ -43,6 +44,12 @@ import { sendInviteEmail } from "@/lib/actions/invite-email";
 import { createChildOrg } from "@/lib/actions/network";
 import { getOrgDashboard } from "@/lib/actions/organization";
 import { getOrgClassRanking } from "@/lib/actions/rankings";
+import { exportNetworkCsv, type NetworkCsvRow } from "@/lib/export-network-csv";
+import {
+  exportNetworkPdf,
+  type NetworkPdfData,
+} from "@/lib/export-network-pdf";
+import { exportSchoolCsv, type SchoolCsvRow } from "@/lib/export-school-csv";
 import {
   exportSchoolPdf,
   type SchoolReportData,
@@ -633,6 +640,132 @@ export default function OrgDetailPage({
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t("schoolPdf")}
+                </button>
+              )}
+              {/* School CSV export */}
+              {dashData && !dashData.empty && (
+                <button
+                  onClick={() => {
+                    const rows: SchoolCsvRow[] = (
+                      dashData.classComparison || []
+                    ).map(
+                      (cls: {
+                        className: string;
+                        students: number;
+                        avgAccuracy: number;
+                        avgSolved: number;
+                        active7d: number;
+                        adoption: number;
+                      }) => ({
+                        className: cls.className || "",
+                        teacherName: "",
+                        studentName: "",
+                        studentEmail: "",
+                        exercises: cls.avgSolved || 0,
+                        accuracy: cls.avgAccuracy || 0,
+                        streak: 0,
+                        lastActive: "",
+                      })
+                    );
+                    exportSchoolCsv(rows, data?.org?.name || "escola");
+                  }}
+                  className="flex items-center gap-1.5 rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400 transition-colors hover:bg-green-500/20"
+                >
+                  <FileSpreadsheet className="h-3.5 w-3.5" />
+                  CSV
+                </button>
+              )}
+              {/* Network PDF export (secretary/owner with child orgs) */}
+              {secData && !secData.empty && (
+                <button
+                  onClick={() => {
+                    const pdfData: NetworkPdfData = {
+                      networkName: data?.org?.name || "",
+                      schoolCount: secData.schoolCount || 0,
+                      kpis: secData.kpis || {
+                        totalStudents: 0,
+                        activeStudents: 0,
+                        totalTeachers: 0,
+                        totalClasses: 0,
+                        avgAccuracy: 0,
+                        totalExercises: 0,
+                        avgStreak: 0,
+                        adoption: 0,
+                      },
+                      schoolComparison: (secData.schoolComparison || []).map(
+                        (s: {
+                          orgName: string;
+                          students: number;
+                          active7d: number;
+                          teachers: number;
+                          classes: number;
+                          avgAccuracy: number;
+                          adoption: number;
+                          avgStreak: number;
+                          score: number;
+                          status: string;
+                        }) => ({
+                          orgName: s.orgName,
+                          students: s.students,
+                          active7d: s.active7d,
+                          teachers: s.teachers,
+                          classes: s.classes,
+                          avgAccuracy: s.avgAccuracy,
+                          adoption: s.adoption,
+                          avgStreak: s.avgStreak,
+                          score: s.score,
+                          status: s.status,
+                        })
+                      ),
+                      alerts: secData.alerts || [],
+                      weeklyEvolution: secData.weeklyEvolution || [],
+                      period: "Ultimos 30 dias",
+                    };
+                    exportNetworkPdf(pdfData);
+                  }}
+                  className="flex items-center gap-1.5 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-medium text-purple-400 transition-colors hover:bg-purple-500/20"
+                >
+                  <FileDown className="h-3.5 w-3.5" />
+                  PDF Rede
+                </button>
+              )}
+              {/* Network CSV export */}
+              {secData && !secData.empty && (
+                <button
+                  onClick={() => {
+                    const rows: NetworkCsvRow[] = (
+                      secData.schoolComparison || []
+                    ).map(
+                      (s: {
+                        orgName: string;
+                        students: number;
+                        active7d: number;
+                        teachers: number;
+                        classes: number;
+                        avgAccuracy: number;
+                        adoption: number;
+                        avgStreak: number;
+                        score: number;
+                        status: string;
+                      }) => ({
+                        schoolName: s.orgName,
+                        students: s.students,
+                        active7d: s.active7d,
+                        teachers: s.teachers,
+                        classes: s.classes,
+                        avgAccuracy: s.avgAccuracy,
+                        adoption: s.adoption,
+                        avgStreak: s.avgStreak,
+                        score: s.score,
+                        status: s.status,
+                      })
+                    );
+                    exportNetworkCsv(rows, data?.org?.name || "rede");
+                  }}
+                  className="flex items-center gap-1.5 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-medium text-purple-400 transition-colors hover:bg-purple-500/20"
+                >
+                  <FileSpreadsheet className="h-3.5 w-3.5" />
+                  CSV Rede
                 </button>
               )}
               <button
