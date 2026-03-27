@@ -768,7 +768,12 @@
     "sendEmail": "Envoyer",
     "sendingEmail": "Envoi...",
     "inviteSent": "Invitation envoyée avec succès !",
-    "inviteError": "Erreur lors de l’envoi."
+    "inviteError": "Erreur lors de l’envoi.",
+    "deleteOrg": "Supprimer l'Organisation",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Toutes les classes, membres et codes d'invitation seront supprimés.",
+    "deleteWarning": "Les écoles-filles ne seront PAS supprimées, seulement détachées. Cette action est irréversible.",
+    "typeOrgName": "Tapez le nom de l'organisation pour confirmer",
+    "deletePermanently": "Supprimer Définitivement"
   },
   "Class": {
     "title": "Classe",

@@ -768,7 +768,12 @@
     "sendEmail": "Senden",
     "sendingEmail": "Sende...",
     "inviteSent": "Einladung erfolgreich gesendet!",
-    "inviteError": "Fehler beim Senden der Einladung."
+    "inviteError": "Fehler beim Senden der Einladung.",
+    "deleteOrg": "Organisation Löschen",
+    "deleteConfirm": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Alle Klassen, Mitglieder und Einladungscodes werden entfernt.",
+    "deleteWarning": "Tochterschulen werden NICHT gelöscht, nur entkoppelt. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "typeOrgName": "Geben Sie den Organisationsnamen ein, um zu bestätigen",
+    "deletePermanently": "Endgültig Löschen"
   },
   "Class": {
     "title": "Klasse",

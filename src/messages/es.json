@@ -772,7 +772,12 @@
     "sendEmail": "Enviar",
     "sendingEmail": "Enviando...",
     "inviteSent": "¡Invitación enviada con éxito!",
-    "inviteError": "Error al enviar invitación."
+    "inviteError": "Error al enviar invitación.",
+    "deleteOrg": "Eliminar Organización",
+    "deleteConfirm": "¿Seguro que desea eliminar \"{name}\"? Se eliminarán todas las clases, miembros y códigos de invitación.",
+    "deleteWarning": "Las escuelas-hijas NO serán eliminadas, solo deslinkadas. Esta acción no se puede deshacer.",
+    "typeOrgName": "Escriba el nombre de la organización para confirmar",
+    "deletePermanently": "Eliminar Permanentemente"
   },
   "Class": {
     "title": "Clase",

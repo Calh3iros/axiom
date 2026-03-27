@@ -1,12 +1,14 @@
 "use client";
 
-import { Building2, LogIn, ChevronRight } from "lucide-react";
+import { Building2, LogIn, ChevronRight, AlertTriangle, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback } from "react";
 
 import { OrgCard } from "@/components/org/org-card";
 import { Link } from "@/i18n/routing";
+import { deleteOrganization } from "@/lib/actions/admin";
 import { getMyOrganizations } from "@/lib/actions/organization";
+import { createClient } from "@/lib/supabase/client";
 
 interface OrgData {
   id: string;
@@ -27,6 +29,16 @@ export default function OrgListPage() {
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [childOrgs, setChildOrgs] = useState<OrgData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+
+  // Delete modal state
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [confirmName, setConfirmName] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   const fetchOrgs = useCallback(async () => {
     setLoading(true);
@@ -45,7 +57,51 @@ export default function OrgListPage() {
     fetchOrgs();
   }, [fetchOrgs]);
 
+  // Check if user is super_admin
+  useEffect(() => {
+    (async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("is_super_admin")
+        .eq("id", user.id)
+        .single();
+      if ((profile as unknown as { is_super_admin?: boolean })?.is_super_admin)
+        setIsSuperAdmin(true);
+    })();
+  }, []);
+
   const directOrgIds = new Set(memberships.map((m) => m.org_id));
+
+  const handleDeleteClick = (orgId: string, orgName: string) => {
+    setDeleteTarget({ id: orgId, name: orgName });
+    setConfirmName("");
+    setDeleteError("");
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget || confirmName !== deleteTarget.name) return;
+    setDeleting(true);
+    setDeleteError("");
+    try {
+      const result = await deleteOrganization(deleteTarget.id);
+      if ("error" in result) {
+        setDeleteError(result.error);
+        setDeleting(false);
+        return;
+      }
+      setDeleteTarget(null);
+      setDeleting(false);
+      fetchOrgs();
+    } catch {
+      setDeleteError("Unexpected error");
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -83,7 +139,13 @@ export default function OrgListPage() {
         <div className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2">
             {memberships.map((o) => (
-              <OrgCard key={o.org_id} org={o.organizations} role={o.role} />
+              <OrgCard
+                key={o.org_id}
+                org={o.organizations}
+                role={o.role}
+                isSuperAdmin={isSuperAdmin}
+                onDelete={handleDeleteClick}
+              />
             ))}
           </div>
 
@@ -132,6 +194,71 @@ export default function OrgListPage() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── Delete Confirmation Modal ── */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="mx-4 w-full max-w-md rounded-2xl border border-red-500/20 bg-[var(--color-bg1)] p-6 shadow-2xl">
+            <div className="mb-4 flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-red-500/10 p-2">
+                  <AlertTriangle className="h-5 w-5 text-red-400" />
+                </div>
+                <h3 className="text-lg font-bold text-red-400">
+                  {t("deleteOrg")}
+                </h3>
+              </div>
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="rounded-lg p-1 text-[var(--color-dim)] hover:bg-[var(--color-bg2)]"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <p className="mb-2 text-sm text-[var(--color-text-secondary)]">
+              {t("deleteConfirm", { name: deleteTarget.name })}
+            </p>
+            <p className="mb-4 text-xs text-[var(--color-dim)]">
+              {t("deleteWarning")}
+            </p>
+
+            <div className="mb-4">
+              <label className="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">
+                {t("typeOrgName")}
+              </label>
+              <input
+                type="text"
+                value={confirmName}
+                onChange={(e) => setConfirmName(e.target.value)}
+                className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg0)] px-3 py-2 text-sm text-[var(--color-text-primary)] focus:border-red-500/50 focus:outline-none"
+                placeholder={deleteTarget.name}
+                autoFocus
+              />
+            </div>
+
+            {deleteError && (
+              <p className="mb-3 text-xs text-red-400">{deleteError}</p>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={confirmName !== deleteTarget.name || deleting}
+                className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-400 disabled:opacity-40"
+              >
+                {deleting ? "..." : t("deletePermanently")}
+              </button>
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg2)] px-4 py-2.5 text-sm font-bold text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

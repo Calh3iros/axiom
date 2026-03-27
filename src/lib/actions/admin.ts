@@ -664,7 +664,7 @@ export async function getAdminOrgList() {
   if (!orgs || orgs.length === 0) return [];
 
   const orgIds = orgs.map((o: { id: string }) => o.id);
-  
+
   // Parallel fetch: invite codes, children organizations, and org_memberships
   const [codesRes, childrenRes, membersRes] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -677,8 +677,7 @@ export async function getAdminOrgList() {
       .select("parent_id")
       .in("parent_id", orgIds),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabaseAdmin.from("org_memberships") as any)
-      .select("org_id")
+    (supabaseAdmin.from("org_memberships") as any).select("org_id"),
   ]);
 
   const codes = codesRes?.data || [];
@@ -712,7 +711,7 @@ export async function getAdminOrgList() {
     // Add members from direct children
     childrenData.forEach((c: any) => {
       if (c.parent_id === o.id && c.id) {
-         members += (memberCountMap.get(c.id) || 0);
+        members += memberCountMap.get(c.id) || 0;
       }
     });
 
@@ -724,4 +723,78 @@ export async function getAdminOrgList() {
       membersCount: members,
     };
   });
+}
+
+// ─── Delete Organization (cascade) ───────────────────────────────────────
+
+export async function deleteOrganization(
+  orgId: string
+): Promise<{ success: boolean } | { error: string }> {
+  const user = await requireSuperAdmin();
+
+  // Fetch org name for logging
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: org } = await (supabaseAdmin.from("organizations") as any)
+    .select("id, name")
+    .eq("id", orgId)
+    .single();
+
+  if (!org) return { error: "Organization not found" };
+
+  try {
+    // 1. Get all classes belonging to this org
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: classes } = await (supabaseAdmin.from("classes") as any)
+      .select("id")
+      .eq("org_id", orgId);
+
+    const classIds = (classes || []).map((c: { id: string }) => c.id);
+
+    // 2. Delete class_memberships for those classes
+    if (classIds.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabaseAdmin.from("class_memberships") as any)
+        .delete()
+        .in("class_id", classIds);
+    }
+
+    // 3. Delete classes
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("classes") as any).delete().eq("org_id", orgId);
+
+    // 4. Delete invite_codes
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("invite_codes") as any)
+      .delete()
+      .eq("org_id", orgId);
+
+    // 5. Delete org_memberships
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("org_memberships") as any)
+      .delete()
+      .eq("org_id", orgId);
+
+    // 6. Unlink children (do NOT delete them)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("organizations") as any)
+      .update({ parent_id: null })
+      .eq("parent_id", orgId);
+
+    // 7. Delete the organization itself
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabaseAdmin.from("organizations") as any)
+      .delete()
+      .eq("id", orgId);
+
+    if (error) return { error: error.message };
+
+    console.log(
+      `[DELETE_ORG] Org "${org.name}" (${orgId}) deleted by user ${user.id}`
+    );
+
+    return { success: true };
+  } catch (err) {
+    console.error("[DELETE_ORG] Cascade delete failed:", err);
+    return { error: "Cascade delete failed" };
+  }
 }

@@ -768,7 +768,12 @@
     "sendEmail": "Send Email",
     "sendingEmail": "Sending...",
     "inviteSent": "Invite sent successfully!",
-    "inviteError": "Error sending invite."
+    "inviteError": "Error sending invite.",
+    "deleteOrg": "Delete Organization",
+    "deleteConfirm": "Are you sure you want to delete \"{name}\"? This will remove all classes, members and invite codes.",
+    "deleteWarning": "Child schools will NOT be deleted, only unlinked. This action cannot be undone.",
+    "typeOrgName": "Type the organization name to confirm",
+    "deletePermanently": "Delete Permanently"
   },
   "Class": {
     "title": "Class",

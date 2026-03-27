@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, GraduationCap, Globe } from "lucide-react";
+import { Building2, GraduationCap, Globe, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/routing";
@@ -13,6 +13,8 @@ interface OrgCardProps {
     created_at: string;
   };
   role: string;
+  isSuperAdmin?: boolean;
+  onDelete?: (orgId: string, orgName: string) => void;
 }
 
 const typeIcons: Record<string, React.ReactNode> = {
@@ -21,7 +23,7 @@ const typeIcons: Record<string, React.ReactNode> = {
   state: <GraduationCap className="h-5 w-5 text-orange-400" />,
 };
 
-export function OrgCard({ org, role }: OrgCardProps) {
+export function OrgCard({ org, role, isSuperAdmin, onDelete }: OrgCardProps) {
   const t = useTranslations("Org");
 
   const roleColors: Record<string, string> = {
@@ -51,8 +53,8 @@ export function OrgCard({ org, role }: OrgCardProps) {
     | "typePublicState";
 
   return (
-    <Link href={`/org/${org.id}`}>
-      <div className="group cursor-pointer rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-5 transition-all hover:border-[var(--color-ax-blue)]/30 hover:shadow-[var(--color-ax-blue)]/5 hover:shadow-lg">
+    <div className="group relative rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] p-5 transition-all hover:border-[var(--color-ax-blue)]/30 hover:shadow-[var(--color-ax-blue)]/5 hover:shadow-lg">
+      <Link href={`/org/${org.id}`} className="block">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             {typeIcons[org.type] || typeIcons.school}
@@ -69,7 +71,20 @@ export function OrgCard({ org, role }: OrgCardProps) {
             {t(roleKey)}
           </span>
         </div>
-      </div>
-    </Link>
+      </Link>
+      {isSuperAdmin && onDelete && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDelete(org.id, org.name);
+          }}
+          className="absolute right-3 bottom-3 rounded-lg p-1.5 text-[var(--color-dim)] opacity-0 transition-all group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-400"
+          title={t("deleteOrg")}
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
+    </div>
   );
 }

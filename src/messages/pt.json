@@ -772,7 +772,12 @@
     "sendEmail": "Enviar",
     "sendingEmail": "Enviando...",
     "inviteSent": "Convite enviado com sucesso!",
-    "inviteError": "Erro ao enviar convite."
+    "inviteError": "Erro ao enviar convite.",
+    "deleteOrg": "Deletar Organização",
+    "deleteConfirm": "Tem certeza que deseja deletar \"{name}\"? Isso removerá todas as turmas, membros e códigos de convite.",
+    "deleteWarning": "Escolas-filhas NÃO serão deletadas, apenas deslinkadas. Esta ação não pode ser desfeita.",
+    "typeOrgName": "Digite o nome da organização para confirmar",
+    "deletePermanently": "Deletar Permanentemente"
   },
   "Class": {
     "title": "Turma",
