@@ -506,9 +506,7 @@ export default function OrgDetailPage({
             {coordCode ? (
               <div>
                 <p className="mb-2 text-xs font-medium tracking-wider text-cyan-400/70 uppercase">
-                  {t("coordinatorCode", {
-                    fallback: "C\u00f3digo do Coordenador",
-                  })}
+                  {t("coordinatorCode")}
                 </p>
                 <div className="flex items-center gap-3">
                   <code className="rounded-lg bg-[var(--color-bg2)] px-4 py-2 font-mono text-xl font-bold tracking-widest text-cyan-400">
@@ -548,10 +546,7 @@ export default function OrgDetailPage({
                   </button>
                 </div>
                 <p className="mt-2 text-xs text-[var(--color-dim)]">
-                  {t("coordinatorCodeInfo", {
-                    fallback:
-                      "Envie ao coordenador pedag\u00f3gico. Ele poder\u00e1 acompanhar todas as turmas.",
-                  })}
+                  {t("coordinatorCodeInfo")}
                 </p>
               </div>
             ) : (
@@ -577,9 +572,7 @@ export default function OrgDetailPage({
                   className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
                 >
                   <Plus className="h-4 w-4" />
-                  {t("generateCoordinatorCode", {
-                    fallback: "Gerar C\u00f3digo Coordenador",
-                  })}
+                  {t("generateCoordinatorCode")}
                 </button>
               </div>
             )}
@@ -669,12 +662,8 @@ export default function OrgDetailPage({
                               m.role === "teacher" ? "coordinator" : "teacher";
                             const action =
                               m.role === "teacher"
-                                ? t("promoteToCoordinator", {
-                                    fallback: "Promover a Coordenador",
-                                  })
-                                : t("demoteToTeacher", {
-                                    fallback: "Rebaixar a Professor",
-                                  });
+                                ? t("promoteToCoordinator")
+                                : t("demoteToTeacher");
                             if (!confirm(`${action}: ${name}?`)) return;
                             setRoleUpdating(m.user_id);
                             const result = await updateMemberRole({
@@ -693,12 +682,8 @@ export default function OrgDetailPage({
                           className="rounded p-1 text-[var(--color-dim)] hover:text-cyan-400 disabled:opacity-50"
                           title={
                             m.role === "teacher"
-                              ? t("promoteToCoordinator", {
-                                  fallback: "Promover a Coordenador",
-                                })
-                              : t("demoteToTeacher", {
-                                  fallback: "Rebaixar a Professor",
-                                })
+                              ? t("promoteToCoordinator")
+                              : t("demoteToTeacher")
                           }
                         >
                           <UserCog
