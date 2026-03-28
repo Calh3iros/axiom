@@ -187,3 +187,76 @@ export async function getOrgTeachers(
     };
   });
 }
+
+// ─── Update Member Role (teacher ↔ coordinator) ────────────────────────
+
+export async function updateMemberRole(input: {
+  orgId: string;
+  userId: string;
+  newRole: "teacher" | "coordinator";
+}): Promise<{ success: boolean } | { error: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  // 1. Caller must be director+ (canManageMembers level)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: callerMem } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
+    .select("role")
+    .eq("user_id", user.id)
+    .eq("org_id", input.orgId)
+    .single();
+
+  if (
+    !callerMem ||
+    !["admin", "director", "owner", "secretary"].includes(callerMem.role)
+  ) {
+    return { error: "Not authorized — director or above required" };
+  }
+
+  // 2. Validate newRole is only teacher or coordinator
+  if (input.newRole !== "teacher" && input.newRole !== "coordinator") {
+    return { error: "Can only switch between teacher and coordinator" };
+  }
+
+  // 3. Get target user's current role
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: targetMem } = await (
+    supabaseAdmin.from("org_memberships") as any
+  )
+    .select("role")
+    .eq("user_id", input.userId)
+    .eq("org_id", input.orgId)
+    .single();
+
+  if (!targetMem) return { error: "User is not a member of this organization" };
+
+  // 4. Can only change teacher or coordinator (not director/owner/etc)
+  if (targetMem.role !== "teacher" && targetMem.role !== "coordinator") {
+    return { error: "Can only promote/demote teachers and coordinators" };
+  }
+
+  // 5. No-op check
+  if (targetMem.role === input.newRole) {
+    return { error: "User already has this role" };
+  }
+
+  // 6. Update
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseAdmin.from("org_memberships") as any)
+    .update({ role: input.newRole })
+    .eq("user_id", input.userId)
+    .eq("org_id", input.orgId);
+
+  if (error) return { error: error.message };
+
+  console.log(
+    `Role updated: ${input.userId} ${targetMem.role}→${input.newRole} in org ${input.orgId} by ${user.id}`
+  );
+
+  return { success: true };
+}

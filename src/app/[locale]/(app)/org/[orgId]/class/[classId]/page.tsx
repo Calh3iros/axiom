@@ -327,7 +327,7 @@ export default function ClassDetailPage({
         </div>
 
         {/* Invite Code */}
-        {data.isTeacher && (
+        {(data.isTeacher || canCoordinate) && (
           <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-6">
             <p className="mb-2 text-sm font-medium text-[var(--color-text-secondary)]">
               {t("inviteCode")}

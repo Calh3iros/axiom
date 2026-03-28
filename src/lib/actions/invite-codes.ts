@@ -87,13 +87,13 @@ export async function generateInviteCode(input: {
         };
       }
     }
-  } else if (input.type === "teacher") {
+  } else if (input.type === "teacher" || input.type === "gre") {
     if (!isAdmin) {
       const role = await getOrgRole(user.id, input.orgId);
       if (!role || !["admin", "director", "owner"].includes(role)) {
         return {
           error:
-            "Not authorized to generate teacher codes for this organization",
+            "Not authorized to generate this code type for this organization",
         };
       }
     }
@@ -218,7 +218,7 @@ export async function redeemInviteCode(input: {
   // Map type → role
   const roleMap: Record<string, string> = {
     secretary: "secretary",
-    gre: "director",
+    gre: "coordinator",
     director: "director",
     teacher: "teacher",
     owner: "owner",

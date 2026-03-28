@@ -15,6 +15,7 @@ import {
   FileSpreadsheet,
   Trash2,
   Trophy,
+  UserCog,
   Users,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -31,6 +32,7 @@ import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { Link, useRouter } from "@/i18n/routing";
+import { updateMemberRole } from "@/lib/actions/coordinator";
 import {
   getDirectorDashboard,
   getSecretaryDashboard,
@@ -96,6 +98,14 @@ export default function OrgDetailPage({
   const [inviteEmail, setInviteEmail] = useState("");
   const [sendingEmail, setSendingEmail] = useState(false);
 
+  // Coordinator code state
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [coordCode, setCoordCode] = useState<any>(null);
+  const [copiedCoordCode, setCopiedCoordCode] = useState(false);
+  const [copiedCoordLink, setCopiedCoordLink] = useState(false);
+  const [coordCodeLoading, setCoordCodeLoading] = useState(false);
+  const [roleUpdating, setRoleUpdating] = useState<string | null>(null);
+
   // Create child org modal state
   const [showCreateSchool, setShowCreateSchool] = useState(false);
   const [newSchoolName, setNewSchoolName] = useState("");
@@ -134,6 +144,8 @@ export default function OrgDetailPage({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const prf = codes.find((c: any) => c.type === "teacher" && c.is_active);
       setTeacherCode(prf || null);
+      const gre = codes.find((c: any) => c.type === "gre" && c.is_active);
+      setCoordCode(gre || null);
     }
 
     setLoading(false);
@@ -226,7 +238,9 @@ export default function OrgDetailPage({
   const canMembers = canManageMembersRole(data.myRole);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const teachers = data.members.filter((m: any) => m.role === "teacher");
+  const teachers = data.members.filter(
+    (m: any) => m.role === "teacher" || m.role === "coordinator"
+  );
 
   return (
     <div className="space-y-8">
@@ -487,6 +501,90 @@ export default function OrgDetailPage({
             )}
           </div>
 
+          {/* Coordinator Code Card */}
+          <div className="mb-4 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5">
+            {coordCode ? (
+              <div>
+                <p className="mb-2 text-xs font-medium tracking-wider text-cyan-400/70 uppercase">
+                  {t("coordinatorCode", {
+                    fallback: "C\u00f3digo do Coordenador",
+                  })}
+                </p>
+                <div className="flex items-center gap-3">
+                  <code className="rounded-lg bg-[var(--color-bg2)] px-4 py-2 font-mono text-xl font-bold tracking-widest text-cyan-400">
+                    {coordCode.code}
+                  </code>
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(coordCode.code);
+                      setCopiedCoordCode(true);
+                      setTimeout(() => setCopiedCoordCode(false), 2000);
+                    }}
+                    className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white"
+                    title={t("copyCode")}
+                  >
+                    {copiedCoordCode ? (
+                      <Check className="h-4 w-4 text-cyan-400" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </button>
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(
+                        `https://axiom-solver.com/join?code=${coordCode.code}`
+                      );
+                      setCopiedCoordLink(true);
+                      setTimeout(() => setCopiedCoordLink(false), 2000);
+                    }}
+                    className="rounded-lg bg-[var(--color-bg2)] p-2 text-[var(--color-dim)] hover:text-white"
+                    title={t("copyLink")}
+                  >
+                    {copiedCoordLink ? (
+                      <Check className="h-4 w-4 text-cyan-400" />
+                    ) : (
+                      <ExternalLink className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <p className="mt-2 text-xs text-[var(--color-dim)]">
+                  {t("coordinatorCodeInfo", {
+                    fallback:
+                      "Envie ao coordenador pedag\u00f3gico. Ele poder\u00e1 acompanhar todas as turmas.",
+                  })}
+                </p>
+              </div>
+            ) : (
+              <div className="text-center">
+                <button
+                  onClick={async () => {
+                    setCoordCodeLoading(true);
+                    const result = await generateInviteCode({
+                      type: "gre",
+                      orgId,
+                    });
+                    if ("code" in result) {
+                      const codes = await getOrgInviteCodes(orgId);
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      const gre = codes.find(
+                        (c: any) => c.type === "gre" && c.is_active
+                      );
+                      setCoordCode(gre || null);
+                    }
+                    setCoordCodeLoading(false);
+                  }}
+                  disabled={coordCodeLoading}
+                  className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                >
+                  <Plus className="h-4 w-4" />
+                  {t("generateCoordinatorCode", {
+                    fallback: "Gerar C\u00f3digo Coordenador",
+                  })}
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* Teacher List */}
           {teachers.length === 0 ? (
             <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg1)] py-8 text-center">
@@ -551,23 +649,80 @@ export default function OrgDetailPage({
                           )}
                         </div>
                       )}
-                      <button
-                        onClick={async () => {
-                          if (!confirm(t("removeConfirm"))) return;
-                          const { supabaseAdmin } =
-                            await import("@/lib/supabase/admin");
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          await (supabaseAdmin.from("org_memberships") as any)
-                            .delete()
-                            .eq("user_id", m.user_id)
-                            .eq("org_id", orgId);
-                          fetchData();
-                        }}
-                        className="rounded p-1 text-[var(--color-dim)] hover:text-red-400"
-                        title={t("removeTeacher")}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        {/* Role badge */}
+                        <span
+                          className={`rounded-full border px-2 py-0.5 text-xs font-medium ${
+                            m.role === "coordinator"
+                              ? "border-cyan-500/20 bg-cyan-500/10 text-cyan-400"
+                              : "border-green-500/20 bg-green-500/10 text-green-400"
+                          }`}
+                        >
+                          {m.role === "coordinator"
+                            ? t("roleCoordinator")
+                            : t("roleTeacher")}
+                        </span>
+                        {/* Promote/Demote */}
+                        <button
+                          onClick={async () => {
+                            const newRole =
+                              m.role === "teacher" ? "coordinator" : "teacher";
+                            const action =
+                              m.role === "teacher"
+                                ? t("promoteToCoordinator", {
+                                    fallback: "Promover a Coordenador",
+                                  })
+                                : t("demoteToTeacher", {
+                                    fallback: "Rebaixar a Professor",
+                                  });
+                            if (!confirm(`${action}: ${name}?`)) return;
+                            setRoleUpdating(m.user_id);
+                            const result = await updateMemberRole({
+                              orgId,
+                              userId: m.user_id,
+                              newRole: newRole as "teacher" | "coordinator",
+                            });
+                            setRoleUpdating(null);
+                            if ("success" in result) {
+                              fetchData();
+                            } else {
+                              alert(result.error);
+                            }
+                          }}
+                          disabled={roleUpdating === m.user_id}
+                          className="rounded p-1 text-[var(--color-dim)] hover:text-cyan-400 disabled:opacity-50"
+                          title={
+                            m.role === "teacher"
+                              ? t("promoteToCoordinator", {
+                                  fallback: "Promover a Coordenador",
+                                })
+                              : t("demoteToTeacher", {
+                                  fallback: "Rebaixar a Professor",
+                                })
+                          }
+                        >
+                          <UserCog
+                            className={`h-3.5 w-3.5 ${roleUpdating === m.user_id ? "animate-spin" : ""}`}
+                          />
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(t("removeConfirm"))) return;
+                            const { supabaseAdmin } =
+                              await import("@/lib/supabase/admin");
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            await (supabaseAdmin.from("org_memberships") as any)
+                              .delete()
+                              .eq("user_id", m.user_id)
+                              .eq("org_id", orgId);
+                            fetchData();
+                          }}
+                          className="rounded p-1 text-[var(--color-dim)] hover:text-red-400"
+                          title={t("removeTeacher")}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
