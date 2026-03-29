@@ -38,6 +38,24 @@ async function getManagerRole(
     return { userId: user.id, role: membership.role };
   }
 
+  // If no direct membership, check parent chain (owner/secretary of rede → can access escola)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: org } = await (supabaseAdmin.from("organizations") as any)
+    .select("parent_id")
+    .eq("id", orgId)
+    .single();
+  if (org?.parent_id) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: parentMem } = await (supabaseAdmin.from("org_memberships") as any)
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("org_id", org.parent_id)
+      .single();
+    if (parentMem && isElevated(parentMem.role)) {
+      return { userId: user.id, role: parentMem.role };
+    }
+  }
+
   // Super_admin bypass: read-only director-level access without membership
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: profile } = await (supabaseAdmin.from("profiles") as any)
