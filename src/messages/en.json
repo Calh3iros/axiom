@@ -297,7 +297,19 @@
     "alertActionEmptySchool": "This school has no students yet. Ask the director to set it up.",
     "alertActionInactive": "The teacher can reach out to inactive students.",
     "alertActionEngagementDrop": "Encourage usage with weekly goals or challenges.",
-    "alertActionTopErrors": "Review the highest error-rate topics with teachers."
+    "alertActionTopErrors": "Review the highest error-rate topics with teachers.",
+    "summaryGoodAdoption": "Good adoption: {active} of {total} students used this week.",
+    "summaryModerateAdoption": "Moderate adoption. Some areas need attention.",
+    "summaryLowAdoption": "Attention: less than half of students are using Axiom.",
+    "summaryNoStudents": "No students registered yet. Set up to get started.",
+    "summaryGoodPerformance": "Good performance — {accuracy}% correct answers on average.",
+    "summaryModeratePerformance": "Moderate performance — {accuracy}% accuracy. Room for improvement.",
+    "summaryLowPerformance": "Below expected — {accuracy}% accuracy.",
+    "summarySchoolActive": "Your school has {active} active students out of {total}.",
+    "summaryClassActive": "Your class has {active} active students out of {total}.",
+    "summaryInactiveCount": "{count} students inactive for more than 7 days.",
+    "summaryLowAdoptionSchools": "{count} schools with low adoption.",
+    "summaryNetworkOverview": "Your network has {schools} schools, {total} students and {active} active this week."
   },
   "FAQ": {
     "backToHome": "Back to Home",

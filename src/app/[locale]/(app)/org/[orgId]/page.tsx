@@ -31,6 +31,7 @@ import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { ReportCard, type ReportItem } from "@/components/dashboard/report-card";
+import { ExecutiveSummary } from "@/components/dashboard/executive-summary";
 import { Breadcrumb } from "@/components/shared/breadcrumb";
 import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { Link, useRouter } from "@/i18n/routing";
@@ -733,6 +734,30 @@ export default function OrgDetailPage({
       {/* Dashboard (directors/admins/secretaries/coordinators) */}
       {isElevated && (dashData || secData) && (
         <div>
+          {/* Executive Summary */}
+          <div className="mb-4">
+            {secData && !secData.empty && secData.kpis && (
+              <ExecutiveSummary
+                level="network"
+                totalStudents={secData.kpis.totalStudents || 0}
+                activeStudents={secData.kpis.activeStudents || 0}
+                avgAccuracy={secData.kpis.avgAccuracy || 0}
+                adoption={secData.kpis.adoption || 0}
+                schoolCount={secData.schoolCount}
+                lowAdoptionSchools={secData.alerts?.filter((a: any) => a.type === 'low_adoption').length}
+              />
+            )}
+            {dashData && !dashData.empty && !secData && (
+              <ExecutiveSummary
+                level="school"
+                totalStudents={dashData.totalStudents || 0}
+                activeStudents={dashData.active7d || 0}
+                avgAccuracy={dashData.overallAccuracy || 0}
+                adoption={dashData.adoption || 0}
+                inactiveCount={dashData.inactiveStudents?.length}
+              />
+            )}
+          </div>
           {/* Report Card — large export buttons + print */}
           <div className="mb-4">
             <ReportCard

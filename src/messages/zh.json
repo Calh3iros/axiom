@@ -297,7 +297,19 @@
     "alertActionEmptySchool": "该校尚无学生。请校长进行配置。",
     "alertActionInactive": "教师可以联系不活跃的学生。",
     "alertActionEngagementDrop": "通过每周目标或挑战来鼓励使用。",
-    "alertActionTopErrors": "与老师一起审查错误率最高的主题。"
+    "alertActionTopErrors": "与老师一起审查错误率最高的主题。",
+    "summaryGoodAdoption": "良好采用率：本周 {active}/{total} 学生活跃。",
+    "summaryModerateAdoption": "采用率一般。部分领域需要关注。",
+    "summaryLowAdoption": "注意：不到一半的学生在使用Axiom。",
+    "summaryNoStudents": "尚无学生注册。请先配置。",
+    "summaryGoodPerformance": "表现良好 — 平均正确率 {accuracy}%。",
+    "summaryModeratePerformance": "表现一般 — 正确率 {accuracy}%。仍有提升空间。",
+    "summaryLowPerformance": "低于预期 — 正确率 {accuracy}%。",
+    "summarySchoolActive": "学校有 {active}/{total} 活跃学生。",
+    "summaryClassActive": "班级有 {active}/{total} 活跃学生。",
+    "summaryInactiveCount": "{count} 名学生超过7天未活跃。",
+    "summaryLowAdoptionSchools": "{count} 所学校采用率低。",
+    "summaryNetworkOverview": "网络有 {schools} 所学校，{total} 名学生，本周 {active} 活跃。"
   },
   "FAQ": {
     "backToHome": "返回首页",
