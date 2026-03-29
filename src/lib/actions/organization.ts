@@ -266,7 +266,7 @@ export async function getOrgDashboard(orgId: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.from("organizations") as any)
       .select(
-        "id, name, type, created_at, max_students, access_expires_at, contract_notes"
+        "id, name, type, parent_id, created_at, max_students, access_expires_at, contract_notes"
       )
       .eq("id", orgId)
       .single(),
@@ -347,6 +347,18 @@ export async function getOrgDashboard(orgId: string) {
     }
   }
 
+  // Fetch parent name for breadcrumb (if org has a parent)
+  let parentName: string | null = null;
+  const orgData2 = orgRes?.data;
+  if (orgData2?.parent_id) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: parentOrg } = await (db.from("organizations") as any)
+      .select("name")
+      .eq("id", orgData2.parent_id)
+      .single();
+    parentName = parentOrg?.name || null;
+  }
+
   return {
     org: orgRes?.data,
     myRole: effectiveRole,
@@ -354,6 +366,8 @@ export async function getOrgDashboard(orgId: string) {
     classes: classesRes?.data || [],
     childOrgs,
     studentCount,
+    parentName,
+    isInherited: !!inheritedRole,
   };
 }
 

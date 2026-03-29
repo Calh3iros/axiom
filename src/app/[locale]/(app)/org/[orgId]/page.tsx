@@ -31,6 +31,7 @@ import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { ReportCard, type ReportItem } from "@/components/dashboard/report-card";
+import { Breadcrumb } from "@/components/shared/breadcrumb";
 import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { Link, useRouter } from "@/i18n/routing";
 import { updateMemberRole } from "@/lib/actions/coordinator";
@@ -255,6 +256,17 @@ export default function OrgDetailPage({
           <ArrowLeft className="h-4 w-4" />
           {t("title")}
         </Link>
+        {/* Breadcrumb: Parent > Current */}
+        {data.parentName && data.org.parent_id && (
+          <Breadcrumb
+            items={[
+              ...(data.isInherited
+                ? [{ label: data.parentName, href: `/org/${data.org.parent_id}` }]
+                : [{ label: data.parentName }]),
+              { label: data.org.name },
+            ]}
+          />
+        )}
         <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">
           {data.org.name}
         </h1>
