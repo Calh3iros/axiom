@@ -1342,34 +1342,49 @@ export function SecretaryDashboard({
             <div className="dash-alert-card" style={{ marginBottom: 20 }}>
               <h3 className="dash-alert-title">
                 <AlertTriangle style={{ width: 18, height: 18, color: RED }} />
-                Alertas da Rede ({alerts.length})
+                {t("networkAlerts", { fallback: `Alertas da Rede (${alerts.length})` })} ({alerts.length})
               </h3>
               <div className="dash-alert-list">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {alerts.map((a: any, i: number) => (
-                  <div key={i} className="dash-alert-item">
-                    <span
-                      className="dash-alert-name"
-                      style={{ fontWeight: 500 }}
-                    >
-                      {a.orgName}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 500,
-                        color:
-                          a.severity === "error"
-                            ? RED
-                            : a.severity === "warning"
-                              ? YELLOW
-                              : "#64748b",
-                      }}
-                    >
-                      {a.message}
-                    </span>
-                  </div>
-                ))}
+                {alerts.map((a: any, i: number) => {
+                  const actionKey = a.type === "low_score" ? "alertActionLowScore"
+                    : a.type === "low_adoption" ? "alertActionLowAdoption"
+                    : a.type === "empty_school" ? "alertActionEmptySchool"
+                    : a.type === "inactive_students" ? "alertActionInactive"
+                    : a.type === "engagement_drop" ? "alertActionEngagementDrop"
+                    : null;
+                  return (
+                    <div key={i} className="dash-alert-item" style={{ flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        <span
+                          className="dash-alert-name"
+                          style={{ fontWeight: 500 }}
+                        >
+                          {a.orgName}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 12,
+                            fontWeight: 500,
+                            color:
+                              a.severity === "error"
+                                ? RED
+                                : a.severity === "warning"
+                                  ? YELLOW
+                                  : "#64748b",
+                          }}
+                        >
+                          {a.message}
+                        </span>
+                      </div>
+                      {actionKey && (
+                        <span style={{ fontSize: 11, color: "#64748b" }}>
+                          💡 {t(actionKey)}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -291,7 +291,13 @@
       "180d": "6个月",
       "year": "学年",
       "custom": "自定义"
-    }
+    },
+    "alertActionLowScore": "考虑在错误最多的科目上加强辅导。",
+    "alertActionLowAdoption": "检查教师是否已与学生分享访问代码。",
+    "alertActionEmptySchool": "该校尚无学生。请校长进行配置。",
+    "alertActionInactive": "教师可以联系不活跃的学生。",
+    "alertActionEngagementDrop": "通过每周目标或挑战来鼓励使用。",
+    "alertActionTopErrors": "与老师一起审查错误率最高的主题。"
   },
   "FAQ": {
     "backToHome": "返回首页",

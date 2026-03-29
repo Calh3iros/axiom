@@ -291,7 +291,13 @@
       "180d": "6 mois",
       "year": "Année scolaire",
       "custom": "Personnalisé"
-    }
+    },
+    "alertActionLowScore": "Envisagez un renforcement dans les matières avec le plus d'erreurs.",
+    "alertActionLowAdoption": "Vérifiez si les enseignants ont partagé les codes d'accès avec les élèves.",
+    "alertActionEmptySchool": "Cette école n'a pas encore d'élèves. Demandez au directeur de la configurer.",
+    "alertActionInactive": "L'enseignant peut contacter les élèves inactifs.",
+    "alertActionEngagementDrop": "Encouragez l'utilisation avec des objectifs hebdomadaires.",
+    "alertActionTopErrors": "Révisez les sujets avec le taux d'erreur le plus élevé avec les enseignants."
   },
   "FAQ": {
     "backToHome": "Retour à l'accueil",

@@ -291,7 +291,13 @@
       "180d": "6 Monate",
       "year": "Schuljahr",
       "custom": "Benutzerdefiniert"
-    }
+    },
+    "alertActionLowScore": "Erwägen Sie Verstärkung in Fächern mit den meisten Fehlern.",
+    "alertActionLowAdoption": "Überprüfen Sie, ob die Lehrer die Zugangscodes mit den Schülern geteilt haben.",
+    "alertActionEmptySchool": "Diese Schule hat noch keine Schüler. Bitten Sie den Direktor, sie einzurichten.",
+    "alertActionInactive": "Der Lehrer kann die inaktiven Schüler kontaktieren.",
+    "alertActionEngagementDrop": "Fördern Sie die Nutzung mit Wochenzielen oder Herausforderungen.",
+    "alertActionTopErrors": "Überprüfen Sie die Themen mit der höchsten Fehlerrate mit den Lehrern."
   },
   "FAQ": {
     "backToHome": "Zurück zur Startseite",

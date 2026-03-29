@@ -291,7 +291,13 @@
       "180d": "6 months",
       "year": "School year",
       "custom": "Custom"
-    }
+    },
+    "alertActionLowScore": "Consider reinforcing subjects with the most errors.",
+    "alertActionLowAdoption": "Check if teachers have shared access codes with students.",
+    "alertActionEmptySchool": "This school has no students yet. Ask the director to set it up.",
+    "alertActionInactive": "The teacher can reach out to inactive students.",
+    "alertActionEngagementDrop": "Encourage usage with weekly goals or challenges.",
+    "alertActionTopErrors": "Review the highest error-rate topics with teachers."
   },
   "FAQ": {
     "backToHome": "Back to Home",

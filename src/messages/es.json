@@ -291,7 +291,13 @@
       "180d": "6 meses",
       "year": "Año escolar",
       "custom": "Personalizado"
-    }
+    },
+    "alertActionLowScore": "Considere refuerzo en las materias con más errores.",
+    "alertActionLowAdoption": "Verifique si los profesores compartieron los códigos con los alumnos.",
+    "alertActionEmptySchool": "Esta escuela aún no tiene alumnos. Pida al director que la configure.",
+    "alertActionInactive": "El profesor puede contactar a los alumnos inactivos.",
+    "alertActionEngagementDrop": "Incentive el uso con metas semanales o desafíos.",
+    "alertActionTopErrors": "Revise los temas con mayor tasa de error con los profesores."
   },
   "FAQ": {
     "backToHome": "Volver al Inicio",
