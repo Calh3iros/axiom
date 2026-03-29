@@ -445,15 +445,31 @@
       "headerTask": "Tarefa",
       "headerWithout": "Sem",
       "headerAxiom": "Com Axiom",
-      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
+      "row1": [
+        "Resolver 1 problema",
+        "30 – 60 min",
+        "5 segundos"
+      ],
       "row2": [
         "Escrever redação de 1.000 palavras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": ["Montar plano de estudo", "1 – 2 horas", "1 clique"],
-      "row4": ["Humanizar 2.000 palavras", "45 min", "10 segundos"],
-      "row5": ["Preparação completa para prova", "6 – 10 horas", "2 horas"],
+      "row3": [
+        "Montar plano de estudo",
+        "1 – 2 horas",
+        "1 clique"
+      ],
+      "row4": [
+        "Humanizar 2.000 palavras",
+        "45 min",
+        "10 segundos"
+      ],
+      "row5": [
+        "Preparação completa para prova",
+        "6 – 10 horas",
+        "2 horas"
+      ],
       "footer": "Estudante médio economiza ~200 horas por semestre"
     },
     "pricing": {
@@ -782,7 +798,18 @@
     "deleteConfirm": "Tem certeza que deseja deletar \"{name}\"? Isso removerá todas as turmas, membros e códigos de convite.",
     "deleteWarning": "Escolas-filhas NÃO serão deletadas, apenas deslinkadas. Esta ação não pode ser desfeita.",
     "typeOrgName": "Digite o nome da organização para confirmar",
-    "deletePermanently": "Deletar Permanentemente"
+    "deletePermanently": "Deletar Permanentemente",
+    "reports": "Relatórios",
+    "networkPdfReport": "Relatório Executivo (PDF)",
+    "networkPdfDesc": "KPIs e comparativo entre escolas",
+    "networkSpreadsheet": "Planilha da Rede",
+    "networkSpreadsheetDesc": "Dados por escola em formato Excel",
+    "schoolPdfReport": "Relatório da Escola (PDF)",
+    "schoolPdfDesc": "KPIs, turmas e evolução",
+    "schoolSpreadsheet": "Planilha da Escola",
+    "schoolSpreadsheetDesc": "Dados das turmas em formato Excel",
+    "printDashboard": "Imprimir Painel",
+    "printDashboardDesc": "Imprimir esta página"
   },
   "Class": {
     "title": "Turma",

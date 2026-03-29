@@ -445,11 +445,31 @@
       "headerTask": "Aufgabe",
       "headerWithout": "Ohne",
       "headerAxiom": "Mit Axiom",
-      "row1": ["1 Problem lösen", "30 – 60 Min", "5 Sekunden"],
-      "row2": ["1.000-Wort-Aufsatz schreiben", "3 – 5 Stunden", "15 Minuten"],
-      "row3": ["Lernplan erstellen", "1 – 2 Stunden", "1 Klick"],
-      "row4": ["2.000 Wörter humanisieren", "45 Min", "10 Sekunden"],
-      "row5": ["Volle Prüfungsvorbereitung", "6 – 10 Stunden", "2 Stunden"],
+      "row1": [
+        "1 Problem lösen",
+        "30 – 60 Min",
+        "5 Sekunden"
+      ],
+      "row2": [
+        "1.000-Wort-Aufsatz schreiben",
+        "3 – 5 Stunden",
+        "15 Minuten"
+      ],
+      "row3": [
+        "Lernplan erstellen",
+        "1 – 2 Stunden",
+        "1 Klick"
+      ],
+      "row4": [
+        "2.000 Wörter humanisieren",
+        "45 Min",
+        "10 Sekunden"
+      ],
+      "row5": [
+        "Volle Prüfungsvorbereitung",
+        "6 – 10 Stunden",
+        "2 Stunden"
+      ],
       "footer": "Durchschnittlicher Student spart ~200 Stunden pro Semester"
     },
     "pricing": {
@@ -778,7 +798,18 @@
     "deleteConfirm": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Alle Klassen, Mitglieder und Einladungscodes werden entfernt.",
     "deleteWarning": "Tochterschulen werden NICHT gelöscht, nur entkoppelt. Diese Aktion kann nicht rückgängig gemacht werden.",
     "typeOrgName": "Geben Sie den Organisationsnamen ein, um zu bestätigen",
-    "deletePermanently": "Endgültig Löschen"
+    "deletePermanently": "Endgültig Löschen",
+    "reports": "Berichte",
+    "networkPdfReport": "Geschäftsbericht (PDF)",
+    "networkPdfDesc": "KPIs und Schulvergleich",
+    "networkSpreadsheet": "Netzwerk-Tabelle",
+    "networkSpreadsheetDesc": "Daten pro Schule im Excel-Format",
+    "schoolPdfReport": "Schulbericht (PDF)",
+    "schoolPdfDesc": "KPIs, Klassen und Entwicklung",
+    "schoolSpreadsheet": "Schul-Tabelle",
+    "schoolSpreadsheetDesc": "Klassendaten im Excel-Format",
+    "printDashboard": "Dashboard drucken",
+    "printDashboardDesc": "Diese Seite drucken"
   },
   "Class": {
     "title": "Klasse",

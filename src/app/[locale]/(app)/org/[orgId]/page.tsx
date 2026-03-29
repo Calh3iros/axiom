@@ -30,6 +30,7 @@ import { CreateClassesBatchModal } from "@/components/org/create-class-batch-mod
 import { CreateClassModal } from "@/components/org/create-class-modal";
 import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
+import { ReportCard, type ReportItem } from "@/components/dashboard/report-card";
 import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { Link, useRouter } from "@/i18n/routing";
 import { updateMemberRole } from "@/lib/actions/coordinator";
@@ -720,119 +721,156 @@ export default function OrgDetailPage({
       {/* Dashboard (directors/admins/secretaries/coordinators) */}
       {isElevated && (dashData || secData) && (
         <div>
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-indigo-400" />
-              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                Dashboard
-              </h2>
-            </div>
-            <div className="flex items-center gap-2">
-              {/* School PDF export */}
-              {dashData && !dashData.empty && (
-                <button
-                  onClick={() => {
-                    const reportData: SchoolReportData = {
-                      schoolName: data?.org?.name || "",
-                      period: "Ultimos 30 dias",
-                      generatedBy: "Axiom",
-                      totalStudents: dashData.totalStudents || 0,
-                      activeStudents: dashData.active7d || 0,
-                      totalSolved: dashData.totalSolved || 0,
-                      overallAccuracy: dashData.overallAccuracy || 0,
-                      avgStreak: dashData.avgStreak || 0,
-                      adoption: dashData.adoption || 0,
-                      classComparison: dashData.classComparison || [],
-                      weeklyEvolution: dashData.weeklyEvolution || [],
-                      engagementAlerts: dashData.engagementAlerts || [],
-                      managers:
-                        data?.members
-                          ?.filter((m: { role: string }) =>
-                            [
-                              "teacher",
-                              "coordinator",
-                              "admin",
-                              "director",
-                              "owner",
-                              "secretary",
-                            ].includes(m.role)
-                          )
-                          .map(
-                            (m: {
-                              role: string;
-                              profiles?: {
-                                full_name?: string;
-                                email?: string;
-                              };
-                            }) => ({
-                              name:
-                                m.profiles?.full_name ||
-                                m.profiles?.email?.split("@")[0] ||
-                                "User",
-                              role: m.role,
-                              email: m.profiles?.email || "",
-                            })
-                          ) || [],
-                    };
-                    exportSchoolPdf(reportData);
-                  }}
-                  className="flex items-center gap-1.5 rounded-lg border border-orange-500/30 bg-orange-500/10 px-3 py-1.5 text-xs font-medium text-orange-400 transition-colors hover:bg-orange-500/20"
-                >
-                  <FileDown className="h-3.5 w-3.5" />
-                  {t("schoolPdf")}
-                </button>
-              )}
-              {/* School CSV export */}
-              {dashData && !dashData.empty && (
-                <button
-                  onClick={() => {
-                    const rows: SchoolCsvRow[] = (
-                      dashData.classComparison || []
-                    ).map(
-                      (cls: {
-                        className: string;
-                        students: number;
-                        avgAccuracy: number;
-                        avgSolved: number;
-                        active7d: number;
-                        adoption: number;
-                      }) => ({
-                        className: cls.className || "",
-                        teacherName: "",
-                        studentName: "",
-                        studentEmail: "",
-                        exercises: cls.avgSolved || 0,
-                        accuracy: cls.avgAccuracy || 0,
-                        streak: 0,
-                        lastActive: "",
-                      })
-                    );
-                    exportSchoolCsv(rows, data?.org?.name || "escola");
-                  }}
-                  className="flex items-center gap-1.5 rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400 transition-colors hover:bg-green-500/20"
-                >
-                  <FileSpreadsheet className="h-3.5 w-3.5" />
-                  CSV
-                </button>
-              )}
-              {/* Network PDF export (secretary/owner with child orgs) */}
-              {secData && !secData.empty && (
-                <button
-                  onClick={() => {
-                    const pdfData: NetworkPdfData = {
-                      networkName: data?.org?.name || "",
-                      schoolCount: secData.schoolCount || 0,
-                      kpis: secData.kpis || {
-                        totalStudents: 0,
-                        activeStudents: 0,
-                        totalTeachers: 0,
-                        totalClasses: 0,
-                        avgAccuracy: 0,
-                        totalExercises: 0,
-                        avgStreak: 0,
-                        adoption: 0,
-                      },
-                      schoolComparison: (secData.schoolComparison || []).map(
+          {/* Report Card — large export buttons + print */}
+          <div className="mb-4">
+            <ReportCard
+              title={t("reports")}
+              reports={(() => {
+                const items: ReportItem[] = [];
+                // School exports
+                if (dashData && !dashData.empty) {
+                  items.push({
+                    label: t("schoolPdfReport"),
+                    description: t("schoolPdfDesc"),
+                    icon: "pdf",
+                    onClick: () => {
+                      const reportData: SchoolReportData = {
+                        schoolName: data?.org?.name || "",
+                        period: "Ultimos 30 dias",
+                        generatedBy: "Axiom",
+                        totalStudents: dashData.totalStudents || 0,
+                        activeStudents: dashData.active7d || 0,
+                        totalSolved: dashData.totalSolved || 0,
+                        overallAccuracy: dashData.overallAccuracy || 0,
+                        avgStreak: dashData.avgStreak || 0,
+                        adoption: dashData.adoption || 0,
+                        classComparison: dashData.classComparison || [],
+                        weeklyEvolution: dashData.weeklyEvolution || [],
+                        engagementAlerts: dashData.engagementAlerts || [],
+                        managers:
+                          data?.members
+                            ?.filter((m: { role: string }) =>
+                              [
+                                "teacher",
+                                "coordinator",
+                                "admin",
+                                "director",
+                                "owner",
+                                "secretary",
+                              ].includes(m.role)
+                            )
+                            .map(
+                              (m: {
+                                role: string;
+                                profiles?: {
+                                  full_name?: string;
+                                  email?: string;
+                                };
+                              }) => ({
+                                name:
+                                  m.profiles?.full_name ||
+                                  m.profiles?.email?.split("@")[0] ||
+                                  "User",
+                                role: m.role,
+                                email: m.profiles?.email || "",
+                              })
+                            ) || [],
+                      };
+                      exportSchoolPdf(reportData);
+                    },
+                  });
+                  items.push({
+                    label: t("schoolSpreadsheet"),
+                    description: t("schoolSpreadsheetDesc"),
+                    icon: "spreadsheet",
+                    onClick: () => {
+                      const rows: SchoolCsvRow[] = (
+                        dashData.classComparison || []
+                      ).map(
+                        (cls: {
+                          className: string;
+                          students: number;
+                          avgAccuracy: number;
+                          avgSolved: number;
+                          active7d: number;
+                          adoption: number;
+                        }) => ({
+                          className: cls.className || "",
+                          teacherName: "",
+                          studentName: "",
+                          studentEmail: "",
+                          exercises: cls.avgSolved || 0,
+                          accuracy: cls.avgAccuracy || 0,
+                          streak: 0,
+                          lastActive: "",
+                        })
+                      );
+                      exportSchoolCsv(rows, data?.org?.name || "escola");
+                    },
+                  });
+                }
+                // Network exports
+                if (secData && !secData.empty) {
+                  items.push({
+                    label: t("networkPdfReport"),
+                    description: t("networkPdfDesc"),
+                    icon: "pdf",
+                    onClick: () => {
+                      const pdfData: NetworkPdfData = {
+                        networkName: data?.org?.name || "",
+                        schoolCount: secData.schoolCount || 0,
+                        kpis: secData.kpis || {
+                          totalStudents: 0,
+                          activeStudents: 0,
+                          totalTeachers: 0,
+                          totalClasses: 0,
+                          avgAccuracy: 0,
+                          totalExercises: 0,
+                          avgStreak: 0,
+                          adoption: 0,
+                        },
+                        schoolComparison: (
+                          secData.schoolComparison || []
+                        ).map(
+                          (s: {
+                            orgName: string;
+                            students: number;
+                            active7d: number;
+                            teachers: number;
+                            classes: number;
+                            avgAccuracy: number;
+                            adoption: number;
+                            avgStreak: number;
+                            score: number;
+                            status: string;
+                          }) => ({
+                            orgName: s.orgName,
+                            students: s.students,
+                            active7d: s.active7d,
+                            teachers: s.teachers,
+                            classes: s.classes,
+                            avgAccuracy: s.avgAccuracy,
+                            adoption: s.adoption,
+                            avgStreak: s.avgStreak,
+                            score: s.score,
+                            status: s.status,
+                          })
+                        ),
+                        alerts: secData.alerts || [],
+                        weeklyEvolution: secData.weeklyEvolution || [],
+                        period: "Ultimos 30 dias",
+                      };
+                      exportNetworkPdf(pdfData);
+                    },
+                  });
+                  items.push({
+                    label: t("networkSpreadsheet"),
+                    description: t("networkSpreadsheetDesc"),
+                    icon: "spreadsheet",
+                    onClick: () => {
+                      const rows: NetworkCsvRow[] = (
+                        secData.schoolComparison || []
+                      ).map(
                         (s: {
                           orgName: string;
                           students: number;
@@ -845,7 +883,7 @@ export default function OrgDetailPage({
                           score: number;
                           status: string;
                         }) => ({
-                          orgName: s.orgName,
+                          schoolName: s.orgName,
                           students: s.students,
                           active7d: s.active7d,
                           teachers: s.teachers,
@@ -856,58 +894,31 @@ export default function OrgDetailPage({
                           score: s.score,
                           status: s.status,
                         })
-                      ),
-                      alerts: secData.alerts || [],
-                      weeklyEvolution: secData.weeklyEvolution || [],
-                      period: "Ultimos 30 dias",
-                    };
-                    exportNetworkPdf(pdfData);
-                  }}
-                  className="flex items-center gap-1.5 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-medium text-purple-400 transition-colors hover:bg-purple-500/20"
-                >
-                  <FileDown className="h-3.5 w-3.5" />
-                  PDF Rede
-                </button>
-              )}
-              {/* Network CSV export */}
-              {secData && !secData.empty && (
-                <button
-                  onClick={() => {
-                    const rows: NetworkCsvRow[] = (
-                      secData.schoolComparison || []
-                    ).map(
-                      (s: {
-                        orgName: string;
-                        students: number;
-                        active7d: number;
-                        teachers: number;
-                        classes: number;
-                        avgAccuracy: number;
-                        adoption: number;
-                        avgStreak: number;
-                        score: number;
-                        status: string;
-                      }) => ({
-                        schoolName: s.orgName,
-                        students: s.students,
-                        active7d: s.active7d,
-                        teachers: s.teachers,
-                        classes: s.classes,
-                        avgAccuracy: s.avgAccuracy,
-                        adoption: s.adoption,
-                        avgStreak: s.avgStreak,
-                        score: s.score,
-                        status: s.status,
-                      })
-                    );
-                    exportNetworkCsv(rows, data?.org?.name || "rede");
-                  }}
-                  className="flex items-center gap-1.5 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-medium text-purple-400 transition-colors hover:bg-purple-500/20"
-                >
-                  <FileSpreadsheet className="h-3.5 w-3.5" />
-                  CSV Rede
-                </button>
-              )}
+                      );
+                      exportNetworkCsv(rows, data?.org?.name || "rede");
+                    },
+                  });
+                }
+                // Print — always available
+                items.push({
+                  label: t("printDashboard"),
+                  description: t("printDashboardDesc"),
+                  icon: "print",
+                  onClick: () => window.print(),
+                });
+                return items;
+              })()}
+            />
+          </div>
+
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-indigo-400" />
+              <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+                Dashboard
+              </h2>
+            </div>
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowDashboard(!showDashboard)}
                 className="text-xs text-[var(--color-dim)] transition-colors hover:text-[var(--color-text-primary)]"

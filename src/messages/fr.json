@@ -445,11 +445,31 @@
       "headerTask": "Tâche",
       "headerWithout": "Sans",
       "headerAxiom": "Avec Axiom",
-      "row1": ["Résoudre 1 problème", "30 – 60 min", "5 secondes"],
-      "row2": ["Écrire un essai de 1 000 mots", "3 – 5 heures", "15 minutes"],
-      "row3": ["Créer un plan d'étude", "1 – 2 heures", "1 clic"],
-      "row4": ["Humaniser 2 000 mots", "45 min", "10 secondes"],
-      "row5": ["Préparation complète exam", "6 – 10 heures", "2 heures"],
+      "row1": [
+        "Résoudre 1 problème",
+        "30 – 60 min",
+        "5 secondes"
+      ],
+      "row2": [
+        "Écrire un essai de 1 000 mots",
+        "3 – 5 heures",
+        "15 minutes"
+      ],
+      "row3": [
+        "Créer un plan d'étude",
+        "1 – 2 heures",
+        "1 clic"
+      ],
+      "row4": [
+        "Humaniser 2 000 mots",
+        "45 min",
+        "10 secondes"
+      ],
+      "row5": [
+        "Préparation complète exam",
+        "6 – 10 heures",
+        "2 heures"
+      ],
       "footer": "L'étudiant moyen économise ~200 heures par semestre"
     },
     "pricing": {
@@ -778,7 +798,18 @@
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Toutes les classes, membres et codes d'invitation seront supprimés.",
     "deleteWarning": "Les écoles-filles ne seront PAS supprimées, seulement détachées. Cette action est irréversible.",
     "typeOrgName": "Tapez le nom de l'organisation pour confirmer",
-    "deletePermanently": "Supprimer Définitivement"
+    "deletePermanently": "Supprimer Définitivement",
+    "reports": "Rapports",
+    "networkPdfReport": "Rapport Exécutif (PDF)",
+    "networkPdfDesc": "KPIs et comparatif entre écoles",
+    "networkSpreadsheet": "Tableur du Réseau",
+    "networkSpreadsheetDesc": "Données par école au format Excel",
+    "schoolPdfReport": "Rapport de l'École (PDF)",
+    "schoolPdfDesc": "KPIs, classes et évolution",
+    "schoolSpreadsheet": "Tableur de l'École",
+    "schoolSpreadsheetDesc": "Données des classes au format Excel",
+    "printDashboard": "Imprimer le Tableau",
+    "printDashboardDesc": "Imprimer cette page"
   },
   "Class": {
     "title": "Classe",

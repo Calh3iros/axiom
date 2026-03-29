@@ -445,11 +445,31 @@
       "headerTask": "Task",
       "headerWithout": "Without",
       "headerAxiom": "With Axiom",
-      "row1": ["Solve 1 problem", "30 – 60 min", "5 seconds"],
-      "row2": ["Write 1,000-word essay", "3 – 5 hours", "15 minutes"],
-      "row3": ["Build study plan", "1 – 2 hours", "1 click"],
-      "row4": ["Humanize 2,000 words", "45 min", "10 seconds"],
-      "row5": ["Full exam prep", "6 – 10 hours", "2 hours"],
+      "row1": [
+        "Solve 1 problem",
+        "30 – 60 min",
+        "5 seconds"
+      ],
+      "row2": [
+        "Write 1,000-word essay",
+        "3 – 5 hours",
+        "15 minutes"
+      ],
+      "row3": [
+        "Build study plan",
+        "1 – 2 hours",
+        "1 click"
+      ],
+      "row4": [
+        "Humanize 2,000 words",
+        "45 min",
+        "10 seconds"
+      ],
+      "row5": [
+        "Full exam prep",
+        "6 – 10 hours",
+        "2 hours"
+      ],
       "footer": "Average student saves ~200 hours per semester"
     },
     "pricing": {
@@ -778,7 +798,18 @@
     "deleteConfirm": "Are you sure you want to delete \"{name}\"? This will remove all classes, members and invite codes.",
     "deleteWarning": "Child schools will NOT be deleted, only unlinked. This action cannot be undone.",
     "typeOrgName": "Type the organization name to confirm",
-    "deletePermanently": "Delete Permanently"
+    "deletePermanently": "Delete Permanently",
+    "reports": "Reports",
+    "networkPdfReport": "Executive Report (PDF)",
+    "networkPdfDesc": "KPIs and school comparison",
+    "networkSpreadsheet": "Network Spreadsheet",
+    "networkSpreadsheetDesc": "Per-school data in Excel format",
+    "schoolPdfReport": "School Report (PDF)",
+    "schoolPdfDesc": "KPIs, classes and progress",
+    "schoolSpreadsheet": "School Spreadsheet",
+    "schoolSpreadsheetDesc": "Class data in Excel format",
+    "printDashboard": "Print Dashboard",
+    "printDashboardDesc": "Print this page"
   },
   "Class": {
     "title": "Class",

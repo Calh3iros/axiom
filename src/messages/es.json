@@ -445,15 +445,31 @@
       "headerTask": "Tarea",
       "headerWithout": "Sin",
       "headerAxiom": "Con Axiom",
-      "row1": ["Resolver 1 problema", "30 – 60 min", "5 segundos"],
+      "row1": [
+        "Resolver 1 problema",
+        "30 – 60 min",
+        "5 segundos"
+      ],
       "row2": [
         "Escribir ensayo de 1.000 palabras",
         "3 – 5 horas",
         "15 minutos"
       ],
-      "row3": ["Crear plan de estudio", "1 – 2 horas", "1 clic"],
-      "row4": ["Humanizar 2.000 palabras", "45 min", "10 segundos"],
-      "row5": ["Preparación completa para examen", "6 – 10 horas", "2 horas"],
+      "row3": [
+        "Crear plan de estudio",
+        "1 – 2 horas",
+        "1 clic"
+      ],
+      "row4": [
+        "Humanizar 2.000 palabras",
+        "45 min",
+        "10 segundos"
+      ],
+      "row5": [
+        "Preparación completa para examen",
+        "6 – 10 horas",
+        "2 horas"
+      ],
       "footer": "El estudiante promedio ahorra ~200 horas por semestre"
     },
     "pricing": {
@@ -782,7 +798,18 @@
     "deleteConfirm": "¿Seguro que desea eliminar \"{name}\"? Se eliminarán todas las clases, miembros y códigos de invitación.",
     "deleteWarning": "Las escuelas-hijas NO serán eliminadas, solo deslinkadas. Esta acción no se puede deshacer.",
     "typeOrgName": "Escriba el nombre de la organización para confirmar",
-    "deletePermanently": "Eliminar Permanentemente"
+    "deletePermanently": "Eliminar Permanentemente",
+    "reports": "Reportes",
+    "networkPdfReport": "Reporte Ejecutivo (PDF)",
+    "networkPdfDesc": "KPIs y comparativo entre escuelas",
+    "networkSpreadsheet": "Hoja de cálculo de la Red",
+    "networkSpreadsheetDesc": "Datos por escuela en formato Excel",
+    "schoolPdfReport": "Reporte de la Escuela (PDF)",
+    "schoolPdfDesc": "KPIs, clases y evolución",
+    "schoolSpreadsheet": "Hoja de cálculo de la Escuela",
+    "schoolSpreadsheetDesc": "Datos de las clases en formato Excel",
+    "printDashboard": "Imprimir Panel",
+    "printDashboardDesc": "Imprimir esta página"
   },
   "Class": {
     "title": "Clase",
