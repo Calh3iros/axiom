@@ -218,11 +218,33 @@ export async function getOrgDashboard(orgId: string) {
     .eq("org_id", orgId)
     .single();
 
+  // If no direct membership, check parent chain (owner/secretary of rede → can access escola)
+  let inheritedRole: string | null = null;
+  if (!membership) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: org } = await (supabaseAdmin.from("organizations") as any)
+      .select("parent_id")
+      .eq("id", orgId)
+      .single();
+    if (org?.parent_id) {
+      const { data: parentMem } = await (
+        supabaseAdmin.from("org_memberships") as any
+      )
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("org_id", org.parent_id)
+        .single();
+      if (parentMem && ELEVATED_ROLES.includes(parentMem.role)) {
+        inheritedRole = parentMem.role;
+      }
+    }
+  }
+
   // Super_admin bypass: read-only director-level access without membership
   const isSuperAdminUser =
-    !membership && (await isSuperAdmin(supabase, user.id));
+    !membership && !inheritedRole && (await isSuperAdmin(supabase, user.id));
   const effectiveRole =
-    membership?.role || (isSuperAdminUser ? "director" : null);
+    membership?.role || inheritedRole || (isSuperAdminUser ? "director" : null);
   if (!effectiveRole) return null;
 
   // Use supabaseAdmin for all data queries — membership is verified above.
@@ -505,6 +527,26 @@ export async function getClassDashboard(classId: string) {
     .eq("org_id", cls.org_id)
     .single();
 
+  // If no direct membership, check parent chain (owner/secretary can view child org classes)
+  let inheritedClassRole: string | null = null;
+  if (!myMembership) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: classOrg } = await (db.from("organizations") as any)
+      .select("parent_id")
+      .eq("id", cls.org_id)
+      .single();
+    if (classOrg?.parent_id) {
+      const { data: parentMem } = await (db.from("org_memberships") as any)
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("org_id", classOrg.parent_id)
+        .single();
+      if (parentMem && ELEVATED_ROLES.includes(parentMem.role)) {
+        inheritedClassRole = parentMem.role;
+      }
+    }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: mRows } = await (db.from("class_memberships") as any)
     .select("user_id, joined_at")
@@ -537,6 +579,7 @@ export async function getClassDashboard(classId: string) {
     isTeacher: cls.teacher_id === user.id,
     myRole:
       myMembership?.role ||
+      inheritedClassRole ||
       (cls.teacher_id === user.id ? "teacher" : "student"),
   };
 }

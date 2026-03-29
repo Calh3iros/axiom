@@ -802,6 +802,7 @@
     "joining": "Beitritt...",
     "typeEmpty": "Geben Sie den erhaltenen Code ein",
     "typeSecretary": "Sekretariat/Netzwerk-Code",
+    "typeOwner": "Eigentümer-Code",
     "typeGre": "Regionalverwaltungs-Code",
     "typeDirector": "Direktor-Code",
     "typeTeacher": "Lehrer-Code",

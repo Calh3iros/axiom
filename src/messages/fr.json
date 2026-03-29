@@ -802,6 +802,7 @@
     "joining": "En cours...",
     "typeEmpty": "Entrez le code reçu",
     "typeSecretary": "Code Secrétariat/Réseau",
+    "typeOwner": "Code Propriétaire",
     "typeGre": "Code Gestion Régionale",
     "typeDirector": "Code Directeur",
     "typeTeacher": "Code Professeur",

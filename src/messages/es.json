@@ -806,6 +806,7 @@
     "joining": "Uniéndose...",
     "typeEmpty": "Ingrese el código recibido",
     "typeSecretary": "Código de Secretaría/Red",
+    "typeOwner": "Código de Propietario",
     "typeGre": "Código de Gerencia Regional",
     "typeDirector": "Código de Director",
     "typeTeacher": "Código de Profesor",

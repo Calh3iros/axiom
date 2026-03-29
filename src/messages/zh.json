@@ -802,6 +802,7 @@
     "joining": "加入中...",
     "typeEmpty": "输入收到的代码",
     "typeSecretary": "秘书处/网络代码",
+    "typeOwner": "所有者代码",
     "typeGre": "区域管理代码",
     "typeDirector": "校长代码",
     "typeTeacher": "教师代码",
