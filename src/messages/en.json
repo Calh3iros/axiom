@@ -827,7 +827,22 @@
     "schoolSpreadsheet": "School Spreadsheet",
     "schoolSpreadsheetDesc": "Class data in Excel format",
     "printDashboard": "Print Dashboard",
-    "printDashboardDesc": "Print this page"
+    "printDashboardDesc": "Print this page",
+    "onboardingConfigureNetwork": "Set up your network",
+    "onboardingConfigureSchool": "Set up your school",
+    "onboardingStepsComplete": "{done} of {total} completed",
+    "onboardingSchoolsRegistered": "Schools registered",
+    "onboardingSchoolsRegisteredDesc": "Use '+ New School' to add your units",
+    "onboardingDirectorsLinked": "Directors linked",
+    "onboardingDirectorsLinkedDesc": "Directors create accounts and enter the DIR code",
+    "onboardingTeachersLinked": "Teachers linked",
+    "onboardingTeachersLinkedDesc": "Directors generate PRF codes and share with teachers",
+    "onboardingStudentsActive": "Students active",
+    "onboardingStudentsActiveDesc": "Teachers share the class code with students",
+    "onboardingClassesCreated": "Classes created",
+    "onboardingClassesCreatedDesc": "Use 'Batch Create' to create multiple at once",
+    "onboardingTeacherCodeGenerated": "Teacher code generated",
+    "onboardingTeacherCodeGeneratedDesc": "Click 'Generate Teacher Code' in the Teachers section"
   },
   "Class": {
     "title": "Class",

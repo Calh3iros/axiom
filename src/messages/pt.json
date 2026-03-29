@@ -827,7 +827,22 @@
     "schoolSpreadsheet": "Planilha da Escola",
     "schoolSpreadsheetDesc": "Dados das turmas em formato Excel",
     "printDashboard": "Imprimir Painel",
-    "printDashboardDesc": "Imprimir esta página"
+    "printDashboardDesc": "Imprimir esta página",
+    "onboardingConfigureNetwork": "Configure sua rede",
+    "onboardingConfigureSchool": "Configure sua escola",
+    "onboardingStepsComplete": "{done} de {total} concluídos",
+    "onboardingSchoolsRegistered": "Escolas cadastradas",
+    "onboardingSchoolsRegisteredDesc": "Use '+ Nova Escola' para adicionar suas unidades",
+    "onboardingDirectorsLinked": "Diretores vinculados",
+    "onboardingDirectorsLinkedDesc": "Os diretores criam conta e informam o código DIR",
+    "onboardingTeachersLinked": "Professores vinculados",
+    "onboardingTeachersLinkedDesc": "Os diretores geram código PRF e enviam aos professores",
+    "onboardingStudentsActive": "Alunos usando",
+    "onboardingStudentsActiveDesc": "Os professores compartilham o código da turma",
+    "onboardingClassesCreated": "Turmas criadas",
+    "onboardingClassesCreatedDesc": "Use 'Criar em Lote' para criar várias de uma vez",
+    "onboardingTeacherCodeGenerated": "Código professor gerado",
+    "onboardingTeacherCodeGeneratedDesc": "Clique 'Gerar Código Professor' na aba Professores"
   },
   "Class": {
     "title": "Turma",

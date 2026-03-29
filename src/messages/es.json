@@ -827,7 +827,22 @@
     "schoolSpreadsheet": "Hoja de cálculo de la Escuela",
     "schoolSpreadsheetDesc": "Datos de las clases en formato Excel",
     "printDashboard": "Imprimir Panel",
-    "printDashboardDesc": "Imprimir esta página"
+    "printDashboardDesc": "Imprimir esta página",
+    "onboardingConfigureNetwork": "Configure su red",
+    "onboardingConfigureSchool": "Configure su escuela",
+    "onboardingStepsComplete": "{done} de {total} completados",
+    "onboardingSchoolsRegistered": "Escuelas registradas",
+    "onboardingSchoolsRegisteredDesc": "Use '+ Nueva Escuela' para agregar unidades",
+    "onboardingDirectorsLinked": "Directores vinculados",
+    "onboardingDirectorsLinkedDesc": "Los directores crean cuenta e informan el código DIR",
+    "onboardingTeachersLinked": "Profesores vinculados",
+    "onboardingTeachersLinkedDesc": "Los directores generan código PRF y envían a los profesores",
+    "onboardingStudentsActive": "Alumnos usando",
+    "onboardingStudentsActiveDesc": "Los profesores comparten el código de clase",
+    "onboardingClassesCreated": "Clases creadas",
+    "onboardingClassesCreatedDesc": "Use 'Crear en Lote' para crear varias a la vez",
+    "onboardingTeacherCodeGenerated": "Código profesor generado",
+    "onboardingTeacherCodeGeneratedDesc": "Haga clic en 'Generar Código Profesor'"
   },
   "Class": {
     "title": "Clase",

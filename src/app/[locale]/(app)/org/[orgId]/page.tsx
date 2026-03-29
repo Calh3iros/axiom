@@ -32,6 +32,7 @@ import { MemberList } from "@/components/org/member-list";
 import { OrgRankingView } from "@/components/rankings/org-ranking-view";
 import { ReportCard, type ReportItem } from "@/components/dashboard/report-card";
 import { ExecutiveSummary } from "@/components/dashboard/executive-summary";
+import { OnboardingProgress } from "@/components/dashboard/onboarding-progress";
 import { Breadcrumb } from "@/components/shared/breadcrumb";
 import { WelcomeBanner } from "@/components/shared/welcome-banner";
 import { Link, useRouter } from "@/i18n/routing";
@@ -730,6 +731,44 @@ export default function OrgDetailPage({
           )}
         </div>
       )}
+
+      {/* Onboarding Progress Checklist (elevated roles, new orgs) */}
+      {isElevated && (() => {
+        const hasChildren = (data.childOrgs || []).length > 0;
+        const isNetwork = hasChildren || data.org.type?.includes('network') || data.org.type?.includes('municipal') || data.org.type?.includes('state');
+        const members = data.members || [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const hasDirectors = members.some((m: any) => ['director', 'admin', 'owner'].includes(m.role) && m.user_id !== undefined);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const hasTeachers = members.some((m: any) => m.role === 'teacher');
+        const hasClasses = (data.classes || []).length > 0;
+        const hasStudents = (data.studentCount || 0) > 0;
+
+        if (isNetwork) {
+          return (
+            <OnboardingProgress
+              level="network"
+              steps={[
+                { key: "SchoolsRegistered", done: hasChildren },
+                { key: "DirectorsLinked", done: hasDirectors || hasTeachers },
+                { key: "TeachersLinked", done: hasTeachers },
+                { key: "StudentsActive", done: hasStudents },
+              ]}
+            />
+          );
+        } else {
+          return (
+            <OnboardingProgress
+              level="school"
+              steps={[
+                { key: "ClassesCreated", done: hasClasses },
+                { key: "TeacherCodeGenerated", done: hasTeachers },
+                { key: "StudentsActive", done: hasStudents },
+              ]}
+            />
+          );
+        }
+      })()}
 
       {/* Dashboard (directors/admins/secretaries/coordinators) */}
       {isElevated && (dashData || secData) && (

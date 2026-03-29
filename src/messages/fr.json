@@ -827,7 +827,22 @@
     "schoolSpreadsheet": "Tableur de l'École",
     "schoolSpreadsheetDesc": "Données des classes au format Excel",
     "printDashboard": "Imprimer le Tableau",
-    "printDashboardDesc": "Imprimer cette page"
+    "printDashboardDesc": "Imprimer cette page",
+    "onboardingConfigureNetwork": "Configurez votre réseau",
+    "onboardingConfigureSchool": "Configurez votre école",
+    "onboardingStepsComplete": "{done} sur {total} terminés",
+    "onboardingSchoolsRegistered": "Écoles enregistrées",
+    "onboardingSchoolsRegisteredDesc": "Utilisez '+ Nouvelle École' pour ajouter vos unités",
+    "onboardingDirectorsLinked": "Directeurs liés",
+    "onboardingDirectorsLinkedDesc": "Les directeurs créent un compte et renseignent le code DIR",
+    "onboardingTeachersLinked": "Enseignants liés",
+    "onboardingTeachersLinkedDesc": "Les directeurs génèrent le code PRF et le partagent",
+    "onboardingStudentsActive": "Élèves actifs",
+    "onboardingStudentsActiveDesc": "Les enseignants partagent le code de classe",
+    "onboardingClassesCreated": "Classes créées",
+    "onboardingClassesCreatedDesc": "Utilisez 'Créer en lot' pour en créer plusieurs",
+    "onboardingTeacherCodeGenerated": "Code enseignant généré",
+    "onboardingTeacherCodeGeneratedDesc": "Cliquez sur 'Générer Code Enseignant'"
   },
   "Class": {
     "title": "Classe",

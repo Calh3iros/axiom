@@ -827,7 +827,22 @@
     "schoolSpreadsheet": "学校电子表格",
     "schoolSpreadsheetDesc": "班级Excel格式数据",
     "printDashboard": "打印面板",
-    "printDashboardDesc": "打印此页面"
+    "printDashboardDesc": "打印此页面",
+    "onboardingConfigureNetwork": "设置您的网络",
+    "onboardingConfigureSchool": "设置您的学校",
+    "onboardingStepsComplete": "已完成 {done}/{total}",
+    "onboardingSchoolsRegistered": "学校已注册",
+    "onboardingSchoolsRegisteredDesc": "使用'+ 新学校'添加您的单位",
+    "onboardingDirectorsLinked": "校长已关联",
+    "onboardingDirectorsLinkedDesc": "校长创建账户并输入DIR代码",
+    "onboardingTeachersLinked": "教师已关联",
+    "onboardingTeachersLinkedDesc": "校长生成PRF代码并分享给教师",
+    "onboardingStudentsActive": "学生活跃",
+    "onboardingStudentsActiveDesc": "教师与学生分享班级代码",
+    "onboardingClassesCreated": "班级已创建",
+    "onboardingClassesCreatedDesc": "使用'批量创建'一次创建多个",
+    "onboardingTeacherCodeGenerated": "教师代码已生成",
+    "onboardingTeacherCodeGeneratedDesc": "点击'生成教师代码'"
   },
   "Class": {
     "title": "班级",

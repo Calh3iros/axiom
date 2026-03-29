@@ -827,7 +827,22 @@
     "schoolSpreadsheet": "Schul-Tabelle",
     "schoolSpreadsheetDesc": "Klassendaten im Excel-Format",
     "printDashboard": "Dashboard drucken",
-    "printDashboardDesc": "Diese Seite drucken"
+    "printDashboardDesc": "Diese Seite drucken",
+    "onboardingConfigureNetwork": "Richten Sie Ihr Netzwerk ein",
+    "onboardingConfigureSchool": "Richten Sie Ihre Schule ein",
+    "onboardingStepsComplete": "{done} von {total} abgeschlossen",
+    "onboardingSchoolsRegistered": "Schulen registriert",
+    "onboardingSchoolsRegisteredDesc": "Verwenden Sie '+ Neue Schule' zum Hinzufügen",
+    "onboardingDirectorsLinked": "Direktoren verbunden",
+    "onboardingDirectorsLinkedDesc": "Direktoren erstellen Konten und geben den DIR-Code ein",
+    "onboardingTeachersLinked": "Lehrer verbunden",
+    "onboardingTeachersLinkedDesc": "Direktoren generieren PRF-Codes und teilen sie",
+    "onboardingStudentsActive": "Schüler aktiv",
+    "onboardingStudentsActiveDesc": "Lehrer teilen den Klassencode mit Schülern",
+    "onboardingClassesCreated": "Klassen erstellt",
+    "onboardingClassesCreatedDesc": "Verwenden Sie 'Stapelerstellung' für mehrere",
+    "onboardingTeacherCodeGenerated": "Lehrer-Code generiert",
+    "onboardingTeacherCodeGeneratedDesc": "Klicken Sie auf 'Lehrer-Code generieren'"
   },
   "Class": {
     "title": "Klasse",
