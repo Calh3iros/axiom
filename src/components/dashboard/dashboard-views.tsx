@@ -450,18 +450,30 @@ export function TeacherDashboard({
   );
 }
 
+// Compute trend delta between last 2 entries of a data array
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function computeTrend(data: any[] | undefined, field: string): number | null {
+  if (!data || data.length < 2) return null;
+  const curr = data[data.length - 1]?.[field];
+  const prev = data[data.length - 2]?.[field];
+  if (curr == null || prev == null) return null;
+  return Math.round(curr - prev);
+}
+
 function KpiCard({
   icon: Icon,
   color,
   label,
   value,
   sub,
+  trend,
 }: {
   icon: React.ElementType;
   color: string;
   label: string;
   value: string | number;
   sub?: string;
+  trend?: number | null;
 }) {
   return (
     <div
@@ -492,19 +504,35 @@ function KpiCard({
           fontWeight: 700,
           color: "var(--color-text-primary, #f1f5f9)",
           lineHeight: 1,
+          display: "flex",
+          alignItems: "baseline",
+          gap: 6,
         }}
       >
-        {value}
+        <span>{value}</span>
         {sub && (
           <span
             style={{
               fontSize: 14,
               color: "#64748b",
-              marginLeft: 6,
               fontWeight: 400,
             }}
           >
             {sub}
+          </span>
+        )}
+        {trend != null && trend !== 0 && (
+          <span
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: trend > 0 ? GREEN : RED,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}{typeof value === "string" && value.includes("%") ? "%" : ""}
           </span>
         )}
       </div>
@@ -672,24 +700,28 @@ export function DirectorDashboard({
               label={t("active7d")}
               value={data.active7d}
               sub={`${data.adoption}%`}
+              trend={computeTrend(data.weeklyEvolution, "active")}
             />
             <KpiCard
               icon={TrendingUp}
               color={ACCENT}
               label={t("totalSolved")}
               value={data.totalSolved.toLocaleString()}
+              trend={computeTrend(data.weeklyEvolution, "solved")}
             />
             <KpiCard
               icon={Target}
               color={YELLOW}
               label={t("avgAccuracy")}
               value={`${data.overallAccuracy}%`}
+              trend={computeTrend(data.weeklyEvolution, "accuracy")}
             />
             <KpiCard
               icon={Zap}
               color={PINK}
               label={t("avgStreak")}
               value={`🔥 ${data.avgStreak}`}
+              trend={computeTrend(data.weeklyEvolution, "streak")}
             />
           </div>
 
@@ -1009,12 +1041,14 @@ export function SecretaryDashboard({
                 color={ACCENT}
                 label={t("totalSolved")}
                 value={kpis.totalExercises.toLocaleString()}
+                trend={computeTrend(data.weeklyEvolution, "exercises")}
               />
               <KpiCard
                 icon={Target}
                 color={YELLOW}
                 label={t("avgAccuracy")}
                 value={`${kpis.avgAccuracy}%`}
+                trend={computeTrend(data.weeklyEvolution, "accuracy")}
               />
               <KpiCard
                 icon={Zap}
