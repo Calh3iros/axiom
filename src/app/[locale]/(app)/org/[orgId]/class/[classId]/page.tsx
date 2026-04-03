@@ -33,7 +33,7 @@ import { getStudentReport, type StudentReport } from "@/lib/actions/report";
 import { exportClassPdf2Pages } from "@/lib/export-class-pdf";
 import { exportStudentPdf, exportClassPdf } from "@/lib/export-student-pdf";
 import { createClient } from "@/lib/supabase/client";
-import { isElevated } from "@/types/roles";
+import { isElevated, isManager } from "@/types/roles";
 
 interface ProfileData {
   full_name: string | null;
@@ -222,6 +222,13 @@ export default function ClassDetailPage({
       ? isElevated(ranking.role)
       : data.isTeacher;
 
+  // Stricter: coordinator+ only (not teacher) for destructive actions
+  const canManage = data.myRole
+    ? isManager(data.myRole)
+    : ranking?.role
+      ? isManager(ranking.role)
+      : false;
+
   const handleReassignOpen = async () => {
     const teachers = await getOrgTeachers(orgId);
     setOrgTeachers(teachers || []);
@@ -312,8 +319,8 @@ export default function ClassDetailPage({
                   )}
                 </div>
               )}
-              {/* Reassign Teacher button (coordinator+) */}
-              {canCoordinate && (
+              {/* Reassign Teacher button (coordinator+ only — NOT teacher) */}
+              {canManage && (
                 <button
                   onClick={handleReassignOpen}
                   className="flex items-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-400 transition-colors hover:bg-cyan-500/20"
@@ -467,7 +474,7 @@ export default function ClassDetailPage({
                       <span className="text-xs text-[var(--color-dim)]">
                         {new Date(s.joined_at).toLocaleDateString()}
                       </span>
-                      {canCoordinate && (
+                      {canManage && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
