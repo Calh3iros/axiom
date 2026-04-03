@@ -354,16 +354,18 @@ export default function ClassDetailPage({
                   <Copy className="h-5 w-5" />
                 )}
               </button>
-              <button
-                onClick={handleRegenerate}
-                disabled={regenerating}
-                className="flex items-center gap-2 rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm text-[var(--color-dim)] transition-colors hover:text-white disabled:opacity-50"
-              >
-                <RefreshCw
-                  className={`h-4 w-4 ${regenerating ? "animate-spin" : ""}`}
-                />
-                {t("regenerateCode")}
-              </button>
+              {canManage && (
+                <button
+                  onClick={handleRegenerate}
+                  disabled={regenerating}
+                  className="flex items-center gap-2 rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm text-[var(--color-dim)] transition-colors hover:text-white disabled:opacity-50"
+                >
+                  <RefreshCw
+                    className={`h-4 w-4 ${regenerating ? "animate-spin" : ""}`}
+                  />
+                  {t("regenerateCode")}
+                </button>
+              )}
             </div>
             {copied && (
               <p className="mt-2 text-xs text-green-400">{t("codeCopied")}</p>
