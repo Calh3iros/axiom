@@ -103,15 +103,23 @@ function computeTimeBuckets(
   endDate: string
 ): { label: string; start: Date; end: Date }[] {
   const start = new Date(startDate);
-  const end = new Date(endDate);
-  const diffDays = Math.ceil((end.getTime() - start.getTime()) / 86400000);
+  // endDate comes as "YYYY-MM-DD" — new Date() makes it midnight UTC.
+  // We need the end of that day so the last bucket covers the full day.
+  const end = new Date(endDate + "T23:59:59.999Z");
+  // Use date-only diff for choosing bucket granularity (daily/weekly/monthly)
+  const diffDays = Math.ceil(
+    (new Date(endDate).getTime() - start.getTime()) / 86400000
+  );
 
   if (diffDays <= 7) {
-    // Daily buckets
+    // Daily buckets — include endDate day
     const buckets = [];
-    for (let d = 0; d < diffDays; d++) {
+    for (let d = 0; d <= diffDays; d++) {
       const bStart = new Date(start.getTime() + d * 86400000);
-      const bEnd = new Date(start.getTime() + (d + 1) * 86400000);
+      if (bStart > end) break;
+      const bEnd = new Date(
+        Math.min(start.getTime() + (d + 1) * 86400000, end.getTime())
+      );
       buckets.push({
         label: `${bStart.getMonth() + 1}/${bStart.getDate()}`,
         start: bStart,
