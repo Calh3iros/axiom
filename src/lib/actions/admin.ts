@@ -589,13 +589,10 @@ export async function createOrganizationDirect(input: {
 
   if (orgErr) return { error: orgErr.message };
 
-  // Auto-add creator as admin
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabaseAdmin.from("org_memberships") as any).insert({
-    user_id: user.id,
-    org_id: org.id,
-    role: "admin",
-  });
+  // NOTE: We intentionally do NOT insert a membership for the super_admin creator.
+  // Super admins access all orgs via the is_super_admin bypass in getManagerRole.
+  // Adding a membership would make them appear in the org's member list,
+  // confusing school directors who see an unknown "Admin" user.
 
   // Generate invite code based on org type
   // school/private_school => director, network/state => secretary, private_network/public_* => owner

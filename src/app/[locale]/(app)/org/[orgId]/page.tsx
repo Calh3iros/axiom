@@ -119,13 +119,18 @@ export default function OrgDetailPage({
   const [createSchoolResult, setCreateSchoolResult] = useState<any>(null);
   const [copiedDirCode, setCopiedDirCode] = useState(false);
 
+  // Org types that represent a network (have child schools)
+  const NETWORK_TYPES = ['network', 'private_network', 'public_municipal', 'public_state', 'state'];
+
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [res, rankRes, dirRes, secRes] = await Promise.all([
-      getOrgDashboard(orgId),
+    const res = await getOrgDashboard(orgId);
+    const isNetwork = res?.org?.type && NETWORK_TYPES.includes(res.org.type);
+
+    const [rankRes, dirRes, secRes] = await Promise.all([
       getOrgClassRanking(orgId),
       getDirectorDashboard(orgId),
-      getSecretaryDashboard(orgId),
+      isNetwork ? getSecretaryDashboard(orgId) : Promise.resolve(null),
     ]);
     setData(res);
     setOrgRanking(rankRes);
@@ -159,6 +164,8 @@ export default function OrgDetailPage({
     fetchData();
   }, [fetchData]);
 
+  const isNetworkType = data?.org?.type && NETWORK_TYPES.includes(data.org.type);
+
   const handleDirPeriodChange = async (range: {
     startDate: string;
     endDate: string;
@@ -173,6 +180,7 @@ export default function OrgDetailPage({
     startDate: string;
     endDate: string;
   }) => {
+    if (!isNetworkType) return;
     setSecLoading(true);
     const res = await getSecretaryDashboard(orgId, range);
     setSecData(res);
@@ -775,7 +783,7 @@ export default function OrgDetailPage({
         <div>
           {/* Executive Summary */}
           <div className="mb-4">
-            {secData && !secData.empty && secData.kpis && (
+            {isNetworkType && secData && !secData.empty && secData.kpis && (
               <ExecutiveSummary
                 level="network"
                 totalStudents={secData.kpis.totalStudents || 0}
@@ -786,7 +794,7 @@ export default function OrgDetailPage({
                 lowAdoptionSchools={secData.alerts?.filter((a: any) => a.type === 'low_adoption').length}
               />
             )}
-            {dashData && !dashData.empty && !secData && (
+            {dashData && !dashData.empty && (!isNetworkType || !secData) && (
               <ExecutiveSummary
                 level="school"
                 totalStudents={dashData.totalStudents || 0}
@@ -885,8 +893,8 @@ export default function OrgDetailPage({
                     },
                   });
                 }
-                // Network exports
-                if (secData && !secData.empty) {
+                // Network exports (only for network-type orgs)
+                if (isNetworkType && secData && !secData.empty) {
                   items.push({
                     label: t("networkPdfReport"),
                     description: t("networkPdfDesc"),
@@ -1016,7 +1024,7 @@ export default function OrgDetailPage({
                   title={data?.org?.name}
                 />
               )}
-              {secData && (
+              {isNetworkType && secData && (
                 <SecretaryDashboard
                   data={secData}
                   onDrillDown={(id) => router.push(`/org/${id}`)}
