@@ -67,11 +67,7 @@ export async function generateInviteCode(input: {
   const isAdmin = await isSuperAdmin(user.id);
 
   // Permission check
-  if (
-    input.type === "secretary" ||
-    input.type === "gre" ||
-    input.type === "owner"
-  ) {
+  if (input.type === "secretary" || input.type === "owner") {
     if (!isAdmin)
       return { error: "Only administrators can generate this code type" };
   } else if (input.type === "director") {
@@ -88,6 +84,7 @@ export async function generateInviteCode(input: {
       }
     }
   } else if (input.type === "teacher" || input.type === "gre") {
+    // Teacher and coordinator codes: director+ can generate
     if (!isAdmin) {
       const role = await getOrgRole(user.id, input.orgId);
       if (!role || !["admin", "director", "owner"].includes(role)) {

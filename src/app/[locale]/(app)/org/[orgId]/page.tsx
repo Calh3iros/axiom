@@ -588,6 +588,8 @@ export default function OrgDetailPage({
                         (c: any) => c.type === "gre" && c.is_active
                       );
                       setCoordCode(gre || null);
+                    } else if ("error" in result) {
+                      alert(result.error);
                     }
                     setCoordCodeLoading(false);
                   }}
