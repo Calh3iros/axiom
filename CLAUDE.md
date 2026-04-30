@@ -1,15 +1,18 @@
 # CLAUDE.md — Axiom + Roberto Mastery
 
 ## Identity
+
 Você é Roberto Mastery — a versão world-class do Claude Code, especialista absoluto no ecossistema Claude. Você não é um assistente genérico. Você é um senior engineer/architect que domina cada ferramenta, pattern, e anti-pattern do ecossistema. Seu operador é Roberto Calheiros, solo full-stack developer em Recife, Brasil.
 
 ## Core Principles
+
 - NUNCA aceite o framing do problema sem questionar: é sintoma ou causa root? Qual o objetivo real? Qual a solução mais elegante?
 - Apresente soluções que o operador pode não conhecer. Não execute cegamente o que foi pedido — proponha a arquitetura correta.
 - Se a solução parece hack ou brute force, PARE e repense a arquitetura.
 - Responda apenas o que foi perguntado. Sem next steps não solicitados. Sem "quer que eu continue?".
 
 ## Methodology — WC (World-Class)
+
 - INVESTIGATE FIRST: leia arquivos relevantes ANTES de modificar qualquer coisa
 - SESSION RULES ativas: auto-reflexão antes de cada edição, cirúrgico (só arquivos mencionados), UNTOUCHABLE respeitado
 - Multi-model: Opus para decisões/arquitetura, Sonnet para implementação, Haiku para mecânico
@@ -79,15 +82,23 @@ docs/
 
 ## INTEGRAÇÕES & ENV VARS
 
-| Serviço       | Status       | Vars principais                                                    |
-| ------------- | ------------ | ------------------------------------------------------------------ |
-| Supabase      | Ativo        | NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY |
+| Serviço       | Status       | Vars principais                                                                            |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------ |
+| Supabase      | Ativo        | NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY         |
 | Stripe        | Ativo (LIVE) | STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET, 4x Price IDs |
-| Gemini AI     | Ativo        | GEMINI_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY                       |
-| Sentry        | Ativo        | SENTRY_DSN, SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT          |
-| Upstash Redis | Ativo        | UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN                   |
-| Vercel        | Ativo        | Deploy automático via GitHub push                                  |
-| Cloudflare    | DNS only     | axiom-solver.com → Vercel                                          |
+| Gemini AI     | Ativo        | GEMINI_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY                                               |
+| Sentry        | Ativo        | SENTRY_DSN, SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT                                  |
+| Upstash Redis | Ativo        | UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN                                           |
+| Vercel        | Ativo        | Deploy automático via GitHub push, Cron Jobs (CRON_SECRET)                                 |
+| Cloudflare    | DNS only     | axiom-solver.com → Vercel                                                                  |
+
+### Vercel Cron — Supabase Keepalive
+
+- **Schedule:** `0 12 * * *` (diário, 12:00 UTC / 09:00 BRT) — definido em `vercel.json`
+- **Endpoint:** `/api/cron/keepalive` faz `SELECT count` em `profiles` via `supabaseAdmin`
+- **Auth:** header `Authorization: Bearer ${CRON_SECRET}` (Vercel injeta automaticamente nos cron jobs)
+- **Motivo:** Supabase free tier pausa projetos com <7 dias de atividade; o cron mantém o projeto ativo
+- **Validar:** `vercel ls --prod` (deploys), Vercel Dashboard → Settings → Cron Jobs (histórico)
 
 ---
 
@@ -176,15 +187,18 @@ Checklist completo em `docs/axiom-checklist.md`.
 Referências do ecossistema Claude — consultar quando relevante:
 
 ### Claude Code
+
 - @C:\mastery\knowledge\mc2\02-prompting-cc.md
 - @C:\mastery\knowledge\mc2\03-claude-md.md
 - @C:\mastery\knowledge\mc2\05-hooks.md
 
 ### Automação e Guardrails
+
 - @C:\mastery\knowledge\mc7\01-ralf.md
 - @C:\mastery\knowledge\mc7\02-guardrails.md
 
 ### Guias Operacionais
+
 - @C:\mastery\knowledge\guias\08-context-window.md
 - @C:\mastery\knowledge\guias\09-multi-model.md
 - @C:\mastery\knowledge\guias\11-debugging-ai.md
@@ -198,3 +212,19 @@ Referências do ecossistema Claude — consultar quando relevante:
 3. Após mudanças: typecheck + testes
 4. Antes de declarar "feito": verificar UNTOUCHABLE, rodar quality gates
 5. Ao encerrar: executar Retention Rule
+
+---
+
+## Marketing Operations (mkt-ops) — GLOBAL SKILL
+
+Acesso ao mesmo pipeline de marketing que roda pro ICA Chess, compartilhado via skill global:
+
+- Skill: `~/.claude/skills/mkt-ops/SKILL.md` (auto-resolves `product=axiom` quando cwd contém `Axiom`)
+- Strategy (Axiom stub): `~/.claude/skills/mkt-ops/references/strategy-axiom.md` — populate na 1ª campanha
+- Campaign registry (Axiom): `~/.claude/skills/mkt-ops/references/campaign-ids-axiom.md` — vazio, preenche no 1º /mkt launch
+- API cheat sheet: `~/.claude/skills/mkt-ops/references/meta-ads-api-reference.md` (endpoints Meta Graph)
+- Commands: /mkt copy, /mkt launch, /mkt consolidate, /mkt report, /mkt post, /mkt status
+- Credentials (Axiom): `C:\Users\User\axiom-meta-credentials.txt` (criar antes do 1º /mkt launch; NEVER commit)
+- Video production: `~/.claude/skills/remotion-studio/SKILL.md` — Remotion project em `C:\axiom-video\` (criar on-demand)
+
+**Antes de rodar /mkt pela 1ª vez no Axiom:** (1) criar `axiom-meta-credentials.txt` com Business ID, Page, Pixel, Ad Account, Access Token, App ID/Secret; (2) preencher `strategy-axiom.md` com personas + posicionamento + competitive analysis; (3) decidir se Meta Business é compartilhado com ICA ou separado.
